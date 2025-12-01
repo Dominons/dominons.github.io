@@ -12,7 +12,6 @@
             margin: 0;
             display: flex;
             height: 100vh;
-            overflow: hidden;
         }
 
         /* Panel Izquierdo */
@@ -59,12 +58,13 @@
             background: #666;
         }
 
-        /* Panel Derecho / YouTube */
+        /* Panel Derecho fijo */
         .sidebar {
             width: 30%;
             background: #181818;
             padding: 15px;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         iframe {
@@ -72,6 +72,7 @@
             height: 180px;
             margin-bottom: 20px;
             border-radius: 6px;
+            flex-shrink: 0;
         }
 
         .date-time {
@@ -102,11 +103,10 @@
             <button onclick="saveNote()">Guardar Nota</button>
         </div>
 
-        <!-- NUEVO: Portafolio -->
+        <!-- MI PORTAFOLIO -->
         <div class="card">
             <h2>📈 Mi Portafolio</h2>
 
-            <!-- Widget TradingView Tabla -->
             <div class="tradingview-widget-container">
                 <div class="tradingview-widget-container__widget"></div>
                 <script type="text/javascript" 
@@ -141,10 +141,9 @@
 
     </div>
 
-    <!-- PARTE DERECHA (VIDEOS) -->
+    <!-- DERECHA FIJA -->
     <div class="sidebar">
         <div class="date-time" id="dateTime"></div>
-
         <h3>Videos Sugeridos</h3>
         
         <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" allowfullscreen></iframe>
