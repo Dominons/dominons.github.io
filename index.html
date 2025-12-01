@@ -1,581 +1,192 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>DANIFU777 - Dominon</title>
-  <link rel="icon" type="image/ico" href="Favicon.ico"> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <style>
-    /* Variables CSS para facilitar cambios de color */
-    :root {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444;
-      --color-highlight: #A855F7; /* Morado/Rosado */
-      --color-main-bg: #282828; /* Color de fondo principal */
-      --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F; /* Fondo para inputs/areas de texto */
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --top-tools-height: 300px; /* ALTURA FIJA PARA CALCULADORA Y GRÁFICO */
-      --main-gap: 15px; /* ESPACIO DE SEPARACIÓN EN .MAIN */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Plataforma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--color-dark-bg);
-      color: var(--color-text);
-      overflow: hidden; 
-    }
+        /* Panel Izquierdo */
+        .main-content {
+            width: 70%;
+            padding: 20px;
+            overflow-y: auto;
+        }
 
-    .container {
-      display: grid;
-      /* Ajuste a tu diseño final: 70% para el contenido, 30% para la barra lateral */
-      grid-template-columns: 70% 30%; 
-      grid-template-rows: auto 1fr;
-      height: 100vh;
-    }
-    
-    /* Estilos para la barra superior (header) */
-    .top-bar {
-      grid-column: 1 / span 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 15px;
-      background: var(--color-header-bg);
-      border-bottom: 2px solid var(--color-highlight);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.8);
-      z-index: 10;
-      position: sticky; 
-      top: 0;
-    }
+        .card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px #000;
+        }
 
-    .top-left, .top-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
 
-    /* Estilos para las cajas de información */
-    .box {
-      border: 1px solid var(--color-border);
-      padding: 4px 10px;
-      background: #333;
-      border-radius: 4px;
-      box-shadow: var(--shadow-light);
-      transition: background 0.3s ease;
-      font-size: 0.9em;
-      white-space: nowrap;
-    }
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 10px;
+            resize: none;
+        }
 
-    /* Estilos para el área principal (main) - FLEX CONTAINER */
-    .main {
-      /* Ocupa la primera columna y se ajusta a la altura restante */
-      grid-column: 1 / 2;
-      background: var(--color-main-bg); 
-      padding: var(--main-gap);
-      display: flex;
-      flex-direction: column; 
-      gap: var(--main-gap);
-      
-      /* CRÍTICO: Aseguramos que la altura total es el 100% del espacio restante. */
-      height: calc(100vh - 52px); 
-      overflow-y: auto; /* Permitir scroll en el contenido principal */
-      box-sizing: border-box;
-    }
+        button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #666;
+        }
 
-    h1 {
-      display: none; 
-    }
-    
-    /* --- Contenedor de herramientas superiores (Calculadora + Mini-Gráfico) --- */
-    .top-tools-container {
-        display: flex;
-        gap: 20px;
-        /* CRÍTICO: Usamos la altura fija de la variable CSS */
-        height: var(--top-tools-height); 
-        flex-shrink: 0; 
-    }
-    
-    .tool-panel {
-        background: var(--color-input-bg);
-        border: 2px solid var(--color-highlight);
-        border-radius: 8px;
-        padding: 10px;
-        box-shadow: var(--shadow-light);
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .tool-panel h2 {
-        color: var(--color-highlight);
-        margin-top: 0;
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: 5px;
-        font-size: 1.2em;
-    }
+        /* Panel Derecho / YouTube */
+        .sidebar {
+            width: 30%;
+            background: #181818;
+            padding: 15px;
+            overflow-y: auto;
+        }
 
-    /* --- Calculadora y Mini-Gráfico --- */
-    .calculator-panel {
-        width: 300px; 
-        flex-shrink: 0; 
-    }
-    
-    .chart-panel {
-        flex-grow: 1; 
-        overflow: hidden; 
-        padding: 0; 
-        border: 2px solid var(--color-highlight);
-        height: 100%; 
-    }
-    
-    .chart-panel h2 {
-        padding: 10px 10px 5px 10px; 
-        background: var(--color-input-bg); 
-        margin-bottom: 0;
-    }
+        iframe {
+            width: 100%;
+            height: 180px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
 
-    .chart-iframe {
-        width: 100%;
-        height: calc(100% - 40px); 
-        border: none;
-        display: block; 
-    }
+        .date-time {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-    /* Grid de la Calculadora - ESTILO CRÍTICO */
-    .calculator-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
-        /* Rellena el espacio verticalmente dentro del panel */
-        height: 100%; 
-        box-sizing: border-box;
-    }
-    #display {
-        grid-column: 1 / -1; background: #0D0D0D; color: var(--color-highlight); border: 1px solid var(--color-highlight);
-        text-align: right; padding: 8px; margin-bottom: 8px; font-size: 1.8em; overflow: hidden; height: 30px; line-height: 30px;
-    }
-    /* AJUSTE CLAVE: Reducir el padding y la fuente para compactar los botones */
-    .calc-button {
-        background: #333; color: var(--color-text); border: 1px solid var(--color-border); 
-        padding: 6px 0; 
-        font-size: 1em; 
-        cursor: pointer; transition: background 0.1s; border-radius: 4px; user-select: none; 
-    }
-    /* El botón = (igual) ocupa dos filas (la 4 y la 5) y la última columna (la 4). */
-    .calc-button.equals { 
-        grid-row: 4 / span 2; 
-        grid-column: 4 / span 1;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-    }
-    /* El botón 0 (cero) ocupa dos columnas. */
-    .calc-button.zero { 
-        grid-column: 1 / span 2; 
-    }
-    /* Los botones de operador (morados) */
-    .calc-button.operator, .calc-button.clear {
-        background: var(--color-highlight);
-        color: var(--color-dark-bg);
-        font-weight: bold;
-    }
-    .calc-button.clear {
-        background: #DC2626; /* Rojo para AC */
-        color: white;
-    }
-
-    /* --- Estilos del Bloc de Notas MAXIMIZADO --- */
-    .notepad-panel {
-        /* Se ajusta a una altura mínima grande */
-        min-height: 250px; 
-        flex-shrink: 0; 
-        background: var(--color-input-bg);
-        border: 2px solid var(--color-highlight);
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: var(--shadow-light);
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .notepad-panel h2 {
-        color: var(--color-highlight);
-        margin-top: 0;
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: 5px;
-        font-size: 1.2em;
-        flex-shrink: 0; 
-    }
-
-    #notepad {
-        flex-grow: 1; 
-        width: 100%;
-        background: var(--color-input-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        padding: 10px;
-        resize: none; 
-        box-sizing: border-box;
-        font-size: 1em;
-        line-height: 1.4;
-        overflow-y: auto;
-    }
-
-    /* Estilos para la barra lateral (aside) - POSICIÓN FIJA */
-    .sidebar {
-      /* Ocupa la segunda columna */
-      grid-column: 2 / 3;
-      position: sticky; 
-      right: 0;
-      top: 52px; /* Altura de la top-bar */
-      bottom: 0; 
-      width: 100%; 
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 10px;
-      background: var(--color-header-bg);
-      overflow: hidden; 
-      z-index: 5; 
-      height: calc(100vh - 52px); /* Altura igual a la del main */
-      box-sizing: border-box;
-    }
-
-    /* Estilos para los iframes (videos) */
-    .sidebar iframe {
-      width: 100%;
-      height: calc(50% - 5px);
-      border: 3px solid var(--color-highlight); 
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); 
-    }
-
-    /* PERSONALIZACIÓN DE BARRAS DE DESPLAZAMIENTO (Morado/Rosa) */
-    
-    /* Bloc de Notas Scroll */
-    #notepad::-webkit-scrollbar { width: 10px; }
-    #notepad::-webkit-scrollbar-track { background: var(--color-input-bg); border-radius: 5px; }
-    #notepad::-webkit-scrollbar-thumb { background-color: var(--color-highlight); border-radius: 5px; border: 2px solid var(--color-input-bg); }
-    
-    /* Main Scroll */
-    .main::-webkit-scrollbar { width: 10px; }
-    .main::-webkit-scrollbar-track { background: var(--color-main-bg); border-radius: 5px; }
-    .main::-webkit-scrollbar-thumb { background-color: var(--color-highlight); border-radius: 5px; border: 2px solid var(--color-main-bg); }
-
-    /* Media Query para responsividad en pantallas pequeñas (Se mantienen igual) */
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; height: auto;
-      }
-      .main {
-        grid-column: 1 / span 1;
-        height: auto; overflow-y: visible; padding-right: 15px; 
-      }
-      .sidebar {
-        grid-column: 1 / span 1;
-        position: static; width: auto; top: auto; bottom: auto; height: 400px; flex-direction: row;
-        overflow-x: auto; border-top: 2px solid var(--color-highlight);
-        height: auto;
-      }
-      .top-tools-container {
-        flex-direction: column; max-height: none; height: auto; 
-      }
-      .calculator-panel {
-        width: 100%;
-      }
-      .notepad-panel {
-        height: auto;
-        min-height: 200px; /* Ajuste responsive */
-        flex-grow: 1;
-      }
-      .sidebar iframe {
-        min-width: 80%; height: 100%; flex-shrink: 0; 
-      }
-      .sidebar::-webkit-scrollbar { height: 8px; }
-      .sidebar::-webkit-scrollbar-track { background: var(--color-main-bg); }
-      .sidebar::-webkit-scrollbar-thumb { background-color: var(--color-highlight); border-radius: 20px; border: 2px solid var(--color-main-bg); }
-    }
-  </style>
+    </style>
 </head>
 <body>
-  
-  <div id="youtube-player" style="display:none;"></div>
 
-  <div class="container">
-    <header class="top-bar">
-      <nav class="top-left">
-        <div class="box user-info">DANIFU777</div>
-        <!-- Se eliminó el recuadro de ARS/USD por pedido -->
+    <!-- PARTE IZQUIERDA -->
+    <div class="main-content">
+
+        <!-- CALCULADORA -->
+        <div class="card">
+            <h2>Calculadora</h2>
+            <input type="text" id="calc-display" disabled 
+                   style="width:100%;padding:10px;font-size:20px;background:#000;color:#0f0;border:none;text-align:right;margin-bottom:10px;">
+            <div id="calc-buttons"></div>
+        </div>
+
+        <!-- Bloc de Notas -->
+        <div class="card">
+            <h2>Bloc de Notas</h2>
+            <textarea id="notepad"></textarea>
+            <button onclick="saveNote()">Guardar Nota</button>
+        </div>
+
+        <!-- NUEVO: Portafolio -->
+        <div class="card">
+            <h2>📈 Mi Portafolio</h2>
+
+            <!-- Widget TradingView Tabla -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" 
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                  "colorTheme": "dark",
+                  "dateRange": "1D",
+                  "showChart": false,
+                  "locale": "es",
+                  "width": "100%",
+                  "height": "300px",
+                  "tabs": [
+                    {
+                      "title": "Acciones",
+                      "symbols": [
+                        { "s": "AMEX:SPY", "d": "SPY" },
+                        { "s": "BCBA:YPF", "d": "YPF" },
+                        { "s": "NASDAQ:TSLA", "d": "TSLA" },
+                        { "s": "NASDAQ:MSFT", "d": "MSFT" },
+                        { "s": "NASDAQ:GOOGL", "d": "GOOGL" },
+                        { "s": "NASDAQ:AAPL", "d": "AAPL" },
+                        { "s": "NASDAQ:NVDA", "d": "NVDA" },
+                        { "s": "NASDAQ:AMZN", "d": "AMZN" }
+                      ]
+                    }
+                  ]
+                }
+                </script>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PARTE DERECHA (VIDEOS) -->
+    <div class="sidebar">
+        <div class="date-time" id="dateTime"></div>
+
+        <h3>Videos Sugeridos</h3>
         
-        <div class="box music-control" id="prevBtn" title="Pista Anterior"><i class="fa-solid fa-backward-step"></i> ATRÁS</div>
-        <div class="box music-control" id="playPauseBtn" title="Reproducir/Pausa"><i class="fa-solid fa-play"></i> REPRODUCIR</div> 
-        <div class="box music-control" id="nextBtn" title="Pista Siguiente"><i class="fa-solid fa-forward-step"></i> ADELANTE</div>
-        
-        <div class="box song-info">Música: <span id="song">YouTube Ready</span></div>
-      </nav>
-      <div class="top-right">
-        <div class="box date-time" id="fecha-hora"></div>
-      </div>
-    </header>
+        <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/DWcJFNfaw9c" allowfullscreen></iframe>
+    </div>
 
-    <main class="main">
-      
-      <div class="top-tools-container">
-          
-          <div class="tool-panel calculator-panel">
-              <h2>Calculadora</h2>
-              <div id="display">0</div>
-              <div class="calculator-grid">
-                  <button class="calc-button clear" onclick="clearDisplay()">AC</button>
-                  <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-                  <button class="calc-button operator" onclick="appendOperator('*')">x</button>
-                  <button class="calc-button" onclick="backspace()"><i class="fa-solid fa-delete-left"></i></button> 
-                  
-                  <button class="calc-button" onclick="appendNumber('7')">7</button>
-                  <button class="calc-button" onclick="appendNumber('8')">8</button>
-                  <button class="calc-button" onclick="appendNumber('9')">9</button>
-                  <button class="calc-button operator" onclick="appendOperator('-')">-</button>
-                  
-                  <button class="calc-button" onclick="appendNumber('4')">4</button>
-                  <button class="calc-button" onclick="appendNumber('5')">5</button>
-                  <button class="calc-button" onclick="appendNumber('6')">6</button>
-                  <button class="calc-button operator" onclick="appendOperator('+')">+</button>
-                  
-                  <button class="calc-button" onclick="appendNumber('1')">1</button>
-                  <button class="calc-button" onclick="appendNumber('2')">2</button>
-                  <button class="calc-button" onclick="appendNumber('3')">3</button>
-                  <button class="calc-button operator equals" onclick="calculate()">=</button>
-                  
-                  <button class="calc-button zero" onclick="appendNumber('0')">0</button>
-                  <button class="calc-button" onclick="appendNumber('.')">.</button>
-              </div>
-          </div>
-          
-          <div class="tool-panel chart-panel">
-              <h2>Mini-Gráfico (USDT/ARS)</h2>
-              <iframe class="chart-iframe" 
-                      src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache" 
-                      frameborder="0" allowfullscreen>
-              </iframe>
-          </div>
-          
-      </div>
-      
-      <div class="notepad-panel">
-          <h2>Bloc de Notas</h2>
-          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
-      </div>
-      
-      <!-- Conversor eliminado por pedido -->
-      
-    </main>
+<script>
+    // Fecha y Hora
+    function updateTime() {
+        document.getElementById('dateTime').innerHTML =
+            new Date().toLocaleString("es-AR");
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 
-    <aside class="sidebar">
-      <iframe class="video-frame" 
-              src="https://www.youtube.com/embed/QviXe8xvA50" 
-              title="YouTube video player 1" 
-              frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-      </iframe>
-      <iframe class="video-frame" 
-              src="https://www.youtube.com/embed/dIqzNSKCNlI" 
-              title="YouTube video player 2" 
-              frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-      </iframe>
-    </aside>
-  </div>
-  
-  <script src="https://www.youtube.com/iframe_api"></script>
+    // Bloc de notas
+    const noteArea = document.getElementById("notepad");
+    noteArea.value = localStorage.getItem("notes") || "";
+    function saveNote() {
+        localStorage.setItem("notes", noteArea.value);
+        alert("Guardado! ✔️");
+    }
 
-  <script>
-    // --- Lógica JavaScript ---
-
-    // 1. Calculadora
-    const display = document.getElementById('display');
-    let currentInput = '0';
-    let previousInput = '';
-    let operation = null;
-    let waitingForSecondOperand = false;
-    
-    function updateDisplay() {
-        display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput;
-    }
-    function appendNumber(number) {
-        if (waitingForSecondOperand) {
-            currentInput = number;
-            waitingForSecondOperand = false;
-        } else {
-            if (number === '.' && currentInput.includes('.')) return;
-            currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number;
-        }
-        updateDisplay();
-    }
-    function appendOperator(nextOperation) {
-        const inputValue = parseFloat(currentInput);
-        if (operation && waitingForSecondOperand) {
-            operation = nextOperation;
-            return;
-        }
-        if (previousInput === '') {
-            previousInput = inputValue;
-        } else if (operation) {
-            const result = performCalculation[operation](previousInput, inputValue);
-            currentInput = String(result);
-            previousInput = result;
-        }
-        waitingForSecondOperand = true;
-        operation = nextOperation;
-        updateDisplay();
-    }
-    const performCalculation = {
-        '/': (first, second) => first / second,
-        '*': (first, second) => first * second,
-        '+': (first, second) => first + second,
-        '-': (first, second) => first - second,
-        '=': (first, second) => second 
-    };
-    function calculate() {
-        if (!operation || waitingForSecondOperand) return;
-        const secondOperand = parseFloat(currentInput);
-        if (operation === '=') {
-             return;
-        }
-        const result = performCalculation[operation](previousInput, secondOperand);
-        currentInput = String(result);
-        operation = null;
-        previousInput = '';
-        waitingForSecondOperand = false;
-        updateDisplay();
-    }
-    function clearDisplay() {
-        currentInput = '0';
-        previousInput = '';
-        operation = null;
-        waitingForSecondOperand = false;
-        updateDisplay();
-    }
-    function backspace() {
-        if (currentInput.length > 1 && !waitingForSecondOperand) {
-            currentInput = currentInput.slice(0, -1);
-        } else if (currentInput.length === 1 && !waitingForSecondOperand) {
-            currentInput = '0';
-        }
-        updateDisplay();
-    }
-    updateDisplay(); 
-    
-    // 2. Bloc de Notas
-    const notepad = document.getElementById('notepad');
-    const savedNotes = localStorage.getItem('danifu_notes');
-    if (savedNotes) {
-        notepad.value = savedNotes;
-    }
-    notepad.addEventListener('input', () => {
-        localStorage.setItem('danifu_notes', notepad.value);
+    // Generar botones calculadora
+    const calcButtons = [
+        "7","8","9","/","4","5","6","*","1","2","3","-","0",".","=","C"
+    ];
+    const container = document.getElementById("calc-buttons");
+    calcButtons.forEach(text => {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.onclick = () => calcPress(text);
+        container.appendChild(btn);
     });
-
-    // 3. Fecha y Hora
-    function actualizarFechaHora() {
-      const ahora = new Date();
-      document.getElementById("fecha-hora").textContent =
-        ahora.toLocaleDateString() + " " + ahora.toLocaleTimeString();
+    function calcPress(val) {
+        const display = document.getElementById("calc-display");
+        if (val === "C") display.value = "";
+        else if (val === "=") {
+            try { display.value = eval(display.value); } catch {}
+        } else display.value += val;
     }
-    setInterval(actualizarFechaHora, 1000);
-    actualizarFechaHora();
+</script>
 
-    // 4. (Se removió el bloque de Dólar / Conversor por pedido)
-    // No quedan referencias a elementos del conversor ni a la API.
-
-    // 5. SCRIPT DE REPRODUCTOR DE MÚSICA CON YOUTUBE IFRAME API
-
-    // ID de la playlist proporcionada: PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG
-    const YOUTUBE_PLAYLIST_ID = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG'; 
-    // Video inicial (el primer video de la lista o uno por defecto)
-    const INITIAL_VIDEO_ID = 'P0TqT0-qJqU'; 
-    
-    let player;
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const songNameElement = document.getElementById('song');
-
-    // Función que YouTube llama cuando la API está lista
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-player', {
-            height: '1',
-            width: '1',
-            videoId: INITIAL_VIDEO_ID, 
-            playerVars: {
-                'autoplay': 0, // Inicia pausado 
-                'controls': 0, // Oculta controles
-                'listType': 'playlist',
-                'list': YOUTUBE_PLAYLIST_ID, // Carga la lista de reproducción
-                'loop': 1, // Repetir
-                'enablejsapi': 1,
-                'disablekb': 1, 
-                'rel': 0,
-                'fs': 0,
-                'modestbranding': 1, 
-            },
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
-
-    function onPlayerReady(event) {
-        songNameElement.textContent = "Listo para Play";
-        
-        // Habilitar controles y asignar funciones
-        playPauseBtn.addEventListener('click', togglePlayPause);
-        prevBtn.addEventListener('click', () => {
-            player.previousVideo();
-        });
-        nextBtn.addEventListener('click', () => {
-            player.nextVideo();
-        });
-    }
-    
-    function onPlayerStateChange(event) {
-        // YT.PlayerState.PLAYING (1) = Reproduciendo
-        // YT.PlayerState.PAUSED (2) = Pausado
-        if (event.data == YT.PlayerState.PLAYING) {
-            updatePlayPauseButton(true);
-            // Intenta obtener el título y lo acorta para que quepa en el box
-            try {
-                songNameElement.textContent = player.getVideoData().title.substring(0, 30) + (player.getVideoData().title.length > 30 ? "..." : "");
-            } catch {}
-        } else {
-            updatePlayPauseButton(false);
-        }
-    }
-
-    function togglePlayPause() {
-        if (player.getPlayerState() == YT.PlayerState.PLAYING || player.getPlayerState() == YT.PlayerState.BUFFERING) {
-            player.pauseVideo();
-        } else {
-            // Inicia la reproducción de la playlist
-            player.playVideo();
-        }
-    }
-
-    function updatePlayPauseButton(isPlaying) {
-        if (isPlaying) {
-            playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i> PAUSA';
-            playPauseBtn.title = "Pausa";
-        } else {
-            playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
-            playPauseBtn.title = "Reproducir";
-        }
-    }
-    
-    // Inicialización
-    updatePlayPauseButton(false); 
-  </script>
 </body>
 </html>
