@@ -5,19 +5,20 @@
   <title>DANIFU777 - Dominon</title>
   <link rel="icon" type="image/ico" href="Favicon.ico"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
   <style>
-    /* Variables CSS para facilitar cambios de color */
+    /* Variables CSS */
     :root {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
       --color-border: #444;
-      --color-highlight: #A855F7; /* Morado/Rosado */
-      --color-main-bg: #282828; /* Color de fondo principal */
+      --color-highlight: #A855F7;
+      --color-main-bg: #282828;
       --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F; /* Fondo para inputs/areas de texto */
+      --color-input-bg: #1F1F1F;
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --top-tools-height: 300px; /* ALTURA FIJA PARA CALCULADORA Y GRÁFICO */
-      --main-gap: 15px; /* ESPACIO DE SEPARACIÓN EN .MAIN */
+      --top-tools-height: 300px;
+      --main-gap: 15px;
     }
 
     body {
@@ -30,13 +31,12 @@
 
     .container {
       display: grid;
-      /* Ajuste a tu diseño final: 70% para el contenido, 30% para la barra lateral */
       grid-template-columns: 70% 30%; 
       grid-template-rows: auto 1fr;
       height: 100vh;
     }
     
-    /* Estilos para la barra superior (header) */
+    /* Barra superior */
     .top-bar {
       grid-column: 1 / span 2;
       display: flex;
@@ -57,43 +57,32 @@
       gap: 15px;
     }
 
-    /* Estilos para las cajas de información */
     .box {
       border: 1px solid var(--color-border);
       padding: 4px 10px;
       background: #333;
       border-radius: 4px;
       box-shadow: var(--shadow-light);
-      transition: background 0.3s ease;
       font-size: 0.9em;
       white-space: nowrap;
     }
 
-    /* Estilos para el área principal (main) - FLEX CONTAINER */
+    /* Área principal */
     .main {
-      /* Ocupa la primera columna y se ajusta a la altura restante */
       grid-column: 1 / 2;
       background: var(--color-main-bg); 
       padding: var(--main-gap);
       display: flex;
       flex-direction: column; 
       gap: var(--main-gap);
-      
-      /* CRÍTICO: Aseguramos que la altura total es el 100% del espacio restante. */
       height: calc(100vh - 52px); 
-      overflow-y: auto; /* Permitir scroll en el contenido principal */
+      overflow-y: auto;
       box-sizing: border-box;
     }
 
-    h1 {
-      display: none; 
-    }
-    
-    /* --- Contenedor de herramientas superiores (Calculadora + Mini-Gráfico) --- */
     .top-tools-container {
         display: flex;
         gap: 20px;
-        /* CRÍTICO: Usamos la altura fija de la variable CSS */
         height: var(--top-tools-height); 
         flex-shrink: 0; 
     }
@@ -117,54 +106,31 @@
         font-size: 1.2em;
     }
 
-    /* --- Calculadora y Mini-Gráfico --- */
+    /* Calculadora */
     .calculator-panel {
         width: 300px; 
         flex-shrink: 0; 
+        /* Hacemos este panel un contenedor flex para que la cuadrícula se estire */
+        display: flex; 
+        flex-direction: column;
     }
     
-    .chart-panel {
-        flex-grow: 1; 
-        overflow: hidden; 
-        padding: 0; 
-        border: 2px solid var(--color-highlight);
-        height: 100%; 
-    }
-    
-    .chart-panel h2 {
-        padding: 10px 10px 5px 10px; 
-        background: var(--color-input-bg); 
-        margin-bottom: 0;
-    }
-
-    .chart-iframe {
-        width: 100%;
-        height: calc(100% - 40px); 
-        border: none;
-        display: block; 
-    }
-
-    /* Grid de la Calculadora - ESTILO CRÍTICO */
     .calculator-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
-        /* Rellena el espacio verticalmente dentro del panel */
-        height: 100%; 
-        box-sizing: border-box;
+        flex-grow: 1; /* Esto es clave para que ocupe el espacio disponible */
     }
     #display {
         grid-column: 1 / -1; background: #0D0D0D; color: var(--color-highlight); border: 1px solid var(--color-highlight);
         text-align: right; padding: 8px; margin-bottom: 8px; font-size: 1.8em; overflow: hidden; height: 30px; line-height: 30px;
     }
-    /* AJUSTE CLAVE: Reducir el padding y la fuente para compactar los botones */
     .calc-button {
         background: #333; color: var(--color-text); border: 1px solid var(--color-border); 
         padding: 6px 0; 
         font-size: 1em; 
         cursor: pointer; transition: background 0.1s; border-radius: 4px; user-select: none; 
     }
-    /* El botón = (igual) ocupa dos filas (la 4 y la 5) y la última columna (la 4). */
     .calc-button.equals { 
         grid-row: 4 / span 2; 
         grid-column: 4 / span 1;
@@ -172,27 +138,43 @@
         align-items: center; 
         justify-content: center;
     }
-    /* El botón 0 (cero) ocupa dos columnas. */
     .calc-button.zero { 
         grid-column: 1 / span 2; 
     }
-    /* Los botones de operador (morados) */
     .calc-button.operator, .calc-button.clear {
         background: var(--color-highlight);
         color: var(--color-dark-bg);
         font-weight: bold;
     }
     .calc-button.clear {
-        background: #DC2626; /* Rojo para AC */
+        background: #DC2626;
         color: white;
     }
+    
+    /* Mini-Gráfico */
+    .chart-panel {
+        flex-grow: 1; 
+        overflow: hidden; 
+        padding: 0; 
+        border: 2px solid var(--color-highlight);
+        height: 100%; 
+    }
+    .chart-panel h2 {
+        padding: 10px 10px 5px 10px; 
+        background: var(--color-input-bg); 
+        margin-bottom: 0;
+    }
+    .chart-iframe {
+        width: 100%;
+        height: calc(100% - 40px); 
+        border: none;
+        display: block; 
+    }
 
-    /* --- Estilos del Bloc de Notas MAXIMIZADO --- */
+    /* Bloc de Notas */
     .notepad-panel {
-        /* Ahora ocupa el espacio restante automáticamente */
         flex-grow: 1; 
         min-height: 250px; 
-        flex-shrink: 0; 
         background: var(--color-input-bg);
         border: 2px solid var(--color-highlight);
         border-radius: 8px;
@@ -201,16 +183,6 @@
         display: flex;
         flex-direction: column;
     }
-    
-    .notepad-panel h2 {
-        color: var(--color-highlight);
-        margin-top: 0;
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: 5px;
-        font-size: 1.2em;
-        flex-shrink: 0; 
-    }
-
     #notepad {
         flex-grow: 1; 
         width: 100%;
@@ -225,15 +197,13 @@
         overflow-y: auto;
     }
     
-    /* Estilos para la barra lateral (aside) - POSICIÓN FIJA */
+    /* Barra lateral */
     .sidebar {
-      /* Ocupa la segunda columna */
       grid-column: 2 / 3;
       position: sticky; 
       right: 0;
-      top: 52px; /* Altura de la top-bar */
+      top: 52px;
       bottom: 0; 
-      width: 100%; 
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -241,11 +211,9 @@
       background: var(--color-header-bg);
       overflow: hidden; 
       z-index: 5; 
-      height: calc(100vh - 52px); /* Altura igual a la del main */
+      height: calc(100vh - 52px);
       box-sizing: border-box;
     }
-
-    /* Estilos para los iframes (videos) */
     .sidebar iframe {
       width: 100%;
       height: calc(50% - 5px);
@@ -254,32 +222,24 @@
       box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); 
     }
 
-    /* PERSONALIZACIÓN DE BARRAS DE DESPLAZAMIENTO (Morado/Rosa) */
-    
-    /* Bloc de Notas Scroll */
+    /* Scrollbars */
     #notepad::-webkit-scrollbar { width: 10px; }
     #notepad::-webkit-scrollbar-track { background: var(--color-input-bg); border-radius: 5px; }
     #notepad::-webkit-scrollbar-thumb { background-color: var(--color-highlight); border-radius: 5px; border: 2px solid var(--color-input-bg); }
-    
-    /* Main Scroll */
     .main::-webkit-scrollbar { width: 10px; }
     .main::-webkit-scrollbar-track { background: var(--color-main-bg); border-radius: 5px; }
     .main::-webkit-scrollbar-thumb { background-color: var(--color-highlight); border-radius: 5px; border: 2px solid var(--color-main-bg); }
 
-    /* Media Query para responsividad en pantallas pequeñas (Se mantienen igual) */
+    /* Media Query (Responsive) */
     @media (max-width: 900px) {
       .container {
         grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; height: auto;
       }
       .main {
-        grid-column: 1 / span 1;
-        height: auto; overflow-y: visible; padding-right: 15px; 
+        grid-column: 1 / span 1; height: auto; overflow-y: visible; padding-right: 15px; 
       }
       .sidebar {
-        grid-column: 1 / span 1;
-        position: static; width: auto; top: auto; bottom: auto; height: 400px; flex-direction: row;
-        overflow-x: auto; border-top: 2px solid var(--color-highlight);
-        height: auto;
+        grid-column: 1 / span 1; position: static; height: auto; flex-direction: row; overflow-x: auto; border-top: 2px solid var(--color-highlight);
       }
       .top-tools-container {
         flex-direction: column; max-height: none; height: auto; 
@@ -288,9 +248,7 @@
         width: 100%;
       }
       .notepad-panel {
-        height: auto;
-        min-height: 200px; /* Ajuste responsive */
-        flex-grow: 1;
+        height: auto; min-height: 200px; flex-grow: 1;
       }
       .sidebar iframe {
         min-width: 80%; height: 100%; flex-shrink: 0; 
@@ -487,9 +445,7 @@
     
     // 4. SCRIPT DE REPRODUCTOR DE MÚSICA CON YOUTUBE IFRAME API
 
-    // ID de la playlist proporcionada: PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG
     const YOUTUBE_PLAYLIST_ID = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG'; 
-    // Video inicial (el primer video de la lista o uno por defecto)
     const INITIAL_VIDEO_ID = 'P0TqT0-qJqU'; 
     
     let player;
@@ -505,16 +461,8 @@
             width: '1',
             videoId: INITIAL_VIDEO_ID, 
             playerVars: {
-                'autoplay': 0, // Inicia pausado 
-                'controls': 0, // Oculta controles
-                'listType': 'playlist',
-                'list': YOUTUBE_PLAYLIST_ID, // Carga la lista de reproducción
-                'loop': 1, // Repetir
-                'enablejsapi': 1,
-                'disablekb': 1, 
-                'rel': 0,
-                'fs': 0,
-                'modestbranding': 1, 
+                'autoplay': 0, 'controls': 0, 'listType': 'playlist', 'list': YOUTUBE_PLAYLIST_ID, 
+                'loop': 1, 'enablejsapi': 1, 'disablekb': 1, 'rel': 0, 'fs': 0, 'modestbranding': 1, 
             },
             events: {
                 'onReady': onPlayerReady,
@@ -526,7 +474,6 @@
     function onPlayerReady(event) {
         songNameElement.textContent = "Listo para Play";
         
-        // Habilitar controles y asignar funciones
         playPauseBtn.addEventListener('click', togglePlayPause);
         prevBtn.addEventListener('click', () => {
             player.previousVideo();
@@ -537,11 +484,8 @@
     }
     
     function onPlayerStateChange(event) {
-        // YT.PlayerState.PLAYING (1) = Reproduciendo
-        // YT.PlayerState.PAUSED (2) = Pausado
         if (event.data == YT.PlayerState.PLAYING) {
             updatePlayPauseButton(true);
-            // Intenta obtener el título y lo acorta para que quepa en el box
             try {
                 songNameElement.textContent = player.getVideoData().title.substring(0, 30) + (player.getVideoData().title.length > 30 ? "..." : "");
             } catch {}
@@ -554,7 +498,6 @@
         if (player.getPlayerState() == YT.PlayerState.PLAYING || player.getPlayerState() == YT.PlayerState.BUFFERING) {
             player.pauseVideo();
         } else {
-            // Inicia la reproducción de la playlist
             player.playVideo();
         }
     }
@@ -569,7 +512,6 @@
         }
     }
     
-    // Inicialización
     updatePlayPauseButton(false); 
   </script>
 </body>
