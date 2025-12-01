@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>DANIFU777 - Dominon</title>
-    <link rel="icon" type="image/ico" href="Favicon.ico"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
   <style>
@@ -12,12 +11,12 @@
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
       --color-border: #444;
-      --color-highlight: #A855F7; /* Morado/Rosado */
+      --color-highlight: #A855F7;
       --color-main-bg: #282828;
       --color-text: #EAEAEA;
       --color-input-bg: #1F1F1F;
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --top-tools-height: 300px; /* Altura de la fila superior */
+      --top-tools-height: 300px;
       --main-gap: 15px;
     }
 
@@ -31,7 +30,7 @@
 
     .container {
       display: grid;
-      grid-template-columns: 70% 30%;  /* Contenido principal y barra lateral */
+      grid-template-columns: 70% 30%; 
       grid-template-rows: auto 1fr;
       height: 100vh;
     }
@@ -119,7 +118,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
-        flex-grow: 1; /* Ocupa el espacio restante del panel */
+        flex-grow: 1;
     }
     #display {
         grid-column: 1 / -1; background: #0D0D0D; color: var(--color-highlight); border: 1px solid var(--color-highlight);
@@ -131,7 +130,6 @@
         font-size: 1em; 
         cursor: pointer; transition: background 0.1s; border-radius: 4px; user-select: none; 
     }
-    /* El botón = (igual) ocupa dos filas y la última columna. */
     .calc-button.equals { 
         grid-row: 4 / span 2; 
         grid-column: 4 / span 1;
@@ -139,7 +137,6 @@
         align-items: center; 
         justify-content: center;
     }
-    /* El botón 0 (cero) ocupa dos columnas. */
     .calc-button.zero { 
         grid-column: 1 / span 2; 
     }
@@ -149,7 +146,7 @@
         font-weight: bold;
     }
     .calc-button.clear {
-        background: #DC2626; /* Rojo para AC */
+        background: #DC2626;
         color: white;
     }
     
