@@ -1,191 +1,272 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Plataforma</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: #fff;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mi Plataforma - Corregido</title>
+<style>
+  :root{
+    --bg:#111;
+    --panel:#1a1a1a;
+    --card:#151515;
+    --muted:#222;
+    --accent:#A855F7;
+    --text:#eaeaea;
+    --success:#1db954;
+    --danger:#ff4d4f;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Roboto,Arial,sans-serif;}
+  /* Layout: left scrollable, right fixed */
+  .wrap{display:flex;height:100vh;overflow:hidden;}
+  .left {
+    width:70%;
+    min-width:480px;
+    padding:20px;
+    background:linear-gradient(180deg,var(--panel),#0f0f0f);
+    overflow-y:auto; /* <-- only this scrolls */
+  }
+  .right {
+    width:30%;
+    max-width:420px;
+    background: #181818;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    /* right panel does NOT scroll with page; its content is visible */
+  }
 
-        /* Panel Izquierdo */
-        .main-content {
-            width: 70%;
-            padding: 20px;
-            overflow-y: auto;
-        }
+  .card {
+    background:var(--card);
+    border-radius:8px;
+    padding:14px;
+    margin-bottom:18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  h2{margin:0 0 10px 0;font-size:20px;color:var(--text)}
+  /* Calculadora */
+  #calc-display{
+    width:100%;
+    padding:10px;
+    font-size:20px;
+    background:#000;
+    color:#0f0;
+    border:none;
+    margin-bottom:10px;
+  }
+  #calc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  #calc-buttons button{
+    padding:10px;border-radius:6px;border:none;background:rgba(255,255,255,0.06);color:var(--text);cursor:pointer;
+  }
+  #calc-buttons button:active{transform:translateY(1px)}
 
-        .card {
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px #000;
-        }
+  textarea{width:100%;height:140px;background:var(--muted);color:var(--text);border:1px solid rgba(255,255,255,0.03);padding:10px;border-radius:6px;resize:none}
 
-        .card h2 {
-            margin-top: 0;
-            font-size: 20px;
-        }
+  button.primary{background:var(--accent);color:#081218;border:none;padding:10px;border-radius:6px;margin-top:10px;cursor:pointer}
+  button.primary:active{transform:translateY(1px)}
 
-        textarea {
-            width: 100%;
-            height: 150px;
-            background: #222;
-            color: white;
-            border: none;
-            padding: 10px;
-            resize: none;
-        }
+  /* Portafolio tabla compacta */
+  table.portfolio{width:100%;border-collapse:collapse;font-size:14px}
+  table.portfolio thead th{ text-align:left;padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.04);color:#cfcfcf;font-weight:600}
+  table.portfolio tbody td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.02)}
+  .sym{width:30%}
+  .price{text-align:right;width:35%}
+  .chg{text-align:right;width:35%}
+  .up{color:var(--success)}
+  .down{color:var(--danger)}
 
-        button {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background: #666;
-        }
-
-        /* Panel Derecho fijo */
-        .sidebar {
-            width: 30%;
-            background: #181818;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        iframe {
-            width: 100%;
-            height: 180px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            flex-shrink: 0;
-        }
-
-        .date-time {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-    </style>
+  /* Right panel content */
+  .date-time{font-size:16px;font-weight:700;margin-bottom:6px}
+  .video-frame{width:100%;height:190px;border-radius:8px;background:#000;overflow:hidden;border:2px solid rgba(255,255,255,0.06)}
+  /* small screens */
+  @media (max-width:900px){
+    .wrap{flex-direction:column}
+    .left{width:100%;height:60vh;overflow-y:auto}
+    .right{width:100%;height:40vh;display:flex;flex-direction:row;gap:8px;overflow-x:auto}
+    .video-frame{min-width:300px;height:160px}
+  }
+</style>
 </head>
 <body>
+  <div class="wrap">
+    <main class="left" id="leftPanel">
+      <!-- Calculadora -->
+      <section class="card">
+        <h2>Calculadora</h2>
+        <input id="calc-display" type="text" disabled value="">
+        <div id="calc-buttons"></div>
+      </section>
 
-    <!-- PARTE IZQUIERDA -->
-    <div class="main-content">
+      <!-- Bloc de notas -->
+      <section class="card">
+        <h2>Bloc de Notas</h2>
+        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+        <button class="primary" onclick="saveNote()">Guardar Nota</button>
+      </section>
 
-        <!-- CALCULADORA -->
-        <div class="card">
-            <h2>Calculadora</h2>
-            <input type="text" id="calc-display" disabled 
-                   style="width:100%;padding:10px;font-size:20px;background:#000;color:#0f0;border:none;text-align:right;margin-bottom:10px;">
-            <div id="calc-buttons"></div>
-        </div>
+      <!-- Portafolio -->
+      <section class="card" id="portfolioCard">
+        <h2>📈 Mi Portafolio</h2>
+        <div style="font-size:13px;color:#bdbdbd;margin-bottom:8px">Datos en vivo (si la petición lo permite). Última actualización: <span id="pf-updated">—</span></div>
 
-        <!-- Bloc de Notas -->
-        <div class="card">
-            <h2>Bloc de Notas</h2>
-            <textarea id="notepad"></textarea>
-            <button onclick="saveNote()">Guardar Nota</button>
-        </div>
+        <table class="portfolio" id="portfolioTable" aria-live="polite">
+          <thead>
+            <tr><th class="sym">Símbolo</th><th class="price">Precio</th><th class="chg">Cambio %</th></tr>
+          </thead>
+          <tbody>
+            <!-- filas generadas por JS -->
+          </tbody>
+        </table>
 
-        <!-- MI PORTAFOLIO -->
-        <div class="card">
-            <h2>📈 Mi Portafolio</h2>
+        <div id="pf-error" style="margin-top:10px;color:#ff9b9b;display:none;font-size:13px">No se pudieron obtener datos en vivo — mostrando valores de ejemplo.</div>
+      </section>
+    </main>
 
-            <div class="tradingview-widget-container">
-                <div class="tradingview-widget-container__widget"></div>
-                <script type="text/javascript" 
-                        src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                {
-                  "colorTheme": "dark",
-                  "dateRange": "1D",
-                  "showChart": false,
-                  "locale": "es",
-                  "width": "100%",
-                  "height": "300px",
-                  "tabs": [
-                    {
-                      "title": "Acciones",
-                      "symbols": [
-                        { "s": "AMEX:SPY", "d": "SPY" },
-                        { "s": "BCBA:YPF", "d": "YPF" },
-                        { "s": "NASDAQ:TSLA", "d": "TSLA" },
-                        { "s": "NASDAQ:MSFT", "d": "MSFT" },
-                        { "s": "NASDAQ:GOOGL", "d": "GOOGL" },
-                        { "s": "NASDAQ:AAPL", "d": "AAPL" },
-                        { "s": "NASDAQ:NVDA", "d": "NVDA" },
-                        { "s": "NASDAQ:AMZN", "d": "AMZN" }
-                      ]
-                    }
-                  ]
-                }
-                </script>
-            </div>
+    <aside class="right">
+      <div class="date-time" id="dateTime"></div>
 
-        </div>
-
-    </div>
-
-    <!-- DERECHA FIJA -->
-    <div class="sidebar">
-        <div class="date-time" id="dateTime"></div>
-        <h3>Videos Sugeridos</h3>
-        
-        <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/DWcJFNfaw9c" allowfullscreen></iframe>
-    </div>
+      <div style="font-weight:700;color:#e6e6e6;margin-bottom:6px">Videos Sugeridos</div>
+      <div class="video-frame">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/QviXe8xvA50" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:6px"></iframe>
+      </div>
+      <div class="video-frame">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dIqzNSKCNlI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:6px"></iframe>
+      </aside>
+  </div>
 
 <script>
-    // Fecha y Hora
-    function updateTime() {
-        document.getElementById('dateTime').innerHTML =
-            new Date().toLocaleString("es-AR");
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+/* ---------- Reloj ---------- */
+function updateTime(){
+  document.getElementById('dateTime').textContent = new Date().toLocaleString('es-AR');
+}
+setInterval(updateTime,1000);
+updateTime();
 
-    // Bloc de notas
-    const noteArea = document.getElementById("notepad");
-    noteArea.value = localStorage.getItem("notes") || "";
-    function saveNote() {
-        localStorage.setItem("notes", noteArea.value);
-        alert("Guardado! ✔️");
-    }
+/* ---------- Notas (localStorage) ---------- */
+const noteArea = document.getElementById('notepad');
+noteArea.value = localStorage.getItem('danifu_notes') || '';
+function saveNote(){
+  localStorage.setItem('danifu_notes', noteArea.value);
+  // feedback no intrusivo
+  const old = document.getElementById('pf-updated');
+  const now = new Date();
+  old.textContent = now.toLocaleTimeString();
+}
 
-    // Generar botones calculadora
-    const calcButtons = [
-        "7","8","9","/","4","5","6","*","1","2","3","-","0",".","=","C"
-    ];
-    const container = document.getElementById("calc-buttons");
-    calcButtons.forEach(text => {
-        const btn = document.createElement("button");
-        btn.textContent = text;
-        btn.onclick = () => calcPress(text);
-        container.appendChild(btn);
+/* ---------- Calculadora (botones generados) ---------- */
+const calcButtons = ["7","8","9","/","4","5","6","*","1","2","3","-","0",".","=","C"];
+const calcContainer = document.getElementById('calc-buttons');
+const calcDisplay = document.getElementById('calc-display');
+calcButtons.forEach(t=>{
+  const b=document.createElement('button');
+  b.textContent=t;
+  b.addEventListener('click',()=>handleCalc(t));
+  calcContainer.appendChild(b);
+});
+function handleCalc(val){
+  if(val === 'C'){ calcDisplay.value=''; return; }
+  if(val === '='){
+    try{ calcDisplay.value = eval(calcDisplay.value) ?? ''; }
+    catch(e){ /* ignore */ }
+    return;
+  }
+  calcDisplay.value += val;
+}
+
+/* ---------- Portafolio: símbolo lista ---------- */
+const symbols = [
+  { s: "SPY", q: "SPY" },
+  { s: "YPF", q: "YPF.BA" },    // YPF en bolsa local (BCBA) -> Yahoo usa X.BA or .BA format (YPF.BA)
+  { s: "TSLA", q: "TSLA" },
+  { s: "MSFT", q: "MSFT" },
+  { s: "GOOGL", q: "GOOGL" },
+  { s: "AAPL", q: "AAPL" },
+  { s: "NVDA", q: "NVDA" },
+  { s: "AMZN", q: "AMZN" }
+];
+
+/*
+  Intentaremos obtener cotizaciones desde Yahoo Finance (endpoint público).
+  Nota: en algunos hosts/browsers la petición puede bloquearse por CORS.
+  Si falla, mostramos valores de ejemplo y no rompemos el layout.
+*/
+async function fetchQuotes(){
+  const tbody = document.querySelector('#portfolioTable tbody');
+  tbody.innerHTML = ''; // limpiar
+  const pfUpdated = document.getElementById('pf-updated');
+  const pfError = document.getElementById('pf-error');
+  pfError.style.display = 'none';
+  // Construir symbols para Yahoo (coma separada). Usamos los q del array.
+  const yahooSymbols = symbols.map(x=>x.q).join(',');
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(yahooSymbols)}`;
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const data = await resp.json();
+    const quotes = (data.quoteResponse && data.quoteResponse.result) || [];
+    // Mapear por símbolo rápido:
+    const map = {};
+    quotes.forEach(q => { if(q.symbol) map[q.symbol.toUpperCase()] = q; });
+    // Rellenar tabla en el orden pedido
+    symbols.forEach(sym=>{
+      // buscar por exact match prioritario q, si no por symbol field
+      const qkey = sym.q.toUpperCase();
+      const qObj = map[qkey] || Object.values(map).find(v => v.shortName && v.shortName.includes(sym.s)) || null;
+      const tr = document.createElement('tr');
+      const tdSym = document.createElement('td'); tdSym.className='sym'; tdSym.textContent = sym.s;
+      const tdPrice = document.createElement('td'); tdPrice.className='price';
+      const tdChg = document.createElement('td'); tdChg.className='chg';
+      if(qObj){
+        const price = qObj.regularMarketPrice ?? qObj.regularMarketPreviousClose ?? 0;
+        const changePercent = qObj.regularMarketChangePercent ?? 0;
+        tdPrice.textContent = (price>0 ? price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}) : '-');
+        tdChg.textContent = (changePercent !== null ? (changePercent>=0? '+' : '') + changePercent.toFixed(2) + '%' : '-');
+        tdChg.className = 'chg ' + (changePercent >= 0 ? 'up' : 'down');
+      } else {
+        // fallback (si no existe)
+        tdPrice.textContent = '-';
+        tdChg.textContent = '-';
+      }
+      tr.appendChild(tdSym); tr.appendChild(tdPrice); tr.appendChild(tdChg);
+      tbody.appendChild(tr);
     });
-    function calcPress(val) {
-        const display = document.getElementById("calc-display");
-        if (val === "C") display.value = "";
-        else if (val === "=") {
-            try { display.value = eval(display.value); } catch {}
-        } else display.value += val;
-    }
-</script>
+    pfUpdated.textContent = new Date().toLocaleString();
+  } catch(err){
+    // fallback: mostrar valores ejemplo y mostrar aviso
+    pfError.style.display = 'block';
+    const sample = {
+      SPY: {p:682.38,c:-0.15},
+      YPF: {p:36.68,c:-0.38},
+      TSLA:{p:429.63,c:-0.13},
+      MSFT:{p:489.02,c:-0.61},
+      GOOGL:{p:317.79,c:-0.75},
+      AAPL:{p:279.82,c:0.35},
+      NVDA:{p:179.43,c:1.37},
+      AMZN:{p:234.40,c:0.51}
+    };
+    const tbody2 = document.querySelector('#portfolioTable tbody');
+    tbody2.innerHTML = '';
+    symbols.forEach(sym=>{
+      const tr=document.createElement('tr');
+      const td1=document.createElement('td'); td1.className='sym'; td1.textContent=sym.s;
+      const td2=document.createElement('td'); td2.className='price'; td2.textContent = sample[sym.s]?.p?.toFixed(2) ?? '-';
+      const td3=document.createElement('td'); td3.className='chg ' + ((sample[sym.s]?.c ?? 0)>=0 ? 'up' : 'down');
+      td3.textContent = (sample[sym.s]?.c ?? 0) >= 0 ? '+' + (sample[sym.s]?.c ?? 0).toFixed(2) + '%' : (sample[sym.s]?.c ?? 0).toFixed(2) + '%';
+      tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+      tbody2.appendChild(tr);
+    });
+    pfUpdated.textContent = '—';
+    console.warn('No se pudieron obtener cotizaciones en vivo:', err);
+  }
+}
 
+/* Inicializar y refrescar cada 2 minutos */
+fetchQuotes();
+setInterval(fetchQuotes, 120000);
+
+</script>
 </body>
 </html>
+
