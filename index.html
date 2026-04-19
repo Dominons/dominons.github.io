@@ -192,22 +192,22 @@
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
       border-radius: 8px;
-      padding: 10px;
+      padding: 8px;
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
     }
     .calculator-panel h2 {
       color: var(--color-highlight);
-      margin: 0 0 8px 0;
+      margin: 0 0 6px 0;
       border-bottom: 1px solid var(--color-border);
-      padding-bottom: 5px;
-      font-size: 1.2em;
+      padding-bottom: 4px;
+      font-size: 1em;
     }
     .calculator-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
+      gap: 4px;
     }
     #display {
       grid-column: 1 / -1;
@@ -215,20 +215,20 @@
       color: var(--color-highlight);
       border: 1px solid var(--color-highlight);
       text-align: right;
-      padding: 8px;
-      margin-bottom: 8px;
-      font-size: 1.6em;
+      padding: 6px;
+      margin-bottom: 6px;
+      font-size: 1.3em;
       overflow: hidden;
-      height: 35px;
-      line-height: 35px;
+      height: 28px;
+      line-height: 28px;
       border-radius: 4px;
     }
     .calc-button {
       background: #333;
       color: var(--color-text);
       border: 1px solid var(--color-border);
-      padding: 10px 0;
-      font-size: 1em;
+      padding: 8px 0;
+      font-size: 0.9em;
       cursor: pointer;
       border-radius: 4px;
       transition: background 0.1s;
@@ -263,7 +263,7 @@
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
       border-radius: 8px;
-      padding: 12px;
+      padding: 10px;
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
@@ -271,24 +271,24 @@
     }
     .pomodoro-panel h2 {
       color: var(--color-highlight);
-      margin: 0 0 8px 0;
+      margin: 0 0 6px 0;
       border-bottom: 1px solid var(--color-border);
-      padding-bottom: 5px;
-      font-size: 1.2em;
+      padding-bottom: 4px;
+      font-size: 1em;
     }
     .pomodoro-display {
-      font-size: 2.5em;
+      font-size: 2em;
       font-weight: bold;
       color: var(--color-highlight);
       font-family: monospace;
       letter-spacing: 2px;
       text-align: center;
       text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      margin: 10px 0;
+      margin: 8px 0;
     }
     .pomodoro-controls {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -296,13 +296,13 @@
       background: #333;
       color: #ddd;
       border: 1px solid #555;
-      padding: 7px 12px;
+      padding: 6px 10px;
       cursor: pointer;
       border-radius: 4px;
-      font-size: 0.85em;
+      font-size: 0.8em;
       transition: background 0.2s;
       flex: 1;
-      min-width: 60px;
+      min-width: 55px;
     }
     .pomo-btn:hover {
       background: #444;
@@ -316,10 +316,10 @@
       background: #0D0D0D;
       color: var(--color-highlight);
       border: 1px solid var(--color-highlight);
-      padding: 6px 8px;
+      padding: 5px 6px;
       border-radius: 4px;
-      width: 60px;
-      font-size: 0.85em;
+      width: 50px;
+      font-size: 0.8em;
       text-align: center;
       flex: 0 0 auto;
     }
@@ -422,6 +422,13 @@
             <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
             <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
             <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
+            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
+            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
+            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
+            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
+            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
+            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
+            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
           </div>
         </div>
         <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
