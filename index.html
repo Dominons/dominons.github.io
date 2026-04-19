@@ -15,7 +15,6 @@
       --color-text: #EAEAEA;
       --color-input-bg: #1F1F1F;
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --top-tools-height: 300px;
       --main-gap: 15px;
     }
     body {
@@ -72,165 +71,47 @@
       overflow-y: auto;
       box-sizing: border-box;
     }
+    .main::-webkit-scrollbar {
+      width: 10px;
+    }
+    .main::-webkit-scrollbar-track {
+      background: var(--color-input-bg);
+    }
+    .main::-webkit-scrollbar-thumb {
+      background: var(--color-highlight);
+      border-radius: 5px;
+    }
+    .main::-webkit-scrollbar-thumb:hover {
+      background: #8b3ed9;
+    }
     h1 {
       display: none;
     }
-    /* --- SECCIÓN SUPERIOR (CALCULADORA + CHART) --- */
-    .top-tools-container {
-      display: flex;
-      gap: 20px;
-      height: var(--top-tools-height);
-      flex-shrink: 0;
-    }
-    .tool-panel {
+    /* --- GRÁFICO TOP --- */
+    .chart-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
       border-radius: 8px;
       padding: 10px;
       box-shadow: var(--shadow-light);
-      flex-shrink: 0;
+      height: 300px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
+      flex-shrink: 0;
     }
-    .tool-panel h2 {
+    .chart-panel h2 {
       color: var(--color-highlight);
-      margin-top: 0;
+      margin: 0 0 8px 0;
       border-bottom: 1px solid var(--color-border);
       padding-bottom: 5px;
       font-size: 1.2em;
     }
-    .calculator-panel {
-      width: 300px;
-    }
-    .chart-panel {
-      flex-grow: 1;
-      overflow: hidden;
-      padding: 0;
-      border: 2px solid var(--color-highlight);
-      height: 100%;
-    }
-    .chart-panel h2 {
-      padding: 10px 10px 5px 10px;
-      background: var(--color-input-bg);
-    }
     .chart-iframe {
       width: 100%;
-      height: calc(100% - 40px);
+      height: calc(100% - 30px);
       border: none;
       display: block;
-    }
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
-      height: 100%;
-    }
-    #display {
-      grid-column: 1 / -1;
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 1px solid var(--color-highlight);
-      text-align: right;
-      padding: 8px;
-      margin-bottom: 8px;
-      font-size: 1.8em;
-      overflow: hidden;
-      height: 30px;
-      line-height: 30px;
-    }
-    .calc-button {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 6px 0;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 4px;
-      border: 1px solid #444;
-    }
-    .calc-button:active {
-      background: #555;
-    }
-    .calc-button.equals {
-      grid-row: 4 / span 2;
-      grid-column: 4 / span 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .calc-button.zero {
-      grid-column: 1 / span 2;
-    }
-    .calc-button.operator {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    .calc-button.clear {
-      background: #DC2626;
-      color: white;
-    }
-    /* --- POMODORO PANEL --- */
-    .pomodoro-container {
-      display: flex;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-    .pomodoro-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: var(--shadow-light);
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .pomodoro-display {
-      font-size: 2.2em;
-      font-weight: bold;
-      color: var(--color-highlight);
-      font-family: monospace;
-      letter-spacing: 2px;
-      margin-left: 15px;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-    .pomodoro-controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .pomo-btn {
-      background: #333;
-      color: #ddd;
-      border: 1px solid #555;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.9em;
-      transition: background 0.2s;
-    }
-    .pomo-btn:hover {
-      background: #444;
-    }
-    .pomo-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    .custom-time-input {
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 1px solid var(--color-highlight);
-      padding: 6px 8px;
-      border-radius: 4px;
-      width: 60px;
-      font-size: 0.9em;
-      text-align: center;
-    }
-    .custom-time-input::placeholder {
-      color: #777;
     }
     /* --- NOTEPAD PANEL --- */
     .notepad-panel {
@@ -242,7 +123,7 @@
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-      min-height: 0;
+      min-height: 200px;
     }
     .notepad-header-row {
       display: flex;
@@ -297,6 +178,153 @@
       outline: none;
       border-color: var(--color-highlight);
       box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    }
+    /* --- BOTTOM CONTAINER (CALC + POMODORO) --- */
+    .bottom-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--main-gap);
+      flex-shrink: 0;
+      height: auto;
+    }
+    /* --- CALCULADORA --- */
+    .calculator-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+    }
+    .calculator-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 8px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 5px;
+      font-size: 1.2em;
+    }
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    #display {
+      grid-column: 1 / -1;
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      text-align: right;
+      padding: 8px;
+      margin-bottom: 8px;
+      font-size: 1.6em;
+      overflow: hidden;
+      height: 35px;
+      line-height: 35px;
+      border-radius: 4px;
+    }
+    .calc-button {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 10px 0;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.1s;
+    }
+    .calc-button:active {
+      background: #555;
+    }
+    .calc-button:hover {
+      background: #444;
+    }
+    .calc-button.equals {
+      grid-row: 4 / span 2;
+      grid-column: 4 / span 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .calc-button.zero {
+      grid-column: 1 / span 2;
+    }
+    .calc-button.operator {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    .calc-button.clear {
+      background: #DC2626;
+      color: white;
+    }
+    /* --- POMODORO PANEL --- */
+    .pomodoro-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .pomodoro-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 8px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 5px;
+      font-size: 1.2em;
+    }
+    .pomodoro-display {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: var(--color-highlight);
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      margin: 10px 0;
+    }
+    .pomodoro-controls {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .pomo-btn {
+      background: #333;
+      color: #ddd;
+      border: 1px solid #555;
+      padding: 7px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: background 0.2s;
+      flex: 1;
+      min-width: 60px;
+    }
+    .pomo-btn:hover {
+      background: #444;
+    }
+    .pomo-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    .custom-time-input {
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      padding: 6px 8px;
+      border-radius: 4px;
+      width: 60px;
+      font-size: 0.85em;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+    .custom-time-input::placeholder {
+      color: #777;
     }
     /* --- MÚSICA Y CONTROLES --- */
     .music-container {
@@ -378,9 +406,31 @@
     </div>
 
     <main class="main">
-      <!-- CALCULADORA + GRÁFICO -->
-      <div class="top-tools-container">
-        <div class="tool-panel calculator-panel">
+      <!-- GRÁFICO TOP -->
+      <div class="chart-panel">
+        <h2>Mini-Gráfico (USDT/ARS)</h2>
+        <iframe class="chart-iframe"
+          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
+          frameborder="0" allowfullscreen></iframe>
+      </div>
+
+      <!-- BLOC DE NOTAS -->
+      <div class="notepad-panel">
+        <div class="notepad-header-row">
+          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
+          <div class="notepad-tabs">
+            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
+            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
+            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
+          </div>
+        </div>
+        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+      </div>
+
+      <!-- CALCULADORA + POMODORO (50/50) -->
+      <div class="bottom-container">
+        <!-- CALCULADORA -->
+        <div class="calculator-panel">
           <h2>Calculadora</h2>
           <div class="calculator-grid">
             <input type="text" id="display" readonly>
@@ -403,42 +453,18 @@
             <button class="calc-button" onclick="appendNumber('.')">.</button>
           </div>
         </div>
-        <div class="tool-panel chart-panel">
-          <h2>Mini-Gráfico (USDT/ARS)</h2>
-          <iframe class="chart-iframe"
-            src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
-            frameborder="0" allowfullscreen></iframe>
-        </div>
-      </div>
 
-      <!-- POMODORO -->
-      <div class="pomodoro-container">
+        <!-- POMODORO -->
         <div class="pomodoro-panel">
-          <div style="display:flex; align-items:center;">
-            <h2 style="margin:0; font-size:1.3em; color:var(--color-highlight);">Pomodoro</h2>
-            <div class="pomodoro-display" id="pomo-display">25:00</div>
-          </div>
+          <h2>Pomodoro</h2>
+          <div class="pomodoro-display" id="pomo-display">25:00</div>
           <div class="pomodoro-controls">
             <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
             <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
-            <div style="width: 1px; height: 30px; background: #555; margin: 0 10px;"></div>
             <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
             <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
           </div>
         </div>
-      </div>
-
-      <!-- BLOC DE NOTAS -->
-      <div class="notepad-panel">
-        <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
-          <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
-          </div>
-        </div>
-        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
       </div>
     </main>
   </div>
