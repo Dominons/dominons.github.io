@@ -28,12 +28,12 @@
     }
     .container {
       display: grid;
-      grid-template-columns: 70% 30%;
+      grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       height: 100vh;
     }
     .top-bar {
-      grid-column: 1 / span 2;
+      grid-column: 1 / span 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -62,7 +62,7 @@
       white-space: nowrap;
     }
     .main {
-      grid-column: 1 / 2;
+      grid-column: 1 / -1;
       background: var(--color-main-bg);
       padding: var(--main-gap);
       display: flex;
@@ -204,219 +204,197 @@
     .pomo-btn {
       background: #333;
       color: #ddd;
-      border: 1px solid var(--color-highlight);
-      padding: 8px 16px;
-      border-radius: 4px;
+      border: 1px solid #555;
+      padding: 8px 12px;
       cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
+      border-radius: 4px;
+      font-size: 0.9em;
+      transition: background 0.2s;
     }
     .pomo-btn:hover {
-      background: var(--color-highlight);
-      color: #000;
+      background: #444;
     }
     .pomo-btn.active {
-      background: #cc0000;
-      border-color: #cc0000;
-      color: white;
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
     }
-    /* INPUT PERSONALIZADO */
     .custom-time-input {
       background: #0D0D0D;
-      color: white;
-      border: 1px solid var(--color-border);
-      padding: 8px;
-      width: 60px;
-      text-align: center;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      padding: 6px 8px;
       border-radius: 4px;
+      width: 60px;
+      font-size: 0.9em;
+      text-align: center;
     }
-    /* --- THEME PICKER --- */
-    .theme-selector {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-right: 15px;
+    .custom-time-input::placeholder {
+      color: #777;
     }
-    .theme-dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform 0.2s;
-    }
-    .theme-dot:hover {
-      transform: scale(1.2);
-    }
-    /* --- BLOC DE NOTAS --- */
+    /* --- NOTEPAD PANEL --- */
     .notepad-panel {
-      min-height: 250px;
-      flex-shrink: 0;
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
       border-radius: 8px;
-      padding: 15px;
+      padding: 12px;
       box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
+      flex-grow: 1;
+      min-height: 0;
     }
     .notepad-header-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
       border-bottom: 1px solid var(--color-border);
-      padding-bottom: 12px;
-      margin-bottom: 12px;
+      padding-bottom: 8px;
+    }
+    .notepad-header-row h2 {
+      color: var(--color-highlight);
+      margin: 0;
+      font-size: 1.1em;
     }
     .notepad-tabs {
       display: flex;
       gap: 8px;
     }
     .tab-btn {
-      background: #2a2a2a;
-      color: #888;
-      border: 1px solid var(--color-border);
-      padding: 6px 15px;
-      font-size: 0.9em;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-      font-weight: 500;
-      outline: none;
-    }
-    .tab-btn:hover {
       background: #333;
       color: var(--color-text);
-      border-color: #666;
+      border: 1px solid var(--color-border);
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      background: #444;
     }
     .tab-btn.active {
       background: var(--color-highlight);
-      color: white;
-      border-color: var(--color-highlight);
+      color: var(--color-dark-bg);
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
     }
     #notepad {
-      flex-grow: 1;
-      width: 100%;
-      background: var(--color-input-bg);
+      background: #0D0D0D;
       color: var(--color-text);
       border: 1px solid var(--color-border);
-      padding: 12px;
-      resize: none;
-      box-sizing: border-box;
-      font-size: 1.05em;
-      line-height: 1.5;
+      padding: 10px;
       border-radius: 4px;
-      outline: none;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.95em;
+      resize: none;
+      flex-grow: 1;
+    }
+    #notepad::placeholder {
+      color: #666;
     }
     #notepad:focus {
+      outline: none;
       border-color: var(--color-highlight);
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
     }
-    .sidebar {
-      grid-column: 2 / 3;
-      position: sticky;
-      right: 0;
-      top: 52px;
-      bottom: 0;
-      width: 100%;
+    /* --- MÚSICA Y CONTROLES --- */
+    .music-container {
       display: flex;
-      flex-direction: column;
       gap: 10px;
-      padding: 10px;
-      background: var(--color-header-bg);
-      height: calc(100vh - 52px);
-      box-sizing: border-box;
+      align-items: center;
     }
-    .sidebar iframe {
-      width: 100%;
-      height: calc(50% - 5px);
-      border: 3px solid var(--color-highlight);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+    .theme-buttons {
+      display: flex;
+      gap: 8px;
     }
-    #notepad::-webkit-scrollbar,
-    .main::-webkit-scrollbar {
-      width: 10px;
+    .theme-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+      transition: transform 0.2s;
     }
-    #notepad::-webkit-scrollbar-thumb,
-    .main::-webkit-scrollbar-thumb {
-      background-color: var(--color-highlight);
-      border-radius: 5px;
+    .theme-btn:hover {
+      transform: scale(1.15);
     }
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-      .main {
-        height: auto;
-        overflow-y: visible;
-      }
-      .sidebar {
-        position: static;
-        height: auto;
-        flex-direction: row;
-        overflow-x: auto;
-      }
-      .top-tools-container,
-      .pomodoro-container {
-        flex-direction: column;
-        height: auto;
-      }
-      .calculator-panel {
-        width: 100%;
-      }
-      .pomodoro-panel {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-      }
-      .sidebar iframe {
-        min-width: 80%;
-      }
+    .theme-btn.purple {
+      background: #A855F7;
+      border-color: #A855F7;
+    }
+    .theme-btn.blue {
+      background: #3B82F6;
+      border-color: #3B82F6;
+    }
+    .theme-btn.green {
+      background: #10B981;
+      border-color: #10B981;
+    }
+    .theme-btn.red {
+      background: #EF4444;
+      border-color: #EF4444;
+    }
+    .theme-btn.pink {
+      background: #EC4899;
+      border-color: #EC4899;
+    }
+    .music-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid #555;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: background 0.2s;
+    }
+    .music-btn:hover {
+      background: #444;
     }
   </style>
 </head>
 <body>
-  <div id="youtube-player" style="display:none;"></div>
   <div class="container">
-    <header class="top-bar">
-      <nav class="top-left">
-        <div class="box user-info">DANIFU777</div>
-        <div class="box music-control" id="prevBtn"><i class="fa-solid fa-backward-step"></i> ATRÁS</div>
-        <div class="box music-control" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</div>
-        <div class="box music-control" id="nextBtn"><i class="fa-solid fa-forward-step"></i> ADELANTE</div>
-        <div class="box song-info">Música: <span id="song">YouTube Ready</span></div>
-      </nav>
-      <div class="top-right">
-        <div class="theme-selector">
-          <div class="theme-dot" style="background: #A855F7;" onclick="setTheme('#A855F7')" title="Morado"></div>
-          <div class="theme-dot" style="background: #3B82F6;" onclick="setTheme('#3B82F6')" title="Azul"></div>
-          <div class="theme-dot" style="background: #10B981;" onclick="setTheme('#10B981')" title="Verde"></div>
-          <div class="theme-dot" style="background: #E11D48;" onclick="setTheme('#E11D48')" title="Rojo"></div>
-          <div class="theme-dot" style="background: #F59E0B;" onclick="setTheme('#F59E0B')" title="Naranja"></div>
-        </div>
-        <div class="box date-time" id="fecha-hora"></div>
+    <div class="top-bar">
+      <div class="top-left">
+        <div class="box" id="fecha-hora">Cargando...</div>
       </div>
-    </header>
+      <div class="top-right">
+        <div class="theme-buttons">
+          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
+          <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
+          <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
+          <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
+          <button class="theme-btn pink" onclick="setTheme('#EC4899')" title="Rosa"></button>
+        </div>
+        <div class="music-container">
+          <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</button>
+          <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+          <span class="box" id="song">Listo para Play</span>
+        </div>
+      </div>
+    </div>
+
     <main class="main">
+      <!-- CALCULADORA + GRÁFICO -->
       <div class="top-tools-container">
         <div class="tool-panel calculator-panel">
           <h2>Calculadora</h2>
-          <div id="display">0</div>
           <div class="calculator-grid">
-            <button class="calc-button clear" onclick="clearDisplay()">AC</button>
-            <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-            <button class="calc-button operator" onclick="appendOperator('*')">x</button>
-            <button class="calc-button" onclick="backspace()"><i class="fa-solid fa-delete-left"></i></button>
+            <input type="text" id="display" readonly>
+            <button class="calc-button clear" onclick="clearDisplay()">C</button>
+            <button class="calc-button" onclick="backspace()">←</button>
+            <button class="calc-button" onclick="appendOperator('/')">/</button>
             <button class="calc-button" onclick="appendNumber('7')">7</button>
             <button class="calc-button" onclick="appendNumber('8')">8</button>
             <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+            <button class="calc-button operator" onclick="appendOperator('*')">*</button>
             <button class="calc-button" onclick="appendNumber('4')">4</button>
             <button class="calc-button" onclick="appendNumber('5')">5</button>
             <button class="calc-button" onclick="appendNumber('6')">6</button>
-            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
+            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
             <button class="calc-button" onclick="appendNumber('1')">1</button>
             <button class="calc-button" onclick="appendNumber('2')">2</button>
             <button class="calc-button" onclick="appendNumber('3')">3</button>
@@ -432,7 +410,8 @@
             frameborder="0" allowfullscreen></iframe>
         </div>
       </div>
-      <!-- POMODORO REDISEÑADO CON INPUT PERSONALIZADO -->
+
+      <!-- POMODORO -->
       <div class="pomodoro-container">
         <div class="pomodoro-panel">
           <div style="display:flex; align-items:center;">
@@ -440,15 +419,16 @@
             <div class="pomodoro-display" id="pomo-display">25:00</div>
           </div>
           <div class="pomodoro-controls">
-            <!-- NUEVO: INPUT DE MINUTOS -->
             <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
             <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
-            <div style="width: 1px; height: 30px; background: #555; margin: 0 10px;"></div> <!-- Separador -->
+            <div style="width: 1px; height: 30px; background: #555; margin: 0 10px;"></div>
             <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
             <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
           </div>
         </div>
       </div>
+
+      <!-- BLOC DE NOTAS -->
       <div class="notepad-panel">
         <div class="notepad-header-row">
           <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
@@ -461,13 +441,9 @@
         <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
       </div>
     </main>
-    <aside class="sidebar">
-      <iframe class="video-frame" src="https://www.youtube.com/embed/QviXe8xvA50" frameborder="0"
-        allowfullscreen></iframe>
-      <iframe class="video-frame" src="https://www.youtube.com/embed/dIqzNSKCNlI" frameborder="0"
-        allowfullscreen></iframe>
-    </aside>
   </div>
+
+  <div id="youtube-player"></div>
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     // --- FUNCIONES GLOBALES ---
@@ -499,6 +475,7 @@
     };
     window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
     window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
+    
     // 2. BLOC DE NOTAS
     let activeTab = localStorage.getItem('danifu_active_tab') || "1";
     window.switchTab = function (tabNum) {
@@ -513,11 +490,13 @@
       if (activeBtn) activeBtn.classList.add('active');
       if (notepad) notepad.value = localStorage.getItem(`danifu_notes_v2_${activeTab}`) || "";
     };
+    
     // 3. CAMBIAR TEMA
     window.setTheme = function (color) {
       document.documentElement.style.setProperty('--color-highlight', color);
       localStorage.setItem('danifu_theme', color);
     };
+    
     // 4. POMODORO CON PERSONALIZACIÓN
     let pomoInterval;
     let pomoSeconds = 25 * 60;
@@ -555,12 +534,11 @@
     window.resetPomodoro = function () {
       clearInterval(pomoInterval);
       isRunning = false;
-      pomoSeconds = 25 * 60; // Default reset to 25
+      pomoSeconds = 25 * 60;
       updatePomoUI();
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
-    // Nueva función para tiempo custom
     window.setCustomTime = function () {
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
@@ -575,6 +553,7 @@
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
+    
     // INIT
     window.onload = function () {
       window.switchTab(activeTab);
@@ -584,12 +563,14 @@
       if (savedTheme) window.setTheme(savedTheme);
       updatePomoUI();
     };
+    
     // DATE
     setInterval(() => {
       const d = new Date();
       const el = document.getElementById("fecha-hora");
       if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
     }, 1000);
+    
     // YOUTUBE
     let player;
     const playPauseBtn = document.getElementById('playPauseBtn');
