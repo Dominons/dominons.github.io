@@ -209,42 +209,66 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
     }
+    .calc-display {
+      grid-column: 1 / -1;
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 2px solid var(--color-highlight);
+      text-align: right;
+      padding: 10px;
+      margin-bottom: 6px;
+      font-size: 1.5em;
+      font-weight: bold;
+      overflow: hidden;
+      min-height: 32px;
+      border-radius: 4px;
+      font-family: monospace;
+      word-break: break-all;
+    }
     #display {
       grid-column: 1 / -1;
       background: #0D0D0D;
       color: var(--color-highlight);
-      border: 1px solid var(--color-highlight);
+      border: 2px solid var(--color-highlight);
       text-align: right;
-      padding: 6px;
+      padding: 10px;
       margin-bottom: 6px;
-      font-size: 1.3em;
+      font-size: 1.5em;
+      font-weight: bold;
       overflow: hidden;
-      height: 28px;
-      line-height: 28px;
+      min-height: 32px;
       border-radius: 4px;
+      font-family: monospace;
+      word-break: break-all;
     }
     .calc-button {
       background: #333;
       color: var(--color-text);
       border: 1px solid var(--color-border);
-      padding: 8px 0;
-      font-size: 0.9em;
+      padding: 10px 0;
+      font-size: 0.95em;
+      font-weight: 600;
       cursor: pointer;
       border-radius: 4px;
-      transition: background 0.1s;
+      transition: all 0.1s;
     }
     .calc-button:active {
       background: #555;
+      transform: scale(0.95);
     }
     .calc-button:hover {
       background: #444;
     }
     .calc-button.equals {
-      grid-row: 4 / span 2;
       grid-column: 4 / span 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      grid-row: 5 / span 1;
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .calc-button.equals:hover {
+      background: #8b3ed9;
     }
     .calc-button.zero {
       grid-column: 1 / span 2;
@@ -253,10 +277,18 @@
       background: var(--color-highlight);
       color: var(--color-dark-bg);
       font-weight: bold;
+      font-size: 1.1em;
+    }
+    .calc-button.operator:hover {
+      background: #8b3ed9;
     }
     .calc-button.clear {
       background: #DC2626;
       color: white;
+      font-weight: bold;
+    }
+    .calc-button.clear:hover {
+      background: #b91c1c;
     }
     /* --- POMODORO PANEL --- */
     .pomodoro-panel {
@@ -429,6 +461,16 @@
             <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
             <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
             <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
+            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
+            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
+            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
+            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
+            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
+            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
+            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
+            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
+            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
+            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
           </div>
         </div>
         <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
@@ -439,23 +481,24 @@
         <!-- CALCULADORA -->
         <div class="calculator-panel">
           <h2>Calculadora</h2>
+          <div id="display" class="calc-display">0</div>
           <div class="calculator-grid">
-            <input type="text" id="display" readonly>
             <button class="calc-button clear" onclick="clearDisplay()">C</button>
             <button class="calc-button" onclick="backspace()">←</button>
-            <button class="calc-button" onclick="appendOperator('/')">/</button>
+            <button class="calc-button operator" onclick="appendOperator('/')">/</button>
+            <button class="calc-button operator" onclick="appendOperator('*')">×</button>
             <button class="calc-button" onclick="appendNumber('7')">7</button>
             <button class="calc-button" onclick="appendNumber('8')">8</button>
             <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button operator" onclick="appendOperator('*')">*</button>
+            <button class="calc-button operator" onclick="appendOperator('-')">−</button>
             <button class="calc-button" onclick="appendNumber('4')">4</button>
             <button class="calc-button" onclick="appendNumber('5')">5</button>
             <button class="calc-button" onclick="appendNumber('6')">6</button>
-            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
             <button class="calc-button" onclick="appendNumber('1')">1</button>
             <button class="calc-button" onclick="appendNumber('2')">2</button>
             <button class="calc-button" onclick="appendNumber('3')">3</button>
-            <button class="calc-button operator equals" onclick="calculate()">=</button>
+            <button class="calc-button equals" onclick="calculate()">=</button>
             <button class="calc-button zero" onclick="appendNumber('0')">0</button>
             <button class="calc-button" onclick="appendNumber('.')">.</button>
           </div>
