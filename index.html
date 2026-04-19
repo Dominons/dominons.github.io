@@ -100,16 +100,41 @@
       flex-direction: column;
       flex-shrink: 0;
     }
-    .chart-panel h2 {
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    .chart-header h2 {
       color: var(--color-highlight);
-      margin: 0 0 8px 0;
+      margin: 0;
       border-bottom: 1px solid var(--color-border);
       padding-bottom: 5px;
       font-size: 1.2em;
+      flex: 1;
+    }
+    .symbol-selector {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .symbol-selector:hover {
+      background: #444;
+    }
+    .symbol-selector:focus {
+      outline: none;
+      border-color: var(--color-highlight);
     }
     .chart-iframe {
       width: 100%;
-      height: calc(100% - 30px);
+      height: calc(100% - 40px);
       border: none;
       display: block;
     }
@@ -399,6 +424,38 @@
       background: #EC4899;
       border-color: #EC4899;
     }
+    .theme-btn.yellow {
+      background: #FBBF24;
+      border-color: #FBBF24;
+    }
+    .theme-btn.cyan {
+      background: #06B6D4;
+      border-color: #06B6D4;
+    }
+    .theme-btn.lime {
+      background: #84CC16;
+      border-color: #84CC16;
+    }
+    .theme-btn.orange {
+      background: #F97316;
+      border-color: #F97316;
+    }
+    .theme-btn.indigo {
+      background: #6366F1;
+      border-color: #6366F1;
+    }
+    .theme-btn.white {
+      background: #FFFFFF;
+      border-color: #FFFFFF;
+    }
+    .theme-btn.black {
+      background: #000000;
+      border-color: #FFFFFF;
+    }
+    .theme-btn.gray {
+      background: #9CA3AF;
+      border-color: #9CA3AF;
+    }
     .music-btn {
       background: #333;
       color: var(--color-text);
@@ -427,6 +484,14 @@
           <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
           <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
           <button class="theme-btn pink" onclick="setTheme('#EC4899')" title="Rosa"></button>
+          <button class="theme-btn yellow" onclick="setTheme('#FBBF24')" title="Amarillo"></button>
+          <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
+          <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
+          <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
+          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
+          <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
+          <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
+          <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
         </div>
         <div class="music-container">
           <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</button>
@@ -440,8 +505,22 @@
     <main class="main">
       <!-- GRÁFICO TOP -->
       <div class="chart-panel">
-        <h2>Mini-Gráfico (USDT/ARS)</h2>
-        <iframe class="chart-iframe"
+        <div class="chart-header">
+          <h2>Mini-Gráfico</h2>
+          <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
+            <option value="BINANCE:USDTARS">USDT/ARS</option>
+            <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
+            <option value="FOREXCOM:EURUSD">EUR/USD</option>
+            <option value="FOREXCOM:GBPUSD">GBP/USD</option>
+            <option value="FOREXCOM:JPYUSD">JPY/USD</option>
+            <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
+            <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
+            <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
+            <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
+            <option value="FOREXCOM:NGAS">Gas Natural</option>
+          </select>
+        </div>
+        <iframe class="chart-iframe" id="tradingViewChart"
           src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
           frameborder="0" allowfullscreen></iframe>
       </div>
@@ -573,6 +652,16 @@
       localStorage.setItem('danifu_theme', color);
     };
     
+    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
+    window.changeSymbol = function () {
+      const select = document.getElementById('symbolSelect');
+      const symbol = select.value;
+      const iframe = document.getElementById('tradingViewChart');
+      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
+      iframe.src = newSrc;
+      localStorage.setItem('danifu_chart_symbol', symbol);
+    };
+    
     // 4. POMODORO CON PERSONALIZACIÓN
     let pomoInterval;
     let pomoSeconds = 25 * 60;
@@ -637,7 +726,12 @@
       if (notepad) notepad.addEventListener('input', () => localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value));
       const savedTheme = localStorage.getItem('danifu_theme');
       if (savedTheme) window.setTheme(savedTheme);
+      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
+      if (savedSymbol) {
+        document.getElementById('symbolSelect').value = savedSymbol;
+      }
       updatePomoUI();
+      updateDisplay();
     };
     
     // DATE
