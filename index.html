@@ -25,11 +25,139 @@
       overflow: hidden;
       transition: background 0.3s;
     }
+    /* --- LOGIN SCREEN --- */
+    #loginScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1A1A1A 0%, #282828 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 30px;
+    }
+    #loginScreen.hidden {
+      display: none !important;
+    }
+    .login-container {
+      background: #1F1F1F;
+      border: 3px solid #A855F7;
+      border-radius: 15px;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4),
+                  inset 0 0 20px rgba(168, 85, 247, 0.1);
+      max-width: 450px;
+      width: 90%;
+      backdrop-filter: blur(10px);
+    }
+    .login-container h1 {
+      color: #A855F7;
+      margin: 0 0 15px 0;
+      font-size: 3.5em;
+      font-weight: 800;
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+      letter-spacing: 2px;
+    }
+    .login-container .subtitle {
+      color: #999;
+      margin: 0 0 10px 0;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+    .login-container p {
+      color: #BBB;
+      margin: 0 0 40px 0;
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+    .google-button {
+      background: white;
+      color: #333;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 1.05em;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      margin: 0 auto;
+    }
+    .google-button:hover {
+      background: #f8f8f8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .google-button:active {
+      transform: translateY(0);
+    }
+    .google-button i {
+      font-size: 1.3em;
+    }
+    .features {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #444;
+      text-align: left;
+    }
+    .features h3 {
+      color: #A855F7;
+      margin-bottom: 15px;
+      font-size: 1.1em;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+      font-size: 0.95em;
+      color: #CCC;
+    }
+    .feature-item i {
+      color: #A855F7;
+      font-size: 1.2em;
+      min-width: 20px;
+    }
+    .loading {
+      display: none;
+      text-align: center;
+      color: #A855F7;
+    }
+    .loading.show {
+      display: block;
+    }
+    .spinner {
+      border: 3px solid #333;
+      border-top: 3px solid #A855F7;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* --- MAIN APP --- */
     .container {
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       height: 100vh;
+    }
+    .container.hidden {
+      display: none !important;
     }
     .top-bar {
       grid-column: 1 / span 1;
@@ -166,6 +294,8 @@
     .notepad-tabs {
       display: flex;
       gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
     }
     .tab-btn {
       background: #333;
@@ -176,6 +306,7 @@
       border-radius: 4px;
       font-size: 0.85em;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .tab-btn:hover {
       background: #444;
@@ -392,6 +523,7 @@
     .theme-buttons {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .theme-btn {
       width: 24px;
@@ -404,58 +536,19 @@
     .theme-btn:hover {
       transform: scale(1.15);
     }
-    .theme-btn.purple {
-      background: #A855F7;
-      border-color: #A855F7;
-    }
-    .theme-btn.blue {
-      background: #3B82F6;
-      border-color: #3B82F6;
-    }
-    .theme-btn.green {
-      background: #10B981;
-      border-color: #10B981;
-    }
-    .theme-btn.red {
-      background: #EF4444;
-      border-color: #EF4444;
-    }
-    .theme-btn.pink {
-      background: #EC4899;
-      border-color: #EC4899;
-    }
-    .theme-btn.yellow {
-      background: #FBBF24;
-      border-color: #FBBF24;
-    }
-    .theme-btn.cyan {
-      background: #06B6D4;
-      border-color: #06B6D4;
-    }
-    .theme-btn.lime {
-      background: #84CC16;
-      border-color: #84CC16;
-    }
-    .theme-btn.orange {
-      background: #F97316;
-      border-color: #F97316;
-    }
-    .theme-btn.indigo {
-      background: #6366F1;
-      border-color: #6366F1;
-    }
-    .theme-btn.white {
-      background: #FFFFFF;
-      border-color: #FFFFFF;
-    }
-    .theme-btn.black {
-      background: #000000;
-      border-color: #FFFFFF;
-    }
-    .theme-btn.gray {
-      background: #9CA3AF;
-      border-color: #9CA3AF;
-    }
+    .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+    .theme-btn.blue { background: #3B82F6; border-color: #3B82F6; }
+    .theme-btn.green { background: #10B981; border-color: #10B981; }
+    .theme-btn.red { background: #EF4444; border-color: #EF4444; }
+    .theme-btn.pink { background: #EC4899; border-color: #EC4899; }
+    .theme-btn.yellow { background: #FBBF24; border-color: #FBBF24; }
+    .theme-btn.cyan { background: #06B6D4; border-color: #06B6D4; }
+    .theme-btn.lime { background: #84CC16; border-color: #84CC16; }
+    .theme-btn.orange { background: #F97316; border-color: #F97316; }
+    .theme-btn.indigo { background: #6366F1; border-color: #6366F1; }
+    .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
     .music-btn {
       background: #333;
       color: var(--color-text);
@@ -469,10 +562,82 @@
     .music-btn:hover {
       background: #444;
     }
+    .logout-btn {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: background 0.2s;
+      font-weight: 600;
+    }
+    .logout-btn:hover {
+      background: #b91c1c;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #333;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen">
+    <div class="login-container">
+      <div class="subtitle">Bienvenido a</div>
+      <h1>DANIFU777</h1>
+      <p>Dominon</p>
+      
+      <button class="google-button" id="googleSignInBtn">
+        <i class="fa-brands fa-google"></i>
+        Iniciar sesión con Google
+      </button>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Autenticando...</p>
+      </div>
+
+      <div class="features">
+        <h3>✨ Características</h3>
+        <div class="feature-item">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span>Guarda automáticamente tus notas</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-palette"></i>
+          <span>Recuerda tu tema favorito</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Sincroniza gráficos activos</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-music"></i>
+          <span>Guarda tu música en reproducción</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-lock"></i>
+          <span>Acceso seguro con Google</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="container hidden" id="mainApp">
     <div class="top-bar">
       <div class="top-left">
         <div class="box" id="fecha-hora">Cargando...</div>
@@ -498,6 +663,11 @@
           <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
           <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
           <span class="box" id="song">Listo para Play</span>
+        </div>
+        <div class="user-info" id="userInfo">
+          <img class="user-avatar" id="userAvatar" alt="Avatar">
+          <span id="userName">Usuario</span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
       </div>
     </div>
@@ -600,40 +770,199 @@
 
   <div id="youtube-player"></div>
   <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+  <!-- Google Sign-In -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <script>
-    // --- FUNCIONES GLOBALES ---
-    // 1. CALCULADORA
+    // ===== FIREBASE CONFIG =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
+      authDomain: "danifu777-4732c.firebaseapp.com",
+      projectId: "danifu777-4732c",
+      storageBucket: "danifu777-4732c.firebasestorage.app",
+      messagingSenderId: "171480985650",
+      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ===== AUTH STATE =====
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        showApp(user);
+        loadUserData();
+      } else {
+        showLogin();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('mainApp').classList.add('hidden');
+    }
+
+    function showApp(user) {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('mainApp').classList.remove('hidden');
+      document.getElementById('userName').textContent = user.displayName || 'Usuario';
+      document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/28';
+    }
+
+    // ===== GOOGLE SIGN IN =====
+    document.getElementById('googleSignInBtn').addEventListener('click', function() {
+      document.getElementById('loading').classList.add('show');
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(result => {
+          document.getElementById('loading').classList.remove('show');
+        })
+        .catch(error => {
+          document.getElementById('loading').classList.remove('show');
+          console.error('Error:', error);
+          alert('Error al iniciar sesión');
+        });
+    });
+
+    // ===== LOGOUT =====
+    window.logout = function() {
+      auth.signOut().then(() => {
+        console.log('Sesión cerrada');
+      });
+    };
+
+    // ===== SAVE/LOAD DATA =====
+    function saveUserData() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const notes = {};
+      for (let i = 1; i <= 20; i++) {
+        notes[`page_${i}`] = localStorage.getItem(`danifu_notes_v2_${i}`) || '';
+      }
+
+      const theme = localStorage.getItem('danifu_theme') || '#A855F7';
+      const symbol = document.getElementById('symbolSelect').value || 'BINANCE:USDTARS';
+      const currentSong = document.getElementById('song').textContent || 'Listo para Play';
+
+      db.collection('users').doc(user.uid).set({
+        notes: notes,
+        theme: theme,
+        symbol: symbol,
+        currentSong: currentSong,
+        lastUpdated: new Date()
+      });
+    }
+
+    function loadUserData() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      db.collection('users').doc(user.uid).get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          
+          // Cargar notas
+          if (data.notes) {
+            for (let i = 1; i <= 20; i++) {
+              localStorage.setItem(`danifu_notes_v2_${i}`, data.notes[`page_${i}`] || '');
+            }
+          }
+          
+          // Cargar tema
+          if (data.theme) {
+            setTheme(data.theme);
+          }
+          
+          // Cargar símbolo
+          if (data.symbol) {
+            document.getElementById('symbolSelect').value = data.symbol;
+            changeSymbol();
+          }
+          
+          // Cargar canción
+          if (data.currentSong) {
+            document.getElementById('song').textContent = data.currentSong;
+          }
+          
+          window.switchTab(1);
+        }
+      });
+    }
+
+    // Guardar datos cada vez que cambien
+    setInterval(saveUserData, 5000);
+
+    // ===== FUNCIONES EXISTENTES =====
     const display = document.getElementById('display');
-    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
-    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
-    window.appendNumber = function (number) {
+    let currentInput = '0';
+    let previousInput = '';
+    let operation = null;
+    let waitingForSecondOperand = false;
+
+    window.updateDisplay = function() {
+      if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput;
+    };
+
+    window.appendNumber = function(number) {
       if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
       else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
       updateDisplay();
     };
-    window.appendOperator = function (nextOperation) {
+
+    window.appendOperator = function(nextOperation) {
       const inputValue = parseFloat(currentInput);
       if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
       if (previousInput === '') { previousInput = inputValue; }
       else if (operation) {
         const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result); previousInput = result;
+        currentInput = String(result);
+        previousInput = result;
       }
-      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
-    };
-    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
-    window.calculate = function () {
-      if (!operation || waitingForSecondOperand) return;
-      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
+      waitingForSecondOperand = true;
+      operation = nextOperation;
       updateDisplay();
     };
-    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
-    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
-    
-    // 2. BLOC DE NOTAS
+
+    const performCalculation = {
+      '/': (a, b) => a / b,
+      '*': (a, b) => a * b,
+      '+': (a, b) => a + b,
+      '-': (a, b) => a - b
+    };
+
+    window.calculate = function() {
+      if (!operation || waitingForSecondOperand) return;
+      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
+      currentInput = String(result);
+      operation = null;
+      previousInput = '';
+      waitingForSecondOperand = false;
+      updateDisplay();
+    };
+
+    window.clearDisplay = function() {
+      currentInput = '0';
+      previousInput = '';
+      operation = null;
+      updateDisplay();
+    };
+
+    window.backspace = function() {
+      if (currentInput.length > 1) currentInput = currentInput.slice(0, -1);
+      else currentInput = '0';
+      updateDisplay();
+    };
+
+    // ===== BLOC DE NOTAS =====
     let activeTab = localStorage.getItem('danifu_active_tab') || "1";
-    window.switchTab = function (tabNum) {
+
+    window.switchTab = function(tabNum) {
       const notepad = document.getElementById('notepad');
       const notepadTitle = document.getElementById('notepad-title');
       if (notepad) localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
@@ -645,15 +974,15 @@
       if (activeBtn) activeBtn.classList.add('active');
       if (notepad) notepad.value = localStorage.getItem(`danifu_notes_v2_${activeTab}`) || "";
     };
-    
-    // 3. CAMBIAR TEMA
-    window.setTheme = function (color) {
+
+    // ===== TEMA =====
+    window.setTheme = function(color) {
       document.documentElement.style.setProperty('--color-highlight', color);
       localStorage.setItem('danifu_theme', color);
     };
-    
-    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
-    window.changeSymbol = function () {
+
+    // ===== SÍMBOLO GRÁFICO =====
+    window.changeSymbol = function() {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
       const iframe = document.getElementById('tradingViewChart');
@@ -661,17 +990,19 @@
       iframe.src = newSrc;
       localStorage.setItem('danifu_chart_symbol', symbol);
     };
-    
-    // 4. POMODORO CON PERSONALIZACIÓN
+
+    // ===== POMODORO =====
     let pomoInterval;
     let pomoSeconds = 25 * 60;
     let isRunning = false;
-    window.updatePomoUI = function () {
+
+    window.updatePomoUI = function() {
       const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
       const s = (pomoSeconds % 60).toString().padStart(2, '0');
       document.getElementById('pomo-display').innerText = `${m}:${s}`;
     };
-    window.togglePomodoro = function () {
+
+    window.togglePomodoro = function() {
       const btn = document.getElementById('start-btn');
       if (isRunning) {
         clearInterval(pomoInterval);
@@ -696,7 +1027,8 @@
         }, 1000);
       }
     };
-    window.resetPomodoro = function () {
+
+    window.resetPomodoro = function() {
       clearInterval(pomoInterval);
       isRunning = false;
       pomoSeconds = 25 * 60;
@@ -704,7 +1036,8 @@
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
-    window.setCustomTime = function () {
+
+    window.setCustomTime = function() {
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
@@ -718,53 +1051,73 @@
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
-    
-    // INIT
-    window.onload = function () {
-      window.switchTab(activeTab);
-      const notepad = document.getElementById('notepad');
-      if (notepad) notepad.addEventListener('input', () => localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value));
-      const savedTheme = localStorage.getItem('danifu_theme');
-      if (savedTheme) window.setTheme(savedTheme);
-      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
-      if (savedSymbol) {
-        document.getElementById('symbolSelect').value = savedSymbol;
-      }
+
+    // ===== INIT =====
+    window.onload = function() {
       updatePomoUI();
       updateDisplay();
+      
+      const notepad = document.getElementById('notepad');
+      if (notepad) {
+        notepad.addEventListener('input', () => {
+          localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
+          saveUserData();
+        });
+      }
+
+      const savedTheme = localStorage.getItem('danifu_theme');
+      if (savedTheme) window.setTheme(savedTheme);
+
+      setInterval(() => {
+        const d = new Date();
+        const el = document.getElementById("fecha-hora");
+        if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+      }, 1000);
     };
-    
-    // DATE
-    setInterval(() => {
-      const d = new Date();
-      const el = document.getElementById("fecha-hora");
-      if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-    }, 1000);
-    
-    // YOUTUBE
+
+    // ===== YOUTUBE =====
     let player;
     const playPauseBtn = document.getElementById('playPauseBtn');
     const songNameElement = document.getElementById('song');
-    window.onYouTubeIframeAPIReady = function () {
+
+    window.onYouTubeIframeAPIReady = function() {
       player = new YT.Player('youtube-player', {
-        height: '1', width: '1', videoId: 'P0TqT0-qJqU',
-        playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG', 'autoplay': 0, 'controls': 0 },
+        height: '1',
+        width: '1',
+        videoId: 'P0TqT0-qJqU',
+        playerVars: {
+          'listType': 'playlist',
+          'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG',
+          'autoplay': 0,
+          'controls': 0
+        },
         events: {
           'onReady': () => {
             if (songNameElement) songNameElement.textContent = "Listo para Play";
-            if (playPauseBtn) playPauseBtn.onclick = () => { if (player.getPlayerState() == 1) player.pauseVideo(); else player.playVideo(); };
+            if (playPauseBtn) {
+              playPauseBtn.onclick = () => {
+                if (player.getPlayerState() == 1) player.pauseVideo();
+                else player.playVideo();
+                saveUserData();
+              };
+            }
             document.getElementById('prevBtn').onclick = () => player.previousVideo();
             document.getElementById('nextBtn').onclick = () => player.nextVideo();
           },
           'onStateChange': (e) => {
             if (e.data == 1) {
               if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i> PAUSA';
-              try { if (songNameElement) songNameElement.textContent = player.getVideoData().title.substring(0, 25) + "..."; } catch (e) { }
-            } else if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
+              try {
+                if (songNameElement) songNameElement.textContent = player.getVideoData().title.substring(0, 25) + "...";
+              } catch (e) {}
+            } else if (playPauseBtn) {
+              playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
+            }
+            saveUserData();
           }
         }
       });
-    }
+    };
   </script>
 </body>
 </html>
