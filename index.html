@@ -671,6 +671,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
@@ -678,10 +679,12 @@
       projectId: "danifu777-4732c",
       storageBucket: "danifu777-4732c.firebasestorage.app",
       messagingSenderId: "171480985650",
-      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b"
+      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
+      measurementId: "G-SL032V9XGM"
     };
 
     const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
