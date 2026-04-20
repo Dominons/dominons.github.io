@@ -61,9 +61,6 @@
       gap: 10px;
       font-size: 1em;
     }
-    .google-button:hover {
-      background: #f0f0f0;
-    }
 
     /* ========== MAIN CONTAINER ========== */
     .container {
@@ -93,10 +90,10 @@
     .top-left, .top-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
 
-    /* ========== USER INFO ========== */
+    /* USER INFO */
     .user-info {
       display: flex;
       align-items: center;
@@ -124,135 +121,85 @@
       font-size: 0.8em;
     }
 
-    /* ========== NUEVO MODAL DE MÚSICA ========== */
+    /* ========== MODAL DE MÚSICA ========== */
     .music-trigger {
-      background: var(--color-highlight);
-      color: white;
-      border: none;
-      width: 35px;
-      height: 35px;
+      background: #333;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.2em;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-      transition: transform 0.2s;
+      transition: all 0.3s;
     }
-    .music-trigger:hover { transform: scale(1.1); }
+    .music-trigger:hover { background: var(--color-highlight); color: #000; }
 
-    #musicPlayerModal {
+    #musicModal {
       position: fixed;
       top: 60px;
       right: 20px;
       width: 280px;
-      background: rgba(31, 31, 31, 0.95);
+      background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
       border-radius: 12px;
       padding: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
       z-index: 1000;
       display: none;
-      backdrop-filter: blur(5px);
     }
-    #musicPlayerModal.active { display: block; animation: fadeIn 0.3s; }
-
-    .music-modal-header {
-      font-size: 0.9em;
-      font-weight: bold;
-      color: var(--color-highlight);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
-    }
-    .song-title {
-      font-size: 0.8em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 10px;
-      color: #bbb;
-    }
-    .music-controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    .music-btn-circle {
-      background: #333;
-      border: 1px solid #555;
-      color: white;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .music-btn-circle:hover { background: var(--color-highlight); }
+    #musicModal.active { display: block; }
     
-    .progress-container { margin-bottom: 10px; }
-    .time-info {
+    .music-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.7em;
-      margin-top: 3px;
-      color: #888;
+      color: var(--color-highlight);
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 0.9em;
     }
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--color-highlight);
-      cursor: pointer;
-      height: 4px;
-    }
-    .volume-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8em;
-      color: #888;
-    }
-    .playlist-selector {
-      margin-top: 15px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-    }
-    .p-btn {
-      font-size: 0.7em;
-      padding: 4px;
-      background: #222;
-      border: 1px solid #444;
-      color: #eee;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .p-btn:hover { border-color: var(--color-highlight); }
+    .song-info { font-size: 0.75em; color: #bbb; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .music-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+    .m-btn { background: #333; border: 1px solid #555; color: white; padding: 8px; border-radius: 50%; cursor: pointer; width: 35px; height: 35px; }
+    .m-btn:hover { border-color: var(--color-highlight); color: var(--color-highlight); }
 
-    /* ========== OTROS ESTILOS ========== */
-    .box { border: 1px solid var(--color-border); padding: 4px 10px; background: #333; border-radius: 4px; font-size: 0.85em; }
-    .main { padding: var(--main-gap); display: flex; flex-direction: column; gap: var(--main-gap); height: calc(100vh - 52px); overflow-y: auto; box-sizing: border-box; }
-    .chart-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 10px; height: 300px; display: flex; flex-direction: column; }
-    .notepad-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
-    .notepad-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
-    .tab-btn { background: #333; color: var(--color-text); border: 1px solid var(--color-border); padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.7em; }
+    .progress-area { margin-bottom: 10px; }
+    .time-labels { display: flex; justify-content: space-between; font-size: 0.65em; color: #888; margin-top: 4px; }
+    
+    input[type="range"] { width: 100%; accent-color: var(--color-highlight); cursor: pointer; }
+    
+    .playlist-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
+    .pl-btn { background: #111; border: 1px solid #444; color: #eee; font-size: 0.7em; padding: 5px; cursor: pointer; border-radius: 4px; }
+    .pl-btn:hover { border-color: var(--color-highlight); }
+
+    /* ========== ESTILOS ORIGINALES REUTILIZADOS ========== */
+    .box { border: 1px solid var(--color-border); padding: 4px 10px; background: #333; border-radius: 4px; box-shadow: var(--shadow-light); font-size: 0.9em; white-space: nowrap; }
+    .main { grid-column: 1 / -1; background: var(--color-main-bg); padding: var(--main-gap); display: flex; flex-direction: column; gap: var(--main-gap); height: calc(100vh - 52px); overflow-y: auto; box-sizing: border-box; }
+    
+    .chart-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 10px; height: 300px; flex-shrink: 0; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .chart-header h2 { color: var(--color-highlight); margin: 0; font-size: 1.2em; }
+    
+    .notepad-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; flex-grow: 1; min-height: 200px; }
+    .notepad-tabs { display: flex; gap: 4px; flex-wrap: wrap; width: 100%; margin-top: 5px; }
+    .tab-btn { background: #333; color: var(--color-text); border: 1px solid var(--color-border); padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.75em; }
     .tab-btn.active { background: var(--color-highlight); color: #000; font-weight: bold; }
-    #notepad { background: #0D0D0D; color: var(--color-text); border: 1px solid var(--color-border); padding: 10px; border-radius: 4px; resize: none; flex-grow: 1; }
-    .bottom-container { display: grid; grid-template-columns: 1fr 1fr; gap: var(--main-gap); }
+    #notepad { background: #0D0D0D; color: var(--color-text); border: 1px solid var(--color-border); padding: 10px; border-radius: 4px; font-family: sans-serif; resize: none; flex-grow: 1; }
+
+    .bottom-container { display: grid; grid-template-columns: 1fr 1fr; gap: var(--main-gap); flex-shrink: 0; }
     .calculator-panel, .pomodoro-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 10px; }
-    .calc-display { background: #0D0D0D; color: var(--color-highlight); text-align: right; padding: 10px; margin-bottom: 6px; font-size: 1.2em; border-radius: 4px; font-family: monospace; }
+    .calc-display { background: #0D0D0D; color: var(--color-highlight); border: 2px solid var(--color-highlight); text-align: right; padding: 10px; margin-bottom: 6px; font-size: 1.5em; border-radius: 4px; font-family: monospace; }
     .calculator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .calc-button { background: #333; color: white; border: 1px solid #444; padding: 10px; cursor: pointer; border-radius: 4px; }
-    .pomodoro-display { font-size: 2em; text-align: center; color: var(--color-highlight); margin: 10px 0; font-family: monospace; }
-    .theme-buttons { display: flex; gap: 4px; flex-wrap: wrap; max-width: 150px; }
-    .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #555; cursor: pointer; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .calc-button.operator { background: var(--color-highlight); color: #000; font-weight: bold; }
+    
+    .pomodoro-display { font-size: 2em; font-weight: bold; color: var(--color-highlight); font-family: monospace; text-align: center; margin: 10px 0; }
+    .pomo-btn { background: #333; color: #ddd; border: 1px solid #555; padding: 6px; cursor: pointer; border-radius: 4px; font-size: 0.8em; flex: 1; }
+    .theme-btn { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #555; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -263,128 +210,136 @@
       <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
       <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
       <button class="google-button" id="googleSignInBtn">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
+        <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
         Iniciar sesión con Google
       </button>
     </div>
   </div>
 
-  <!-- MAIN APP -->
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
       <div class="top-left">
         <div class="box" id="fecha-hora">Cargando...</div>
-        <div class="theme-buttons">
-          <button class="theme-btn" style="background:#A855F7" onclick="setTheme('#A855F7')"></button>
-          <button class="theme-btn" style="background:#3B82F6" onclick="setTheme('#3B82F6')"></button>
-          <button class="theme-btn" style="background:#10B981" onclick="setTheme('#10B981')"></button>
-          <button class="theme-btn" style="background:#EF4444" onclick="setTheme('#EF4444')"></button>
-          <button class="theme-btn" style="background:#FFFFFF" onclick="setTheme('#FFFFFF')"></button>
+        <div class="theme-buttons" style="display:flex; gap:5px;">
+           <button class="theme-btn" style="background:#A855F7" onclick="setTheme('#A855F7')"></button>
+           <button class="theme-btn" style="background:#3B82F6" onclick="setTheme('#3B82F6')"></button>
+           <button class="theme-btn" style="background:#10B981" onclick="setTheme('#10B981')"></button>
+           <button class="theme-btn" style="background:#EF4444" onclick="setTheme('#EF4444')"></button>
         </div>
       </div>
-
       <div class="top-right">
-        <!-- Gatillo del reproductor -->
-        <button class="music-trigger" onclick="toggleMusicModal()" title="Reproductor de Música">
-          <i class="fas fa-compact-disc fa-spin" id="disc-icon" style="animation-play-state: paused;"></i>
+        <!-- ÚNICO BOTÓN DE MÚSICA -->
+        <button class="music-trigger" onclick="document.getElementById('musicModal').classList.toggle('active')">
+          <i class="fas fa-compact-disc" id="disc-icon"></i>
         </button>
 
-        <div class="user-info">
+        <div class="user-info" id="userInfo">
           <img class="user-avatar" id="userAvatar" src="">
-          <span id="userName" style="max-width: 80px; overflow: hidden;"></span>
-          <button class="logout-btn" id="logoutBtn"><i class="fas fa-power-off"></i></button>
+          <span class="user-name" id="userName"></span>
+          <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
     </div>
 
-    <!-- PANEL FLOTANTE DE MÚSICA -->
-    <div id="musicPlayerModal">
-      <div class="music-modal-header">
-        <span>PLAYER PRO</span>
-        <i class="fas fa-times" onclick="toggleMusicModal()" style="cursor:pointer"></i>
+    <!-- MODAL FLOTANTE DE MÚSICA -->
+    <div id="musicModal">
+      <div class="music-header">
+        <span>DOMINON PLAYER</span>
+        <i class="fas fa-times" style="cursor:pointer" onclick="document.getElementById('musicModal').classList.remove('active')"></i>
       </div>
-      <div class="song-title" id="song-title">Cargando biblioteca...</div>
+      <div class="song-info" id="song-title">Cargando...</div>
       
       <div class="music-controls">
-        <button class="music-btn-circle" onclick="player.previousVideo()"><i class="fas fa-step-backward"></i></button>
-        <button class="music-btn-circle" id="playBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-        <button class="music-btn-circle" onclick="player.nextVideo()"><i class="fas fa-step-forward"></i></button>
+        <button class="m-btn" onclick="player.previousVideo()"><i class="fas fa-backward"></i></button>
+        <button class="m-btn" id="modalPlayBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+        <button class="m-btn" onclick="player.nextVideo()"><i class="fas fa-forward"></i></button>
       </div>
 
-      <div class="progress-container">
-        <input type="range" id="progress-bar" value="0" max="100" oninput="seekVideo(this.value)">
-        <div class="time-info">
+      <div class="progress-area">
+        <input type="range" id="progressBar" value="0" max="100" oninput="seek(this.value)">
+        <div class="time-labels">
           <span id="curr-time">0:00</span>
           <span id="total-time">0:00</span>
         </div>
       </div>
 
-      <div class="volume-row">
-        <i class="fas fa-volume-down"></i>
-        <input type="range" id="volume-bar" value="50" max="100" oninput="changeVolume(this.value)">
-        <i class="fas fa-volume-up"></i>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-volume-down" style="font-size:0.7em;"></i>
+        <input type="range" id="volumeBar" value="50" max="100" oninput="player.setVolume(this.value)">
       </div>
 
-      <div class="playlist-selector">
-        <button class="p-btn" onclick="changePlaylist('PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG')">Lofi</button>
-        <button class="p-btn" onclick="changePlaylist('PL4fGSI1pDJn6jWadV81Ww_7stfD6ujky9')">Synth</button>
-        <button class="p-btn" onclick="changePlaylist('RDCLAK5uy_l7S88XmN9s4T7Wf3W-6Kq9tM1f4Y8')">Deep</button>
+      <div class="playlist-grid">
+        <button class="pl-btn" onclick="changePL('PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG')">Lofi</button>
+        <button class="pl-btn" onclick="changePL('PL4fGSI1pDJn6jWadV81Ww_7stfD6ujky9')">Synth</button>
+        <button class="pl-btn" onclick="changePL('RDEMrX5e_3a4Gf9-Y8D7v-YgMg')">Phonk</button>
       </div>
     </div>
 
     <main class="main">
+      <!-- GRÁFICO (IGUAL AL ORIGINAL) -->
       <div class="chart-panel">
-        <select id="symbolSelect" onchange="changeSymbol()" style="background:#333; color:white; margin-bottom:5px;">
-          <option value="BINANCE:USDTARS">USDT/ARS</option>
-          <option value="BITSTAMP:BTCUSD">BTC/USD</option>
-          <option value="FOREXCOM:XAUUSD">Oro</option>
-        </select>
-        <iframe id="tradingViewChart" style="width:100%; height:100%; border:none;" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&theme=dark"></iframe>
+        <div class="chart-header">
+          <h2>Mini-Gráfico</h2>
+          <select id="symbolSelect" onchange="changeSymbol()" style="background:#333; color:white; border:1px solid #555;">
+            <option value="BINANCE:USDTARS">USDT/ARS</option>
+            <option value="BITSTAMP:BTCUSD">Bitcoin</option>
+            <option value="FOREXCOM:XAUUSD">Oro</option>
+          </select>
+        </div>
+        <iframe id="tradingViewChart" style="width:100%; height:calc(100% - 40px); border:none;" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&theme=dark"></iframe>
       </div>
 
+      <!-- BLOC DE NOTAS (20 PESTAÑAS ORIGINALES) -->
       <div class="notepad-panel">
-        <div class="notepad-tabs" id="tabs-container"></div>
-        <textarea id="notepad" placeholder="Escribe aquí..."></textarea>
+        <h2 id="notepad-title" style="color:var(--color-highlight); margin:0; font-size:1.1em;">Bloc de Notas - Pág 1</h2>
+        <div class="notepad-tabs" id="tabs-container">
+          <!-- Se generan por JS abajo -->
+        </div>
+        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
       </div>
 
       <div class="bottom-container">
+        <!-- CALCULADORA ORIGINAL -->
         <div class="calculator-panel">
           <div id="display" class="calc-display">0</div>
           <div class="calculator-grid">
-            <button class="calc-button" onclick="clearDisplay()">C</button>
-            <button class="calc-button" onclick="appendOperator('/')">/</button>
-            <button class="calc-button" onclick="appendOperator('*')">×</button>
+            <button class="calc-button" onclick="clearDisplay()" style="background:#DC2626">C</button>
             <button class="calc-button" onclick="backspace()">←</button>
+            <button class="calc-button operator" onclick="appendOperator('/')">/</button>
+            <button class="calc-button operator" onclick="appendOperator('*')">×</button>
             <button class="calc-button" onclick="appendNumber('7')">7</button>
             <button class="calc-button" onclick="appendNumber('8')">8</button>
             <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button" onclick="appendOperator('-')">-</button>
+            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
             <button class="calc-button" onclick="appendNumber('4')">4</button>
             <button class="calc-button" onclick="appendNumber('5')">5</button>
             <button class="calc-button" onclick="appendNumber('6')">6</button>
-            <button class="calc-button" onclick="appendOperator('+')">+</button>
+            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
             <button class="calc-button" onclick="appendNumber('1')">1</button>
             <button class="calc-button" onclick="appendNumber('2')">2</button>
             <button class="calc-button" onclick="appendNumber('3')">3</button>
-            <button class="calc-button" onclick="calculate()" style="background:var(--color-highlight); color:black;">=</button>
+            <button class="calc-button operator" onclick="calculate()" style="grid-row: span 2; height:100%">=</button>
+            <button class="calc-button" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+            <button class="calc-button" onclick="appendNumber('.')">.</button>
           </div>
         </div>
 
+        <!-- POMODORO ORIGINAL -->
         <div class="pomodoro-panel">
           <div class="pomodoro-display" id="pomo-display">25:00</div>
-          <div style="display:flex; gap:5px; justify-content:center;">
-            <input type="number" id="custom-min" placeholder="Min" style="width:50px; background:#000; color:white; border:1px solid var(--color-highlight);">
-            <button class="p-btn" onclick="togglePomodoro()" id="start-btn">INICIAR</button>
-            <button class="p-btn" onclick="resetPomodoro()">RST</button>
+          <div style="display:flex; gap:6px;">
+            <input type="number" id="custom-min" style="width:50px; background:#000; color:white; border:1px solid var(--color-highlight);" placeholder="Min">
+            <button class="pomo-btn" onclick="togglePomodoro()" id="start-btn">INICIAR</button>
+            <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
           </div>
         </div>
       </div>
     </main>
   </div>
 
-  <div id="youtube-player" style="display:none;"></div>
+  <div id="youtube-player" style="display:none"></div>
 
-  <!-- FIREBASE SETUP -->
+  <!-- FIREBASE CONFIG (TU CONFIGURACIÓN ORIGINAL) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -406,23 +361,20 @@
     const db = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
-    window.currentUser = null;
-
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         window.currentUser = user;
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
-        document.getElementById('userName').textContent = user.displayName.split(' ')[0];
+        document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
-        
-        // Cargar estado de música guardado
-        const musicRef = ref(db, `users/${user.uid}/musicState`);
-        const snapshot = await get(musicRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          window.lastSavedState = data;
-          if (window.playerReady) resumeMusic();
+
+        // Recuperar música de Firebase
+        const musicRef = ref(db, `users/${user.uid}/musicProgress`);
+        const snap = await get(musicRef);
+        if(snap.exists()){
+          window.savedMusic = snap.val();
+          if(window.playerLoaded) resumeSavedMusic();
         }
       } else {
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -430,15 +382,14 @@
       }
     });
 
-    // Guardar estado cada 10 segundos si está sonando
+    // Guardar progreso cada 10 seg
     setInterval(() => {
-      if (window.currentUser && window.player && player.getPlayerState() === 1) {
-        const state = {
+      if(window.currentUser && window.player && player.getPlayerState() === 1){
+        set(ref(db, `users/${window.currentUser.uid}/musicProgress`), {
           videoId: player.getVideoData().video_id,
           time: player.getCurrentTime(),
-          listId: window.currentPlaylistId || 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG'
-        };
-        set(ref(db, `users/${window.currentUser.uid}/musicState`), state);
+          listId: window.currentList || 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG'
+        });
       }
     }, 10000);
 
@@ -446,144 +397,118 @@
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
   </script>
 
-  <!-- APP SCRIPTS -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // --- LÓGICA DE MÚSICA (PEDIDA) ---
     let player;
-    window.playerReady = false;
-    window.currentPlaylistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    window.playerLoaded = false;
+    window.currentList = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('youtube-player', {
         height: '0', width: '0',
-        playerVars: { listType: 'playlist', list: window.currentPlaylistId, autoplay: 0 },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
+        playerVars: { listType: 'playlist', list: window.currentList, autoplay: 0 },
+        events: { 'onReady': onPlayerReady, 'onStateChange': onStateChange }
       });
     }
 
-    function onPlayerReady(event) {
-      window.playerReady = true;
-      if (window.lastSavedState) resumeMusic();
-      setInterval(updateMusicUI, 1000);
+    function onPlayerReady() {
+      window.playerLoaded = true;
+      if(window.savedMusic) resumeSavedMusic();
+      setInterval(updateUI, 1000);
     }
 
-    function resumeMusic() {
-      if (!window.lastSavedState) return;
-      const { videoId, time, listId } = window.lastSavedState;
+    function resumeSavedMusic() {
       player.cueVideoById({
-        videoId: videoId,
-        startSeconds: time
+        videoId: window.savedMusic.videoId,
+        startSeconds: window.savedMusic.time
       });
-      document.getElementById('song-title').textContent = "Sesión recuperada...";
+      document.getElementById('song-title').innerText = "Sesión recuperada...";
     }
 
-    function onPlayerStateChange(event) {
-      const btn = document.getElementById('playBtn');
+    function onStateChange(e) {
+      const btn = document.getElementById('modalPlayBtn');
       const icon = document.getElementById('disc-icon');
-      if (event.data == YT.PlayerState.PLAYING) {
+      if(e.data == 1) {
         btn.innerHTML = '<i class="fas fa-pause"></i>';
-        icon.style.animationPlayState = 'running';
-        document.getElementById('song-title').textContent = player.getVideoData().title;
+        icon.classList.add('fa-spin');
+        document.getElementById('song-title').innerText = player.getVideoData().title;
       } else {
         btn.innerHTML = '<i class="fas fa-play"></i>';
-        icon.style.animationPlayState = 'paused';
+        icon.classList.remove('fa-spin');
       }
     }
 
-    function togglePlay() {
-      if (player.getPlayerState() == 1) player.pauseVideo();
-      else player.playVideo();
-    }
-
-    function changeVolume(v) { player.setVolume(v); }
-
-    function seekVideo(v) {
-      const duration = player.getDuration();
-      player.seekTo(duration * (v / 100));
-    }
-
-    function updateMusicUI() {
-      if (player && player.getPlayerState() == 1) {
-        const curr = player.getCurrentTime();
-        const total = player.getDuration();
-        document.getElementById('progress-bar').value = (curr / total) * 100;
-        document.getElementById('curr-time').textContent = formatTime(curr);
-        document.getElementById('total-time').textContent = formatTime(total);
+    function togglePlay() { player.getPlayerState() == 1 ? player.pauseVideo() : player.playVideo(); }
+    function seek(v) { player.seekTo(player.getDuration() * (v/100)); }
+    function changePL(id) { window.currentList = id; player.loadPlaylist({list:id, listType:'playlist'}); }
+    
+    function updateUI() {
+      if(player && player.getPlayerState() == 1) {
+        const cur = player.getCurrentTime();
+        const dur = player.getDuration();
+        document.getElementById('progressBar').value = (cur/dur)*100;
+        document.getElementById('curr-time').innerText = formatTime(cur);
+        document.getElementById('total-time').innerText = formatTime(dur);
       }
     }
-
     function formatTime(s) {
-      const min = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return `${min}:${sec.toString().padStart(2, '0')}`;
+      let m = Math.floor(s/60);
+      let sec = Math.floor(s%60);
+      return m + ":" + (sec < 10 ? '0'+sec : sec);
     }
 
-    function toggleMusicModal() {
-      document.getElementById('musicPlayerModal').classList.toggle('active');
-    }
+    // --- LÓGICA ORIGINAL DE CALCULADORA ---
+    const display = document.getElementById('display');
+    let curIn = '0';
+    function updateCalc() { display.innerText = curIn; }
+    window.appendNumber = (n) => { curIn = (curIn==='0' && n!=='.') ? n : curIn+n; updateCalc(); }
+    window.appendOperator = (op) => { curIn += op; updateCalc(); }
+    window.calculate = () => { try { curIn = eval(curIn).toString(); } catch { curIn = 'Error'; } updateCalc(); }
+    window.clearDisplay = () => { curIn = '0'; updateCalc(); }
+    window.backspace = () => { curIn = curIn.length > 1 ? curIn.slice(0,-1) : '0'; updateCalc(); }
 
-    function changePlaylist(id) {
-      window.currentPlaylistId = id;
-      player.loadPlaylist({ list: id, listType: 'playlist' });
-    }
-
-    // --- OTROS SISTEMAS (Calc, Notas, etc) ---
-    function setTheme(color) {
-      document.documentElement.style.setProperty('--color-highlight', color);
-    }
-
-    // Notas (20 pestañas)
-    const tabsContainer = document.getElementById('tabs-container');
+    // --- LÓGICA ORIGINAL DE NOTAS (20 PESTAÑAS) ---
+    const container = document.getElementById('tabs-container');
     let activeTab = 1;
-    for (let i = 1; i <= 20; i++) {
-      const b = document.createElement('button');
-      b.className = 'tab-btn' + (i==1?' active':'');
-      b.innerText = i;
-      b.onclick = () => {
+    for(let i=1; i<=20; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (i===1 ? ' active' : '');
+      btn.innerText = 'Pág '+i;
+      btn.onclick = () => {
         localStorage.setItem('note_'+activeTab, document.getElementById('notepad').value);
-        document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active'));
-        b.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         activeTab = i;
-        document.getElementById('notepad').value = localStorage.getItem('note_'+i) || "";
+        document.getElementById('notepad-title').innerText = 'Bloc de Notas - Pág '+i;
+        document.getElementById('notepad').value = localStorage.getItem('note_'+i) || '';
       };
-      tabsContainer.appendChild(b);
+      container.appendChild(btn);
     }
+    document.getElementById('notepad').value = localStorage.getItem('note_1') || '';
 
-    // Calculadora Simple
-    let curInput = '0';
-    function updateDisplay() { document.getElementById('display').innerText = curInput; }
-    function appendNumber(n) { curInput = curInput === '0' ? n : curInput + n; updateDisplay(); }
-    function appendOperator(op) { curInput += op; updateDisplay(); }
-    function clearDisplay() { curInput = '0'; updateDisplay(); }
-    function backspace() { curInput = curInput.length > 1 ? curInput.slice(0,-1) : '0'; updateDisplay(); }
-    function calculate() { try { curInput = eval(curInput).toString(); } catch { curInput = "Error"; } updateDisplay(); }
-
-    // Reloj
-    setInterval(() => {
-      document.getElementById('fecha-hora').innerText = new Date().toLocaleString();
-    }, 1000);
-
-    // Pomodoro
-    let pomoSec = 1500, pomoRunning = false, pomoInt;
-    function togglePomodoro() {
-      const btn = document.getElementById('start-btn');
-      if(pomoRunning) { clearInterval(pomoInt); pomoRunning = false; btn.innerText = "INICIAR"; }
+    // --- LÓGICA ORIGINAL DE TEMA ---
+    window.setTheme = (c) => document.documentElement.style.setProperty('--color-highlight', c);
+    
+    // --- POMODORO ---
+    let pSec = 1500, pRun = false, pInt;
+    window.togglePomodoro = () => {
+      if(pRun) { clearInterval(pInt); pRun = false; document.getElementById('start-btn').innerText = "INICIAR"; }
       else {
-        pomoRunning = true; btn.innerText = "PAUSAR";
-        const custom = document.getElementById('custom-min').value;
-        if(custom) pomoSec = custom * 60;
-        pomoInt = setInterval(() => {
-          pomoSec--;
-          const m = Math.floor(pomoSec/60), s = pomoSec%60;
-          document.getElementById('pomo-display').innerText = `${m}:${s.toString().padStart(2,'0')}`;
-          if(pomoSec<=0) { clearInterval(pomoInt); alert("¡Tiempo!"); resetPomodoro(); }
+        let cust = document.getElementById('custom-min').value;
+        if(cust) pSec = cust * 60;
+        pRun = true; document.getElementById('start-btn').innerText = "PAUSAR";
+        pInt = setInterval(() => {
+          pSec--;
+          let m = Math.floor(pSec/60), s = pSec%60;
+          document.getElementById('pomo-display').innerText = `${m}:${s<10?'0'+s:s}`;
+          if(pSec<=0) { clearInterval(pInt); alert("¡Fin!"); resetPomodoro(); }
         }, 1000);
       }
     }
-    function resetPomodoro() { clearInterval(pomoInt); pomoSec = 1500; pomoRunning = false; document.getElementById('pomo-display').innerText = "25:00"; }
+    window.resetPomodoro = () => { clearInterval(pInt); pSec = 1500; pRun = false; document.getElementById('pomo-display').innerText = "25:00"; }
+
+    setInterval(() => { document.getElementById("fecha-hora").textContent = new Date().toLocaleString(); }, 1000);
   </script>
 </body>
 </html>
