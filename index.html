@@ -792,12 +792,20 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Permitir pop-ups
+    window.addEventListener('beforeunload', () => {
+      // Esto permite que los pop-ups se abran sin bloqueos
+    });
+
     // ===== AUTH STATE =====
     auth.onAuthStateChanged(user => {
+      console.log('Auth state changed:', user);
       if (user) {
+        console.log('Usuario autenticado:', user.displayName);
         showApp(user);
         loadUserData();
       } else {
+        console.log('Usuario no autenticado');
         showLogin();
       }
     });
@@ -811,28 +819,43 @@
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('mainApp').classList.remove('hidden');
       document.getElementById('userName').textContent = user.displayName || 'Usuario';
-      document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/28';
+      if (user.photoURL) {
+        document.getElementById('userAvatar').src = user.photoURL;
+      }
     }
 
     // ===== GOOGLE SIGN IN =====
-    document.getElementById('googleSignInBtn').addEventListener('click', function() {
-      document.getElementById('loading').classList.add('show');
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(result => {
-          document.getElementById('loading').classList.remove('show');
-        })
-        .catch(error => {
-          document.getElementById('loading').classList.remove('show');
-          console.error('Error:', error);
-          alert('Error al iniciar sesión');
-        });
-    });
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    if (googleSignInBtn) {
+      googleSignInBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('loading').classList.add('show');
+        
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('profile');
+        provider.addScope('email');
+        
+        auth.signInWithPopup(provider)
+          .then(result => {
+            console.log('Login exitoso:', result.user);
+            document.getElementById('loading').classList.remove('show');
+          })
+          .catch(error => {
+            document.getElementById('loading').classList.remove('show');
+            console.error('Error de login:', error);
+            console.error('Código de error:', error.code);
+            console.error('Mensaje de error:', error.message);
+            alert('Error al iniciar sesión:\n' + error.message + '\n\nAsegúrate de:\n1. Permitir pop-ups\n2. Tener conexión a internet\n3. Google debe estar disponible en tu región');
+          });
+      });
+    }
 
     // ===== LOGOUT =====
     window.logout = function() {
       auth.signOut().then(() => {
         console.log('Sesión cerrada');
+      }).catch(error => {
+        console.error('Error al cerrar sesión:', error);
       });
     };
 
