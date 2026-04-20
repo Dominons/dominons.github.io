@@ -1,1178 +1,337 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>DANIFU777 - Dominon </title>
-  <link rel="icon" type="image/ico" href="Favicon.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <style>
-    :root {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444;
-      --color-highlight: #A855F7;
-      --color-main-bg: #282828;
-      --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --main-gap: 15px;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--color-dark-bg);
-      color: var(--color-text);
-      overflow: hidden;
-      transition: background 0.3s;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANIFU777 - Dominion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bg: #0b0b0b;
+            --color-card: #151515;
+            --color-text: #e0e0e0;
+            --color-highlight: #a855f7;
+            --color-input-bg: #1e1e1e;
+        }
 
-    /* ========== LOGIN SCREEN ========== */
-    #loginScreen {
-      position: fixed;
-      inset: 0;
-      background: #1A1A1A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    #loginScreen.hidden {
-      display: none !important;
-    }
-    .login-container {
-      background: #1F1F1F;
-      border: 3px solid #A855F7;
-      border-radius: 15px;
-      padding: 50px;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-    }
-    .google-button {
-      background: white;
-      color: #333;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1em;
-    }
-    .google-button:hover {
-      background: #f0f0f0;
-    }
-    .google-button svg {
-      width: 20px;
-      height: 20px;
-    }
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    /* ========== MAIN CONTAINER ========== */
-    .container {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
-    }
-    .container.hidden {
-      display: none !important;
-    }
+        /* Pantalla de Carga/Login */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
 
-    /* ========== TOP BAR ========== */
-    .top-bar {
-      grid-column: 1 / span 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 15px;
-      background: var(--color-header-bg);
-      border-bottom: 2px solid var(--color-highlight);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
-      z-index: 10;
-      position: sticky;
-      top: 0;
-    }
-    .top-left,
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+        .login-card {
+            background: var(--color-card);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--color-highlight);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        }
 
-    /* ========== USER INFO (COMPACT) ========== */
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 10px;
-      background: #333;
-      border: 1px solid var(--color-border);
-      border-radius: 20px;
-      font-size: 0.85em;
-    }
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid var(--color-highlight);
-      object-fit: cover;
-    }
-    .user-name {
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      color: var(--color-text);
-    }
-    .logout-btn {
-      background: #DC2626;
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      cursor: pointer;
-      border-radius: 15px;
-      font-size: 0.8em;
-      transition: background 0.2s;
-    }
-    .logout-btn:hover {
-      background: #b91c1c;
-    }
+        .login-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-    /* ========== SHARED STYLES ========== */
-    .box {
-      border: 1px solid var(--color-border);
-      padding: 4px 10px;
-      background: #333;
-      border-radius: 4px;
-      box-shadow: var(--shadow-light);
-      transition: background 0.3s ease;
-      font-size: 0.9em;
-      white-space: nowrap;
-    }
-    .main {
-      grid-column: 1 / -1;
-      background: var(--color-main-bg);
-      padding: var(--main-gap);
-      display: flex;
-      flex-direction: column;
-      gap: var(--main-gap);
-      height: calc(100vh - 52px);
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-    .main::-webkit-scrollbar {
-      width: 10px;
-    }
-    .main::-webkit-scrollbar-track {
-      background: var(--color-input-bg);
-    }
-    .main::-webkit-scrollbar-thumb {
-      background: var(--color-highlight);
-      border-radius: 5px;
-    }
-    .main::-webkit-scrollbar-thumb:hover {
-      background: #8b3ed9;
-    }
-    h1 {
-      display: none;
-    }
-    /* --- GRÁFICO TOP --- */
-    .chart-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: var(--shadow-light);
-      height: 300px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-    }
-    .chart-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      gap: 10px;
-    }
-    .chart-header h2 {
-      color: var(--color-highlight);
-      margin: 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 5px;
-      font-size: 1.2em;
-      flex: 1;
-    }
-    .symbol-selector {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 0.85em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .symbol-selector:hover {
-      background: #444;
-    }
-    .symbol-selector:focus {
-      outline: none;
-      border-color: var(--color-highlight);
-    }
-    .chart-iframe {
-      width: 100%;
-      height: calc(100% - 40px);
-      border: none;
-      display: block;
-    }
-    /* --- NOTEPAD PANEL --- */
-    .notepad-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      min-height: 200px;
-    }
-    .notepad-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 8px;
-    }
-    .notepad-header-row h2 {
-      color: var(--color-highlight);
-      margin: 0;
-      font-size: 1.1em;
-    }
-    .notepad-tabs {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      width: 100%;
-    }
-    .tab-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 4px 8px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.75em;
-      transition: all 0.2s;
-      white-space: nowrap;
-      flex: 0 1 auto;
-    }
-    .tab-btn:hover {
-      background: #444;
-    }
-    .tab-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    #notepad {
-      background: #0D0D0D;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 10px;
-      border-radius: 4px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 0.95em;
-      resize: none;
-      flex-grow: 1;
-    }
-    #notepad::placeholder {
-      color: #666;
-    }
-    #notepad:focus {
-      outline: none;
-      border-color: var(--color-highlight);
-      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
-    }
-    /* --- BOTTOM CONTAINER (CALC + POMODORO) --- */
-    .bottom-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--main-gap);
-      flex-shrink: 0;
-      height: auto;
-    }
-    /* --- CALCULADORA --- */
-    .calculator-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 8px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-    }
-    .calculator-panel h2 {
-      color: var(--color-highlight);
-      margin: 0 0 6px 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 4px;
-      font-size: 1em;
-    }
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-    }
-    .calc-display {
-      grid-column: 1 / -1;
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 2px solid var(--color-highlight);
-      text-align: right;
-      padding: 10px;
-      margin-bottom: 6px;
-      font-size: 1.5em;
-      font-weight: bold;
-      overflow: hidden;
-      min-height: 32px;
-      border-radius: 4px;
-      font-family: monospace;
-      word-break: break-all;
-    }
-    .calc-button {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 10px 0;
-      font-size: 0.95em;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.1s;
-    }
-    .calc-button:active {
-      background: #555;
-      transform: scale(0.95);
-    }
-    .calc-button:hover {
-      background: #444;
-    }
-    .calc-button.equals {
-      grid-column: 4 / span 1;
-      grid-row: 5 / span 1;
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .calc-button.equals:hover {
-      background: #8b3ed9;
-    }
-    .calc-button.zero {
-      grid-column: 1 / span 2;
-    }
-    .calc-button.operator {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .calc-button.operator:hover {
-      background: #8b3ed9;
-    }
-    .calc-button.clear {
-      background: #DC2626;
-      color: white;
-      font-weight: bold;
-    }
-    .calc-button.clear:hover {
-      background: #b91c1c;
-    }
-    /* --- POMODORO PANEL --- */
-    .pomodoro-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .pomodoro-panel h2 {
-      color: var(--color-highlight);
-      margin: 0 0 6px 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 4px;
-      font-size: 1em;
-    }
-    .pomodoro-display {
-      font-size: 2em;
-      font-weight: bold;
-      color: var(--color-highlight);
-      font-family: monospace;
-      letter-spacing: 2px;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      margin: 8px 0;
-    }
-    .pomodoro-controls {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .pomo-btn {
-      background: #333;
-      color: #ddd;
-      border: 1px solid #555;
-      padding: 6px 10px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.8em;
-      transition: background 0.2s;
-      flex: 1;
-      min-width: 55px;
-    }
-    .pomo-btn:hover {
-      background: #444;
-    }
-    .pomo-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    .custom-time-input {
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 1px solid var(--color-highlight);
-      padding: 5px 6px;
-      border-radius: 4px;
-      width: 50px;
-      font-size: 0.8em;
-      text-align: center;
-      flex: 0 0 auto;
-    }
-    .custom-time-input::placeholder {
-      color: #777;
-    }
-    /* --- MÚSICA Y CONTROLES --- */
-    .music-container {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .theme-buttons {
-      display: flex;
-      gap: 8px;
-    }
-    .theme-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid #555;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .theme-btn:hover {
-      transform: scale(1.15);
-    }
-    .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
-    .theme-btn.blue { background: #3B82F6; border-color: #3B82F6; }
-    .theme-btn.green { background: #10B981; border-color: #10B981; }
-    .theme-btn.red { background: #EF4444; border-color: #EF4444; }
-    .theme-btn.pink { background: #EC4899; border-color: #EC4899; }
-    .theme-btn.yellow { background: #FBBF24; border-color: #FBBF24; }
-    .theme-btn.cyan { background: #06B6D4; border-color: #06B6D4; }
-    .theme-btn.lime { background: #84CC16; border-color: #84CC16; }
-    .theme-btn.orange { background: #F97316; border-color: #F97316; }
-    .theme-btn.indigo { background: #6366F1; border-color: #6366F1; }
-    .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
-    .theme-btn.black { background: #000000; border-color: #FFFFFF; }
-    .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
-    .music-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid #555;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.85em;
-      transition: background 0.2s;
-    }
-    .music-btn:hover {
-      background: #444;
-    }
+        /* Header Principal */
+        header {
+            background-color: var(--color-card);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
 
-    /* ========== MODAL DE MÚSICA ========== */
-    .music-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #1F1F1F;
-      border: 2px solid var(--color-highlight);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
-      z-index: 10000;
-      width: 350px;
-      max-width: 90vw;
-    }
-    .music-modal.active {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 10px;
-    }
-    .modal-header h3 {
-      margin: 0;
-      color: var(--color-highlight);
-    }
-    .close-modal {
-      background: none;
-      border: none;
-      color: var(--color-text);
-      font-size: 1.2em;
-      cursor: pointer;
-      padding: 0 5px;
-    }
-    .close-modal:hover {
-      color: var(--color-highlight);
-    }
-    .playlist-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .playlist-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.9em;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .playlist-btn:hover {
-      background: #444;
-    }
-    .playlist-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-    }
-    .player-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .player-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .time-display {
-      font-size: 0.9em;
-      color: #aaa;
-    }
-    .progress-bar-container {
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .progress-bar {
-      height: 100%;
-      background: var(--color-highlight);
-      border-radius: 3px;
-      width: 0%;
-    }
-    .volume-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .volume-slider {
-      flex-grow: 1;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .volume-fill {
-      height: 100%;
-      background: var(--color-highlight);
-      border-radius: 3px;
-      width: 70%;
-    }
-    .volume-icon {
-      font-size: 0.9em;
-    }
-  </style>
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-info img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--color-highlight); }
+
+        /* Contenedor de Música */
+        .music-container { display: flex; align-items: center; gap: 15px; position: relative; }
+        .music-btn {
+            background: none;
+            border: 1px solid var(--color-highlight);
+            color: var(--color-highlight);
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .music-btn:hover { background: var(--color-highlight); color: white; }
+        .fa-spin-slow { animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        #musicPanel {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--color-card);
+            border: 2px solid var(--color-highlight);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 2000;
+            width: 250px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        #musicPanel.hidden { display: none; }
+
+        /* Grid de Pestañas */
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .tab-box {
+            background: var(--color-card);
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+        }
+
+        .tab-header {
+            font-size: 0.7em;
+            color: var(--color-highlight);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        textarea {
+            background: var(--color-input-bg);
+            color: white;
+            border: none;
+            resize: none;
+            flex-grow: 1;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 0.9em;
+        }
+
+        .hidden { display: none !important; }
+        .box { font-size: 0.8em; color: #888; }
+    </style>
 </head>
 <body>
 
-  <!-- ========== LOGIN SCREEN ========== -->
-  <div id="loginScreen">
-    <div class="login-container">
-      <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
-      <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
-      <button class="google-button" id="googleSignInBtn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
-        Iniciar sesión con Google
-      </button>
+<div id="loginScreen">
+    <div class="login-card">
+        <h1 style="color: var(--color-highlight); margin-bottom: 10px;">DANIFU777</h1>
+        <p>Inicia sesión para acceder a tus notas en la nube</p>
+        <button id="googleSignInBtn" class="login-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/pwa/google.svg" width="20">
+            Continuar con Google
+        </button>
     </div>
-  </div>
+</div>
 
-  <!-- ========== MAIN APP ========== -->
-  <div class="container hidden" id="mainApp">
-    <div class="top-bar">
-      <div class="top-left">
-        <div class="box" id="fecha-hora">Cargando...</div>
-      </div>
-      <div class="top-right">
-        <!-- USER INFO (compact, integrated) -->
-        <div class="user-info" id="userInfo">
-          <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
-          <span class="user-name" id="userName"></span>
-          <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
-            <i class="fas fa-sign-out-alt"></i>
-          </button>
-        </div>
-        <div class="theme-buttons">
-          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
-          <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
-          <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
-          <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
-          <button class="theme-btn pink" onclick="setTheme('#EC4899')" title="Rosa"></button>
-          <button class="theme-btn yellow" onclick="setTheme('#FBBF24')" title="Amarillo"></button>
-          <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
-          <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
-          <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
-          <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
-          <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
-          <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
-        </div>
-        <!-- Botón principal de música (icono único) -->
-        <button class="music-btn" id="openMusicModalBtn"><i class="fa-solid fa-music"></i> Música</button>
-      </div>
-    </div>
-
-    <main class="main">
-      <!-- GRÁFICO TOP -->
-      <div class="chart-panel">
-        <div class="chart-header">
-          <h2>Mini-Gráfico</h2>
-          <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
-            <option value="BINANCE:USDTARS">USDT/ARS</option>
-            <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
-            <option value="FOREXCOM:EURUSD">EUR/USD</option>
-            <option value="FOREXCOM:GBPUSD">GBP/USD</option>
-            <option value="FOREXCOM:JPYUSD">JPY/USD</option>
-            <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
-            <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
-            <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-            <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
-            <option value="FOREXCOM:NGAS">Gas Natural</option>
-          </select>
-        </div>
-        <iframe class="chart-iframe" id="tradingViewChart"
-          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
-          frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <!-- BLOC DE NOTAS -->
-      <div class="notepad-panel">
-        <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
-          <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
-            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
-            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
-            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
-            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
-            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
-            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
-            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
-            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
-            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
-            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
-            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
-            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
-            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
-            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
-            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
-            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
-            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
-          </div>
-        </div>
-        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
-      </div>
-
-      <!-- CALCULADORA + POMODORO (50/50) -->
-      <div class="bottom-container">
-        <!-- CALCULADORA -->
-        <div class="calculator-panel">
-          <h2>Calculadora</h2>
-          <div id="display" class="calc-display">0</div>
-          <div class="calculator-grid">
-            <button class="calc-button clear" onclick="clearDisplay()">C</button>
-            <button class="calc-button" onclick="backspace()">←</button>
-            <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-            <button class="calc-button operator" onclick="appendOperator('*')">×</button>
-            <button class="calc-button" onclick="appendNumber('7')">7</button>
-            <button class="calc-button" onclick="appendNumber('8')">8</button>
-            <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button operator" onclick="appendOperator('-')">−</button>
-            <button class="calc-button" onclick="appendNumber('4')">4</button>
-            <button class="calc-button" onclick="appendNumber('5')">5</button>
-            <button class="calc-button" onclick="appendNumber('6')">6</button>
-            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
-            <button class="calc-button" onclick="appendNumber('1')">1</button>
-            <button class="calc-button" onclick="appendNumber('2')">2</button>
-            <button class="calc-button" onclick="appendNumber('3')">3</button>
-            <button class="calc-button equals" onclick="calculate()">=</button>
-            <button class="calc-button zero" onclick="appendNumber('0')">0</button>
-            <button class="calc-button" onclick="appendNumber('.')">.</button>
-          </div>
+<div id="mainApp" class="hidden">
+    <header>
+        <div class="user-info">
+            <img id="userAvatar" src="" alt="Avatar">
+            <span id="userName" style="font-weight: bold;"></span>
+            <button id="logoutBtn" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:0.8em;">Cerrar Sesión</button>
         </div>
 
-        <!-- POMODORO -->
-        <div class="pomodoro-panel">
-          <h2>Pomodoro</h2>
-          <div class="pomodoro-display" id="pomo-display">25:00</div>
-          <div class="pomodoro-controls">
-            <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
-            <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
-            <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
-            <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
-          </div>
+        <div class="music-container">
+            <span class="box" id="songStatus">Pausado</span>
+            <button class="music-btn" id="toggleMusicPanel">
+                <i class="fa-solid fa-compact-disc fa-spin-slow"></i>
+            </button>
+
+            <div id="musicPanel" class="hidden">
+                <div style="text-align: center; margin-bottom: 10px; font-size: 0.8em; color: var(--color-highlight);">CONTROL DE AUDIO</div>
+                <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px;">
+                    <button class="music-btn" id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+                    <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i></button>
+                    <button class="music-btn" id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75em; margin-bottom: 5px;">
+                    <span id="current-time">0:00</span>
+                    <span id="duration-time">0:00</span>
+                </div>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width: 100%; accent-color: var(--color-highlight);">
+            </div>
         </div>
-      </div>
-    </main>
-  </div>
+    </header>
 
-  <!-- ========== MODAL DE MÚSICA ========== -->
-  <div class="music-modal" id="musicModal">
-    <div class="modal-header">
-      <h3><i class="fa-solid fa-music"></i> Reproductor de Música</h3>
-      <button class="close-modal" id="closeMusicModal" title="Cerrar"><i class="fas fa-times"></i></button>
-    </div>
-
-    <div class="playlist-buttons">
-      <button class="playlist-btn active" onclick="loadPlaylist('PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG')">
-        <i class="fas fa-list"></i> Lista Principal
-      </button>
-      <button class="playlist-btn" onclick="loadPlaylist('PLKByqT47PJxp7Zl8D9k5J5J5J5J5J5J5J')">
-        <i class="fas fa-list"></i> Lista Alternativa
-      </button>
-      <button class="playlist-btn" onclick="loadPlaylist('PLKByqT47PJxp8Zl8D9k5J5J5J5J5J5J5J')">
-        <i class="fas fa-list"></i> Lista Relajante
-      </button>
-    </div>
-
-    <div class="player-controls">
-      <div class="player-info">
-        <span id="currentSongTitle">Selecciona una canción</span>
-        <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
-      </div>
-
-      <div class="progress-bar-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <div class="volume-control">
-        <i class="fas fa-volume-up volume-icon"></i>
-        <div class="volume-slider" id="volumeSlider">
-          <div class="volume-fill" id="volumeFill"></div>
+    <div class="main-content" id="tabsGrid">
         </div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <!-- ========== FIREBASE ========== -->
-  <script type="module">
+<div id="youtube-player"></div>
+
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
-      authDomain: "danifu777-4732c.firebaseapp.com",
-      projectId: "danifu777-4732c",
-      storageBucket: "danifu777-4732c.firebasestorage.app",
-      messagingSenderId: "171480985650",
-      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
-      measurementId: "G-SL032V9XGM"
+        apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
+        authDomain: "danifu777-4732c.firebaseapp.com",
+        projectId: "danifu777-4732c",
+        databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
+        storageBucket: "danifu777-4732c.firebasestorage.app",
+        messagingSenderId: "171480985650",
+        appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
+        measurementId: "G-SL032V9XGM"
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
     const provider = new GoogleAuthProvider();
-    const database = getDatabase(app);
 
-    // Variables globales para el reproductor
-    let player;
-    let currentPlaylistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-    let currentVideoId = '';
-    let currentTime = 0;
-    let isPlaying = false;
-    let userUid = null;
+    // Iniciar Grid de 20 pestañas
+    const tabsGrid = document.getElementById('tabsGrid');
+    for (let i = 1; i <= 20; i++) {
+        const tab = document.createElement('div');
+        tab.className = 'tab-box';
+        tab.innerHTML = `
+            <div class="tab-header">Pestaña ${i}</div>
+            <textarea id="tab-${i}" placeholder="Escribe algo..."></textarea>
+        `;
+        tabsGrid.appendChild(tab);
 
-    // Auth state listener
+        // Evento para guardar en Firestore al escribir
+        tab.querySelector('textarea').addEventListener('input', (e) => {
+            if (auth.currentUser) {
+                const userDoc = doc(db, "users", auth.currentUser.uid, "notas", `nota-${i}`);
+                setDoc(userDoc, { content: e.target.value }, { merge: true });
+            }
+        });
+    }
+
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('mainApp').classList.remove('hidden');
-        document.getElementById('userName').textContent = user.displayName;
-        document.getElementById('userAvatar').src = user.photoURL;
-        userUid = user.uid;
+        if (user) {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userName').textContent = user.displayName;
+            document.getElementById('userAvatar').src = user.photoURL;
 
-        // Cargar estado de la música desde Firebase
-        loadMusicState(userUid);
-      } else {
-        // User is signed out
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('mainApp').classList.add('hidden');
-        userUid = null;
-      }
+            // Cargar notas desde Firestore
+            for (let i = 1; i <= 20; i++) {
+                onSnapshot(doc(db, "users", user.uid, "notas", `nota-${i}`), (doc) => {
+                    if (doc.exists()) {
+                        document.getElementById(`tab-${i}`).value = doc.data().content;
+                    }
+                });
+            }
+
+            // Cargar música desde Realtime Database
+            const musicRef = ref(rtdb, 'users/' + user.uid + '/musicProgress');
+            onValue(musicRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data && window.player && window.player.cueVideoById) {
+                    player.cueVideoById({ videoId: data.videoId, startSeconds: data.time });
+                }
+            }, { onlyOnce: true });
+
+        } else {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
     });
 
-    // Sign in button
-    document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
-
-    // Logout button
-    document.getElementById('logoutBtn').onclick = () => signOut(auth);
-  </script>
-
-  <!-- ========== APP SCRIPTS ========== -->
-  <script>
-    // --- FUNCIONES GLOBALES ---
-    // 1. CALCULADORA
-    const display = document.getElementById('display');
-    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
-    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
-    window.appendNumber = function (number) {
-      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
-      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
-      updateDisplay();
-    };
-    window.appendOperator = function (nextOperation) {
-      const inputValue = parseFloat(currentInput);
-      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
-      if (previousInput === '') { previousInput = inputValue; }
-      else if (operation) {
-        const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result); previousInput = result;
-      }
-      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
-    };
-    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
-    window.calculate = function () {
-      if (!operation || waitingForSecondOperand) return;
-      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
-      updateDisplay();
-    };
-    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
-    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
-
-    // 2. BLOC DE NOTAS
-    let activeTab = localStorage.getItem('danifu_active_tab') || "1";
-    window.switchTab = function (tabNum) {
-      const notepad = document.getElementById('notepad');
-      const notepadTitle = document.getElementById('notepad-title');
-      if (notepad) localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
-      activeTab = String(tabNum);
-      localStorage.setItem('danifu_active_tab', activeTab);
-      if (notepadTitle) notepadTitle.innerText = `Bloc de Notas - Pág ${activeTab}`;
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-tab-${activeTab}`);
-      if (activeBtn) activeBtn.classList.add('active');
-      if (notepad) notepad.value = localStorage.getItem(`danifu_notes_v2_${activeTab}`) || "";
-    };
-
-    // 3. CAMBIAR TEMA
-    window.setTheme = function (color) {
-      document.documentElement.style.setProperty('--color-highlight', color);
-      localStorage.setItem('danifu_theme', color);
-    };
-
-    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
-    window.changeSymbol = function () {
-      const select = document.getElementById('symbolSelect');
-      const symbol = select.value;
-      const iframe = document.getElementById('tradingViewChart');
-      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
-      iframe.src = newSrc;
-      localStorage.setItem('danifu_chart_symbol', symbol);
-    };
-
-    // 4. POMODORO CON PERSONALIZACIÓN
-    let pomoInterval;
-    let pomoSeconds = 25 * 60;
-    let isRunning = false;
-    window.updatePomoUI = function () {
-      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      const s = (pomoSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('pomo-display').innerText = `${m}:${s}`;
-    };
-    window.togglePomodoro = function () {
-      const btn = document.getElementById('start-btn');
-      if (isRunning) {
-        clearInterval(pomoInterval);
-        isRunning = false;
-        btn.innerText = "INICIAR";
-        btn.classList.remove('active');
-      } else {
-        isRunning = true;
-        btn.innerText = "PAUSAR";
-        btn.classList.add('active');
-        pomoInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            updatePomoUI();
-          } else {
-            clearInterval(pomoInterval);
-            isRunning = false;
-            btn.innerText = "INICIAR";
-            btn.classList.remove('active');
-            alert("¡Tiempo terminado!");
-          }
-        }, 1000);
-      }
-    };
-    window.resetPomodoro = function () {
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = 25 * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-    window.setCustomTime = function () {
-      const input = document.getElementById('custom-min');
-      const mins = parseInt(input.value);
-      if (!mins || mins <= 0) {
-        alert("Por favor ingresa un número de minutos válido.");
-        return;
-      }
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = mins * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-
-    // INIT
-    window.onload = function () {
-      window.switchTab(activeTab);
-      const notepad = document.getElementById('notepad');
-      if (notepad) notepad.addEventListener('input', () => localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value));
-      const savedTheme = localStorage.getItem('danifu_theme');
-      if (savedTheme) window.setTheme(savedTheme);
-      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
-      if (savedSymbol) {
-        document.getElementById('symbolSelect').value = savedSymbol;
-      }
-      updatePomoUI();
-      updateDisplay();
-
-      // Configurar modal de música
-      const openModalBtn = document.getElementById('openMusicModalBtn');
-      const closeModalBtn = document.getElementById('closeMusicModal');
-      const musicModal = document.getElementById('musicModal');
-
-      openModalBtn.onclick = () => {
-        musicModal.classList.add('active');
-        if (player) {
-          updatePlayerUI();
-        }
-      };
-
-      closeModalBtn.onclick = () => {
-        musicModal.classList.remove('active');
-      };
-
-      // Configurar controles del modal
-      const progressContainer = document.getElementById('progressContainer');
-      const progressBar = document.getElementById('progressBar');
-      const volumeSlider = document.getElementById('volumeSlider');
-      const volumeFill = document.getElementById('volumeFill');
-
-      // Control de progreso
-      progressContainer.onclick = (e) => {
-        if (player && player.getDuration() > 0) {
-          const rect = progressContainer.getBoundingClientRect();
-          const pos = (e.clientX - rect.left) / rect.width;
-          player.seekTo(pos * player.getDuration(), true);
-        }
-      };
-
-      // Control de volumen
-      volumeSlider.onclick = (e) => {
-        const rect = volumeSlider.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-        const volume = pos * 100;
-        player.setVolume(volume);
-        volumeFill.style.width = `${volume}%`;
-      };
-
-      // Inicializar YouTube Player API
-      window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player('youtube-player', {
-          height: '0',
-          width: '0',
-          videoId: '',
-          playerVars: {
-            'autoplay': 0,
-            'controls': 0,
-            'rel': 0,
-            'modestbranding': 1
-          },
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange,
-            'onError': onPlayerError
-          }
-        });
-      };
-
-      // Cargar YouTube API
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    };
-
-    // Funciones del reproductor de música
-    function onPlayerReady(event) {
-      console.log('Player ready');
-      updatePlayerUI();
-    }
-
-    function onPlayerStateChange(event) {
-      updatePlayerUI();
-
-      // Guardar estado en Firebase
-      if (userUid && currentVideoId) {
-        const stateRef = ref(database, `users/${userUid}/musicState`);
-        set(stateRef, {
-          videoId: currentVideoId,
-          currentTime: player.getCurrentTime(),
-          isPlaying: event.data === YT.PlayerState.PLAYING
-        });
-      }
-    }
-
-    function onPlayerError(event) {
-      console.error('Player error:', event.data);
-      // Intentar cargar el siguiente video de la playlist
-      player.nextVideo();
-    }
-
-    function updatePlayerUI() {
-      const modal = document.getElementById('musicModal');
-      if (!modal || !player) return;
-
-      const timeDisplay = document.getElementById('timeDisplay');
-      const currentSongTitle = document.getElementById('currentSongTitle');
-      const progressBar = document.getElementById('progressBar');
-      const volumeFill = document.getElementById('volumeFill');
-
-      if (player.getDuration() > 0) {
-        const current = formatTime(player.getCurrentTime());
-        const duration = formatTime(player.getDuration());
-        timeDisplay.textContent = `${current} / ${duration}`;
-
-        const progress = (player.getCurrentTime() / player.getDuration()) * 100;
-        progressBar.style.width = `${progress}%`;
-      } else {
-        timeDisplay.textContent = '0:00 / 0:00';
-        progressBar.style.width = '0%';
-      }
-
-      if (player.getVideoData) {
-        currentSongTitle.textContent = player.getVideoData().title;
-      }
-    }
-
-    function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-
-    function loadPlaylist(playlistId) {
-      currentPlaylistId = playlistId;
-      if (player) {
-        player.loadPlaylist({
-          list: playlistId,
-          listType: 'playlist',
-          index: 0,
-          startSeconds: 0
-        });
-      }
-
-      // Actualizar botones de playlist
-      document.querySelectorAll('.playlist-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-    }
-
-    function loadMusicState(uid) {
-      if (!uid) return;
-
-      const stateRef = ref(database, `users/${uid}/musicState`);
-      onValue(stateRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          currentVideoId = data.videoId || '';
-          currentTime = data.currentTime || 0;
-
-          if (player) {
-            player.loadVideoById({
-              videoId: currentVideoId,
-              startSeconds: currentTime
+    // Guardado automático de música cada 10 seg
+    setInterval(() => {
+        if (auth.currentUser && window.player && player.getPlayerState() === 1) {
+            set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+                videoId: player.getVideoData().video_id,
+                time: Math.floor(player.getCurrentTime())
             });
-
-            if (data.isPlaying) {
-              player.playVideo();
-            }
-          }
         }
-      });
+    }, 10000);
+
+    document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+</script>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    let player;
+    const toggleBtn = document.getElementById('toggleMusicPanel');
+    const musicPanel = document.getElementById('musicPanel');
+    const songStatus = document.getElementById('songStatus');
+
+    toggleBtn.onclick = () => musicPanel.classList.toggle('hidden');
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            height: '0', width: '0',
+            playerVars: { 
+                'listType': 'playlist', 
+                'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG',
+                'controls': 0 
+            },
+            events: {
+                'onReady': () => player.setVolume(50),
+                'onStateChange': (e) => {
+                    const playBtn = document.getElementById('playPauseBtn');
+                    if (e.data == 1) {
+                        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                        songStatus.textContent = "Reproduciendo";
+                    } else {
+                        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                        songStatus.textContent = "Pausado";
+                    }
+                }
+            }
+        });
     }
-  </script>
+
+    document.getElementById('playPauseBtn').onclick = () => {
+        player.getPlayerState() == 1 ? player.pauseVideo() : player.playVideo();
+    };
+    document.getElementById('nextBtn').onclick = () => player.nextVideo();
+    document.getElementById('prevBtn').onclick = () => player.previousVideo();
+    document.getElementById('volumeSlider').oninput = (e) => player.setVolume(e.target.value);
+
+    // Actualizar tiempos
+    setInterval(() => {
+        if (player && player.getCurrentTime) {
+            const cur = Math.floor(player.getCurrentTime());
+            const dur = Math.floor(player.getDuration());
+            document.getElementById('current-time').textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+            document.getElementById('duration-time').textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+        }
+    }, 1000);
+</script>
+
 </body>
 </html>
