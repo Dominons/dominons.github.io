@@ -25,7 +25,6 @@
       overflow: hidden;
       transition: background 0.3s;
     }
-    /* --- LOGIN SCREEN --- */
     #loginScreen {
       position: fixed;
       top: 0;
@@ -37,44 +36,22 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      flex-direction: column;
-      gap: 30px;
     }
-    #loginScreen.hidden {
-      display: none !important;
-    }
+    #loginScreen.hidden { display: none !important; }
     .login-container {
       background: #1F1F1F;
       border: 3px solid #A855F7;
       border-radius: 15px;
       padding: 50px 40px;
       text-align: center;
-      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4),
-                  inset 0 0 20px rgba(168, 85, 247, 0.1);
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
       max-width: 450px;
-      width: 90%;
-      backdrop-filter: blur(10px);
     }
     .login-container h1 {
       color: #A855F7;
       margin: 0 0 15px 0;
       font-size: 3.5em;
-      font-weight: 800;
       text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-      letter-spacing: 2px;
-    }
-    .login-container .subtitle {
-      color: #999;
-      margin: 0 0 10px 0;
-      font-size: 0.9em;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-    }
-    .login-container p {
-      color: #BBB;
-      margin: 0 0 40px 0;
-      font-size: 1.2em;
-      line-height: 1.5;
     }
     .google-button {
       background: white;
@@ -85,482 +62,32 @@
       font-size: 1.05em;
       cursor: pointer;
       font-weight: 600;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      margin: 0 auto;
+      margin: 20px auto;
     }
-    .google-button:hover {
-      background: #f8f8f8;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-    .google-button:active {
-      transform: translateY(0);
-    }
-    .google-button i {
-      font-size: 1.3em;
-    }
-    .features {
-      margin-top: 40px;
-      padding-top: 30px;
-      border-top: 1px solid #444;
-      text-align: left;
-    }
-    .features h3 {
-      color: #A855F7;
-      margin-bottom: 15px;
-      font-size: 1.1em;
-    }
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-      font-size: 0.95em;
-      color: #CCC;
-    }
-    .feature-item i {
-      color: #A855F7;
-      font-size: 1.2em;
-      min-width: 20px;
-    }
-    .loading {
-      display: none;
-      text-align: center;
-      color: #A855F7;
-    }
-    .loading.show {
-      display: block;
-    }
-    .spinner {
-      border: 3px solid #333;
-      border-top: 3px solid #A855F7;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* --- MAIN APP --- */
+    .google-button:hover { background: #f8f8f8; }
     .container {
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       height: 100vh;
     }
-    .container.hidden {
-      display: none !important;
-    }
+    .container.hidden { display: none !important; }
     .top-bar {
-      grid-column: 1 / span 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 8px 15px;
       background: var(--color-header-bg);
       border-bottom: 2px solid var(--color-highlight);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
       z-index: 10;
-      position: sticky;
-      top: 0;
     }
-    .top-left,
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .box {
-      border: 1px solid var(--color-border);
-      padding: 4px 10px;
-      background: #333;
-      border-radius: 4px;
-      box-shadow: var(--shadow-light);
-      transition: background 0.3s ease;
-      font-size: 0.9em;
-      white-space: nowrap;
-    }
-    .main {
-      grid-column: 1 / -1;
-      background: var(--color-main-bg);
-      padding: var(--main-gap);
-      display: flex;
-      flex-direction: column;
-      gap: var(--main-gap);
-      height: calc(100vh - 52px);
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-    .main::-webkit-scrollbar {
-      width: 10px;
-    }
-    .main::-webkit-scrollbar-track {
-      background: var(--color-input-bg);
-    }
-    .main::-webkit-scrollbar-thumb {
-      background: var(--color-highlight);
-      border-radius: 5px;
-    }
-    .main::-webkit-scrollbar-thumb:hover {
-      background: #8b3ed9;
-    }
-    h1 {
-      display: none;
-    }
-    /* --- GRÁFICO TOP --- */
-    .chart-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: var(--shadow-light);
-      height: 300px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-    }
-    .chart-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      gap: 10px;
-    }
-    .chart-header h2 {
-      color: var(--color-highlight);
-      margin: 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 5px;
-      font-size: 1.2em;
-      flex: 1;
-    }
-    .symbol-selector {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 0.85em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .symbol-selector:hover {
-      background: #444;
-    }
-    .symbol-selector:focus {
-      outline: none;
-      border-color: var(--color-highlight);
-    }
-    .chart-iframe {
-      width: 100%;
-      height: calc(100% - 40px);
-      border: none;
-      display: block;
-    }
-    /* --- NOTEPAD PANEL --- */
-    .notepad-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      min-height: 200px;
-    }
-    .notepad-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 8px;
-    }
-    .notepad-header-row h2 {
-      color: var(--color-highlight);
-      margin: 0;
-      font-size: 1.1em;
-    }
-    .notepad-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-    }
-    .tab-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.85em;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .tab-btn:hover {
-      background: #444;
-    }
-    .tab-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    #notepad {
-      background: #0D0D0D;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 10px;
-      border-radius: 4px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 0.95em;
-      resize: none;
-      flex-grow: 1;
-    }
-    #notepad::placeholder {
-      color: #666;
-    }
-    #notepad:focus {
-      outline: none;
-      border-color: var(--color-highlight);
-      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
-    }
-    /* --- BOTTOM CONTAINER (CALC + POMODORO) --- */
-    .bottom-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--main-gap);
-      flex-shrink: 0;
-      height: auto;
-    }
-    /* --- CALCULADORA --- */
-    .calculator-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 8px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-    }
-    .calculator-panel h2 {
-      color: var(--color-highlight);
-      margin: 0 0 6px 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 4px;
-      font-size: 1em;
-    }
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-    }
-    .calc-display {
-      grid-column: 1 / -1;
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 2px solid var(--color-highlight);
-      text-align: right;
-      padding: 10px;
-      margin-bottom: 6px;
-      font-size: 1.5em;
-      font-weight: bold;
-      overflow: hidden;
-      min-height: 32px;
-      border-radius: 4px;
-      font-family: monospace;
-      word-break: break-all;
-    }
-    #display {
-      grid-column: 1 / -1;
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 2px solid var(--color-highlight);
-      text-align: right;
-      padding: 10px;
-      margin-bottom: 6px;
-      font-size: 1.5em;
-      font-weight: bold;
-      overflow: hidden;
-      min-height: 32px;
-      border-radius: 4px;
-      font-family: monospace;
-      word-break: break-all;
-    }
-    .calc-button {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 10px 0;
-      font-size: 0.95em;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.1s;
-    }
-    .calc-button:active {
-      background: #555;
-      transform: scale(0.95);
-    }
-    .calc-button:hover {
-      background: #444;
-    }
-    .calc-button.equals {
-      grid-column: 4 / span 1;
-      grid-row: 5 / span 1;
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .calc-button.equals:hover {
-      background: #8b3ed9;
-    }
-    .calc-button.zero {
-      grid-column: 1 / span 2;
-    }
-    .calc-button.operator {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .calc-button.operator:hover {
-      background: #8b3ed9;
-    }
-    .calc-button.clear {
-      background: #DC2626;
-      color: white;
-      font-weight: bold;
-    }
-    .calc-button.clear:hover {
-      background: #b91c1c;
-    }
-    /* --- POMODORO PANEL --- */
-    .pomodoro-panel {
-      background: var(--color-input-bg);
-      border: 2px solid var(--color-highlight);
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .pomodoro-panel h2 {
-      color: var(--color-highlight);
-      margin: 0 0 6px 0;
-      border-bottom: 1px solid var(--color-border);
-      padding-bottom: 4px;
-      font-size: 1em;
-    }
-    .pomodoro-display {
-      font-size: 2em;
-      font-weight: bold;
-      color: var(--color-highlight);
-      font-family: monospace;
-      letter-spacing: 2px;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      margin: 8px 0;
-    }
-    .pomodoro-controls {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .pomo-btn {
-      background: #333;
-      color: #ddd;
-      border: 1px solid #555;
-      padding: 6px 10px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.8em;
-      transition: background 0.2s;
-      flex: 1;
-      min-width: 55px;
-    }
-    .pomo-btn:hover {
-      background: #444;
-    }
-    .pomo-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      font-weight: bold;
-    }
-    .custom-time-input {
-      background: #0D0D0D;
-      color: var(--color-highlight);
-      border: 1px solid var(--color-highlight);
-      padding: 5px 6px;
-      border-radius: 4px;
-      width: 50px;
-      font-size: 0.8em;
-      text-align: center;
-      flex: 0 0 auto;
-    }
-    .custom-time-input::placeholder {
-      color: #777;
-    }
-    /* --- MÚSICA Y CONTROLES --- */
-    .music-container {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .theme-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .top-right { display: flex; gap: 15px; align-items: center; }
     .theme-btn {
       width: 24px;
       height: 24px;
       border-radius: 50%;
       border: 2px solid #555;
       cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .theme-btn:hover {
-      transform: scale(1.15);
-    }
-    .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
-    .theme-btn.blue { background: #3B82F6; border-color: #3B82F6; }
-    .theme-btn.green { background: #10B981; border-color: #10B981; }
-    .theme-btn.red { background: #EF4444; border-color: #EF4444; }
-    .theme-btn.pink { background: #EC4899; border-color: #EC4899; }
-    .theme-btn.yellow { background: #FBBF24; border-color: #FBBF24; }
-    .theme-btn.cyan { background: #06B6D4; border-color: #06B6D4; }
-    .theme-btn.lime { background: #84CC16; border-color: #84CC16; }
-    .theme-btn.orange { background: #F97316; border-color: #F97316; }
-    .theme-btn.indigo { background: #6366F1; border-color: #6366F1; }
-    .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
-    .theme-btn.black { background: #000000; border-color: #FFFFFF; }
-    .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
-    .music-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid #555;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.85em;
-      transition: background 0.2s;
-    }
-    .music-btn:hover {
-      background: #444;
     }
     .logout-btn {
       background: #DC2626;
@@ -569,17 +96,12 @@
       padding: 6px 12px;
       cursor: pointer;
       border-radius: 4px;
-      font-size: 0.85em;
-      transition: background 0.2s;
       font-weight: 600;
-    }
-    .logout-btn:hover {
-      background: #b91c1c;
     }
     .user-info {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
       background: #333;
       padding: 6px 12px;
       border-radius: 4px;
@@ -590,79 +112,38 @@
       height: 28px;
       border-radius: 50%;
     }
+    .main {
+      background: var(--color-main-bg);
+      padding: var(--main-gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--main-gap);
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN -->
   <div id="loginScreen">
     <div class="login-container">
-      <div class="subtitle">Bienvenido a</div>
       <h1>DANIFU777</h1>
       <p>Dominon</p>
-      
       <button class="google-button" id="googleSignInBtn">
-        <i class="fa-brands fa-google"></i>
-        Iniciar sesión con Google
+        <i class="fa-brands fa-google"></i> Iniciar sesión con Google
       </button>
-
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Autenticando...</p>
-      </div>
-
-      <div class="features">
-        <h3>✨ Características</h3>
-        <div class="feature-item">
-          <i class="fa-solid fa-floppy-disk"></i>
-          <span>Guarda automáticamente tus notas</span>
-        </div>
-        <div class="feature-item">
-          <i class="fa-solid fa-palette"></i>
-          <span>Recuerda tu tema favorito</span>
-        </div>
-        <div class="feature-item">
-          <i class="fa-solid fa-chart-line"></i>
-          <span>Sincroniza gráficos activos</span>
-        </div>
-        <div class="feature-item">
-          <i class="fa-solid fa-music"></i>
-          <span>Guarda tu música en reproducción</span>
-        </div>
-        <div class="feature-item">
-          <i class="fa-solid fa-lock"></i>
-          <span>Acceso seguro con Google</span>
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- MAIN APP -->
+  <!-- APP -->
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
-      <div class="top-left">
-        <div class="box" id="fecha-hora">Cargando...</div>
-      </div>
+      <div style="flex: 1;"></div>
       <div class="top-right">
-        <div class="theme-buttons">
-          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
-          <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
-          <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
-          <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
-          <button class="theme-btn pink" onclick="setTheme('#EC4899')" title="Rosa"></button>
-          <button class="theme-btn yellow" onclick="setTheme('#FBBF24')" title="Amarillo"></button>
-          <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
-          <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
-          <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
-          <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
-          <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
-          <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
-        </div>
-        <div class="music-container">
-          <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</button>
-          <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-          <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-          <span class="box" id="song">Listo para Play</span>
+        <div style="display: flex; gap: 8px;">
+          <button class="theme-btn" onclick="setTheme('#A855F7')" style="background: #A855F7; border-color: #A855F7;"></button>
+          <button class="theme-btn" onclick="setTheme('#3B82F6')" style="background: #3B82F6; border-color: #3B82F6;"></button>
+          <button class="theme-btn" onclick="setTheme('#10B981')" style="background: #10B981; border-color: #10B981;"></button>
         </div>
         <div class="user-info" id="userInfo">
           <img class="user-avatar" id="userAvatar" alt="Avatar">
@@ -671,114 +152,16 @@
         </div>
       </div>
     </div>
-
     <main class="main">
-      <!-- GRÁFICO TOP -->
-      <div class="chart-panel">
-        <div class="chart-header">
-          <h2>Mini-Gráfico</h2>
-          <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
-            <option value="BINANCE:USDTARS">USDT/ARS</option>
-            <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
-            <option value="FOREXCOM:EURUSD">EUR/USD</option>
-            <option value="FOREXCOM:GBPUSD">GBP/USD</option>
-            <option value="FOREXCOM:JPYUSD">JPY/USD</option>
-            <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
-            <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
-            <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-            <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
-            <option value="FOREXCOM:NGAS">Gas Natural</option>
-          </select>
-        </div>
-        <iframe class="chart-iframe" id="tradingViewChart"
-          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
-          frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <!-- BLOC DE NOTAS -->
-      <div class="notepad-panel">
-        <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
-          <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
-            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
-            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
-            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
-            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
-            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
-            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
-            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
-            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
-            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
-            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
-            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
-            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
-            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
-            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
-            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
-            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
-            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
-          </div>
-        </div>
-        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
-      </div>
-
-      <!-- CALCULADORA + POMODORO (50/50) -->
-      <div class="bottom-container">
-        <!-- CALCULADORA -->
-        <div class="calculator-panel">
-          <h2>Calculadora</h2>
-          <div id="display" class="calc-display">0</div>
-          <div class="calculator-grid">
-            <button class="calc-button clear" onclick="clearDisplay()">C</button>
-            <button class="calc-button" onclick="backspace()">←</button>
-            <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-            <button class="calc-button operator" onclick="appendOperator('*')">×</button>
-            <button class="calc-button" onclick="appendNumber('7')">7</button>
-            <button class="calc-button" onclick="appendNumber('8')">8</button>
-            <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button operator" onclick="appendOperator('-')">−</button>
-            <button class="calc-button" onclick="appendNumber('4')">4</button>
-            <button class="calc-button" onclick="appendNumber('5')">5</button>
-            <button class="calc-button" onclick="appendNumber('6')">6</button>
-            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
-            <button class="calc-button" onclick="appendNumber('1')">1</button>
-            <button class="calc-button" onclick="appendNumber('2')">2</button>
-            <button class="calc-button" onclick="appendNumber('3')">3</button>
-            <button class="calc-button equals" onclick="calculate()">=</button>
-            <button class="calc-button zero" onclick="appendNumber('0')">0</button>
-            <button class="calc-button" onclick="appendNumber('.')">.</button>
-          </div>
-        </div>
-
-        <!-- POMODORO -->
-        <div class="pomodoro-panel">
-          <h2>Pomodoro</h2>
-          <div class="pomodoro-display" id="pomo-display">25:00</div>
-          <div class="pomodoro-controls">
-            <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
-            <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
-            <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
-            <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
-          </div>
-        </div>
-      </div>
+      <p>¡Bienvenido a DANIFU777!</p>
     </main>
   </div>
 
-  <div id="youtube-player"></div>
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-  <!-- Google Sign-In -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <script>
-    // ===== FIREBASE CONFIG =====
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
       authDomain: "danifu777-4732c.firebaseapp.com",
@@ -790,356 +173,38 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
 
-    // Permitir pop-ups
-    window.addEventListener('beforeunload', () => {
-      // Esto permite que los pop-ups se abran sin bloqueos
-    });
-
-    // ===== AUTH STATE =====
     auth.onAuthStateChanged(user => {
-      console.log('Auth state changed:', user);
       if (user) {
-        console.log('Usuario autenticado:', user.displayName);
-        showApp(user);
-        loadUserData();
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        document.getElementById('userName').textContent = user.displayName || 'Usuario';
+        if (user.photoURL) {
+          document.getElementById('userAvatar').src = user.photoURL;
+        }
       } else {
-        console.log('Usuario no autenticado');
-        showLogin();
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
       }
     });
 
-    function showLogin() {
-      document.getElementById('loginScreen').classList.remove('hidden');
-      document.getElementById('mainApp').classList.add('hidden');
-    }
+    document.getElementById('googleSignInBtn').addEventListener('click', function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithRedirect(provider);
+    });
 
-    function showApp(user) {
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('mainApp').classList.remove('hidden');
-      document.getElementById('userName').textContent = user.displayName || 'Usuario';
-      if (user.photoURL) {
-        document.getElementById('userAvatar').src = user.photoURL;
-      }
-    }
+    auth.getRedirectResult().then(result => {
+      console.log('Redirect result:', result);
+    }).catch(error => {
+      console.error('Redirect error:', error);
+    });
 
-    // ===== GOOGLE SIGN IN =====
-    const googleSignInBtn = document.getElementById('googleSignInBtn');
-    if (googleSignInBtn) {
-      googleSignInBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('loading').classList.add('show');
-        
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('profile');
-        provider.addScope('email');
-        
-        auth.signInWithPopup(provider)
-          .then(result => {
-            console.log('Login exitoso:', result.user);
-            document.getElementById('loading').classList.remove('show');
-          })
-          .catch(error => {
-            document.getElementById('loading').classList.remove('show');
-            console.error('Error de login:', error);
-            console.error('Código de error:', error.code);
-            console.error('Mensaje de error:', error.message);
-            alert('Error al iniciar sesión:\n' + error.message + '\n\nAsegúrate de:\n1. Permitir pop-ups\n2. Tener conexión a internet\n3. Google debe estar disponible en tu región');
-          });
-      });
-    }
-
-    // ===== LOGOUT =====
     window.logout = function() {
-      auth.signOut().then(() => {
-        console.log('Sesión cerrada');
-      }).catch(error => {
-        console.error('Error al cerrar sesión:', error);
-      });
+      auth.signOut();
     };
 
-    // ===== SAVE/LOAD DATA =====
-    function saveUserData() {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      const notes = {};
-      for (let i = 1; i <= 20; i++) {
-        notes[`page_${i}`] = localStorage.getItem(`danifu_notes_v2_${i}`) || '';
-      }
-
-      const theme = localStorage.getItem('danifu_theme') || '#A855F7';
-      const symbol = document.getElementById('symbolSelect').value || 'BINANCE:USDTARS';
-      const currentSong = document.getElementById('song').textContent || 'Listo para Play';
-
-      db.collection('users').doc(user.uid).set({
-        notes: notes,
-        theme: theme,
-        symbol: symbol,
-        currentSong: currentSong,
-        lastUpdated: new Date()
-      });
-    }
-
-    function loadUserData() {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      db.collection('users').doc(user.uid).get().then(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          
-          // Cargar notas
-          if (data.notes) {
-            for (let i = 1; i <= 20; i++) {
-              localStorage.setItem(`danifu_notes_v2_${i}`, data.notes[`page_${i}`] || '');
-            }
-          }
-          
-          // Cargar tema
-          if (data.theme) {
-            setTheme(data.theme);
-          }
-          
-          // Cargar símbolo
-          if (data.symbol) {
-            document.getElementById('symbolSelect').value = data.symbol;
-            changeSymbol();
-          }
-          
-          // Cargar canción
-          if (data.currentSong) {
-            document.getElementById('song').textContent = data.currentSong;
-          }
-          
-          window.switchTab(1);
-        }
-      });
-    }
-
-    // Guardar datos cada vez que cambien
-    setInterval(saveUserData, 5000);
-
-    // ===== FUNCIONES EXISTENTES =====
-    const display = document.getElementById('display');
-    let currentInput = '0';
-    let previousInput = '';
-    let operation = null;
-    let waitingForSecondOperand = false;
-
-    window.updateDisplay = function() {
-      if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput;
-    };
-
-    window.appendNumber = function(number) {
-      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
-      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
-      updateDisplay();
-    };
-
-    window.appendOperator = function(nextOperation) {
-      const inputValue = parseFloat(currentInput);
-      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
-      if (previousInput === '') { previousInput = inputValue; }
-      else if (operation) {
-        const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result);
-        previousInput = result;
-      }
-      waitingForSecondOperand = true;
-      operation = nextOperation;
-      updateDisplay();
-    };
-
-    const performCalculation = {
-      '/': (a, b) => a / b,
-      '*': (a, b) => a * b,
-      '+': (a, b) => a + b,
-      '-': (a, b) => a - b
-    };
-
-    window.calculate = function() {
-      if (!operation || waitingForSecondOperand) return;
-      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result);
-      operation = null;
-      previousInput = '';
-      waitingForSecondOperand = false;
-      updateDisplay();
-    };
-
-    window.clearDisplay = function() {
-      currentInput = '0';
-      previousInput = '';
-      operation = null;
-      updateDisplay();
-    };
-
-    window.backspace = function() {
-      if (currentInput.length > 1) currentInput = currentInput.slice(0, -1);
-      else currentInput = '0';
-      updateDisplay();
-    };
-
-    // ===== BLOC DE NOTAS =====
-    let activeTab = localStorage.getItem('danifu_active_tab') || "1";
-
-    window.switchTab = function(tabNum) {
-      const notepad = document.getElementById('notepad');
-      const notepadTitle = document.getElementById('notepad-title');
-      if (notepad) localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
-      activeTab = String(tabNum);
-      localStorage.setItem('danifu_active_tab', activeTab);
-      if (notepadTitle) notepadTitle.innerText = `Bloc de Notas - Pág ${activeTab}`;
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-tab-${activeTab}`);
-      if (activeBtn) activeBtn.classList.add('active');
-      if (notepad) notepad.value = localStorage.getItem(`danifu_notes_v2_${activeTab}`) || "";
-    };
-
-    // ===== TEMA =====
     window.setTheme = function(color) {
       document.documentElement.style.setProperty('--color-highlight', color);
-      localStorage.setItem('danifu_theme', color);
-    };
-
-    // ===== SÍMBOLO GRÁFICO =====
-    window.changeSymbol = function() {
-      const select = document.getElementById('symbolSelect');
-      const symbol = select.value;
-      const iframe = document.getElementById('tradingViewChart');
-      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
-      iframe.src = newSrc;
-      localStorage.setItem('danifu_chart_symbol', symbol);
-    };
-
-    // ===== POMODORO =====
-    let pomoInterval;
-    let pomoSeconds = 25 * 60;
-    let isRunning = false;
-
-    window.updatePomoUI = function() {
-      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      const s = (pomoSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('pomo-display').innerText = `${m}:${s}`;
-    };
-
-    window.togglePomodoro = function() {
-      const btn = document.getElementById('start-btn');
-      if (isRunning) {
-        clearInterval(pomoInterval);
-        isRunning = false;
-        btn.innerText = "INICIAR";
-        btn.classList.remove('active');
-      } else {
-        isRunning = true;
-        btn.innerText = "PAUSAR";
-        btn.classList.add('active');
-        pomoInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            updatePomoUI();
-          } else {
-            clearInterval(pomoInterval);
-            isRunning = false;
-            btn.innerText = "INICIAR";
-            btn.classList.remove('active');
-            alert("¡Tiempo terminado!");
-          }
-        }, 1000);
-      }
-    };
-
-    window.resetPomodoro = function() {
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = 25 * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-
-    window.setCustomTime = function() {
-      const input = document.getElementById('custom-min');
-      const mins = parseInt(input.value);
-      if (!mins || mins <= 0) {
-        alert("Por favor ingresa un número de minutos válido.");
-        return;
-      }
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = mins * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-
-    // ===== INIT =====
-    window.onload = function() {
-      updatePomoUI();
-      updateDisplay();
-      
-      const notepad = document.getElementById('notepad');
-      if (notepad) {
-        notepad.addEventListener('input', () => {
-          localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
-          saveUserData();
-        });
-      }
-
-      const savedTheme = localStorage.getItem('danifu_theme');
-      if (savedTheme) window.setTheme(savedTheme);
-
-      setInterval(() => {
-        const d = new Date();
-        const el = document.getElementById("fecha-hora");
-        if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-      }, 1000);
-    };
-
-    // ===== YOUTUBE =====
-    let player;
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const songNameElement = document.getElementById('song');
-
-    window.onYouTubeIframeAPIReady = function() {
-      player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        videoId: 'P0TqT0-qJqU',
-        playerVars: {
-          'listType': 'playlist',
-          'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG',
-          'autoplay': 0,
-          'controls': 0
-        },
-        events: {
-          'onReady': () => {
-            if (songNameElement) songNameElement.textContent = "Listo para Play";
-            if (playPauseBtn) {
-              playPauseBtn.onclick = () => {
-                if (player.getPlayerState() == 1) player.pauseVideo();
-                else player.playVideo();
-                saveUserData();
-              };
-            }
-            document.getElementById('prevBtn').onclick = () => player.previousVideo();
-            document.getElementById('nextBtn').onclick = () => player.nextVideo();
-          },
-          'onStateChange': (e) => {
-            if (e.data == 1) {
-              if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i> PAUSA';
-              try {
-                if (songNameElement) songNameElement.textContent = player.getVideoData().title.substring(0, 25) + "...";
-              } catch (e) {}
-            } else if (playPauseBtn) {
-              playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
-            }
-            saveUserData();
-          }
-        }
-      });
     };
   </script>
 </body>
