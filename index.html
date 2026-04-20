@@ -9,44 +9,284 @@
     :root {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
+      --color-border: #444;
       --color-highlight: #A855F7;
+      --color-main-bg: #282828;
       --color-text: #EAEAEA;
+      --color-input-bg: #1F1F1F;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --main-gap: 15px;
     }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--color-dark-bg); color: var(--color-text); overflow: hidden; }
-    #loginScreen { position: fixed; inset: 0; background: #1A1A1A; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-dark-bg);
+      color: var(--color-text);
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    /* --- LOGIN SCREEN --- */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
     #loginScreen.hidden { display: none !important; }
-    .login-container { background: #1F1F1F; border: 3px solid #A855F7; border-radius: 15px; padding: 50px; text-align: center; }
-    .google-button { background: white; color: #333; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-    .container { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+    .login-container {
+      background: #1F1F1F;
+      border: 3px solid var(--color-highlight);
+      border-radius: 15px;
+      padding: 50px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+    }
+    .google-button {
+      background: white;
+      color: #333;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px auto 0;
+      font-size: 1.1em;
+    }
+
+    /* --- APP CONTAINER --- */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
     .container.hidden { display: none !important; }
-    .top-bar { display: flex; justify-content: space-between; padding: 10px 20px; background: #282828; border-bottom: 2px solid var(--color-highlight); }
-    .user-avatar { width: 30px; height: 30px; border-radius: 50%; }
-    .logout-btn { background: #DC2626; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin-left: 10px; }
+
+    .top-bar {
+      grid-column: 1 / span 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 15px;
+      background: var(--color-header-bg);
+      border-bottom: 2px solid var(--color-highlight);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+    .top-left,
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 10px;
+      border-left: 1px solid var(--color-border);
+    }
+    .user-avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--color-highlight); }
+    .logout-btn { background: #DC2626; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.8em; }
+
+    .box {
+      border: 1px solid var(--color-border);
+      padding: 4px 10px;
+      background: #333;
+      border-radius: 4px;
+      box-shadow: var(--shadow-light);
+      transition: background 0.3s ease;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+    .main {
+      grid-column: 1 / -1;
+      background: var(--color-main-bg);
+      padding: var(--main-gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--main-gap);
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .main::-webkit-scrollbar { width: 10px; }
+    .main::-webkit-scrollbar-track { background: var(--color-input-bg); }
+    .main::-webkit-scrollbar-thumb { background: var(--color-highlight); border-radius: 5px; }
+    .main::-webkit-scrollbar-thumb:hover { background: #8b3ed9; }
+    
+    /* --- GRÁFICO --- */
+    .chart-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      height: 300px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
+    .chart-header h2 { color: var(--color-highlight); margin: 0; border-bottom: 1px solid var(--color-border); padding-bottom: 5px; font-size: 1.2em; flex: 1; }
+    .symbol-selector { background: #333; color: var(--color-text); border: 1px solid var(--color-border); padding: 5px 10px; border-radius: 4px; font-size: 0.85em; cursor: pointer; }
+    .chart-iframe { width: 100%; height: calc(100% - 40px); border: none; }
+
+    /* --- NOTEPAD --- */
+    .notepad-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      min-height: 200px;
+    }
+    .notepad-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px; }
+    .notepad-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+    .tab-btn { background: #333; color: var(--color-text); border: 1px solid var(--color-border); padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.85em; white-space: nowrap; }
+    .tab-btn.active { background: var(--color-highlight); color: var(--color-dark-bg); font-weight: bold; }
+    #notepad { background: #0D0D0D; color: var(--color-text); border: 1px solid var(--color-border); padding: 10px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; resize: none; flex-grow: 1; }
+
+    /* --- BOTTOM (CALC + POMO) --- */
+    .bottom-container { display: grid; grid-template-columns: 1fr 1fr; gap: var(--main-gap); flex-shrink: 0; }
+    .calculator-panel, .pomodoro-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 10px; box-shadow: var(--shadow-light); }
+    .calculator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .calc-display { grid-column: 1 / -1; background: #0D0D0D; color: var(--color-highlight); border: 2px solid var(--color-highlight); text-align: right; padding: 10px; margin-bottom: 6px; font-size: 1.5em; font-family: monospace; border-radius: 4px; }
+    .calc-button { background: #333; color: var(--color-text); border: 1px solid var(--color-border); padding: 10px 0; cursor: pointer; border-radius: 4px; }
+    .calc-button.equals { background: var(--color-highlight); color: var(--color-dark-bg); grid-column: 4; grid-row: 5; }
+    .calc-button.clear { background: #DC2626; color: white; }
+
+    .pomodoro-display { font-size: 2.5em; font-weight: bold; color: var(--color-highlight); text-align: center; margin: 10px 0; font-family: monospace; }
+    .pomodoro-controls { display: flex; gap: 6px; justify-content: center; }
+    .pomo-btn { background: #333; color: white; border: 1px solid #555; padding: 8px; cursor: pointer; border-radius: 4px; flex: 1; }
+    .pomo-btn.active { background: var(--color-highlight); color: black; }
+    .custom-time-input { background: #0D0D0D; color: var(--color-highlight); border: 1px solid var(--color-highlight); padding: 5px; width: 50px; border-radius: 4px; }
+
+    .music-container { display: flex; gap: 10px; align-items: center; }
+    .theme-buttons { display: flex; gap: 5px; }
+    .theme-btn { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 1px solid #555; }
+    .music-btn { background: #333; color: white; border: 1px solid #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
   </style>
 </head>
 <body>
   <div id="loginScreen">
     <div class="login-container">
-      <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
-      <p>Dominon</p>
-      <button class="google-button" id="googleSignInBtn">Iniciar sesión con Google</button>
+      <h1 style="color: var(--color-highlight); font-size: 4em; margin: 0;">DANIFU777</h1>
+      <p style="margin-top: 0; opacity: 0.8;">Dominon</p>
+      <button class="google-button" id="googleSignInBtn">
+        <i class="fa-brands fa-google"></i> Iniciar sesión con Google
+      </button>
     </div>
   </div>
 
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
-      <div></div>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <img class="user-avatar" id="userAvatar" src="" alt="">
-        <span id="userName"></span>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+      <div class="top-left">
+        <div class="box" id="fecha-hora">Cargando...</div>
+      </div>
+      <div class="top-right">
+        <div class="theme-buttons">
+          <button class="theme-btn" style="background:#A855F7" onclick="setTheme('#A855F7')"></button>
+          <button class="theme-btn" style="background:#3B82F6" onclick="setTheme('#3B82F6')"></button>
+          <button class="theme-btn" style="background:#10B981" onclick="setTheme('#10B981')"></button>
+          <button class="theme-btn" style="background:#EF4444" onclick="setTheme('#EF4444')"></button>
+          <button class="theme-btn" style="background:#FFFFFF" onclick="setTheme('#FFFFFF')"></button>
+        </div>
+        <div class="music-container">
+          <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> PLAY</button>
+          <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+          <span class="box" id="song">Listo</span>
+        </div>
+        <div class="user-info">
+          <img class="user-avatar" id="userAvatar" src="" alt="">
+          <span id="userName" style="font-size: 0.9em; font-weight: bold;"></span>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
       </div>
     </div>
-    <main style="padding: 20px;">
-      <p>¡Bienvenido a DANIFU777!</p>
+
+    <main class="main">
+      <div class="chart-panel">
+        <div class="chart-header">
+          <h2>Mini-Gráfico</h2>
+          <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
+            <option value="BINANCE:USDTARS">USDT/ARS</option>
+            <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
+            <option value="BITSTAMP:BTCUSD">Bitcoin</option>
+          </select>
+        </div>
+        <iframe class="chart-iframe" id="tradingViewChart" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&hide_volume=1" frameborder="0"></iframe>
+      </div>
+
+      <div class="notepad-panel">
+        <div class="notepad-header-row">
+          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
+          <div class="notepad-tabs">
+            <script>
+              for(let i=1; i<=20; i++) {
+                document.write(`<button class="tab-btn ${i===1?'active':''}" id="btn-tab-${i}" onclick="switchTab(${i})">Pág ${i}</button>`);
+              }
+            </script>
+          </div>
+        </div>
+        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+      </div>
+
+      <div class="bottom-container">
+        <div class="calculator-panel">
+          <div id="display" class="calc-display">0</div>
+          <div class="calculator-grid">
+            <button class="calc-button clear" onclick="clearDisplay()">C</button>
+            <button class="calc-button" onclick="backspace()">←</button>
+            <button class="calc-button" onclick="appendOperator('/')">/</button>
+            <button class="calc-button" onclick="appendOperator('*')">×</button>
+            <button class="calc-button" onclick="appendNumber('7')">7</button>
+            <button class="calc-button" onclick="appendNumber('8')">8</button>
+            <button class="calc-button" onclick="appendNumber('9')">9</button>
+            <button class="calc-button" onclick="appendOperator('-')">−</button>
+            <button class="calc-button" onclick="appendNumber('4')">4</button>
+            <button class="calc-button" onclick="appendNumber('5')">5</button>
+            <button class="calc-button" onclick="appendNumber('6')">6</button>
+            <button class="calc-button" onclick="appendOperator('+')">+</button>
+            <button class="calc-button" onclick="appendNumber('1')">1</button>
+            <button class="calc-button" onclick="appendNumber('2')">2</button>
+            <button class="calc-button" onclick="appendNumber('3')">3</button>
+            <button class="calc-button equals" onclick="calculate()">=</button>
+            <button class="calc-button" style="grid-column: span 2" onclick="appendNumber('0')">0</button>
+            <button class="calc-button" onclick="appendNumber('.')">.</button>
+          </div>
+        </div>
+
+        <div class="pomodoro-panel">
+          <div class="pomodoro-display" id="pomo-display">25:00</div>
+          <div class="pomodoro-controls">
+            <input type="number" id="custom-min" class="custom-time-input" placeholder="Min">
+            <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
+            <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
+            <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
+  <div id="youtube-player"></div>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -68,7 +308,7 @@
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
-        document.getElementById('userName').textContent = user.displayName;
+        document.getElementById('userName').textContent = user.displayName.toUpperCase();
         document.getElementById('userAvatar').src = user.photoURL;
       } else {
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -78,6 +318,81 @@
 
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
+  </script>
+
+  <script>
+    // --- CALCULADORA ---
+    const display = document.getElementById('display');
+    let currentInput = '0', previousInput = '', operation = null, waiting = false;
+    window.updateDisplay = () => display.textContent = currentInput.slice(0,15);
+    window.appendNumber = (n) => { if(waiting){currentInput=n; waiting=false} else {currentInput = currentInput==='0'&&n!=='.'?n:currentInput+n} updateDisplay(); };
+    window.appendOperator = (op) => { previousInput = parseFloat(currentInput); operation = op; waiting = true; };
+    window.calculate = () => {
+      const a = previousInput, b = parseFloat(currentInput);
+      if(operation==='+') currentInput = String(a+b);
+      if(operation==='-') currentInput = String(a-b);
+      if(operation==='*') currentInput = String(a*b);
+      if(operation==='/') currentInput = String(a/b);
+      operation = null; updateDisplay();
+    };
+    window.clearDisplay = () => { currentInput='0'; previousInput=''; operation=null; updateDisplay(); };
+    window.backspace = () => { currentInput = currentInput.length>1?currentInput.slice(0,-1):'0'; updateDisplay(); };
+
+    // --- NOTEPAD ---
+    let activeTab = localStorage.getItem('activeTab') || "1";
+    window.switchTab = (n) => {
+      localStorage.setItem(`note_${activeTab}`, document.getElementById('notepad').value);
+      activeTab = n;
+      document.getElementById('notepad-title').innerText = `Bloc de Notas - Pág ${n}`;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-tab-${n}`).classList.add('active');
+      document.getElementById('notepad').value = localStorage.getItem(`note_${n}`) || "";
+    };
+
+    // --- OTROS ---
+    window.setTheme = (c) => document.documentElement.style.setProperty('--color-highlight', c);
+    window.changeSymbol = () => {
+      const s = document.getElementById('symbolSelect').value;
+      document.getElementById('tradingViewChart').src = `https://s.tradingview.com/widgetembed/?symbol=${s}&interval=D&theme=dark&style=1&locale=es&hide_volume=1`;
+    };
+
+    // --- POMODORO ---
+    let pomoSeconds = 1500, pomoInterval, isRunning = false;
+    window.updatePomoUI = () => {
+      const m = Math.floor(pomoSeconds/60).toString().padStart(2,'0');
+      const s = (pomoSeconds%60).toString().padStart(2,'0');
+      document.getElementById('pomo-display').innerText = `${m}:${s}`;
+    };
+    window.togglePomodoro = () => {
+      if(isRunning) { clearInterval(pomoInterval); isRunning=false; document.getElementById('start-btn').innerText="INICIAR"; }
+      else { 
+        isRunning=true; document.getElementById('start-btn').innerText="PAUSA";
+        pomoInterval = setInterval(() => { if(pomoSeconds>0){pomoSeconds--; updatePomoUI()} else {clearInterval(pomoInterval); alert("¡Tiempo!")} }, 1000);
+      }
+    };
+    window.resetPomodoro = () => { clearInterval(pomoInterval); isRunning=false; pomoSeconds=1500; updatePomoUI(); };
+    window.setCustomTime = () => { pomoSeconds = document.getElementById('custom-min').value * 60; updatePomoUI(); };
+
+    setInterval(() => { document.getElementById("fecha-hora").textContent = new Date().toLocaleString(); }, 1000);
+    window.onload = () => { switchTab(activeTab); updatePomoUI(); };
+
+    let player;
+    window.onYouTubeIframeAPIReady = () => {
+      player = new YT.Player('youtube-player', {
+        height: '1', width: '1', videoId: 'P0TqT0-qJqU',
+        playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG' },
+        events: {
+          'onReady': () => {
+            document.getElementById('playPauseBtn').onclick = () => player.getPlayerState()===1?player.pauseVideo():player.playVideo();
+            document.getElementById('prevBtn').onclick = () => player.previousVideo();
+            document.getElementById('nextBtn').onclick = () => player.nextVideo();
+          },
+          'onStateChange': (e) => {
+            if(e.data===1) document.getElementById('song').textContent = player.getVideoData().title.slice(0,20);
+          }
+        }
+      });
+    };
   </script>
 </body>
 </html>
