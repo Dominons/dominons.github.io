@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>DANIFU777 - Dominon </title>
+  <title>DANIFU777 - Dominon</title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
@@ -178,7 +178,7 @@
     h1 {
       display: none;
     }
-    /* --- GRÁFICO TOP --- */
+    /* --- GRAFICO TOP --- */
     .chart-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -462,12 +462,7 @@
     .custom-time-input::placeholder {
       color: #777;
     }
-    /* --- MÚSICA Y CONTROLES --- */
-    .music-container {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+    /* --- THEMES --- */
     .theme-buttons {
       display: flex;
       gap: 8px;
@@ -496,18 +491,250 @@
     .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     .theme-btn.black { background: #000000; border-color: #FFFFFF; }
     .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
-    .music-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid #555;
-      padding: 6px 12px;
+
+    /* ========== NUEVO ICONO DE MUSICA ========== */
+    .music-icon-btn {
+      background: linear-gradient(135deg, #8b3ed9, var(--color-highlight));
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.85em;
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+      transition: all 0.3s ease;
+    }
+    .music-icon-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.8);
+    }
+    .music-icon-btn.playing {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+      50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.9); }
+    }
+
+    /* ========== MODAL DE MUSICA ========== */
+    .music-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+    .music-modal-overlay.active {
+      display: flex;
+    }
+    .music-modal {
+      background: linear-gradient(145deg, #1F1F1F, #2a2a2a);
+      border: 2px solid var(--color-highlight);
+      border-radius: 15px;
+      padding: 20px;
+      width: 320px;
+      max-width: 90vw;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+      position: relative;
+    }
+    .music-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .music-modal-header h3 {
+      color: var(--color-highlight);
+      margin: 0;
+      font-size: 1.1em;
+    }
+    .close-modal-btn {
+      background: #DC2626;
+      color: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.2s;
     }
-    .music-btn:hover {
+    .close-modal-btn:hover {
+      background: #b91c1c;
+    }
+
+    /* --- CONTROLES DE REPRODUCCION --- */
+    .music-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .music-control-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .music-control-btn:hover {
       background: #444;
+      transform: scale(1.1);
+    }
+    .music-control-btn.play-btn {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      width: 50px;
+      height: 50px;
+      font-size: 1.2em;
+    }
+    .music-control-btn.play-btn:hover {
+      background: #8b3ed9;
+    }
+
+    /* --- CONTADOR DE TIEMPO --- */
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.85em;
+      color: #aaa;
+      font-family: monospace;
+    }
+    .time-current {
+      color: var(--color-highlight);
+      font-weight: bold;
+    }
+    .time-total {
+      color: #888;
+    }
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-highlight), #8b3ed9);
+      border-radius: 3px;
+      transition: width 0.1s linear;
+      width: 0%;
+    }
+
+    /* --- BARRA DE VOLUMEN --- */
+    .volume-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .volume-icon {
+      color: var(--color-highlight);
+      font-size: 1em;
+    }
+    .volume-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--color-highlight);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* --- PLAYLISTS --- */
+    .playlists-section {
+      border-top: 1px solid var(--color-border);
+      padding-top: 12px;
+    }
+    .playlists-section h4 {
+      color: var(--color-highlight);
+      margin: 0 0 10px 0;
+      font-size: 0.9em;
+    }
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .playlist-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 8px 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75em;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .playlist-btn:hover {
+      background: #444;
+      border-color: var(--color-highlight);
+    }
+    .playlist-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      border-color: var(--color-highlight);
+    }
+    .playlist-btn i {
+      font-size: 1.2em;
+    }
+
+    /* --- NOMBRE DE CANCION --- */
+    .song-info {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.8em;
+      color: #888;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -525,7 +752,7 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesión con Google
+        Iniciar sesion con Google
       </button>
     </div>
   </div>
@@ -541,12 +768,12 @@
         <div class="user-info" id="userInfo">
           <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
           <span class="user-name" id="userName"></span>
-          <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+          <button class="logout-btn" id="logoutBtn" title="Cerrar sesion">
             <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
         <div class="theme-buttons">
-          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
+          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Purpura"></button>
           <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
           <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
           <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
@@ -555,25 +782,23 @@
           <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
           <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
           <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
+          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Indigo"></button>
           <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
           <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
           <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
         </div>
-        <div class="music-container">
-          <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</button>
-          <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-          <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-          <span class="box" id="song">Listo para Play</span>
-        </div>
+        <!-- NUEVO ICONO DE MUSICA -->
+        <button class="music-icon-btn" id="musicIconBtn" title="Abrir reproductor">
+          <i class="fas fa-music"></i>
+        </button>
       </div>
     </div>
 
     <main class="main">
-      <!-- GRÁFICO TOP -->
+      <!-- GRAFICO TOP -->
       <div class="chart-panel">
         <div class="chart-header">
-          <h2>Mini-Gráfico</h2>
+          <h2>Mini-Grafico</h2>
           <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
             <option value="BINANCE:USDTARS">USDT/ARS</option>
             <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
@@ -583,43 +808,43 @@
             <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
             <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
             <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-            <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
+            <option value="FOREXCOM:WTIUSD">Petroleo (WTI/USD)</option>
             <option value="FOREXCOM:NGAS">Gas Natural</option>
           </select>
         </div>
         <iframe class="chart-iframe" id="tradingViewChart"
-          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
+          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache"
           frameborder="0" allowfullscreen></iframe>
       </div>
 
       <!-- BLOC DE NOTAS -->
       <div class="notepad-panel">
         <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
+          <h2 id="notepad-title">Bloc de Notas - Pag 1</h2>
           <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
-            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
-            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
-            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
-            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
-            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
-            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
-            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
-            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
-            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
-            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
-            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
-            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
-            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
-            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
-            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
-            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
-            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
+            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pag 1</button>
+            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pag 2</button>
+            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pag 3</button>
+            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pag 4</button>
+            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pag 5</button>
+            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pag 6</button>
+            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pag 7</button>
+            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pag 8</button>
+            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pag 9</button>
+            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pag 10</button>
+            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pag 11</button>
+            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pag 12</button>
+            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pag 13</button>
+            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pag 14</button>
+            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pag 15</button>
+            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pag 16</button>
+            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pag 17</button>
+            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pag 18</button>
+            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pag 19</button>
+            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pag 20</button>
           </div>
         </div>
-        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+        <textarea id="notepad" placeholder="Escribe tus notas aqui..."></textarea>
       </div>
 
       <!-- CALCULADORA + POMODORO (50/50) -->
@@ -665,12 +890,96 @@
     </main>
   </div>
 
-  <div id="youtube-player"></div>
+  <!-- ========== MODAL DE MUSICA ========== -->
+  <div class="music-modal-overlay" id="musicModal">
+    <div class="music-modal">
+      <div class="music-modal-header">
+        <h3><i class="fas fa-headphones"></i> Reproductor</h3>
+        <button class="close-modal-btn" id="closeMusicModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Controles de reproduccion -->
+      <div class="music-controls">
+        <button class="music-control-btn" id="prevBtn" title="Anterior">
+          <i class="fas fa-backward"></i>
+        </button>
+        <button class="music-control-btn play-btn" id="playPauseBtn" title="Play/Pausa">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="music-control-btn" id="nextBtn" title="Siguiente">
+          <i class="fas fa-forward"></i>
+        </button>
+      </div>
+
+      <!-- Contador de tiempo y barra de progreso -->
+      <div class="time-display">
+        <span class="time-current" id="currentTime">0:00</span>
+        <span class="time-total" id="totalTime">0:00</span>
+      </div>
+      <div class="progress-bar-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- Barra de volumen -->
+      <div class="volume-container">
+        <i class="fas fa-volume-up volume-icon" id="volumeIcon"></i>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+      </div>
+
+      <!-- Playlists -->
+      <div class="playlists-section">
+        <h4>Playlists</h4>
+        <div class="playlist-grid">
+          <button class="playlist-btn active" data-playlist="PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG" title="Musica Libre">
+            <i class="fas fa-music"></i>
+            <span>Libre</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp5_h7c5W6jI5e5x" title="Chill">
+            <i class="fas fa-couch"></i>
+            <span>Chill</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp6" title="Rock">
+            <i class="fas fa-guitar"></i>
+            <span>Rock</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp7" title="Pop">
+            <i class="fas fa-star"></i>
+            <span>Pop</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp8" title="Electronica">
+            <i class="fas fa-wave-square"></i>
+            <span>Electro</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp9" title="Lo-Fi">
+            <i class="fas fa-headphones-alt"></i>
+            <span>Lo-Fi</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp1" title="Jazz">
+            <i class="fas fa-saxophone"></i>
+            <span>Jazz</span>
+          </button>
+          <button class="playlist-btn" data-playlist="PLKByqT47PJxp2" title="Clasica">
+            <i class="fas fa-piano"></i>
+            <span>Classica</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Info de cancion -->
+      <div class="song-info" id="songInfo">Selecciona una playlist</div>
+    </div>
+  </div>
+
+  <!-- Contenedor para YouTube Player (oculto) -->
+  <div id="youtube-player" style="position: absolute; top: -9999px; left: -9999px;"></div>
 
   <!-- ========== FIREBASE ========== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
 
     const firebaseConfig = {
@@ -686,16 +995,24 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
+    const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
+
+    // Variable global para el usuario
+    let currentUser = null;
 
     // Auth state listener
     onAuthStateChanged(auth, (user) => {
+      currentUser = user;
       if (user) {
         // User is signed in
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
+
+        // Cargar estado de musica desde Firebase
+        loadMusicState(user.uid);
       } else {
         // User is signed out
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -708,50 +1025,126 @@
 
     // Logout button
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+    // Funcion para guardar estado de musica
+    window.saveMusicState = async function(videoId, currentTime, playlistId) {
+      if (!currentUser) return;
+      try {
+        await set(ref(database, 'users/' + currentUser.uid + '/musicState'), {
+          videoId: videoId,
+          currentTime: currentTime,
+          playlistId: playlistId,
+          lastUpdated: Date.now()
+        });
+      } catch (error) {
+        console.error('Error guardando estado de musica:', error);
+      }
+    };
+
+    // Funcion para cargar estado de musica
+    window.loadMusicState = async function(uid) {
+      try {
+        const snapshot = await get(ref(database, 'users/' + uid + '/musicState'));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          if (window.musicPlayer) {
+            window.musicPlayer.loadPlaylist(data.playlistId, data.currentTime);
+          }
+        }
+      } catch (error) {
+        console.error('Error cargando estado de musica:', error);
+      }
+    };
   </script>
 
   <!-- ========== APP SCRIPTS ========== -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // --- VARIABLES GLOBALES ---
+    let player;
+    let currentPlaylist = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    let isPlayerReady = false;
+
     // --- FUNCIONES GLOBALES ---
     // 1. CALCULADORA
     const display = document.getElementById('display');
-    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
-    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
+    let currentInput = '0';
+    let previousInput = '';
+    let operation = null;
+    let waitingForSecondOperand = false;
+
+    window.updateDisplay = function () {
+      if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput;
+    };
+
     window.appendNumber = function (number) {
-      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
-      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
+      if (waitingForSecondOperand) {
+        currentInput = number;
+        waitingForSecondOperand = false;
+      } else {
+        currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number;
+      }
       updateDisplay();
     };
+
     window.appendOperator = function (nextOperation) {
       const inputValue = parseFloat(currentInput);
-      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
-      if (previousInput === '') { previousInput = inputValue; }
-      else if (operation) {
-        const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result); previousInput = result;
+      if (operation && waitingForSecondOperand) {
+        operation = nextOperation;
+        return;
       }
-      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
+      if (previousInput === '') {
+        previousInput = inputValue;
+      } else if (operation) {
+        const result = performCalculation[operation](previousInput, inputValue);
+        currentInput = String(result);
+        previousInput = result;
+      }
+      waitingForSecondOperand = true;
+      operation = nextOperation;
+      updateDisplay();
     };
-    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
+
+    const performCalculation = {
+      '/': (a, b) => a / b,
+      '*': (a, b) => a * b,
+      '+': (a, b) => a + b,
+      '-': (a, b) => a - b
+    };
+
     window.calculate = function () {
       if (!operation || waitingForSecondOperand) return;
       const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
+      currentInput = String(result);
+      operation = null;
+      previousInput = '';
+      waitingForSecondOperand = false;
       updateDisplay();
     };
-    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
-    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
+
+    window.clearDisplay = function () {
+      currentInput = '0';
+      previousInput = '';
+      operation = null;
+      updateDisplay();
+    };
+
+    window.backspace = function () {
+      if (currentInput.length > 1) currentInput = currentInput.slice(0, -1);
+      else currentInput = '0';
+      updateDisplay();
+    };
 
     // 2. BLOC DE NOTAS
     let activeTab = localStorage.getItem('danifu_active_tab') || "1";
+
     window.switchTab = function (tabNum) {
       const notepad = document.getElementById('notepad');
       const notepadTitle = document.getElementById('notepad-title');
       if (notepad) localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
       activeTab = String(tabNum);
       localStorage.setItem('danifu_active_tab', activeTab);
-      if (notepadTitle) notepadTitle.innerText = `Bloc de Notas - Pág ${activeTab}`;
+      if (notepadTitle) notepadTitle.innerText = `Bloc de Notas - Pag ${activeTab}`;
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById(`btn-tab-${activeTab}`);
       if (activeBtn) activeBtn.classList.add('active');
@@ -764,7 +1157,7 @@
       localStorage.setItem('danifu_theme', color);
     };
 
-    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
+    // 3.5. CAMBIAR SIMBOLO DEL GRAFICO
     window.changeSymbol = function () {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
@@ -774,15 +1167,17 @@
       localStorage.setItem('danifu_chart_symbol', symbol);
     };
 
-    // 4. POMODORO CON PERSONALIZACIÓN
+    // 4. POMODORO CON PERSONALIZACION
     let pomoInterval;
     let pomoSeconds = 25 * 60;
     let isRunning = false;
+
     window.updatePomoUI = function () {
       const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
       const s = (pomoSeconds % 60).toString().padStart(2, '0');
       document.getElementById('pomo-display').innerText = `${m}:${s}`;
     };
+
     window.togglePomodoro = function () {
       const btn = document.getElementById('start-btn');
       if (isRunning) {
@@ -803,11 +1198,12 @@
             isRunning = false;
             btn.innerText = "INICIAR";
             btn.classList.remove('active');
-            alert("¡Tiempo terminado!");
+            alert("Tiempo terminado!");
           }
         }, 1000);
       }
     };
+
     window.resetPomodoro = function () {
       clearInterval(pomoInterval);
       isRunning = false;
@@ -816,11 +1212,12 @@
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
+
     window.setCustomTime = function () {
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
-        alert("Por favor ingresa un número de minutos válido.");
+        alert("Por favor ingresa un numero de minutos valido.");
         return;
       }
       clearInterval(pomoInterval);
@@ -831,17 +1228,234 @@
       document.getElementById('start-btn').classList.remove('active');
     };
 
-    // INIT
+    // --- SISTEMA DE MUSICA MODULAR ---
+    window.musicPlayer = {
+      isPlaying: false,
+      currentTime: 0,
+      duration: 0,
+      volume: 70,
+
+      // Inicializar reproductor
+      init: function() {
+        const self = this;
+
+        // Boton de abrir modal
+        document.getElementById('musicIconBtn').onclick = () => {
+          document.getElementById('musicModal').classList.add('active');
+        };
+
+        // Boton de cerrar modal
+        document.getElementById('closeMusicModal').onclick = () => {
+          document.getElementById('musicModal').classList.remove('active');
+        };
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('musicModal').onclick = (e) => {
+          if (e.target.id === 'musicModal') {
+            document.getElementById('musicModal').classList.remove('active');
+          }
+        };
+
+        // Controles de reproduccion
+        document.getElementById('playPauseBtn').onclick = () => self.togglePlay();
+        document.getElementById('prevBtn').onclick = () => self.previous();
+        document.getElementById('nextBtn').onclick = () => self.next();
+
+        // Barra de progreso clickeable
+        document.getElementById('progressContainer').onclick = (e) => {
+          if (!player || !player.getDuration) return;
+          const rect = e.target.getBoundingClientRect();
+          const percent = (e.clientX - rect.left) / rect.width;
+          const newTime = percent * player.getDuration();
+          player.seekTo(newTime, true);
+        };
+
+        // Control de volumen
+        document.getElementById('volumeSlider').oninput = (e) => {
+          self.volume = e.target.value;
+          if (player && player.setVolume) {
+            player.setVolume(self.volume);
+          }
+          self.updateVolumeIcon();
+        };
+
+        // Playlist buttons
+        document.querySelectorAll('.playlist-btn').forEach(btn => {
+          btn.onclick = () => {
+            const playlistId = btn.dataset.playlist;
+            self.loadPlaylist(playlistId, 0);
+          };
+        });
+      },
+
+      // Cargar playlist
+      loadPlaylist: function(playlistId, startTime = 0) {
+        currentPlaylist = playlistId;
+        if (player && player.loadPlaylist) {
+          player.loadPlaylist({
+            listType: 'playlist',
+            list: playlistId,
+            index: 0,
+            startSeconds: startTime,
+            suggestedQuality: 'small'
+          });
+        }
+
+        // Actualizar botones de playlist
+        document.querySelectorAll('.playlist-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.playlist === playlistId) {
+            btn.classList.add('active');
+          }
+        });
+
+        document.getElementById('songInfo').textContent = 'Cargando playlist...';
+      },
+
+      // Toggle play/pausa
+      togglePlay: function() {
+        if (!player) return;
+        if (player.getPlayerState() === 1) {
+          player.pauseVideo();
+        } else {
+          player.playVideo();
+        }
+      },
+
+      // Anterior
+      previous: function() {
+        if (player && player.previousVideo) {
+          player.previousVideo();
+        }
+      },
+
+      // Siguiente
+      next: function() {
+        if (player && player.nextVideo) {
+          player.nextVideo();
+        }
+      },
+
+      // Actualizar tiempo
+      updateTime: function(currentTime, duration) {
+        this.currentTime = currentTime;
+        this.duration = duration;
+
+        // Actualizar display de tiempo
+        document.getElementById('currentTime').textContent = this.formatTime(currentTime);
+        document.getElementById('totalTime').textContent = this.formatTime(duration);
+
+        // Actualizar barra de progreso
+        if (duration > 0) {
+          const percent = (currentTime / duration) * 100;
+          document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // Guardar estado en Firebase periodicamente
+        if (currentTime > 0 && Math.floor(currentTime) % 5 === 0) {
+          const videoId = player.getVideoId ? player.getVideoId() : '';
+          if (typeof saveMusicState === 'function') {
+            saveMusicState(videoId, currentTime, currentPlaylist);
+          }
+        }
+      },
+
+      // Formatear tiempo
+      formatTime: function(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+      },
+
+      // Actualizar icono de volumen
+      updateVolumeIcon: function() {
+        const icon = document.getElementById('volumeIcon');
+        if (this.volume === 0) {
+          icon.className = 'fas fa-volume-mute volume-icon';
+        } else if (this.volume < 50) {
+          icon.className = 'fas fa-volume-down volume-icon';
+        } else {
+          icon.className = 'fas fa-volume-up volume-icon';
+        }
+      },
+
+      // Estado de reproduccion cambio
+      onStateChange: function(state) {
+        const playBtn = document.getElementById('playPauseBtn');
+        const musicIconBtn = document.getElementById('musicIconBtn');
+
+        if (state === 1) {
+          // Reproduciendo
+          this.isPlaying = true;
+          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          musicIconBtn.classList.add('playing');
+
+          // Obtener nombre de cancion
+          try {
+            const title = player.getVideoData().title;
+            document.getElementById('songInfo').textContent = title.substring(0, 30) + (title.length > 30 ? '...' : '');
+          } catch (e) {}
+        } else {
+          // Pausado o detenido
+          this.isPlaying = false;
+          playBtn.innerHTML = '<i class="fas fa-play"></i>';
+          musicIconBtn.classList.remove('playing');
+        }
+      }
+    };
+
+    // --- YOUTUBE IFRAME API ---
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('youtube-player', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          'listType': 'playlist',
+          'list': currentPlaylist,
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'modestbranding': 1
+        },
+        events: {
+          'onReady': function (event) {
+            isPlayerReady = true;
+            player.setVolume(70);
+            window.musicPlayer.init();
+          },
+          'onStateChange': function (event) {
+            window.musicPlayer.onStateChange(event.data);
+
+            // Actualizar tiempo cada segundo cuando esta reproduciendo
+            if (event.data === 1) {
+              clearInterval(window.playerInterval);
+              window.playerInterval = setInterval(() => {
+                if (player && player.getCurrentTime && player.getDuration) {
+                  window.musicPlayer.updateTime(player.getCurrentTime(), player.getDuration());
+                }
+              }, 1000);
+            }
+          }
+        }
+      });
+    };
+
+    // --- INIT ---
     window.onload = function () {
       window.switchTab(activeTab);
+
       const notepad = document.getElementById('notepad');
       if (notepad) notepad.addEventListener('input', () => localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value));
+
       const savedTheme = localStorage.getItem('danifu_theme');
       if (savedTheme) window.setTheme(savedTheme);
+
       const savedSymbol = localStorage.getItem('danifu_chart_symbol');
       if (savedSymbol) {
         document.getElementById('symbolSelect').value = savedSymbol;
       }
+
       updatePomoUI();
       updateDisplay();
     };
@@ -852,31 +1466,6 @@
       const el = document.getElementById("fecha-hora");
       if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
     }, 1000);
-
-    // YOUTUBE
-    let player;
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const songNameElement = document.getElementById('song');
-    window.onYouTubeIframeAPIReady = function () {
-      player = new YT.Player('youtube-player', {
-        height: '1', width: '1', videoId: 'P0TqT0-qJqU',
-        playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG', 'autoplay': 0, 'controls': 0 },
-        events: {
-          'onReady': () => {
-            if (songNameElement) songNameElement.textContent = "Listo para Play";
-            if (playPauseBtn) playPauseBtn.onclick = () => { if (player.getPlayerState() == 1) player.pauseVideo(); else player.playVideo(); };
-            document.getElementById('prevBtn').onclick = () => player.previousVideo();
-            document.getElementById('nextBtn').onclick = () => player.nextVideo();
-          },
-          'onStateChange': (e) => {
-            if (e.data == 1) {
-              if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i> PAUSA';
-              try { if (songNameElement) songNameElement.textContent = player.getVideoData().title.substring(0, 25) + "..."; } catch (e) { }
-            } else if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
-          }
-        }
-      });
-    }
   </script>
 </body>
 </html>
