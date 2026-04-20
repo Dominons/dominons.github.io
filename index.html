@@ -124,7 +124,6 @@
   </style>
 </head>
 <body>
-  <!-- LOGIN -->
   <div id="loginScreen">
     <div class="login-container">
       <h1>DANIFU777</h1>
@@ -135,7 +134,6 @@
     </div>
   </div>
 
-  <!-- APP -->
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
       <div style="flex: 1;"></div>
@@ -148,7 +146,7 @@
         <div class="user-info" id="userInfo">
           <img class="user-avatar" id="userAvatar" alt="Avatar">
           <span id="userName">Usuario</span>
-          <button class="logout-btn" onclick="logout()">Logout</button>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
       </div>
     </div>
@@ -157,11 +155,11 @@
     </main>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+  <script type="module">
+    // Importamos las funciones necesarias de la versión moderna (v10.7.0)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
       authDomain: "danifu777-4732c.firebaseapp.com",
@@ -171,10 +169,13 @@
       appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    // Inicializamos Firebase y Auth
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    auth.onAuthStateChanged(user => {
+    // Manejo del estado del usuario
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
@@ -188,21 +189,18 @@
       }
     });
 
-    document.getElementById('googleSignInBtn').addEventListener('click', function() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithRedirect(provider);
+    // Evento para Iniciar Sesión (Cambié Redirect por Popup para evitar errores de dominio en GitHub)
+    document.getElementById('googleSignInBtn').addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .catch((error) => console.error('Error en Login:', error));
     });
 
-    auth.getRedirectResult().then(result => {
-      console.log('Redirect result:', result);
-    }).catch(error => {
-      console.error('Redirect error:', error);
+    // Evento para Cerrar Sesión
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      signOut(auth).catch((error) => console.error('Error en Logout:', error));
     });
 
-    window.logout = function() {
-      auth.signOut();
-    };
-
+    // Funciones globales (temas)
     window.setTheme = function(color) {
       document.documentElement.style.setProperty('--color-highlight', color);
     };
