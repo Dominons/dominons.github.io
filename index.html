@@ -509,6 +509,124 @@
     .music-btn:hover {
       background: #444;
     }
+
+    /* ========== MODAL DE MÚSICA ========== */
+    .music-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1F1F1F;
+      border: 2px solid var(--color-highlight);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+      z-index: 10000;
+      width: 350px;
+      max-width: 90vw;
+    }
+    .music-modal.active {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 10px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      color: var(--color-highlight);
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--color-text);
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+    .close-modal:hover {
+      color: var(--color-highlight);
+    }
+    .playlist-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .playlist-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.9em;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .playlist-btn:hover {
+      background: #444;
+    }
+    .playlist-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+    }
+    .player-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .player-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .time-display {
+      font-size: 0.9em;
+      color: #aaa;
+    }
+    .progress-bar-container {
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--color-highlight);
+      border-radius: 3px;
+      width: 0%;
+    }
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .volume-slider {
+      flex-grow: 1;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .volume-fill {
+      height: 100%;
+      background: var(--color-highlight);
+      border-radius: 3px;
+      width: 70%;
+    }
+    .volume-icon {
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
@@ -560,12 +678,8 @@
           <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
           <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
         </div>
-        <div class="music-container">
-          <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i> REPRODUCIR</button>
-          <button class="music-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-          <button class="music-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-          <span class="box" id="song">Listo para Play</span>
-        </div>
+        <!-- Botón principal de música (icono único) -->
+        <button class="music-btn" id="openMusicModalBtn"><i class="fa-solid fa-music"></i> Música</button>
       </div>
     </div>
 
@@ -665,13 +779,50 @@
     </main>
   </div>
 
-  <div id="youtube-player"></div>
+  <!-- ========== MODAL DE MÚSICA ========== -->
+  <div class="music-modal" id="musicModal">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-music"></i> Reproductor de Música</h3>
+      <button class="close-modal" id="closeMusicModal" title="Cerrar"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="playlist-buttons">
+      <button class="playlist-btn active" onclick="loadPlaylist('PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG')">
+        <i class="fas fa-list"></i> Lista Principal
+      </button>
+      <button class="playlist-btn" onclick="loadPlaylist('PLKByqT47PJxp7Zl8D9k5J5J5J5J5J5J5J')">
+        <i class="fas fa-list"></i> Lista Alternativa
+      </button>
+      <button class="playlist-btn" onclick="loadPlaylist('PLKByqT47PJxp8Zl8D9k5J5J5J5J5J5J5J')">
+        <i class="fas fa-list"></i> Lista Relajante
+      </button>
+    </div>
+
+    <div class="player-controls">
+      <div class="player-info">
+        <span id="currentSongTitle">Selecciona una canción</span>
+        <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+      </div>
+
+      <div class="progress-bar-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="volume-control">
+        <i class="fas fa-volume-up volume-icon"></i>
+        <div class="volume-slider" id="volumeSlider">
+          <div class="volume-fill" id="volumeFill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ========== FIREBASE ========== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
@@ -687,6 +838,15 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    const database = getDatabase(app);
+
+    // Variables globales para el reproductor
+    let player;
+    let currentPlaylistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    let currentVideoId = '';
+    let currentTime = 0;
+    let isPlaying = false;
+    let userUid = null;
 
     // Auth state listener
     onAuthStateChanged(auth, (user) => {
@@ -696,10 +856,15 @@
         document.getElementById('mainApp').classList.remove('hidden');
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
+        userUid = user.uid;
+
+        // Cargar estado de la música desde Firebase
+        loadMusicState(userUid);
       } else {
         // User is signed out
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
+        userUid = null;
       }
     });
 
@@ -711,7 +876,6 @@
   </script>
 
   <!-- ========== APP SCRIPTS ========== -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     // --- FUNCIONES GLOBALES ---
     // 1. CALCULADORA
@@ -844,35 +1008,167 @@
       }
       updatePomoUI();
       updateDisplay();
+
+      // Configurar modal de música
+      const openModalBtn = document.getElementById('openMusicModalBtn');
+      const closeModalBtn = document.getElementById('closeMusicModal');
+      const musicModal = document.getElementById('musicModal');
+
+      openModalBtn.onclick = () => {
+        musicModal.classList.add('active');
+        if (player) {
+          updatePlayerUI();
+        }
+      };
+
+      closeModalBtn.onclick = () => {
+        musicModal.classList.remove('active');
+      };
+
+      // Configurar controles del modal
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const volumeSlider = document.getElementById('volumeSlider');
+      const volumeFill = document.getElementById('volumeFill');
+
+      // Control de progreso
+      progressContainer.onclick = (e) => {
+        if (player && player.getDuration() > 0) {
+          const rect = progressContainer.getBoundingClientRect();
+          const pos = (e.clientX - rect.left) / rect.width;
+          player.seekTo(pos * player.getDuration(), true);
+        }
+      };
+
+      // Control de volumen
+      volumeSlider.onclick = (e) => {
+        const rect = volumeSlider.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        const volume = pos * 100;
+        player.setVolume(volume);
+        volumeFill.style.width = `${volume}%`;
+      };
+
+      // Inicializar YouTube Player API
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('youtube-player', {
+          height: '0',
+          width: '0',
+          videoId: '',
+          playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'rel': 0,
+            'modestbranding': 1
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
+          }
+        });
+      };
+
+      // Cargar YouTube API
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     };
 
-    // DATE
-    setInterval(() => {
-      const d = new Date();
-      const el = document.getElementById("fecha-hora");
-      if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-    }, 1000);
+    // Funciones del reproductor de música
+    function onPlayerReady(event) {
+      console.log('Player ready');
+      updatePlayerUI();
+    }
 
-    // YOUTUBE
-    let player;
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const songNameElement = document.getElementById('song');
-    window.onYouTubeIframeAPIReady = function () {
-      player = new YT.Player('youtube-player', {
-        height: '1', width: '1', videoId: 'P0TqT0-qJqU',
-        playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG', 'autoplay': 0, 'controls': 0 },
-        events: {
-          'onReady': () => {
-            if (songNameElement) songNameElement.textContent = "Listo para Play";
-            if (playPauseBtn) playPauseBtn.onclick = () => { if (player.getPlayerState() == 1) player.pauseVideo(); else player.playVideo(); };
-            document.getElementById('prevBtn').onclick = () => player.previousVideo();
-            document.getElementById('nextBtn').onclick = () => player.nextVideo();
-          },
-          'onStateChange': (e) => {
-            if (e.data == 1) {
-              if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i> PAUSA';
-              try { if (songNameElement) songNameElement.textContent = player.getVideoData().title.substring(0, 25) + "..."; } catch (e) { }
-            } else if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR';
+    function onPlayerStateChange(event) {
+      updatePlayerUI();
+
+      // Guardar estado en Firebase
+      if (userUid && currentVideoId) {
+        const stateRef = ref(database, `users/${userUid}/musicState`);
+        set(stateRef, {
+          videoId: currentVideoId,
+          currentTime: player.getCurrentTime(),
+          isPlaying: event.data === YT.PlayerState.PLAYING
+        });
+      }
+    }
+
+    function onPlayerError(event) {
+      console.error('Player error:', event.data);
+      // Intentar cargar el siguiente video de la playlist
+      player.nextVideo();
+    }
+
+    function updatePlayerUI() {
+      const modal = document.getElementById('musicModal');
+      if (!modal || !player) return;
+
+      const timeDisplay = document.getElementById('timeDisplay');
+      const currentSongTitle = document.getElementById('currentSongTitle');
+      const progressBar = document.getElementById('progressBar');
+      const volumeFill = document.getElementById('volumeFill');
+
+      if (player.getDuration() > 0) {
+        const current = formatTime(player.getCurrentTime());
+        const duration = formatTime(player.getDuration());
+        timeDisplay.textContent = `${current} / ${duration}`;
+
+        const progress = (player.getCurrentTime() / player.getDuration()) * 100;
+        progressBar.style.width = `${progress}%`;
+      } else {
+        timeDisplay.textContent = '0:00 / 0:00';
+        progressBar.style.width = '0%';
+      }
+
+      if (player.getVideoData) {
+        currentSongTitle.textContent = player.getVideoData().title;
+      }
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function loadPlaylist(playlistId) {
+      currentPlaylistId = playlistId;
+      if (player) {
+        player.loadPlaylist({
+          list: playlistId,
+          listType: 'playlist',
+          index: 0,
+          startSeconds: 0
+        });
+      }
+
+      // Actualizar botones de playlist
+      document.querySelectorAll('.playlist-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function loadMusicState(uid) {
+      if (!uid) return;
+
+      const stateRef = ref(database, `users/${uid}/musicState`);
+      onValue(stateRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          currentVideoId = data.videoId || '';
+          currentTime = data.currentTime || 0;
+
+          if (player) {
+            player.loadVideoById({
+              videoId: currentVideoId,
+              startSeconds: currentTime
+            });
+
+            if (data.isPlaying) {
+              player.playVideo();
+            }
           }
         }
       });
