@@ -9,154 +9,45 @@
     :root {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
-      --color-border: #444;
       --color-highlight: #A855F7;
-      --color-main-bg: #282828;
       --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-      --main-gap: 15px;
     }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--color-dark-bg);
-      color: var(--color-text);
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    #loginScreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #1A1A1A 0%, #282828 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--color-dark-bg); color: var(--color-text); overflow: hidden; }
+    #loginScreen { position: fixed; inset: 0; background: #1A1A1A; display: flex; align-items: center; justify-content: center; z-index: 9999; }
     #loginScreen.hidden { display: none !important; }
-    .login-container {
-      background: #1F1F1F;
-      border: 3px solid #A855F7;
-      border-radius: 15px;
-      padding: 50px 40px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
-      max-width: 450px;
-    }
-    .login-container h1 {
-      color: #A855F7;
-      margin: 0 0 15px 0;
-      font-size: 3.5em;
-      text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-    }
-    .google-button {
-      background: white;
-      color: #333;
-      border: none;
-      padding: 14px 32px;
-      border-radius: 8px;
-      font-size: 1.05em;
-      cursor: pointer;
-      font-weight: 600;
-      margin: 20px auto;
-    }
-    .google-button:hover { background: #f8f8f8; }
-    .container {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
-    }
+    .login-container { background: #1F1F1F; border: 3px solid #A855F7; border-radius: 15px; padding: 50px; text-align: center; }
+    .google-button { background: white; color: #333; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+    .container { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
     .container.hidden { display: none !important; }
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 15px;
-      background: var(--color-header-bg);
-      border-bottom: 2px solid var(--color-highlight);
-      z-index: 10;
-    }
-    .top-right { display: flex; gap: 15px; align-items: center; }
-    .theme-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid #555;
-      cursor: pointer;
-    }
-    .logout-btn {
-      background: #DC2626;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-weight: 600;
-    }
-    .user-info {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      background: #333;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 0.85em;
-    }
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-    }
-    .main {
-      background: var(--color-main-bg);
-      padding: var(--main-gap);
-      display: flex;
-      flex-direction: column;
-      gap: var(--main-gap);
-      height: calc(100vh - 52px);
-      overflow-y: auto;
-    }
+    .top-bar { display: flex; justify-content: space-between; padding: 10px 20px; background: #282828; border-bottom: 2px solid var(--color-highlight); }
+    .user-avatar { width: 30px; height: 30px; border-radius: 50%; }
+    .logout-btn { background: #DC2626; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin-left: 10px; }
   </style>
 </head>
 <body>
   <div id="loginScreen">
     <div class="login-container">
-      <h1>DANIFU777</h1>
+      <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
       <p>Dominon</p>
-      <button class="google-button" id="googleSignInBtn">
-        <i class="fa-brands fa-google"></i> Iniciar sesión con Google
-      </button>
+      <button class="google-button" id="googleSignInBtn">Iniciar sesión con Google</button>
     </div>
   </div>
 
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
-      <div style="flex: 1;"></div>
-      <div class="top-right">
-        <div style="display: flex; gap: 8px;">
-          <button class="theme-btn" onclick="setTheme('#A855F7')" style="background: #A855F7; border-color: #A855F7;"></button>
-          <button class="theme-btn" onclick="setTheme('#3B82F6')" style="background: #3B82F6; border-color: #3B82F6;"></button>
-          <button class="theme-btn" onclick="setTheme('#10B981')" style="background: #10B981; border-color: #10B981;"></button>
-        </div>
-        <div class="user-info" id="userInfo">
-          <img class="user-avatar" id="userAvatar" alt="Avatar">
-          <span id="userName">Usuario</span>
-          <button class="logout-btn" id="logoutBtn">Logout</button>
-        </div>
+      <div></div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img class="user-avatar" id="userAvatar" src="" alt="">
+        <span id="userName"></span>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
       </div>
     </div>
-    <main class="main">
+    <main style="padding: 20px;">
       <p>¡Bienvenido a DANIFU777!</p>
     </main>
   </div>
 
   <script type="module">
-    // Importamos las funciones necesarias de la versión moderna (v10.7.0)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
@@ -169,41 +60,24 @@
       appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b"
     };
 
-    // Inicializamos Firebase y Auth
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Manejo del estado del usuario
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
-        document.getElementById('userName').textContent = user.displayName || 'Usuario';
-        if (user.photoURL) {
-          document.getElementById('userAvatar').src = user.photoURL;
-        }
+        document.getElementById('userName').textContent = user.displayName;
+        document.getElementById('userAvatar').src = user.photoURL;
       } else {
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
       }
     });
 
-    // Evento para Iniciar Sesión (Cambié Redirect por Popup para evitar errores de dominio en GitHub)
-    document.getElementById('googleSignInBtn').addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-        .catch((error) => console.error('Error en Login:', error));
-    });
-
-    // Evento para Cerrar Sesión
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      signOut(auth).catch((error) => console.error('Error en Logout:', error));
-    });
-
-    // Funciones globales (temas)
-    window.setTheme = function(color) {
-      document.documentElement.style.setProperty('--color-highlight', color);
-    };
+    document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
   </script>
 </body>
 </html>
