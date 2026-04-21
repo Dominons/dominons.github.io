@@ -722,12 +722,8 @@
         const musicRef = ref(rtdb, 'users/' + user.uid + '/musicProgress');
         onValue(musicRef, (snapshot) => {
           const data = snapshot.val();
-          if (data && window.player) {
-             setTimeout(() => {
-                if (window.player && window.player.loadVideoById) {
-                   window.player.loadVideoById({ videoId: data.videoId, startSeconds: data.time || 0 });
-                }
-             }, 500);
+          if (data && window.player && window.player.cueVideoById) {
+             player.cueVideoById({ videoId: data.videoId, startSeconds: data.time });
           }
         }, { onlyOnce: true });
 
@@ -742,22 +738,13 @@
 
     // Auto-guardado de música
     setInterval(() => {
-       if (auth.currentUser && window.player) {
-          try {
-             const currentTime = Math.floor(window.player.getCurrentTime());
-             const videoData = window.player.getVideoData();
-             if (videoData && videoData.video_id) {
-                set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
-                   videoId: videoData.video_id,
-                   time: currentTime,
-                   timestamp: new Date().getTime()
-                });
-             }
-          } catch (error) {
-             console.log("Error guardando música:", error);
-          }
+       if (auth.currentUser && window.player && player.getPlayerState() === 1) {
+           set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+              videoId: player.getVideoData().video_id,
+              time: Math.floor(player.getCurrentTime())
+           });
        }
-    }, 15000);
+    }, 10000);
   </script>
 
   <script src="https://www.youtube.com/iframe_api"></script>
@@ -800,19 +787,12 @@
     
     window.loadNoteFromFirestore = async function(tabNum) {
        if (!window.auth || !window.auth.currentUser) return;
-       try {
-          const userDoc = doc(window.db, "users", window.auth.currentUser.uid, "notas", `pagina-${tabNum}`);
-          const docSnap = await getDoc(userDoc);
-          const notepadEl = document.getElementById('notepad');
-          if (docSnap.exists()) {
-             if (notepadEl) notepadEl.value = docSnap.data().content || "";
-          } else {
-             if (notepadEl) notepadEl.value = "";
-          }
-       } catch (error) {
-          console.error("Error cargando nota:", error);
-          const notepadEl = document.getElementById('notepad');
-          if (notepadEl) notepadEl.value = "";
+       const userDoc = doc(window.db, "users", window.auth.currentUser.uid, "notas", `pagina-${tabNum}`);
+       const docSnap = await getDoc(userDoc);
+       if (docSnap.exists()) {
+          document.getElementById('notepad').value = docSnap.data().content;
+       } else {
+          document.getElementById('notepad').value = "";
        }
     }
 
@@ -839,12 +819,8 @@
       const activeBtn = document.getElementById(`btn-tab-${window.activeTab}`);
       if (activeBtn) activeBtn.classList.add('active');
       
-      if (window.auth && window.auth.currentUser) {
-        window.loadNoteFromFirestore(window.activeTab);
-      } else {
-        const notepadEl = document.getElementById('notepad');
-        if (notepadEl) notepadEl.value = "";
-      }
+      if (notepadEl) notepadEl.value = "Cargando...";
+      if (window.auth && window.auth.currentUser) window.loadNoteFromFirestore(window.activeTab);
     };
 
     // 3. CAMBIAR TEMA
