@@ -1069,24 +1069,25 @@
     if (toggleBtn) toggleBtn.onclick = () => musicPanel.classList.toggle('hidden');
 
     // Lista de reproducción personalizada
-    const playlist = [
-      { id: 'jNQXAC9IVRw', title: 'Me at the zoo' },
-      { id: 'P0TqT0-qJqU', title: 'Lo-Fi Hip Hop' },
-      { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up' },
-      { id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE' },
-      { id: 'kJQP7kiw9Fk', title: 'Luis Fonsi - Despacito' }
-    ];
+    // ID de tu playlist real
+    const playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    const initialVideoId = 'Z6L4u2i97Rw'; // Primer video de tu playlist
     let currentPlaylistIndex = 0;
 
     window.onYouTubeIframeAPIReady = function () {
       // Cargar volumen guardado
       const savedVolume = localStorage.getItem('danifu_volume') || 50;
-      const savedPlaylistIndex = localStorage.getItem('danifu_playlist_index') || 0;
-      currentPlaylistIndex = parseInt(savedPlaylistIndex);
 
       window.player = new YT.Player('youtube-player', {
-        height: '1', width: '1', videoId: playlist[currentPlaylistIndex].id,
-        playerVars: { 'autoplay': 0, 'controls': 0 },
+        height: '1', 
+        width: '1', 
+        videoId: initialVideoId,
+        playerVars: { 
+          'listType': 'playlist',
+          'list': playlistId,
+          'autoplay': 0, 
+          'controls': 0 
+        },
         events: {
           'onReady': () => {
              if(window.player) {
@@ -1111,24 +1112,37 @@
     }
 
     function updateSongDisplay() {
-      const title = playlist[currentPlaylistIndex].title;
-      document.getElementById('songTitle').textContent = title;
-      document.getElementById('playerSongTitle').textContent = title;
-      localStorage.setItem('danifu_playlist_index', currentPlaylistIndex);
-      localStorage.setItem('danifu_current_video', playlist[currentPlaylistIndex].id);
+      // Obtener el título del video actual de YouTube
+      try {
+        const videoData = window.player.getVideoData();
+        const title = videoData && videoData.title ? videoData.title : 'Reproduciendo...';
+        document.getElementById('songTitle').textContent = title;
+        document.getElementById('playerSongTitle').textContent = title;
+        localStorage.setItem('danifu_current_video', window.player.getVideoUrl());
+      } catch (error) {
+        console.log("Error obteniendo título:", error);
+        document.getElementById('songTitle').textContent = 'Reproduciendo...';
+        document.getElementById('playerSongTitle').textContent = 'Reproduciendo...';
+      }
       savePlayerState();
     }
 
     function savePlayerState() {
       if (window.player && window.auth && window.auth.currentUser) {
-        const musicData = {
-          videoId: playlist[currentPlaylistIndex].id,
-          time: Math.floor(window.player.getCurrentTime()),
-          volume: window.player.getVolume(),
-          title: playlist[currentPlaylistIndex].title
-        };
-        const musicRef = ref(rtdb, 'users/' + window.auth.currentUser.uid + '/musicProgress');
-        set(musicRef, musicData);
+        try {
+          const videoData = window.player.getVideoData();
+          const musicData = {
+            videoId: window.player.getVideoUrl(),
+            time: Math.floor(window.player.getCurrentTime()),
+            volume: window.player.getVolume(),
+            title: videoData && videoData.title ? videoData.title : 'Reproduciendo...',
+            playlistId: playlistId
+          };
+          const musicRef = ref(rtdb, 'users/' + window.auth.currentUser.uid + '/musicProgress');
+          set(musicRef, musicData);
+        } catch (error) {
+          console.log("Error guardando estado:", error);
+        }
       }
     }
 
@@ -1145,18 +1159,22 @@
 
     document.getElementById('nextBtn').onclick = function() {
       if (!window.player) return;
-      currentPlaylistIndex = (currentPlaylistIndex + 1) % playlist.length;
-      window.player.loadVideoById(playlist[currentPlaylistIndex].id);
-      updateSongDisplay();
-      window.player.playVideo();
+      // Usar nextVideo() de YouTube para navegar por la playlist
+      window.player.nextVideo();
+      // Esperar un poco para que cargue el nuevo video y actualizar el título
+      setTimeout(() => {
+        updateSongDisplay();
+      }, 500);
     };
 
     document.getElementById('prevBtn').onclick = function() {
       if (!window.player) return;
-      currentPlaylistIndex = (currentPlaylistIndex - 1 + playlist.length) % playlist.length;
-      window.player.loadVideoById(playlist[currentPlaylistIndex].id);
-      updateSongDisplay();
-      window.player.playVideo();
+      // Usar previousVideo() de YouTube para navegar por la playlist
+      window.player.previousVideo();
+      // Esperar un poco para que cargue el nuevo video y actualizar el título
+      setTimeout(() => {
+        updateSongDisplay();
+      }, 500);
     };
 
     document.getElementById('volumeSlider').oninput = function(e) {
