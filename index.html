@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>DANIFU777 - Dominon</title>
+  <title>DANIFU777 - Dominon </title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
@@ -178,7 +178,7 @@
     h1 {
       display: none;
     }
-    /* --- GRAFICO TOP --- */
+    /* --- GRÁFICO TOP --- */
     .chart-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -462,7 +462,13 @@
     .custom-time-input::placeholder {
       color: #777;
     }
-    /* --- THEMES --- */
+    /* --- MÚSICA Y CONTROLES --- */
+    .music-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+    }
     .theme-buttons {
       display: flex;
       gap: 8px;
@@ -491,256 +497,127 @@
     .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     .theme-btn.black { background: #000000; border-color: #FFFFFF; }
     .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
-
-    /* ========== NUEVO ICONO DE MUSICA ========== */
-    .music-icon-btn {
-      background: linear-gradient(135deg, #8b3ed9, var(--color-highlight));
-      color: white;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.1em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
-      transition: all 0.3s ease;
-    }
-    .music-icon-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.8);
-    }
-    .music-icon-btn.playing {
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
-      50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.9); }
-    }
-
-    /* ========== MODAL DE MUSICA ========== */
-    .music-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      backdrop-filter: blur(5px);
-    }
-    .music-modal-overlay.active {
-      display: flex;
-    }
-    .music-modal {
-      background: linear-gradient(145deg, #1F1F1F, #2a2a2a);
-      border: 2px solid var(--color-highlight);
-      border-radius: 15px;
-      padding: 20px;
-      width: 320px;
-      max-width: 90vw;
-      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
-      position: relative;
-    }
-    .music-modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .music-modal-header h3 {
-      color: var(--color-highlight);
-      margin: 0;
-      font-size: 1.1em;
-    }
-    .close-modal-btn {
-      background: #DC2626;
-      color: white;
-      border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 0.9em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .close-modal-btn:hover {
-      background: #b91c1c;
-    }
-
-    /* --- CONTROLES DE REPRODUCCION --- */
-    .music-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .music-control-btn {
+    .music-btn {
       background: #333;
       color: var(--color-text);
-      border: 1px solid var(--color-border);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      border: 1px solid #555;
+      padding: 6px 12px;
       cursor: pointer;
-      font-size: 0.9em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .music-control-btn:hover {
-      background: #444;
-      transform: scale(1.1);
-    }
-    .music-control-btn.play-btn {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      width: 50px;
-      height: 50px;
-      font-size: 1.2em;
-    }
-    .music-control-btn.play-btn:hover {
-      background: #8b3ed9;
-    }
-
-    /* --- CONTADOR DE TIEMPO --- */
-    .time-display {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      border-radius: 4px;
       font-size: 0.85em;
-      color: #aaa;
-      font-family: monospace;
+      transition: background 0.2s;
     }
-    .time-current {
-      color: var(--color-highlight);
-      font-weight: bold;
+    .music-btn:hover {
+      background: var(--color-highlight);
     }
-    .time-total {
-      color: #888;
-    }
-    .progress-bar-container {
-      width: 100%;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      margin-bottom: 15px;
-      cursor: pointer;
+    .fa-spin-slow { animation: spin 4s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    /* SONG DISPLAY */
+    .song-display {
+      flex: 1;
+      max-width: 250px;
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 6px 12px;
+      border-radius: 4px;
       overflow: hidden;
     }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-highlight), #8b3ed9);
-      border-radius: 3px;
-      transition: width 0.1s linear;
-      width: 0%;
+    .song-marquee {
+      display: block;
+      color: var(--color-highlight);
+      font-size: 0.85em;
+      font-weight: 600;
+      white-space: nowrap;
+      animation: marquee 8s linear infinite;
     }
-
-    /* --- BARRA DE VOLUMEN --- */
-    .volume-container {
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    
+    /* MUSIC PLAYER PANEL */
+    #musicPanel.hidden { display: none !important; }
+    .music-player-panel {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      min-width: 280px;
+    }
+    .player-header {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 0.8em;
+      color: var(--color-highlight);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .song-info {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .player-song-title {
+      color: var(--color-text);
+      font-size: 0.85em;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .progress-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7em;
+      color: #AAA;
+      margin-bottom: 6px;
+    }
+    .progress-bar-container {
+      margin-bottom: 12px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .volume-control {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: 8px;
+      margin-top: 10px;
     }
-    .volume-icon {
+    .volume-control i {
       color: var(--color-highlight);
-      font-size: 1em;
+      font-size: 0.85em;
     }
     .volume-slider {
       flex: 1;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
+      height: 4px;
+      accent-color: var(--color-highlight);
       cursor: pointer;
-    }
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      background: var(--color-highlight);
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .volume-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-    }
-
-    /* --- PLAYLISTS --- */
-    .playlists-section {
-      border-top: 1px solid var(--color-border);
-      padding-top: 12px;
-    }
-    .playlists-section h4 {
-      color: var(--color-highlight);
-      margin: 0 0 10px 0;
-      font-size: 0.9em;
-    }
-    .playlist-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .playlist-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      padding: 8px 4px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.75em;
-      text-align: center;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .playlist-btn:hover {
-      background: #444;
-      border-color: var(--color-highlight);
-    }
-    .playlist-btn.active {
-      background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      border-color: var(--color-highlight);
-    }
-    .playlist-btn i {
-      font-size: 1.2em;
-    }
-
-    /* --- NOMBRE DE CANCION --- */
-    .song-info {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.8em;
-      color: #888;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      border-radius: 2px;
     }
   </style>
 </head>
 <body>
 
-  <!-- ========== LOGIN SCREEN ========== -->
   <div id="loginScreen">
     <div class="login-container">
       <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
@@ -752,28 +629,26 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesion con Google
+        Iniciar sesión con Google
       </button>
     </div>
   </div>
 
-  <!-- ========== MAIN APP ========== -->
   <div class="container hidden" id="mainApp">
     <div class="top-bar">
       <div class="top-left">
         <div class="box" id="fecha-hora">Cargando...</div>
       </div>
       <div class="top-right">
-        <!-- USER INFO (compact, integrated) -->
         <div class="user-info" id="userInfo">
           <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
           <span class="user-name" id="userName"></span>
-          <button class="logout-btn" id="logoutBtn" title="Cerrar sesion">
+          <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
             <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
         <div class="theme-buttons">
-          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Purpura"></button>
+          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
           <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
           <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
           <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
@@ -782,23 +657,55 @@
           <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
           <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
           <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Indigo"></button>
+          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
           <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
           <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
           <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
         </div>
-        <!-- NUEVO ICONO DE MUSICA -->
-        <button class="music-icon-btn" id="musicIconBtn" title="Abrir reproductor">
-          <i class="fas fa-music"></i>
-        </button>
+        <div class="music-container">
+          <div class="song-display">
+            <span id="songTitle" class="song-marquee">Listo para Play</span>
+          </div>
+          <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
+            <i class="fa-solid fa-compact-disc fa-spin-slow"></i>
+          </button>
+          
+          <div id="musicPanel" class="hidden music-player-panel">
+            <div class="player-header">REPRODUCTOR</div>
+            
+            <div class="song-info">
+              <span id="playerSongTitle" class="player-song-title">Listo para Play</span>
+            </div>
+            
+            <div class="player-controls">
+              <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+              <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+              <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+            </div>
+            
+            <div class="progress-time">
+              <span id="current-time">0:00</span>
+              <span id="duration-time">0:00</span>
+            </div>
+            
+            <div class="progress-bar-container">
+              <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+            </div>
+            
+            <div class="volume-control">
+              <i class="fa-solid fa-volume-low"></i>
+              <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+              <i class="fa-solid fa-volume-high"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <main class="main">
-      <!-- GRAFICO TOP -->
       <div class="chart-panel">
         <div class="chart-header">
-          <h2>Mini-Grafico</h2>
+          <h2>Mini-Gráfico</h2>
           <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
             <option value="BINANCE:USDTARS">USDT/ARS</option>
             <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
@@ -808,48 +715,45 @@
             <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
             <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
             <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-            <option value="FOREXCOM:WTIUSD">Petroleo (WTI/USD)</option>
+            <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
             <option value="FOREXCOM:NGAS">Gas Natural</option>
           </select>
         </div>
         <iframe class="chart-iframe" id="tradingViewChart"
-          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache"
+          src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
           frameborder="0" allowfullscreen></iframe>
       </div>
 
-      <!-- BLOC DE NOTAS -->
       <div class="notepad-panel">
         <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pag 1</h2>
+          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
           <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pag 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pag 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pag 3</button>
-            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pag 4</button>
-            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pag 5</button>
-            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pag 6</button>
-            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pag 7</button>
-            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pag 8</button>
-            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pag 9</button>
-            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pag 10</button>
-            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pag 11</button>
-            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pag 12</button>
-            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pag 13</button>
-            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pag 14</button>
-            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pag 15</button>
-            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pag 16</button>
-            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pag 17</button>
-            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pag 18</button>
-            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pag 19</button>
-            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pag 20</button>
+            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
+            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
+            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
+            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
+            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
+            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
+            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
+            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
+            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
+            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
+            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
+            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
+            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
+            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
+            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
+            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
+            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
+            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
+            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
+            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
           </div>
         </div>
-        <textarea id="notepad" placeholder="Escribe tus notas aqui..."></textarea>
+        <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
       </div>
 
-      <!-- CALCULADORA + POMODORO (50/50) -->
       <div class="bottom-container">
-        <!-- CALCULADORA -->
         <div class="calculator-panel">
           <h2>Calculadora</h2>
           <div id="display" class="calc-display">0</div>
@@ -875,7 +779,6 @@
           </div>
         </div>
 
-        <!-- POMODORO -->
         <div class="pomodoro-panel">
           <h2>Pomodoro</h2>
           <div class="pomodoro-display" id="pomo-display">25:00</div>
@@ -890,102 +793,20 @@
     </main>
   </div>
 
-  <!-- ========== MODAL DE MUSICA ========== -->
-  <div class="music-modal-overlay" id="musicModal">
-    <div class="music-modal">
-      <div class="music-modal-header">
-        <h3><i class="fas fa-headphones"></i> Reproductor</h3>
-        <button class="close-modal-btn" id="closeMusicModal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
+  <div id="youtube-player"></div>
 
-      <!-- Controles de reproduccion -->
-      <div class="music-controls">
-        <button class="music-control-btn" id="prevBtn" title="Anterior">
-          <i class="fas fa-backward"></i>
-        </button>
-        <button class="music-control-btn play-btn" id="playPauseBtn" title="Play/Pausa">
-          <i class="fas fa-play"></i>
-        </button>
-        <button class="music-control-btn" id="nextBtn" title="Siguiente">
-          <i class="fas fa-forward"></i>
-        </button>
-      </div>
-
-      <!-- Contador de tiempo y barra de progreso -->
-      <div class="time-display">
-        <span class="time-current" id="currentTime">0:00</span>
-        <span class="time-total" id="totalTime">0:00</span>
-      </div>
-      <div class="progress-bar-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <!-- Barra de volumen -->
-      <div class="volume-container">
-        <i class="fas fa-volume-up volume-icon" id="volumeIcon"></i>
-        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
-      </div>
-
-      <!-- Playlists -->
-      <div class="playlists-section">
-        <h4>Playlists</h4>
-        <div class="playlist-grid">
-          <button class="playlist-btn active" data-playlist="PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG" title="Musica Libre">
-            <i class="fas fa-music"></i>
-            <span>Libre</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp5_h7c5W6jI5e5x" title="Chill">
-            <i class="fas fa-couch"></i>
-            <span>Chill</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp6" title="Rock">
-            <i class="fas fa-guitar"></i>
-            <span>Rock</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp7" title="Pop">
-            <i class="fas fa-star"></i>
-            <span>Pop</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp8" title="Electronica">
-            <i class="fas fa-wave-square"></i>
-            <span>Electro</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp9" title="Lo-Fi">
-            <i class="fas fa-headphones-alt"></i>
-            <span>Lo-Fi</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp1" title="Jazz">
-            <i class="fas fa-saxophone"></i>
-            <span>Jazz</span>
-          </button>
-          <button class="playlist-btn" data-playlist="PLKByqT47PJxp2" title="Clasica">
-            <i class="fas fa-piano"></i>
-            <span>Classica</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Info de cancion -->
-      <div class="song-info" id="songInfo">Selecciona una playlist</div>
-    </div>
-  </div>
-
-  <!-- Contenedor para YouTube Player (oculto) -->
-  <div id="youtube-player" style="position: absolute; top: -9999px; left: -9999px;"></div>
-
-  <!-- ========== FIREBASE ========== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
       authDomain: "danifu777-4732c.firebaseapp.com",
       projectId: "danifu777-4732c",
+      databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
       storageBucket: "danifu777-4732c.firebasestorage.app",
       messagingSenderId: "171480985650",
       appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
@@ -995,160 +816,157 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
-    const database = getDatabase(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
-    // Variable global para el usuario
-    let currentUser = null;
+    // Exportar variables a window para que los scripts de abajo las puedan usar
+    window.db = db;
+    window.auth = auth;
+    window.rtdb = rtdb;
 
     // Auth state listener
     onAuthStateChanged(auth, (user) => {
-      currentUser = user;
       if (user) {
-        // User is signed in
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // Cargar estado de musica desde Firebase
-        loadMusicState(user.uid);
+        // Cargar nota actual
+        window.loadNoteFromFirestore(window.activeTab);
+
+        // Cargar música
+        const musicRef = ref(rtdb, 'users/' + user.uid + '/musicProgress');
+        onValue(musicRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data && window.player) {
+             setTimeout(() => {
+                if (window.player && window.player.loadVideoById) {
+                   window.player.loadVideoById({ videoId: data.videoId, startSeconds: data.time || 0 });
+                }
+             }, 500);
+          }
+        }, { onlyOnce: true });
+
       } else {
-        // User is signed out
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
       }
     });
 
-    // Sign in button
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
-
-    // Logout button
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    // Funcion para guardar estado de musica
-    window.saveMusicState = async function(videoId, currentTime, playlistId) {
-      if (!currentUser) return;
-      try {
-        await set(ref(database, 'users/' + currentUser.uid + '/musicState'), {
-          videoId: videoId,
-          currentTime: currentTime,
-          playlistId: playlistId,
-          lastUpdated: Date.now()
-        });
-      } catch (error) {
-        console.error('Error guardando estado de musica:', error);
-      }
-    };
-
-    // Funcion para cargar estado de musica
-    window.loadMusicState = async function(uid) {
-      try {
-        const snapshot = await get(ref(database, 'users/' + uid + '/musicState'));
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          if (window.musicPlayer) {
-            window.musicPlayer.loadPlaylist(data.playlistId, data.currentTime);
+    // Auto-guardado de música cada 30 segundos
+    setInterval(() => {
+       if (auth.currentUser && window.player) {
+          try {
+             const currentTime = Math.floor(window.player.getCurrentTime());
+             const videoData = window.player.getVideoData();
+             if (videoData && videoData.video_id) {
+                set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+                   videoId: videoData.video_id,
+                   time: currentTime,
+                   timestamp: new Date().getTime()
+                });
+             }
+          } catch (error) {
+             console.log("Error guardando música:", error);
           }
-        }
-      } catch (error) {
-        console.error('Error cargando estado de musica:', error);
-      }
-    };
+       }
+    }, 30000);
   </script>
 
-  <!-- ========== APP SCRIPTS ========== -->
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    // --- VARIABLES GLOBALES ---
-    let player;
-    let currentPlaylist = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-    let isPlayerReady = false;
-
+  <script type="module">
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    
     // --- FUNCIONES GLOBALES ---
     // 1. CALCULADORA
     const display = document.getElementById('display');
-    let currentInput = '0';
-    let previousInput = '';
-    let operation = null;
-    let waitingForSecondOperand = false;
-
-    window.updateDisplay = function () {
-      if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput;
-    };
-
+    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
+    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
     window.appendNumber = function (number) {
-      if (waitingForSecondOperand) {
-        currentInput = number;
-        waitingForSecondOperand = false;
-      } else {
-        currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number;
-      }
+      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
+      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
       updateDisplay();
     };
-
     window.appendOperator = function (nextOperation) {
       const inputValue = parseFloat(currentInput);
-      if (operation && waitingForSecondOperand) {
-        operation = nextOperation;
-        return;
-      }
-      if (previousInput === '') {
-        previousInput = inputValue;
-      } else if (operation) {
+      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
+      if (previousInput === '') { previousInput = inputValue; }
+      else if (operation) {
         const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result);
-        previousInput = result;
+        currentInput = String(result); previousInput = result;
       }
-      waitingForSecondOperand = true;
-      operation = nextOperation;
-      updateDisplay();
+      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
     };
-
-    const performCalculation = {
-      '/': (a, b) => a / b,
-      '*': (a, b) => a * b,
-      '+': (a, b) => a + b,
-      '-': (a, b) => a - b
-    };
-
+    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
     window.calculate = function () {
       if (!operation || waitingForSecondOperand) return;
       const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result);
-      operation = null;
-      previousInput = '';
-      waitingForSecondOperand = false;
+      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
       updateDisplay();
     };
+    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
+    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
 
-    window.clearDisplay = function () {
-      currentInput = '0';
-      previousInput = '';
-      operation = null;
-      updateDisplay();
-    };
+    // 2. BLOC DE NOTAS FIRESTORE
+    window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
+    let saveTimeout;
+    
+    window.loadNoteFromFirestore = async function(tabNum) {
+       if (!window.auth || !window.auth.currentUser) return;
+       try {
+          const notepadEl = document.getElementById('notepad');
+          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
+          const docSnap = await getDoc(userDocRef);
+          if (docSnap.exists()) {
+             if (notepadEl) notepadEl.value = docSnap.data().content || "";
+          } else {
+             if (notepadEl) notepadEl.value = "";
+          }
+       } catch (error) {
+          console.error("Error cargando nota:", error);
+          const notepadEl = document.getElementById('notepad');
+          if (notepadEl) notepadEl.value = "";
+       }
+    }
 
-    window.backspace = function () {
-      if (currentInput.length > 1) currentInput = currentInput.slice(0, -1);
-      else currentInput = '0';
-      updateDisplay();
-    };
+    const notepadEl = document.getElementById('notepad');
+    if (notepadEl) {
+        notepadEl.addEventListener('input', function() {
+           if (!window.auth || !window.auth.currentUser) return;
+           clearTimeout(saveTimeout);
+           saveTimeout = setTimeout(async function() {
+              try {
+                 const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
+                 await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
+              } catch (error) {
+                 console.error("Error guardando nota:", error);
+              }
+           }, 1000);
+        });
+    }
 
-    // 2. BLOC DE NOTAS
-    let activeTab = localStorage.getItem('danifu_active_tab') || "1";
-
-    window.switchTab = function (tabNum) {
-      const notepad = document.getElementById('notepad');
-      const notepadTitle = document.getElementById('notepad-title');
-      if (notepad) localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value);
-      activeTab = String(tabNum);
-      localStorage.setItem('danifu_active_tab', activeTab);
-      if (notepadTitle) notepadTitle.innerText = `Bloc de Notas - Pag ${activeTab}`;
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-tab-${activeTab}`);
+    window.switchTab = function(tabNum) {
+      window.activeTab = String(tabNum);
+      localStorage.setItem('danifu_active_tab', window.activeTab);
+      
+      var notepadTitle = document.getElementById('notepad-title');
+      if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Pág " + window.activeTab;
+      
+      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+      var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
       if (activeBtn) activeBtn.classList.add('active');
-      if (notepad) notepad.value = localStorage.getItem(`danifu_notes_v2_${activeTab}`) || "";
+      
+      if (window.auth && window.auth.currentUser) {
+        window.loadNoteFromFirestore(window.activeTab);
+      } else {
+        var notepadEl = document.getElementById('notepad');
+        if (notepadEl) notepadEl.value = "";
+      }
     };
 
     // 3. CAMBIAR TEMA
@@ -1157,7 +975,7 @@
       localStorage.setItem('danifu_theme', color);
     };
 
-    // 3.5. CAMBIAR SIMBOLO DEL GRAFICO
+    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
     window.changeSymbol = function () {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
@@ -1167,17 +985,15 @@
       localStorage.setItem('danifu_chart_symbol', symbol);
     };
 
-    // 4. POMODORO CON PERSONALIZACION
+    // 4. POMODORO CON PERSONALIZACIÓN
     let pomoInterval;
     let pomoSeconds = 25 * 60;
     let isRunning = false;
-
     window.updatePomoUI = function () {
       const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
       const s = (pomoSeconds % 60).toString().padStart(2, '0');
       document.getElementById('pomo-display').innerText = `${m}:${s}`;
     };
-
     window.togglePomodoro = function () {
       const btn = document.getElementById('start-btn');
       if (isRunning) {
@@ -1198,12 +1014,11 @@
             isRunning = false;
             btn.innerText = "INICIAR";
             btn.classList.remove('active');
-            alert("Tiempo terminado!");
+            alert("¡Tiempo terminado!");
           }
         }, 1000);
       }
     };
-
     window.resetPomodoro = function () {
       clearInterval(pomoInterval);
       isRunning = false;
@@ -1212,12 +1027,11 @@
       document.getElementById('start-btn').innerText = "INICIAR";
       document.getElementById('start-btn').classList.remove('active');
     };
-
     window.setCustomTime = function () {
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
-        alert("Por favor ingresa un numero de minutos valido.");
+        alert("Por favor ingresa un número de minutos válido.");
         return;
       }
       clearInterval(pomoInterval);
@@ -1228,234 +1042,15 @@
       document.getElementById('start-btn').classList.remove('active');
     };
 
-    // --- SISTEMA DE MUSICA MODULAR ---
-    window.musicPlayer = {
-      isPlaying: false,
-      currentTime: 0,
-      duration: 0,
-      volume: 70,
-
-      // Inicializar reproductor
-      init: function() {
-        const self = this;
-
-        // Boton de abrir modal
-        document.getElementById('musicIconBtn').onclick = () => {
-          document.getElementById('musicModal').classList.add('active');
-        };
-
-        // Boton de cerrar modal
-        document.getElementById('closeMusicModal').onclick = () => {
-          document.getElementById('musicModal').classList.remove('active');
-        };
-
-        // Cerrar modal al hacer click fuera
-        document.getElementById('musicModal').onclick = (e) => {
-          if (e.target.id === 'musicModal') {
-            document.getElementById('musicModal').classList.remove('active');
-          }
-        };
-
-        // Controles de reproduccion
-        document.getElementById('playPauseBtn').onclick = () => self.togglePlay();
-        document.getElementById('prevBtn').onclick = () => self.previous();
-        document.getElementById('nextBtn').onclick = () => self.next();
-
-        // Barra de progreso clickeable
-        document.getElementById('progressContainer').onclick = (e) => {
-          if (!player || !player.getDuration) return;
-          const rect = e.target.getBoundingClientRect();
-          const percent = (e.clientX - rect.left) / rect.width;
-          const newTime = percent * player.getDuration();
-          player.seekTo(newTime, true);
-        };
-
-        // Control de volumen
-        document.getElementById('volumeSlider').oninput = (e) => {
-          self.volume = e.target.value;
-          if (player && player.setVolume) {
-            player.setVolume(self.volume);
-          }
-          self.updateVolumeIcon();
-        };
-
-        // Playlist buttons
-        document.querySelectorAll('.playlist-btn').forEach(btn => {
-          btn.onclick = () => {
-            const playlistId = btn.dataset.playlist;
-            self.loadPlaylist(playlistId, 0);
-          };
-        });
-      },
-
-      // Cargar playlist
-      loadPlaylist: function(playlistId, startTime = 0) {
-        currentPlaylist = playlistId;
-        if (player && player.loadPlaylist) {
-          player.loadPlaylist({
-            listType: 'playlist',
-            list: playlistId,
-            index: 0,
-            startSeconds: startTime,
-            suggestedQuality: 'small'
-          });
-        }
-
-        // Actualizar botones de playlist
-        document.querySelectorAll('.playlist-btn').forEach(btn => {
-          btn.classList.remove('active');
-          if (btn.dataset.playlist === playlistId) {
-            btn.classList.add('active');
-          }
-        });
-
-        document.getElementById('songInfo').textContent = 'Cargando playlist...';
-      },
-
-      // Toggle play/pausa
-      togglePlay: function() {
-        if (!player) return;
-        if (player.getPlayerState() === 1) {
-          player.pauseVideo();
-        } else {
-          player.playVideo();
-        }
-      },
-
-      // Anterior
-      previous: function() {
-        if (player && player.previousVideo) {
-          player.previousVideo();
-        }
-      },
-
-      // Siguiente
-      next: function() {
-        if (player && player.nextVideo) {
-          player.nextVideo();
-        }
-      },
-
-      // Actualizar tiempo
-      updateTime: function(currentTime, duration) {
-        this.currentTime = currentTime;
-        this.duration = duration;
-
-        // Actualizar display de tiempo
-        document.getElementById('currentTime').textContent = this.formatTime(currentTime);
-        document.getElementById('totalTime').textContent = this.formatTime(duration);
-
-        // Actualizar barra de progreso
-        if (duration > 0) {
-          const percent = (currentTime / duration) * 100;
-          document.getElementById('progressBar').style.width = percent + '%';
-        }
-
-        // Guardar estado en Firebase periodicamente
-        if (currentTime > 0 && Math.floor(currentTime) % 5 === 0) {
-          const videoId = player.getVideoId ? player.getVideoId() : '';
-          if (typeof saveMusicState === 'function') {
-            saveMusicState(videoId, currentTime, currentPlaylist);
-          }
-        }
-      },
-
-      // Formatear tiempo
-      formatTime: function(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-      },
-
-      // Actualizar icono de volumen
-      updateVolumeIcon: function() {
-        const icon = document.getElementById('volumeIcon');
-        if (this.volume === 0) {
-          icon.className = 'fas fa-volume-mute volume-icon';
-        } else if (this.volume < 50) {
-          icon.className = 'fas fa-volume-down volume-icon';
-        } else {
-          icon.className = 'fas fa-volume-up volume-icon';
-        }
-      },
-
-      // Estado de reproduccion cambio
-      onStateChange: function(state) {
-        const playBtn = document.getElementById('playPauseBtn');
-        const musicIconBtn = document.getElementById('musicIconBtn');
-
-        if (state === 1) {
-          // Reproduciendo
-          this.isPlaying = true;
-          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-          musicIconBtn.classList.add('playing');
-
-          // Obtener nombre de cancion
-          try {
-            const title = player.getVideoData().title;
-            document.getElementById('songInfo').textContent = title.substring(0, 30) + (title.length > 30 ? '...' : '');
-          } catch (e) {}
-        } else {
-          // Pausado o detenido
-          this.isPlaying = false;
-          playBtn.innerHTML = '<i class="fas fa-play"></i>';
-          musicIconBtn.classList.remove('playing');
-        }
-      }
-    };
-
-    // --- YOUTUBE IFRAME API ---
-    window.onYouTubeIframeAPIReady = function () {
-      player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        playerVars: {
-          'listType': 'playlist',
-          'list': currentPlaylist,
-          'autoplay': 0,
-          'controls': 0,
-          'disablekb': 1,
-          'fs': 0,
-          'modestbranding': 1
-        },
-        events: {
-          'onReady': function (event) {
-            isPlayerReady = true;
-            player.setVolume(70);
-            window.musicPlayer.init();
-          },
-          'onStateChange': function (event) {
-            window.musicPlayer.onStateChange(event.data);
-
-            // Actualizar tiempo cada segundo cuando esta reproduciendo
-            if (event.data === 1) {
-              clearInterval(window.playerInterval);
-              window.playerInterval = setInterval(() => {
-                if (player && player.getCurrentTime && player.getDuration) {
-                  window.musicPlayer.updateTime(player.getCurrentTime(), player.getDuration());
-                }
-              }, 1000);
-            }
-          }
-        }
-      });
-    };
-
-    // --- INIT ---
+    // INIT
     window.onload = function () {
-      window.switchTab(activeTab);
-
-      const notepad = document.getElementById('notepad');
-      if (notepad) notepad.addEventListener('input', () => localStorage.setItem(`danifu_notes_v2_${activeTab}`, notepad.value));
-
+      window.switchTab(window.activeTab);
       const savedTheme = localStorage.getItem('danifu_theme');
       if (savedTheme) window.setTheme(savedTheme);
-
       const savedSymbol = localStorage.getItem('danifu_chart_symbol');
       if (savedSymbol) {
         document.getElementById('symbolSelect').value = savedSymbol;
       }
-
       updatePomoUI();
       updateDisplay();
     };
@@ -1466,6 +1061,165 @@
       const el = document.getElementById("fecha-hora");
       if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
     }, 1000);
+
+    // YOUTUBE PRO PLAYER CON LISTA DE REPRODUCCIÓN
+    const toggleBtn = document.getElementById('toggleMusicPanel');
+    const musicPanel = document.getElementById('musicPanel');
+    
+    if (toggleBtn) toggleBtn.onclick = () => musicPanel.classList.toggle('hidden');
+
+    // Lista de reproducción personalizada
+    // ID de tu playlist real
+    var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    var initialVideoId = 'Z6L4u2i97Rw'; // Primer video de tu playlist
+    var currentPlaylistIndex = 0;
+
+    window.onYouTubeIframeAPIReady = function() {
+      // Cargar volumen guardado
+      var savedVolume = localStorage.getItem('danifu_volume') || 50;
+
+      window.player = new YT.Player('youtube-player', {
+        height: '0', 
+        width: '0', 
+        videoId: initialVideoId,
+        playerVars: { 
+          'listType': 'playlist',
+          'list': playlistId,
+          'autoplay': 0, 
+          'controls': 0,
+          'showinfo': 0,
+          'rel': 0,
+          'modestbranding': 1
+        },
+        events: {
+          'onReady': () => {
+             if(window.player) {
+               window.player.setVolume(parseInt(savedVolume));
+               document.getElementById('volumeSlider').value = savedVolume;
+               updateSongDisplay();
+             }
+          },
+          'onStateChange': (e) => {
+            const playBtn = document.getElementById('playPauseBtn');
+            if (e.data == 1) {
+              if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } else {
+              if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
+          },
+          'onError': (e) => {
+            console.log("Error de YouTube:", e.data);
+          }
+        }
+      });
+    }
+
+    function updateSongDisplay() {
+      // Obtener el título del video actual de YouTube
+      try {
+        const videoData = window.player.getVideoData();
+        const title = videoData && videoData.title ? videoData.title : 'Reproduciendo...';
+        document.getElementById('songTitle').textContent = title;
+        document.getElementById('playerSongTitle').textContent = title;
+        localStorage.setItem('danifu_current_video', window.player.getVideoUrl());
+      } catch (error) {
+        console.log("Error obteniendo título:", error);
+        document.getElementById('songTitle').textContent = 'Reproduciendo...';
+        document.getElementById('playerSongTitle').textContent = 'Reproduciendo...';
+      }
+      savePlayerState();
+    }
+
+    function savePlayerState() {
+      if (window.player && window.auth && window.auth.currentUser) {
+        try {
+          const videoData = window.player.getVideoData();
+          const musicData = {
+            videoId: window.player.getVideoUrl(),
+            time: Math.floor(window.player.getCurrentTime()),
+            volume: window.player.getVolume(),
+            title: videoData && videoData.title ? videoData.title : 'Reproduciendo...',
+            playlistId: playlistId
+          };
+          const musicRef = ref(rtdb, 'users/' + window.auth.currentUser.uid + '/musicProgress');
+          set(musicRef, musicData);
+        } catch (error) {
+          console.log("Error guardando estado:", error);
+        }
+      }
+    }
+
+    // Controles del reproductor - usando addEventListener para mayor compatibilidad
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const nextBtnEl = document.getElementById('nextBtn');
+    const prevBtnEl = document.getElementById('prevBtn');
+    const volumeSliderEl = document.getElementById('volumeSlider');
+    const progressBarEl = document.getElementById('progressBar');
+    
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', function() {
+        if (!window.player) return;
+        if (window.player.getPlayerState() == 1) {
+          window.player.pauseVideo();
+        } else {
+          window.player.playVideo();
+        }
+        savePlayerState();
+      });
+    }
+    
+    if (nextBtnEl) {
+      nextBtnEl.addEventListener('click', function() {
+        if (!window.player) return;
+        window.player.nextVideo();
+        setTimeout(() => {
+          updateSongDisplay();
+        }, 500);
+      });
+    }
+    
+    if (prevBtnEl) {
+      prevBtnEl.addEventListener('click', function() {
+        if (!window.player) return;
+        window.player.previousVideo();
+        setTimeout(() => {
+          updateSongDisplay();
+        }, 500);
+      });
+    }
+    
+    if (volumeSliderEl) {
+      volumeSliderEl.addEventListener('input', function(e) {
+        if (!window.player) return;
+        const volume = parseInt(e.target.value);
+        window.player.setVolume(volume);
+        localStorage.setItem('danifu_volume', volume);
+      });
+    }
+    
+    if (progressBarEl) {
+      progressBarEl.addEventListener('input', function(e) {
+        if (!window.player || !window.player.getDuration) return;
+        const duration = window.player.getDuration();
+        const newTime = (e.target.value / 100) * duration;
+        window.player.seekTo(newTime);
+      });
+    }
+
+    // Actualizar tiempos y barra de progreso
+    setInterval(() => {
+       if (window.player && window.player.getCurrentTime) {
+          const cur = Math.floor(window.player.getCurrentTime());
+          const dur = Math.floor(window.player.getDuration());
+          
+          document.getElementById('current-time').textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+          document.getElementById('duration-time').textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+          
+          if (dur > 0) {
+            document.getElementById('progressBar').value = (cur / dur) * 100;
+          }
+       }
+    }, 500);
   </script>
 </body>
 </html>
