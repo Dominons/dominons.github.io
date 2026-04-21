@@ -667,7 +667,7 @@
             <span id="songTitle" class="song-marquee">Listo para Play</span>
           </div>
           <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
-            <i class="fa-solid fa-compact-disc fa-spin-slow"></i>
+            <i class="fa-solid fa-music"></i>
           </button>
           
           <div id="musicPanel" class="hidden music-player-panel">
@@ -836,18 +836,29 @@
         // Cargar nota actual
         window.loadNoteFromFirestore(window.activeTab);
 
-        // Cargar música
-        const musicRef = ref(rtdb, 'users/' + user.uid + '/musicProgress');
-        onValue(musicRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data && window.player) {
-             setTimeout(() => {
-                if (window.player && window.player.loadVideoById) {
-                   window.player.loadVideoById({ videoId: data.videoId, startSeconds: data.time || 0 });
+        // Cargar música guardada cuando el reproductor esté listo
+        window.loadSavedMusic = function() {
+          if (!auth.currentUser) return;
+          const musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
+          onValue(musicRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.videoId && window.player && window.player.loadVideoById) {
+              setTimeout(() => {
+                try {
+                  // Asegurarse de que videoId sea solo el ID del video, no la URL completa
+                  var videoIdToLoad = data.videoId;
+                  if (data.videoId.indexOf('watch') !== -1 || data.videoId.indexOf('v=') !== -1) {
+                    var urlParams = new URLSearchParams(data.videoId.split('?')[1] || '');
+                    videoIdToLoad = urlParams.get('v') || data.videoId;
+                  }
+                  window.player.loadVideoById(videoIdToLoad, data.time || 0);
+                } catch (e) {
+                  console.log("Error cargando video:", e);
                 }
-             }, 500);
-          }
-        }, { onlyOnce: true });
+              }, 1000);
+            }
+          }, { onlyOnce: true });
+        };
 
       } else {
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -1092,22 +1103,26 @@
           'modestbranding': 1
         },
         events: {
-          'onReady': () => {
+          'onReady': function() {
              if(window.player) {
                window.player.setVolume(parseInt(savedVolume));
                document.getElementById('volumeSlider').value = savedVolume;
                updateSongDisplay();
+               // Cargar música guardada si existe
+               if (window.loadSavedMusic) {
+                 window.loadSavedMusic();
+               }
              }
           },
-          'onStateChange': (e) => {
-            const playBtn = document.getElementById('playPauseBtn');
+          'onStateChange': function(e) {
+            var playBtn = document.getElementById('playPauseBtn');
             if (e.data == 1) {
               if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
             } else {
               if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             }
           },
-          'onError': (e) => {
+          'onError': function(e) {
             console.log("Error de YouTube:", e.data);
           }
         }
