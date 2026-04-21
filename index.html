@@ -1089,49 +1089,49 @@
     // Lista de reproducción personalizada
     var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
     var initialVideoId = 'Z6L4u2i97Rw';
-    var currentPlaylistIndex = 0;
 
-    window.onYouTubeIframeAPIReady = function() {
+    // Esperar a que la API de YouTube esté lista
+    function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
 
       window.player = new YT.Player('youtube-player', {
-        height: '0', 
-        width: '0', 
+        height: '1', 
+        width: '1', 
         videoId: initialVideoId,
         playerVars: { 
           'listType': 'playlist',
           'list': playlistId,
           'autoplay': 0, 
-          'controls': 1
+          'controls': 0
         },
         events: {
-          'onReady': function() {
-             if(window.player) {
-               window.player.setVolume(parseInt(savedVolume));
-               var volSlider = document.getElementById('volumeSlider');
-               if (volSlider) volSlider.value = savedVolume;
-               updateSongDisplay();
-               if (window.loadSavedMusic) {
-                 window.loadSavedMusic();
-               }
-             }
-          },
-          'onStateChange': function(e) {
-            var playBtn = document.getElementById('playPauseBtn');
-            if (e.data == 1) {
-              if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            } else {
-              if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-            }
-          },
-          'onError': function(e) {
-            console.log("Error de YouTube:", e.data);
-          }
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
         }
       });
     }
 
+    function onPlayerReady(event) {
+      event.target.setVolume(parseInt(savedVolume));
+      var volSlider = document.getElementById('volumeSlider');
+      if (volSlider) volSlider.value = savedVolume;
+      updateSongDisplay();
+      if (window.loadSavedMusic) {
+        window.loadSavedMusic();
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      var playBtn = document.getElementById('playPauseBtn');
+      if (event.data === YT.PlayerState.PLAYING) {
+        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+      } else {
+        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      }
+    }
+
     function updateSongDisplay() {
+      if (!window.player || !window.player.getVideoData) return;
       try {
         var videoData = window.player.getVideoData();
         var title = (videoData && videoData.title) ? videoData.title : 'Reproduciendo...';
@@ -1140,66 +1140,80 @@
         if (songTitleEl) songTitleEl.textContent = title;
         if (playerSongTitleEl) playerSongTitleEl.textContent = title;
       } catch (error) {
-        console.log("Error obteniendo titulo:", error);
+        console.log("Error actualizando display:", error);
       }
     }
 
     // Controles del reproductor
-    document.getElementById('playPauseBtn').onclick = function() {
-      if (!window.player) return;
-      if (window.player.getPlayerState() == 1) {
-        window.player.pauseVideo();
-      } else {
-        window.player.playVideo();
-      }
-    };
-
-    document.getElementById('nextBtn').onclick = function() {
-      if (!window.player) return;
-      window.player.nextVideo();
-      setTimeout(updateSongDisplay, 500);
-    };
-
-    document.getElementById('prevBtn').onclick = function() {
-      if (!window.player) return;
-      window.player.previousVideo();
-      setTimeout(updateSongDisplay, 500);
-    };
-
-    document.getElementById('volumeSlider').oninput = function(e) {
-      if (!window.player) return;
-      var volume = parseInt(e.target.value);
-      window.player.setVolume(volume);
-      localStorage.setItem('danifu_volume', volume);
-    };
-
-    document.getElementById('progressBar').oninput = function(e) {
-      if (!window.player) return;
-      var duration = window.player.getDuration();
-      if (duration) {
-        var newTime = (e.target.value / 100) * duration;
-        window.player.seekTo(newTime);
-      }
-    };
+    var playPauseBtn = document.getElementById('playPauseBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var prevBtn = document.getElementById('prevBtn');
+    var volumeSlider = document.getElementById('volumeSlider');
+    var progressBar = document.getElementById('progressBar');
+    
+    if (playPauseBtn) {
+      playPauseBtn.onclick = function() {
+        if (!window.player || !window.player.getPlayerState) return;
+        if (window.player.getPlayerState() === YT.PlayerState.PLAYING) {
+          window.player.pauseVideo();
+        } else {
+          window.player.playVideo();
+        }
+      };
+    }
+    
+    if (nextBtn) {
+      nextBtn.onclick = function() {
+        if (!window.player || !window.player.nextVideo) return;
+        window.player.nextVideo();
+        setTimeout(updateSongDisplay, 1000);
+      };
+    }
+    
+    if (prevBtn) {
+      prevBtn.onclick = function() {
+        if (!window.player || !window.player.previousVideo) return;
+        window.player.previousVideo();
+        setTimeout(updateSongDisplay, 1000);
+      };
+    }
+    
+    if (volumeSlider) {
+      volumeSlider.oninput = function(e) {
+        if (!window.player || !window.player.setVolume) return;
+        var volume = parseInt(e.target.value);
+        window.player.setVolume(volume);
+        localStorage.setItem('danifu_volume', volume);
+      };
+    }
+    
+    if (progressBar) {
+      progressBar.oninput = function(e) {
+        if (!window.player || !window.player.seekTo) return;
+        var duration = window.player.getDuration();
+        if (duration) {
+          var newTime = (parseInt(e.target.value) / 100) * duration;
+          window.player.seekTo(newTime);
+        }
+      };
+    }
 
     // Actualizar tiempos y barra de progreso
     setInterval(function() {
-       if (window.player && window.player.getCurrentTime) {
+       if (!window.player || !window.player.getCurrentTime) return;
+       try {
           var cur = Math.floor(window.player.getCurrentTime());
           var dur = Math.floor(window.player.getDuration());
           
           var currentTimeEl = document.getElementById('current-time');
           var durationTimeEl = document.getElementById('duration-time');
-          var progressBarEl = document.getElementById('progressBar');
+          var progBar = document.getElementById('progressBar');
           
           if (currentTimeEl) currentTimeEl.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
-          if (durationTimeEl) durationTimeEl.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
-          
-          if (dur > 0 && progressBarEl) {
-            progressBarEl.value = (cur / dur) * 100;
-          }
-       }
-    }, 500);
+          if (durationTimeEl && dur > 0) durationTimeEl.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+          if (progBar && dur > 0) progBar.value = (cur / dur) * 100;
+       } catch (e) {}
+    }, 1000);
   </script>
 </body>
 </html>
