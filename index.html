@@ -512,7 +512,108 @@
     }
     .fa-spin-slow { animation: spin 4s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    /* SONG DISPLAY */
+    .song-display {
+      flex: 1;
+      max-width: 250px;
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 6px 12px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .song-marquee {
+      display: block;
+      color: var(--color-highlight);
+      font-size: 0.85em;
+      font-weight: 600;
+      white-space: nowrap;
+      animation: marquee 8s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    
+    /* MUSIC PLAYER PANEL */
     #musicPanel.hidden { display: none !important; }
+    .music-player-panel {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      min-width: 280px;
+    }
+    .player-header {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 0.8em;
+      color: var(--color-highlight);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .song-info {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .player-song-title {
+      color: var(--color-text);
+      font-size: 0.85em;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .progress-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7em;
+      color: #AAA;
+      margin-bottom: 6px;
+    }
+    .progress-bar-container {
+      margin-bottom: 12px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .volume-control i {
+      color: var(--color-highlight);
+      font-size: 0.85em;
+    }
+    .volume-slider {
+      flex: 1;
+      height: 4px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
   </style>
 </head>
 <body>
@@ -562,23 +663,40 @@
           <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
         </div>
         <div class="music-container">
-          <span class="box" id="songStatus">Pausado</span>
+          <div class="song-display">
+            <span id="songTitle" class="song-marquee">Listo para Play</span>
+          </div>
           <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
             <i class="fa-solid fa-compact-disc fa-spin-slow"></i>
           </button>
           
-          <div id="musicPanel" class="hidden" style="position: absolute; top: 40px; right: 0; background: var(--color-input-bg); border: 2px solid var(--color-highlight); padding: 15px; border-radius: 8px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5); min-width: 200px;">
-            <div style="text-align: center; margin-bottom: 10px; font-size: 0.8em; color: var(--color-highlight);">REPRODUCTOR PRO</div>
-            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
-              <button class="music-btn" id="prevBtn"><i class="fa-solid fa-backward"></i></button>
-              <button class="music-btn" id="playPauseBtn"><i class="fa-solid fa-play"></i></button>
-              <button class="music-btn" id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+          <div id="musicPanel" class="hidden music-player-panel">
+            <div class="player-header">REPRODUCTOR</div>
+            
+            <div class="song-info">
+              <span id="playerSongTitle" class="player-song-title">Listo para Play</span>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75em; margin-bottom: 5px;">
+            
+            <div class="player-controls">
+              <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+              <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+              <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+            </div>
+            
+            <div class="progress-time">
               <span id="current-time">0:00</span>
               <span id="duration-time">0:00</span>
             </div>
-            <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width: 100%; accent-color: var(--color-highlight);">
+            
+            <div class="progress-bar-container">
+              <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+            </div>
+            
+            <div class="volume-control">
+              <i class="fa-solid fa-volume-low"></i>
+              <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+              <i class="fa-solid fa-volume-high"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -944,48 +1062,132 @@
       if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
     }, 1000);
 
-    // YOUTUBE PRO PLAYER
+    // YOUTUBE PRO PLAYER CON LISTA DE REPRODUCCIÓN
     const toggleBtn = document.getElementById('toggleMusicPanel');
     const musicPanel = document.getElementById('musicPanel');
-    const songStatus = document.getElementById('songStatus');
     
     if (toggleBtn) toggleBtn.onclick = () => musicPanel.classList.toggle('hidden');
 
+    // Lista de reproducción personalizada
+    const playlist = [
+      { id: 'jNQXAC9IVRw', title: 'Me at the zoo' },
+      { id: 'P0TqT0-qJqU', title: 'Lo-Fi Hip Hop' },
+      { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up' },
+      { id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE' },
+      { id: 'kJQP7kiw9Fk', title: 'Luis Fonsi - Despacito' }
+    ];
+    let currentPlaylistIndex = 0;
+
     window.onYouTubeIframeAPIReady = function () {
+      // Cargar volumen guardado
+      const savedVolume = localStorage.getItem('danifu_volume') || 50;
+      const savedPlaylistIndex = localStorage.getItem('danifu_playlist_index') || 0;
+      currentPlaylistIndex = parseInt(savedPlaylistIndex);
+
       window.player = new YT.Player('youtube-player', {
-        height: '1', width: '1', videoId: 'P0TqT0-qJqU',
-        playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG', 'autoplay': 0, 'controls': 0 },
+        height: '1', width: '1', videoId: playlist[currentPlaylistIndex].id,
+        playerVars: { 'autoplay': 0, 'controls': 0 },
         events: {
           'onReady': () => {
-             if(window.player) window.player.setVolume(50);
+             if(window.player) {
+               window.player.setVolume(parseInt(savedVolume));
+               document.getElementById('volumeSlider').value = savedVolume;
+               updateSongDisplay();
+             }
           },
           'onStateChange': (e) => {
             const playBtn = document.getElementById('playPauseBtn');
             if (e.data == 1) {
               if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-              if (songStatus) songStatus.textContent = "Reproduciendo";
             } else {
               if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-              if (songStatus) songStatus.textContent = "Pausado";
             }
+          },
+          'onError': (e) => {
+            console.log("Error de YouTube:", e.data);
           }
         }
       });
     }
 
-    document.getElementById('playPauseBtn').onclick = () => { window.player.getPlayerState() == 1 ? window.player.pauseVideo() : window.player.playVideo(); };
-    document.getElementById('nextBtn').onclick = () => window.player.nextVideo();
-    document.getElementById('prevBtn').onclick = () => window.player.previousVideo();
-    document.getElementById('volumeSlider').oninput = (e) => window.player.setVolume(e.target.value);
+    function updateSongDisplay() {
+      const title = playlist[currentPlaylistIndex].title;
+      document.getElementById('songTitle').textContent = title;
+      document.getElementById('playerSongTitle').textContent = title;
+      localStorage.setItem('danifu_playlist_index', currentPlaylistIndex);
+      localStorage.setItem('danifu_current_video', playlist[currentPlaylistIndex].id);
+      savePlayerState();
+    }
 
+    function savePlayerState() {
+      if (window.player && window.auth && window.auth.currentUser) {
+        const musicData = {
+          videoId: playlist[currentPlaylistIndex].id,
+          time: Math.floor(window.player.getCurrentTime()),
+          volume: window.player.getVolume(),
+          title: playlist[currentPlaylistIndex].title
+        };
+        const musicRef = ref(rtdb, 'users/' + window.auth.currentUser.uid + '/musicProgress');
+        set(musicRef, musicData);
+      }
+    }
+
+    // Controles del reproductor
+    document.getElementById('playPauseBtn').onclick = function() {
+      if (!window.player) return;
+      if (window.player.getPlayerState() == 1) {
+        window.player.pauseVideo();
+      } else {
+        window.player.playVideo();
+      }
+      savePlayerState();
+    };
+
+    document.getElementById('nextBtn').onclick = function() {
+      if (!window.player) return;
+      currentPlaylistIndex = (currentPlaylistIndex + 1) % playlist.length;
+      window.player.loadVideoById(playlist[currentPlaylistIndex].id);
+      updateSongDisplay();
+      window.player.playVideo();
+    };
+
+    document.getElementById('prevBtn').onclick = function() {
+      if (!window.player) return;
+      currentPlaylistIndex = (currentPlaylistIndex - 1 + playlist.length) % playlist.length;
+      window.player.loadVideoById(playlist[currentPlaylistIndex].id);
+      updateSongDisplay();
+      window.player.playVideo();
+    };
+
+    document.getElementById('volumeSlider').oninput = function(e) {
+      if (!window.player) return;
+      const volume = parseInt(e.target.value);
+      window.player.setVolume(volume);
+      localStorage.setItem('danifu_volume', volume);
+    };
+
+    // Barra de progreso
+    document.getElementById('progressBar').oninput = function(e) {
+      if (!window.player || !window.player.getDuration) return;
+      const duration = window.player.getDuration();
+      const newTime = (e.target.value / 100) * duration;
+      window.player.seekTo(newTime);
+    };
+
+    // Actualizar tiempos y barra de progreso
     setInterval(() => {
        if (window.player && window.player.getCurrentTime) {
           const cur = Math.floor(window.player.getCurrentTime());
           const dur = Math.floor(window.player.getDuration());
+          
           document.getElementById('current-time').textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
           document.getElementById('duration-time').textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+          
+          if (dur > 0) {
+            document.getElementById('progressBar').value = (cur / dur) * 100;
+          }
        }
-    }, 1000);
+    }, 500);
   </script>
 </body>
 </html>
