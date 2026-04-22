@@ -1091,7 +1091,7 @@
     var initialVideoId = 'Z6L4u2i97Rw';
 
     // Esperar a que la API de YouTube esté lista
-    function onYouTubeIframeAPIReady() {
+   window.onYouTubeIframeAPIReady = function() {
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
 
       window.player = new YT.Player('youtube-player', {
