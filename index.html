@@ -925,11 +925,13 @@
       window.player = new YT.Player('youtube-player', {
         height: '1',
         width: '1',
+        videoId: initialVideoId,
         playerVars: {
           'listType': 'playlist',
           'list': playlistId,
           'autoplay': 0,
-          'controls': 0
+          'controls': 0,
+          'fs': 0
         },
         events: {
           'onReady': onPlayerReady,
@@ -945,12 +947,6 @@
       if (volSlider) volSlider.value = savedVolume;
 
       window.youtubePlayerReady = true;
-
-      // Cargar playlist correctamente
-      window.player.loadPlaylist({
-        listType: 'playlist',
-        list: playlistId
-      });
 
       updateSongDisplay();
 
@@ -1025,14 +1021,24 @@
     window.nextVideo = function() {
       if (window.youtubePlayerReady && window.player && window.player.nextVideo) {
         window.player.nextVideo();
-        setTimeout(updateSongDisplay, 1000);
+        setTimeout(function() {
+          updateSongDisplay();
+          if (window.player.getPlayerState() !== 1) {
+            window.player.playVideo();
+          }
+        }, 800);
       }
     };
 
     window.prevVideo = function() {
       if (window.youtubePlayerReady && window.player && window.player.previousVideo) {
         window.player.previousVideo();
-        setTimeout(updateSongDisplay, 1000);
+        setTimeout(function() {
+          updateSongDisplay();
+          if (window.player.getPlayerState() !== 1) {
+            window.player.playVideo();
+          }
+        }, 800);
       }
     };
 
