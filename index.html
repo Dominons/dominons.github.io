@@ -897,8 +897,154 @@
   </script>
 
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script type="module">
-    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+<script>
+/* =========================
+   🎵 YOUTUBE PLAYER FIXED
+========================= */
+
+var player;
+var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+var initialVideoId = 'Z6L4u2i97Rw';
+
+// 👇 GLOBAL (ESTO ERA EL ERROR PRINCIPAL)
+function onYouTubeIframeAPIReady() {
+  console.log("YT API OK");
+
+  player = new YT.Player('youtube-player', {
+    height: '1',
+    width: '1',
+    videoId: initialVideoId,
+    playerVars: {
+      listType: 'playlist',
+      list: playlistId,
+      autoplay: 0,
+      controls: 0
+    },
+    events: {
+      onReady: onPlayerReady,
+      onStateChange: onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  console.log("PLAYER OK");
+
+  var savedVolume = localStorage.getItem('danifu_volume') || 50;
+  event.target.setVolume(parseInt(savedVolume));
+
+  updateSongDisplay();
+
+  // 🔥 cargar progreso guardado si existe
+  if (window.loadSavedMusic) {
+    window.loadSavedMusic();
+  }
+}
+
+function onPlayerStateChange(event) {
+  var btn = document.getElementById('playPauseBtn');
+
+  if (event.data === YT.PlayerState.PLAYING) {
+    btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+  } else {
+    btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+  }
+
+  updateSongDisplay();
+}
+
+function updateSongDisplay() {
+  if (!player || !player.getVideoData) return;
+
+  try {
+    var data = player.getVideoData();
+    var title = data.title || "Reproduciendo...";
+
+    document.getElementById('songTitle').textContent = title;
+    document.getElementById('playerSongTitle').textContent = title;
+  } catch(e) {}
+}
+
+/* =========================
+   🎮 CONTROLES
+========================= */
+
+document.getElementById('playPauseBtn').onclick = function () {
+  if (!player) return;
+
+  var state = player.getPlayerState();
+
+  if (state === YT.PlayerState.PLAYING) {
+    player.pauseVideo();
+  } else {
+    player.playVideo();
+  }
+};
+
+document.getElementById('nextBtn').onclick = function () {
+  if (player) {
+    player.nextVideo();
+    setTimeout(updateSongDisplay, 800);
+  }
+};
+
+document.getElementById('prevBtn').onclick = function () {
+  if (player) {
+    player.previousVideo();
+    setTimeout(updateSongDisplay, 800);
+  }
+};
+
+document.getElementById('volumeSlider').oninput = function (e) {
+  if (!player) return;
+
+  var vol = parseInt(e.target.value);
+  player.setVolume(vol);
+  localStorage.setItem('danifu_volume', vol);
+};
+
+document.getElementById('progressBar').oninput = function (e) {
+  if (!player) return;
+
+  var duration = player.getDuration();
+  if (duration) {
+    var newTime = (e.target.value / 100) * duration;
+    player.seekTo(newTime);
+  }
+};
+
+/* =========================
+   ⏱ PROGRESO TIEMPO
+========================= */
+
+setInterval(function () {
+  if (!player) return;
+
+  try {
+    var cur = Math.floor(player.getCurrentTime());
+    var dur = Math.floor(player.getDuration());
+
+    var curEl = document.getElementById('current-time');
+    var durEl = document.getElementById('duration-time');
+    var bar = document.getElementById('progressBar');
+
+    if (curEl) {
+      curEl.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+    }
+
+    if (durEl && dur > 0) {
+      durEl.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+    }
+
+    if (bar && dur > 0) {
+      bar.value = (cur / dur) * 100;
+    }
+
+  } catch(e) {}
+}, 1000);
+
+</script>
     
     // --- FUNCIONES GLOBALES ---
     // 1. CALCULADORA
