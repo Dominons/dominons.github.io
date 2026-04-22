@@ -925,7 +925,6 @@
       window.player = new YT.Player('youtube-player', {
         height: '1',
         width: '1',
-        videoId: initialVideoId,
         playerVars: {
           'listType': 'playlist',
           'list': playlistId,
@@ -946,6 +945,13 @@
       if (volSlider) volSlider.value = savedVolume;
 
       window.youtubePlayerReady = true;
+
+      // Cargar playlist correctamente
+      window.player.loadPlaylist({
+        listType: 'playlist',
+        list: playlistId
+      });
+
       updateSongDisplay();
 
       // Ejecutar comandos en cola
