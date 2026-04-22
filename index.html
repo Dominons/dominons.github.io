@@ -905,6 +905,10 @@
     // Cola de comandos hasta que el player esté listo
     window.playerCommands = [];
 
+    // Lista de reproducción
+    var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    var initialVideoId = 'Z6L4u2i97Rw';
+
     // Función para ejecutar comandos cuando el player esté listo
     window.executeWhenPlayerReady = function(command) {
       if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
@@ -917,8 +921,6 @@
     // Función llamada por el API de YouTube cuando está listo
     function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
-      var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-      var initialVideoId = 'Z6L4u2i97Rw';
 
       window.player = new YT.Player('youtube-player', {
         height: '1',
@@ -1002,10 +1004,8 @@
     // Intervalo para actualizar título de canción
     setInterval(updateSongDisplay, 3000);
 
-    // Funciones de control del reproductor (se ejecutan cuando el player esté listo)
+    // Funciones de control del reproductor
     window.playPauseVideo = function() {
-      window.executeWhenPlayerReady({fn: 'playVideo', args: []});
-      // Alternar directamente si el player ya está listo
       if (window.youtubePlayerReady && window.player) {
         var state = window.player.getPlayerState();
         if (state === YT.PlayerState.PLAYING) {
@@ -1017,14 +1017,14 @@
     };
 
     window.nextVideo = function() {
-      if (window.youtubePlayerReady && window.player) {
+      if (window.youtubePlayerReady && window.player && window.player.nextVideo) {
         window.player.nextVideo();
         setTimeout(updateSongDisplay, 1000);
       }
     };
 
     window.prevVideo = function() {
-      if (window.youtubePlayerReady && window.player) {
+      if (window.youtubePlayerReady && window.player && window.player.previousVideo) {
         window.player.previousVideo();
         setTimeout(updateSongDisplay, 1000);
       }
@@ -1041,6 +1041,54 @@
         window.player.setVolume(volume);
       }
     };
+
+    // Asignar eventos a los botones cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+      var playPauseBtn = document.getElementById('playPauseBtn');
+      var nextBtn = document.getElementById('nextBtn');
+      var prevBtn = document.getElementById('prevBtn');
+      var volumeSlider = document.getElementById('volumeSlider');
+      var progressBar = document.getElementById('progressBar');
+      var toggleBtn = document.getElementById('toggleMusicPanel');
+      var musicPanel = document.getElementById('musicPanel');
+
+      if (toggleBtn) {
+        toggleBtn.onclick = function() {
+          musicPanel.classList.toggle('hidden');
+        };
+      }
+
+      if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', window.playPauseVideo);
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', window.nextVideo);
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', window.prevVideo);
+      }
+
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', function(e) {
+          var volume = parseInt(e.target.value);
+          window.setVideoVolume(volume);
+          localStorage.setItem('danifu_volume', volume);
+        });
+      }
+
+      if (progressBar) {
+        progressBar.addEventListener('input', function(e) {
+          if (!window.player || !window.player.getDuration) return;
+          var duration = window.player.getDuration();
+          if (duration) {
+            var newTime = (parseInt(e.target.value) / 100) * duration;
+            window.seekVideo(newTime);
+          }
+        });
+      }
+    });
   </script>
   <script type="module">
     import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -1224,48 +1272,6 @@
       const el = document.getElementById("fecha-hora");
       if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
     }, 1000);
-
-    // Asignar eventos a los botones del reproductor
-    var playPauseBtn = document.getElementById('playPauseBtn');
-    var nextBtn = document.getElementById('nextBtn');
-    var prevBtn = document.getElementById('prevBtn');
-    var volumeSlider = document.getElementById('volumeSlider');
-    var progressBar = document.getElementById('progressBar');
-    var toggleBtn = document.getElementById('toggleMusicPanel');
-    var musicPanel = document.getElementById('musicPanel');
-
-    if (toggleBtn) toggleBtn.onclick = function() { musicPanel.classList.toggle('hidden'); };
-
-    if (playPauseBtn) {
-      playPauseBtn.onclick = window.playPauseVideo;
-    }
-
-    if (nextBtn) {
-      nextBtn.onclick = window.nextVideo;
-    }
-
-    if (prevBtn) {
-      prevBtn.onclick = window.prevVideo;
-    }
-
-    if (volumeSlider) {
-      volumeSlider.oninput = function(e) {
-        var volume = parseInt(e.target.value);
-        window.setVideoVolume(volume);
-        localStorage.setItem('danifu_volume', volume);
-      };
-    }
-
-    if (progressBar) {
-      progressBar.oninput = function(e) {
-        if (!window.player || !window.player.getDuration) return;
-        var duration = window.player.getDuration();
-        if (duration) {
-          var newTime = (parseInt(e.target.value) / 100) * duration;
-          window.seekVideo(newTime);
-        }
-      };
-    }
   </script>
 </body>
 </html>
