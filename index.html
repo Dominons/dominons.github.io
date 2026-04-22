@@ -1112,7 +1112,8 @@
     }
 
     function onPlayerReady(event) {
-      event.target.setVolume(parseInt(savedVolume));
+  var savedVolume = localStorage.getItem('danifu_volume') || 50;
+  event.target.setVolume(parseInt(savedVolume));
       var volSlider = document.getElementById('volumeSlider');
       if (volSlider) volSlider.value = savedVolume;
       updateSongDisplay();
