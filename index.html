@@ -842,12 +842,13 @@
           var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
           onValue(musicRef, function(snapshot) {
             var data = snapshot.val();
-            if (data && data.videoId && window.player && window.player.loadVideoById) {
+            if (data && data.videoId && window.player) {
               setTimeout(function() {
                 try {
+                  // Extraer el videoId limpio si es una URL
                   var videoIdToLoad = data.videoId;
-                  if (data.videoId.indexOf('watch') !== -1 || data.videoId.indexOf('v=') !== -1) {
-                    var urlParts = data.videoId.split('?');
+                  if (videoIdToLoad.indexOf('watch') !== -1 || videoIdToLoad.indexOf('v=') !== -1) {
+                    var urlParts = videoIdToLoad.split('?');
                     if (urlParts.length > 1) {
                       var params = urlParts[1].split('&');
                       for (var i = 0; i < params.length; i++) {
@@ -858,11 +859,53 @@
                       }
                     }
                   }
-                  window.player.loadVideoById(videoIdToLoad, data.time || 0);
+
+                  // Primero cargar la playlist completa para mantener el contexto
+                  window.player.cuePlaylist({
+                    listType: 'playlist',
+                    list: playlistId,
+                    index: 0,
+                    startSeconds: 0
+                  });
+
+                  // Esperar que la playlist cargue, luego buscar el video guardado
+                  setTimeout(function() {
+                    var plist = window.player.getPlaylist();
+                    console.log('🎵 [MUSIC] Playlist lista:', plist ? plist.length + ' videos' : 'NULL');
+                    console.log('🎵 [MUSIC] Buscando videoId:', videoIdToLoad);
+
+                    if (plist && plist.length > 0) {
+                      // Buscar el índice del video guardado en la playlist
+                      var idx = plist.indexOf(videoIdToLoad);
+                      console.log('🎵 [MUSIC] Índice encontrado:', idx);
+
+                      if (idx >= 0) {
+                        // Video encontrado en la playlist - ir a ese índice
+                        window.player.playVideoAt(idx);
+                        setTimeout(function() {
+                          window.player.seekTo(data.time || 0, true);
+                          window.player.pauseVideo();
+                          updateSongDisplay();
+                          console.log('✅ [MUSIC] Video cargado en índice', idx, 'en el segundo', data.time);
+                        }, 1000);
+                      } else {
+                        // No está en la playlist, ir al principio
+                        window.player.playVideoAt(0);
+                        setTimeout(function() { window.player.pauseVideo(); }, 800);
+                        console.log('⚠️ [MUSIC] VideoId no encontrado en playlist, iniciando desde el principio');
+                      }
+                    } else {
+                      // Fallback: si la playlist no cargó, usar playVideoAt(0)
+                      window.player.playVideoAt(0);
+                      setTimeout(function() { window.player.pauseVideo(); }, 800);
+                      console.log('⚠️ [MUSIC] Playlist no disponible, iniciando desde el principio');
+                    }
+                  }, 2000);
+
                 } catch (e) {
-                  console.log("Error cargando video:", e);
+                  console.error('🔴 [MUSIC] Error cargando música guardada:', e);
                 }
-              }, 1000);
+              }, 1500);
             }
           }, { onlyOnce: true });
         };
