@@ -515,12 +515,11 @@
     
     /* SONG DISPLAY */
     .song-display {
-      flex: 1;
-      max-width: 250px;
       background: #0D0D0D;
       border: 1px solid var(--color-border);
       padding: 6px 12px;
       border-radius: 4px;
+      max-width: 180px;
       overflow: hidden;
     }
     .song-marquee {
@@ -529,11 +528,9 @@
       font-size: 0.85em;
       font-weight: 600;
       white-space: nowrap;
-      animation: marquee 8s linear infinite;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
     }
     
     /* MUSIC PLAYER PANEL */
@@ -672,10 +669,6 @@
           
           <div id="musicPanel" class="hidden music-player-panel">
             <div class="player-header">REPRODUCTOR</div>
-            
-            <div class="song-info">
-              <span id="playerSongTitle" class="player-song-title">Listo para Play</span>
-            </div>
             
             <div class="player-controls">
               <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
@@ -1060,35 +1053,58 @@
       if (!window.player || !window.player.getVideoData) return;
       try {
         var videoData = window.player.getVideoData();
-        var title = (videoData && videoData.title) ? videoData.title : 'Reproduciendo...';
-        var songTitleEl = document.getElementById('songTitle');
-        var playerSongTitleEl = document.getElementById('playerSongTitle');
-        if (songTitleEl) songTitleEl.textContent = title;
-        if (playerSongTitleEl) playerSongTitleEl.textContent = title;
-      } catch (error) {
-        console.log("Error actualizando display:", error);
-      }
+        var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
+        if (_elSongTitle) _elSongTitle.textContent = title;
+      } catch (error) {}
     }
 
     // Intervalo para actualizar tiempos y barra de progreso
+    // ============================================================
+    // MASTER LOOP - Un solo setInterval para reloj + música + título
+    // DOM cacheado en variables globales para no buscar en cada tick
+    // ============================================================
+    var _elFechaHora  = document.getElementById('fecha-hora');
+    var _elCurrentTime = document.getElementById('current-time');
+    var _elDuration    = document.getElementById('duration-time');
+    var _elProgress    = document.getElementById('progressBar');
+    var _elSongTitle   = document.getElementById('songTitle');
+    var _masterTick    = 0;   // contador de ticks (cada tick = 500ms)
+
     setInterval(function() {
-       if (!window.player || !window.player.getCurrentTime) return;
-       try {
+      _masterTick++;
+
+      // --- RELOJ: actualizar cada 2 ticks (1 segundo) ---
+      if (_masterTick % 2 === 0) {
+        var d = new Date();
+        if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+      }
+
+      // --- PROGRESO DE MÚSICA: cada tick (500ms) ---
+      if (window.player && window.player.getCurrentTime) {
+        try {
           var cur = Math.floor(window.player.getCurrentTime());
           var dur = Math.floor(window.player.getDuration());
+          if (_elCurrentTime) _elCurrentTime.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+          if (dur > 0) {
+            if (_elDuration) _elDuration.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+            if (_elProgress) _elProgress.value = (cur / dur) * 100;
+          }
+        } catch(e) {}
+      }
 
-          var currentTimeEl = document.getElementById('current-time');
-          var durationTimeEl = document.getElementById('duration-time');
-          var progBar = document.getElementById('progressBar');
+      // --- TÍTULO DE CANCIÓN: cada 6 ticks (3 segundos) ---
+      if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
+        try {
+          var videoData = window.player.getVideoData();
+          var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
+          if (_elSongTitle) _elSongTitle.textContent = title;
+        } catch(e) {}
+      }
 
-          if (currentTimeEl) currentTimeEl.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
-          if (durationTimeEl && dur > 0) durationTimeEl.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
-          if (progBar && dur > 0) progBar.value = (cur / dur) * 100;
-       } catch (e) {}
+      // Reiniciar contador para no crecer indefinidamente
+      if (_masterTick >= 600) _masterTick = 0;
+
     }, 500);
-
-    // Intervalo para actualizar título de canción
-    setInterval(updateSongDisplay, 3000);
 
     // Funciones de control del reproductor
     window.playPauseVideo = function() {
@@ -1270,7 +1286,7 @@
               } catch (error) {
                  console.error("Error guardando nota:", error);
               }
-           }, 1000);
+           }, 2000);
         });
     }
 
@@ -1379,12 +1395,6 @@
       updateDisplay();
     };
 
-    // DATE
-    setInterval(() => {
-      const d = new Date();
-      const el = document.getElementById("fecha-hora");
-      if (el) el.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-    }, 1000);
   </script>
 </body>
 </html>
