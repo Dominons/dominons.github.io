@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DANIFU777 - Dominon </title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -93,12 +94,15 @@
       z-index: 10;
       position: sticky;
       top: 0;
+      flex-wrap: wrap;
+      gap: 6px;
     }
     .top-left,
     .top-right {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     /* ========== USER INFO (COMPACT) ========== */
@@ -243,8 +247,10 @@
     }
     .notepad-header-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
+      flex-direction: column;
+      gap: 8px;
       margin-bottom: 10px;
       border-bottom: 1px solid var(--color-border);
       padding-bottom: 8px;
@@ -259,6 +265,8 @@
       gap: 4px;
       flex-wrap: wrap;
       width: 100%;
+      overflow-x: auto;
+      padding-bottom: 2px;
     }
     .tab-btn {
       background: #333;
@@ -484,19 +492,160 @@
     .theme-btn:hover {
       transform: scale(1.15);
     }
-    .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
-    .theme-btn.blue { background: #3B82F6; border-color: #3B82F6; }
-    .theme-btn.green { background: #10B981; border-color: #10B981; }
-    .theme-btn.red { background: #EF4444; border-color: #EF4444; }
-    .theme-btn.pink { background: #EC4899; border-color: #EC4899; }
-    .theme-btn.yellow { background: #FBBF24; border-color: #FBBF24; }
-    .theme-btn.cyan { background: #06B6D4; border-color: #06B6D4; }
-    .theme-btn.lime { background: #84CC16; border-color: #84CC16; }
-    .theme-btn.orange { background: #F97316; border-color: #F97316; }
-    .theme-btn.indigo { background: #6366F1; border-color: #6366F1; }
-    .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
-    .theme-btn.black { background: #000000; border-color: #FFFFFF; }
-    .theme-btn.gray { background: #9CA3AF; border-color: #9CA3AF; }
+    .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
+    .theme-btn.blue    { background: #3B82F6; border-color: #3B82F6; }
+    .theme-btn.green   { background: #10B981; border-color: #10B981; }
+    .theme-btn.red     { background: #EF4444; border-color: #EF4444; }
+    .theme-btn.pink    { background: #EC4899; border-color: #EC4899; }
+    .theme-btn.yellow  { background: #FBBF24; border-color: #FBBF24; }
+    .theme-btn.cyan    { background: #06B6D4; border-color: #06B6D4; }
+    .theme-btn.lime    { background: #84CC16; border-color: #84CC16; }
+    .theme-btn.orange  { background: #F97316; border-color: #F97316; }
+    .theme-btn.indigo  { background: #6366F1; border-color: #6366F1; }
+    .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
+    .theme-btn.black   { background: #000000; border-color: #FFFFFF; }
+    .theme-btn.gray    { background: #9CA3AF; border-color: #9CA3AF; }
+    /* --- Nuevos colores --- */
+    .theme-btn.rose       { background: #FB7185; border-color: #FB7185; }
+    .theme-btn.violet     { background: #7C3AED; border-color: #7C3AED; }
+    .theme-btn.amber      { background: #D97706; border-color: #D97706; }
+    .theme-btn.emerald    { background: #059669; border-color: #059669; }
+    .theme-btn.sky        { background: #0EA5E9; border-color: #0EA5E9; }
+    .theme-btn.fuchsia    { background: #D946EF; border-color: #D946EF; }
+    .theme-btn.teal       { background: #14B8A6; border-color: #14B8A6; }
+    .theme-btn.gold       { background: #FFD700; border-color: #FFD700; }
+    .theme-btn.coral      { background: #FF6B6B; border-color: #FF6B6B; }
+    .theme-btn.mint       { background: #4ADE80; border-color: #4ADE80; }
+    .theme-btn.lavender   { background: #C4B5FD; border-color: #C4B5FD; }
+    .theme-btn.crimson    { background: #DC143C; border-color: #DC143C; }
+
+    /* ========================================
+       RESPONSIVE - MEDIA QUERIES
+       ======================================== */
+
+    /* Tablet (< 1024px) */
+    @media (max-width: 1024px) {
+      .top-right {
+        gap: 6px;
+      }
+      .theme-btn {
+        width: 20px;
+        height: 20px;
+      }
+      .user-name {
+        max-width: 80px;
+      }
+    }
+
+    /* Tablet chica / pantalla dividida (< 768px) */
+    @media (max-width: 768px) {
+      body {
+        overflow: auto;
+      }
+      .main {
+        height: auto;
+        min-height: calc(100vh - 100px);
+        overflow-y: visible;
+      }
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 10px;
+      }
+      .top-left, .top-right {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .theme-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .theme-btn {
+        width: 18px;
+        height: 18px;
+      }
+      /* Gráfico: altura en vh en pantallas pequeñas */
+      .chart-panel {
+        height: 45vh;
+        min-height: 220px;
+      }
+      /* Bottom: 2 cols → 1 col */
+      .bottom-container {
+        grid-template-columns: 1fr;
+      }
+      .song-display {
+        max-width: 130px;
+      }
+      .song-marquee {
+        max-width: 110px;
+      }
+    }
+
+    /* Celular (< 480px) */
+    @media (max-width: 480px) {
+      :root { --main-gap: 10px; }
+      .top-bar {
+        padding: 6px 8px;
+        gap: 4px;
+      }
+      .top-right {
+        gap: 5px;
+      }
+      /* Ocultar nombre del usuario en pantallas muy pequeñas */
+      .user-name {
+        display: none;
+      }
+      /* Gráfico más compacto */
+      .chart-panel {
+        height: 35vh;
+        min-height: 180px;
+      }
+      /* Tabs del notepad: scroll horizontal */
+      .notepad-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      .tab-btn {
+        font-size: 0.7em;
+        padding: 3px 6px;
+        flex-shrink: 0;
+      }
+      /* Calculadora: botones más compactos */
+      .calc-button {
+        padding: 8px 0;
+        font-size: 0.85em;
+      }
+      .calc-display {
+        font-size: 1.2em;
+        padding: 8px;
+      }
+      /* Pomodoro display más compacto */
+      .pomodoro-display {
+        font-size: 1.6em;
+      }
+      /* Ocultar algunos colores de tema para ahorrar espacio */
+      .theme-btn {
+        width: 16px;
+        height: 16px;
+      }
+      /* Song display más pequeño */
+      .song-display {
+        max-width: 100px;
+      }
+      .song-marquee {
+        max-width: 80px;
+        font-size: 0.78em;
+      }
+      /* Music panel alineado a la izquierda en móvil */
+      .music-player-panel {
+        right: auto;
+        left: 0;
+        min-width: 240px;
+      }
+    }
     .music-btn {
       background: #333;
       color: var(--color-text);
@@ -645,19 +794,31 @@
           </button>
         </div>
         <div class="theme-buttons">
-          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Púrpura"></button>
-          <button class="theme-btn blue" onclick="setTheme('#3B82F6')" title="Azul"></button>
-          <button class="theme-btn green" onclick="setTheme('#10B981')" title="Verde"></button>
-          <button class="theme-btn red" onclick="setTheme('#EF4444')" title="Rojo"></button>
-          <button class="theme-btn pink" onclick="setTheme('#EC4899')" title="Rosa"></button>
-          <button class="theme-btn yellow" onclick="setTheme('#FBBF24')" title="Amarillo"></button>
-          <button class="theme-btn cyan" onclick="setTheme('#06B6D4')" title="Cyan"></button>
-          <button class="theme-btn lime" onclick="setTheme('#84CC16')" title="Lima"></button>
-          <button class="theme-btn orange" onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo" onclick="setTheme('#6366F1')" title="Índigo"></button>
-          <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
-          <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
-          <button class="theme-btn gray" onclick="setTheme('#9CA3AF')" title="Gris"></button>
+          <button class="theme-btn purple"  onclick="setTheme('#A855F7')" title="Púrpura"></button>
+          <button class="theme-btn blue"    onclick="setTheme('#3B82F6')" title="Azul"></button>
+          <button class="theme-btn green"   onclick="setTheme('#10B981')" title="Verde"></button>
+          <button class="theme-btn red"     onclick="setTheme('#EF4444')" title="Rojo"></button>
+          <button class="theme-btn pink"    onclick="setTheme('#EC4899')" title="Rosa"></button>
+          <button class="theme-btn yellow"  onclick="setTheme('#FBBF24')" title="Amarillo"></button>
+          <button class="theme-btn cyan"    onclick="setTheme('#06B6D4')" title="Cyan"></button>
+          <button class="theme-btn lime"    onclick="setTheme('#84CC16')" title="Lima"></button>
+          <button class="theme-btn orange"  onclick="setTheme('#F97316')" title="Naranja"></button>
+          <button class="theme-btn indigo"  onclick="setTheme('#6366F1')" title="Índigo"></button>
+          <button class="theme-btn white"   onclick="setTheme('#FFFFFF')" title="Blanco"></button>
+          <button class="theme-btn black"   onclick="setTheme('#000000')" title="Negro"></button>
+          <button class="theme-btn gray"    onclick="setTheme('#9CA3AF')" title="Gris"></button>
+          <button class="theme-btn rose"    onclick="setTheme('#FB7185')" title="Rosa Fuerte"></button>
+          <button class="theme-btn violet"  onclick="setTheme('#7C3AED')" title="Violeta"></button>
+          <button class="theme-btn amber"   onclick="setTheme('#D97706')" title="Ámbar"></button>
+          <button class="theme-btn emerald" onclick="setTheme('#059669')" title="Esmeralda"></button>
+          <button class="theme-btn sky"     onclick="setTheme('#0EA5E9')" title="Cielo"></button>
+          <button class="theme-btn fuchsia" onclick="setTheme('#D946EF')" title="Fucsia"></button>
+          <button class="theme-btn teal"    onclick="setTheme('#14B8A6')" title="Teal"></button>
+          <button class="theme-btn gold"    onclick="setTheme('#FFD700')" title="Dorado"></button>
+          <button class="theme-btn coral"   onclick="setTheme('#FF6B6B')" title="Coral"></button>
+          <button class="theme-btn mint"    onclick="setTheme('#4ADE80')" title="Menta"></button>
+          <button class="theme-btn lavender"onclick="setTheme('#C4B5FD')" title="Lavanda"></button>
+          <button class="theme-btn crimson" onclick="setTheme('#DC143C')" title="Carmesí"></button>
         </div>
         <div class="music-container">
           <div class="song-display">
