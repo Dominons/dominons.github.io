@@ -492,32 +492,9 @@
     .theme-btn:hover {
       transform: scale(1.15);
     }
-    .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
-    .theme-btn.blue    { background: #3B82F6; border-color: #3B82F6; }
-    .theme-btn.green   { background: #10B981; border-color: #10B981; }
-    .theme-btn.red     { background: #EF4444; border-color: #EF4444; }
-    .theme-btn.pink    { background: #EC4899; border-color: #EC4899; }
-    .theme-btn.yellow  { background: #FBBF24; border-color: #FBBF24; }
-    .theme-btn.cyan    { background: #06B6D4; border-color: #06B6D4; }
-    .theme-btn.lime    { background: #84CC16; border-color: #84CC16; }
-    .theme-btn.orange  { background: #F97316; border-color: #F97316; }
-    .theme-btn.indigo  { background: #6366F1; border-color: #6366F1; }
-    .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
     .theme-btn.black   { background: #000000; border-color: #FFFFFF; }
-    .theme-btn.gray    { background: #9CA3AF; border-color: #9CA3AF; }
-    /* --- Nuevos colores --- */
-    .theme-btn.rose       { background: #FB7185; border-color: #FB7185; }
-    .theme-btn.violet     { background: #7C3AED; border-color: #7C3AED; }
-    .theme-btn.amber      { background: #D97706; border-color: #D97706; }
-    .theme-btn.emerald    { background: #059669; border-color: #059669; }
-    .theme-btn.sky        { background: #0EA5E9; border-color: #0EA5E9; }
-    .theme-btn.fuchsia    { background: #D946EF; border-color: #D946EF; }
-    .theme-btn.teal       { background: #14B8A6; border-color: #14B8A6; }
-    .theme-btn.gold       { background: #FFD700; border-color: #FFD700; }
-    .theme-btn.coral      { background: #FF6B6B; border-color: #FF6B6B; }
-    .theme-btn.mint       { background: #4ADE80; border-color: #4ADE80; }
-    .theme-btn.lavender   { background: #C4B5FD; border-color: #C4B5FD; }
-    .theme-btn.crimson    { background: #DC143C; border-color: #DC143C; }
+    .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
+    .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
 
     /* ========================================
        RESPONSIVE - MEDIA QUERIES
@@ -565,12 +542,10 @@
         width: 18px;
         height: 18px;
       }
-      /* Gráfico: altura en vh en pantallas pequeñas */
       .chart-panel {
         height: 45vh;
         min-height: 220px;
       }
-      /* Bottom: 2 cols → 1 col */
       .bottom-container {
         grid-template-columns: 1fr;
       }
@@ -592,28 +567,18 @@
       .top-right {
         gap: 5px;
       }
-      /* Ocultar nombre del usuario en pantallas muy pequeñas */
       .user-name {
         display: none;
       }
-      /* Gráfico más compacto */
       .chart-panel {
         height: 35vh;
         min-height: 180px;
-      }
-      /* Tabs del notepad: scroll horizontal */
-      .notepad-tabs {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
       }
       .tab-btn {
         font-size: 0.7em;
         padding: 3px 6px;
         flex-shrink: 0;
       }
-      /* Calculadora: botones más compactos */
       .calc-button {
         padding: 8px 0;
         font-size: 0.85em;
@@ -622,16 +587,13 @@
         font-size: 1.2em;
         padding: 8px;
       }
-      /* Pomodoro display más compacto */
       .pomodoro-display {
         font-size: 1.6em;
       }
-      /* Ocultar algunos colores de tema para ahorrar espacio */
       .theme-btn {
         width: 16px;
         height: 16px;
       }
-      /* Song display más pequeño */
       .song-display {
         max-width: 100px;
       }
@@ -639,7 +601,6 @@
         max-width: 80px;
         font-size: 0.78em;
       }
-      /* Music panel alineado a la izquierda en móvil */
       .music-player-panel {
         right: auto;
         left: 0;
@@ -794,31 +755,9 @@
           </button>
         </div>
         <div class="theme-buttons">
-          <button class="theme-btn purple"  onclick="setTheme('#A855F7')" title="Púrpura"></button>
-          <button class="theme-btn blue"    onclick="setTheme('#3B82F6')" title="Azul"></button>
-          <button class="theme-btn green"   onclick="setTheme('#10B981')" title="Verde"></button>
-          <button class="theme-btn red"     onclick="setTheme('#EF4444')" title="Rojo"></button>
-          <button class="theme-btn pink"    onclick="setTheme('#EC4899')" title="Rosa"></button>
-          <button class="theme-btn yellow"  onclick="setTheme('#FBBF24')" title="Amarillo"></button>
-          <button class="theme-btn cyan"    onclick="setTheme('#06B6D4')" title="Cyan"></button>
-          <button class="theme-btn lime"    onclick="setTheme('#84CC16')" title="Lima"></button>
-          <button class="theme-btn orange"  onclick="setTheme('#F97316')" title="Naranja"></button>
-          <button class="theme-btn indigo"  onclick="setTheme('#6366F1')" title="Índigo"></button>
-          <button class="theme-btn white"   onclick="setTheme('#FFFFFF')" title="Blanco"></button>
-          <button class="theme-btn black"   onclick="setTheme('#000000')" title="Negro"></button>
-          <button class="theme-btn gray"    onclick="setTheme('#9CA3AF')" title="Gris"></button>
-          <button class="theme-btn rose"    onclick="setTheme('#FB7185')" title="Rosa Fuerte"></button>
-          <button class="theme-btn violet"  onclick="setTheme('#7C3AED')" title="Violeta"></button>
-          <button class="theme-btn amber"   onclick="setTheme('#D97706')" title="Ámbar"></button>
-          <button class="theme-btn emerald" onclick="setTheme('#059669')" title="Esmeralda"></button>
-          <button class="theme-btn sky"     onclick="setTheme('#0EA5E9')" title="Cielo"></button>
-          <button class="theme-btn fuchsia" onclick="setTheme('#D946EF')" title="Fucsia"></button>
-          <button class="theme-btn teal"    onclick="setTheme('#14B8A6')" title="Teal"></button>
-          <button class="theme-btn gold"    onclick="setTheme('#FFD700')" title="Dorado"></button>
-          <button class="theme-btn coral"   onclick="setTheme('#FF6B6B')" title="Coral"></button>
-          <button class="theme-btn mint"    onclick="setTheme('#4ADE80')" title="Menta"></button>
-          <button class="theme-btn lavender"onclick="setTheme('#C4B5FD')" title="Lavanda"></button>
-          <button class="theme-btn crimson" onclick="setTheme('#DC143C')" title="Carmesí"></button>
+          <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
+          <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
+          <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Morado"></button>
         </div>
         <div class="music-container">
           <div class="song-display">
@@ -880,28 +819,9 @@
 
       <div class="notepad-panel">
         <div class="notepad-header-row">
-          <h2 id="notepad-title">Bloc de Notas - Pág 1</h2>
-          <div class="notepad-tabs">
-            <button class="tab-btn active" id="btn-tab-1" onclick="switchTab(1)">Pág 1</button>
-            <button class="tab-btn" id="btn-tab-2" onclick="switchTab(2)">Pág 2</button>
-            <button class="tab-btn" id="btn-tab-3" onclick="switchTab(3)">Pág 3</button>
-            <button class="tab-btn" id="btn-tab-4" onclick="switchTab(4)">Pág 4</button>
-            <button class="tab-btn" id="btn-tab-5" onclick="switchTab(5)">Pág 5</button>
-            <button class="tab-btn" id="btn-tab-6" onclick="switchTab(6)">Pág 6</button>
-            <button class="tab-btn" id="btn-tab-7" onclick="switchTab(7)">Pág 7</button>
-            <button class="tab-btn" id="btn-tab-8" onclick="switchTab(8)">Pág 8</button>
-            <button class="tab-btn" id="btn-tab-9" onclick="switchTab(9)">Pág 9</button>
-            <button class="tab-btn" id="btn-tab-10" onclick="switchTab(10)">Pág 10</button>
-            <button class="tab-btn" id="btn-tab-11" onclick="switchTab(11)">Pág 11</button>
-            <button class="tab-btn" id="btn-tab-12" onclick="switchTab(12)">Pág 12</button>
-            <button class="tab-btn" id="btn-tab-13" onclick="switchTab(13)">Pág 13</button>
-            <button class="tab-btn" id="btn-tab-14" onclick="switchTab(14)">Pág 14</button>
-            <button class="tab-btn" id="btn-tab-15" onclick="switchTab(15)">Pág 15</button>
-            <button class="tab-btn" id="btn-tab-16" onclick="switchTab(16)">Pág 16</button>
-            <button class="tab-btn" id="btn-tab-17" onclick="switchTab(17)">Pág 17</button>
-            <button class="tab-btn" id="btn-tab-18" onclick="switchTab(18)">Pág 18</button>
-            <button class="tab-btn" id="btn-tab-19" onclick="switchTab(19)">Pág 19</button>
-            <button class="tab-btn" id="btn-tab-20" onclick="switchTab(20)">Pág 20</button>
+          <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
+          <div class="notepad-tabs" id="notepad-tabs">
+            <!-- Se generan dinámicamente con JavaScript para optimizar -->
           </div>
         </div>
         <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
@@ -1014,7 +934,6 @@
                     }
                   }
 
-                  // Primero cargar la playlist completa para mantener el contexto
                   window.player.cuePlaylist({
                     listType: 'playlist',
                     list: playlistId,
@@ -1022,42 +941,29 @@
                     startSeconds: 0
                   });
 
-                  // Esperar que la playlist cargue, luego buscar el video guardado
                   setTimeout(function() {
                     var plist = window.player.getPlaylist();
-                    console.log('🎵 [MUSIC] Playlist lista:', plist ? plist.length + ' videos' : 'NULL');
-                    console.log('🎵 [MUSIC] Buscando videoId:', videoIdToLoad);
-
                     if (plist && plist.length > 0) {
-                      // Buscar el índice del video guardado en la playlist
                       var idx = plist.indexOf(videoIdToLoad);
-                      console.log('🎵 [MUSIC] Índice encontrado:', idx);
-
                       if (idx >= 0) {
-                        // Video encontrado en la playlist - ir a ese índice
                         window.player.playVideoAt(idx);
                         setTimeout(function() {
                           window.player.seekTo(data.time || 0, true);
                           window.player.pauseVideo();
                           updateSongDisplay();
-                          console.log('✅ [MUSIC] Video cargado en índice', idx, 'en el segundo', data.time);
                         }, 1000);
                       } else {
-                        // No está en la playlist, ir al principio
                         window.player.playVideoAt(0);
                         setTimeout(function() { window.player.pauseVideo(); }, 800);
-                        console.log('⚠️ [MUSIC] VideoId no encontrado en playlist, iniciando desde el principio');
                       }
                     } else {
-                      // Fallback: si la playlist no cargó, usar playVideoAt(0)
                       window.player.playVideoAt(0);
                       setTimeout(function() { window.player.pauseVideo(); }, 800);
-                      console.log('⚠️ [MUSIC] Playlist no disponible, iniciando desde el principio');
                     }
                   }, 2000);
 
                 } catch (e) {
-                  console.error('🔴 [MUSIC] Error cargando música guardada:', e);
+                  console.error('Error cargando música guardada:', e);
                 }
               }, 1500);
             }
@@ -1104,7 +1010,6 @@
 
     // Lista de reproducción
     var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-    var initialVideoId = 'Z6L4u2i97Rw';
 
     // Función para ejecutar comandos cuando el player esté listo
     window.executeWhenPlayerReady = function(command) {
@@ -1117,10 +1022,8 @@
 
     // Función llamada por el API de YouTube cuando está listo
     function onYouTubeIframeAPIReady() {
-      console.log('🎵 [YT DEBUG] onYouTubeIframeAPIReady disparado');
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
 
-      // SIN videoId - dejar que la playlist tome el control total
       window.player = new YT.Player('youtube-player', {
         height: '1',
         width: '1',
@@ -1136,16 +1039,13 @@
           'onReady': onPlayerReady,
           'onStateChange': onPlayerStateChange,
           'onError': function(e) {
-            console.error('🔴 [YT DEBUG] Error del player:', e.data);
-            var errores = {1:'Video no encontrado',2:'Parámetro inválido',5:'Error HTML5',100:'Video no encontrado/privado',101:'Embedding no permitido',150:'Embedding no permitido'};
-            console.error('🔴 [YT DEBUG] Descripción:', errores[e.data] || 'Error desconocido');
+             console.error('Error del player:', e.data);
           }
         }
       });
     }
 
     function onPlayerReady(event) {
-      console.log('✅ [YT DEBUG] Player listo');
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
       event.target.setVolume(parseInt(savedVolume));
       var volSlider = document.getElementById('volumeSlider');
@@ -1153,36 +1053,18 @@
 
       window.youtubePlayerReady = true;
 
-      // Verificar que la playlist esté cargada
-      try {
-        var plist = window.player.getPlaylist();
-        console.log('📋 [YT DEBUG] Playlist cargada:', plist ? plist.length + ' videos' : 'NULL - no hay playlist');
-        console.log('📋 [YT DEBUG] IDs:', plist);
-        console.log('📋 [YT DEBUG] Índice actual:', window.player.getPlaylistIndex());
-        console.log('📋 [YT DEBUG] Video actual data:', window.player.getVideoData());
-      } catch(err) {
-        console.error('🔴 [YT DEBUG] Error leyendo playlist:', err);
-      }
-
-      // Si la playlist no cargó, cargarla manualmente
       var plist = window.player.getPlaylist();
       if (!plist || plist.length === 0) {
-        console.log('⚠️ [YT DEBUG] Playlist vacía, cargando manualmente con cuePlaylist...');
         window.player.cuePlaylist({
           listType: 'playlist',
           list: playlistId,
           index: 0,
           startSeconds: 0
         });
-        setTimeout(function() {
-          var p2 = window.player.getPlaylist();
-          console.log('📋 [YT DEBUG] Playlist tras cuePlaylist:', p2 ? p2.length + ' videos' : 'Sigue vacía');
-        }, 2000);
       }
 
       setTimeout(updateSongDisplay, 1000);
 
-      // Ejecutar comandos en cola
       while (window.playerCommands.length > 0) {
         var cmd = window.playerCommands.shift();
         if (window.player && window.player[cmd.fn]) {
@@ -1196,11 +1078,6 @@
     }
 
     function onPlayerStateChange(event) {
-      var estados = {'-1':'sin iniciar','0':'terminado','1':'reproduciendo','2':'pausado','3':'buffering','5':'en cola'};
-      console.log('🔄 [YT DEBUG] Estado cambió a:', estados[event.data] || event.data);
-      console.log('🔄 [YT DEBUG] Video actual:', window.player.getVideoData ? window.player.getVideoData().title : 'N/A');
-      console.log('🔄 [YT DEBUG] Índice en playlist:', window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 'N/A');
-
       var playBtn = document.getElementById('playPauseBtn');
       if (event.data === YT.PlayerState.PLAYING) {
         if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
@@ -1219,28 +1096,21 @@
       } catch (error) {}
     }
 
-    // Intervalo para actualizar tiempos y barra de progreso
-    // ============================================================
-    // MASTER LOOP - Un solo setInterval para reloj + música + título
-    // DOM cacheado en variables globales para no buscar en cada tick
-    // ============================================================
     var _elFechaHora  = document.getElementById('fecha-hora');
     var _elCurrentTime = document.getElementById('current-time');
     var _elDuration    = document.getElementById('duration-time');
     var _elProgress    = document.getElementById('progressBar');
     var _elSongTitle   = document.getElementById('songTitle');
-    var _masterTick    = 0;   // contador de ticks (cada tick = 500ms)
+    var _masterTick    = 0;
 
     setInterval(function() {
       _masterTick++;
 
-      // --- RELOJ: actualizar cada 2 ticks (1 segundo) ---
       if (_masterTick % 2 === 0) {
         var d = new Date();
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
       }
 
-      // --- PROGRESO DE MÚSICA: cada tick (500ms) ---
       if (window.player && window.player.getCurrentTime) {
         try {
           var cur = Math.floor(window.player.getCurrentTime());
@@ -1253,7 +1123,6 @@
         } catch(e) {}
       }
 
-      // --- TÍTULO DE CANCIÓN: cada 6 ticks (3 segundos) ---
       if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
         try {
           var videoData = window.player.getVideoData();
@@ -1262,12 +1131,10 @@
         } catch(e) {}
       }
 
-      // Reiniciar contador para no crecer indefinidamente
       if (_masterTick >= 600) _masterTick = 0;
 
     }, 500);
 
-    // Funciones de control del reproductor
     window.playPauseVideo = function() {
       if (window.youtubePlayerReady && window.player) {
         var state = window.player.getPlayerState();
@@ -1280,43 +1147,22 @@
     };
 
     window.nextVideo = function() {
-      console.log('⏭️ [YT DEBUG] Botón NEXT presionado');
-      console.log('⏭️ [YT DEBUG] playerReady:', window.youtubePlayerReady);
-      console.log('⏭️ [YT DEBUG] player existe:', !!window.player);
       if (!window.youtubePlayerReady || !window.player) return;
       try {
-        var plist = window.player.getPlaylist();
-        var idx = window.player.getPlaylistIndex();
-        console.log('⏭️ [YT DEBUG] Playlist length:', plist ? plist.length : 'NULL');
-        console.log('⏭️ [YT DEBUG] Índice actual:', idx);
         window.player.nextVideo();
-        setTimeout(function() {
-          console.log('⏭️ [YT DEBUG] Después de nextVideo - índice:', window.player.getPlaylistIndex());
-          console.log('⏭️ [YT DEBUG] Después de nextVideo - video:', window.player.getVideoData().title);
-          updateSongDisplay();
-        }, 1000);
+        setTimeout(updateSongDisplay, 1000);
       } catch(err) {
-        console.error('🔴 [YT DEBUG] Error en nextVideo:', err);
+        console.error('Error en nextVideo:', err);
       }
     };
 
     window.prevVideo = function() {
-      console.log('⏮️ [YT DEBUG] Botón PREV presionado');
-      console.log('⏮️ [YT DEBUG] playerReady:', window.youtubePlayerReady);
       if (!window.youtubePlayerReady || !window.player) return;
       try {
-        var plist = window.player.getPlaylist();
-        var idx = window.player.getPlaylistIndex();
-        console.log('⏮️ [YT DEBUG] Playlist length:', plist ? plist.length : 'NULL');
-        console.log('⏮️ [YT DEBUG] Índice actual:', idx);
         window.player.previousVideo();
-        setTimeout(function() {
-          console.log('⏮️ [YT DEBUG] Después de previousVideo - índice:', window.player.getPlaylistIndex());
-          console.log('⏮️ [YT DEBUG] Después de previousVideo - video:', window.player.getVideoData().title);
-          updateSongDisplay();
-        }, 1000);
+        setTimeout(updateSongDisplay, 1000);
       } catch(err) {
-        console.error('🔴 [YT DEBUG] Error en prevVideo:', err);
+        console.error('Error en prevVideo:', err);
       }
     };
 
@@ -1332,7 +1178,6 @@
       }
     };
 
-    // Asignar eventos a los botones cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', function() {
       var playPauseBtn = document.getElementById('playPauseBtn');
       var nextBtn = document.getElementById('nextBtn');
@@ -1413,8 +1258,14 @@
     window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
     window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
 
-    // 2. BLOC DE NOTAS FIRESTORE
+    // 2. BLOC DE NOTAS FIRESTORE (OPTIMIZADO A 3 PESTAÑAS)
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
+    // Seguridad: si el usuario tenía guardada una pestaña > 3, la bajamos a 1
+    if (parseInt(window.activeTab) > 3) {
+        window.activeTab = "1";
+        localStorage.setItem('danifu_active_tab', window.activeTab);
+    }
+    
     let saveTimeout;
     
     window.loadNoteFromFirestore = async function(tabNum) {
@@ -1451,12 +1302,25 @@
         });
     }
 
+    // Generador dinámico de pestañas (limpia el HTML y evita repetir 20 botones)
+    const tabsContainer = document.getElementById('notepad-tabs');
+    if (tabsContainer) {
+        for (let i = 1; i <= 3; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
+            btn.id = 'btn-tab-' + i;
+            btn.textContent = 'Nota ' + i;
+            btn.onclick = function() { window.switchTab(i); };
+            tabsContainer.appendChild(btn);
+        }
+    }
+
     window.switchTab = function(tabNum) {
       window.activeTab = String(tabNum);
       localStorage.setItem('danifu_active_tab', window.activeTab);
       
       var notepadTitle = document.getElementById('notepad-title');
-      if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Pág " + window.activeTab;
+      if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Nota " + window.activeTab;
       
       document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
       var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
