@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DANIFU777 - Dominon </title>
+  
+  <!-- PWA: Manifiesto y Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#A855F7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Danifu777">
+
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
@@ -821,7 +829,7 @@
         <div class="notepad-header-row">
           <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
           <div class="notepad-tabs" id="notepad-tabs">
-            <!-- Se generan dinámicamente con JavaScript para optimizar -->
+            <!-- Se generan dinámicamente con JavaScript -->
           </div>
         </div>
         <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
@@ -833,13 +841,13 @@
           <div id="display" class="calc-display">0</div>
           <div class="calculator-grid">
             <button class="calc-button clear" onclick="clearDisplay()">C</button>
-            <button class="calc-button" onclick="backspace()">?</button>
+            <button class="calc-button" onclick="backspace()">←</button>
             <button class="calc-button operator" onclick="appendOperator('/')">/</button>
             <button class="calc-button operator" onclick="appendOperator('*')">×</button>
             <button class="calc-button" onclick="appendNumber('7')">7</button>
             <button class="calc-button" onclick="appendNumber('8')">8</button>
             <button class="calc-button" onclick="appendNumber('9')">9</button>
-            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+            <button class="calc-button operator" onclick="appendOperator('-')">−</button>
             <button class="calc-button" onclick="appendNumber('4')">4</button>
             <button class="calc-button" onclick="appendNumber('5')">5</button>
             <button class="calc-button" onclick="appendNumber('6')">6</button>
@@ -894,12 +902,10 @@
     const rtdb = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
-    // Exportar variables a window para que los scripts de abajo las puedan usar
     window.db = db;
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // Auth state listener
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -907,10 +913,8 @@
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // Cargar nota actual
         window.loadNoteFromFirestore(window.activeTab);
 
-        // Cargar música guardada cuando el reproductor esté listo
         window.loadSavedMusic = function() {
           if (!auth.currentUser) return;
           var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
@@ -919,7 +923,6 @@
             if (data && data.videoId && window.player) {
               setTimeout(function() {
                 try {
-                  // Extraer el videoId limpio si es una URL
                   var videoIdToLoad = data.videoId;
                   if (videoIdToLoad.indexOf('watch') !== -1 || videoIdToLoad.indexOf('v=') !== -1) {
                     var urlParts = videoIdToLoad.split('?');
@@ -979,7 +982,6 @@
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    // Auto-guardado de música cada 30 segundos
     setInterval(() => {
        if (auth.currentUser && window.player) {
           try {
@@ -1001,17 +1003,11 @@
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // Variables globales para el reproductor
     window.youtubePlayerReady = false;
     window.player = null;
-
-    // Cola de comandos hasta que el player esté listo
     window.playerCommands = [];
-
-    // Lista de reproducción
     var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
 
-    // Función para ejecutar comandos cuando el player esté listo
     window.executeWhenPlayerReady = function(command) {
       if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
         window.player[command.fn].apply(window.player, command.args);
@@ -1020,10 +1016,8 @@
       }
     };
 
-    // Función llamada por el API de YouTube cuando está listo
     function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
-
       window.player = new YT.Player('youtube-player', {
         height: '1',
         width: '1',
@@ -1038,9 +1032,7 @@
         events: {
           'onReady': onPlayerReady,
           'onStateChange': onPlayerStateChange,
-          'onError': function(e) {
-             console.error('Error del player:', e.data);
-          }
+          'onError': function(e) { console.error('Error del player:', e.data); }
         }
       });
     }
@@ -1050,17 +1042,11 @@
       event.target.setVolume(parseInt(savedVolume));
       var volSlider = document.getElementById('volumeSlider');
       if (volSlider) volSlider.value = savedVolume;
-
       window.youtubePlayerReady = true;
 
       var plist = window.player.getPlaylist();
       if (!plist || plist.length === 0) {
-        window.player.cuePlaylist({
-          listType: 'playlist',
-          list: playlistId,
-          index: 0,
-          startSeconds: 0
-        });
+        window.player.cuePlaylist({ listType: 'playlist', list: playlistId, index: 0, startSeconds: 0 });
       }
 
       setTimeout(updateSongDisplay, 1000);
@@ -1072,9 +1058,7 @@
         }
       }
 
-      if (window.loadSavedMusic) {
-        window.loadSavedMusic();
-      }
+      if (window.loadSavedMusic) window.loadSavedMusic();
     }
 
     function onPlayerStateChange(event) {
@@ -1105,12 +1089,10 @@
 
     setInterval(function() {
       _masterTick++;
-
       if (_masterTick % 2 === 0) {
         var d = new Date();
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
       }
-
       if (window.player && window.player.getCurrentTime) {
         try {
           var cur = Math.floor(window.player.getCurrentTime());
@@ -1122,7 +1104,6 @@
           }
         } catch(e) {}
       }
-
       if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
         try {
           var videoData = window.player.getVideoData();
@@ -1130,53 +1111,26 @@
           if (_elSongTitle) _elSongTitle.textContent = title;
         } catch(e) {}
       }
-
       if (_masterTick >= 600) _masterTick = 0;
-
     }, 500);
 
     window.playPauseVideo = function() {
       if (window.youtubePlayerReady && window.player) {
         var state = window.player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-          window.player.pauseVideo();
-        } else {
-          window.player.playVideo();
-        }
+        if (state === YT.PlayerState.PLAYING) { window.player.pauseVideo(); } 
+        else { window.player.playVideo(); }
       }
     };
-
     window.nextVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
-      try {
-        window.player.nextVideo();
-        setTimeout(updateSongDisplay, 1000);
-      } catch(err) {
-        console.error('Error en nextVideo:', err);
-      }
+      try { window.player.nextVideo(); setTimeout(updateSongDisplay, 1000); } catch(err) { console.error(err); }
     };
-
     window.prevVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
-      try {
-        window.player.previousVideo();
-        setTimeout(updateSongDisplay, 1000);
-      } catch(err) {
-        console.error('Error en prevVideo:', err);
-      }
+      try { window.player.previousVideo(); setTimeout(updateSongDisplay, 1000); } catch(err) { console.error(err); }
     };
-
-    window.seekVideo = function(time) {
-      if (window.youtubePlayerReady && window.player) {
-        window.player.seekTo(time, true);
-      }
-    };
-
-    window.setVideoVolume = function(volume) {
-      if (window.youtubePlayerReady && window.player) {
-        window.player.setVolume(volume);
-      }
-    };
+    window.seekVideo = function(time) { if (window.youtubePlayerReady && window.player) window.player.seekTo(time, true); };
+    window.setVideoVolume = function(volume) { if (window.youtubePlayerReady && window.player) window.player.setVolume(volume); };
 
     document.addEventListener('DOMContentLoaded', function() {
       var playPauseBtn = document.getElementById('playPauseBtn');
@@ -1187,24 +1141,10 @@
       var toggleBtn = document.getElementById('toggleMusicPanel');
       var musicPanel = document.getElementById('musicPanel');
 
-      if (toggleBtn) {
-        toggleBtn.onclick = function() {
-          musicPanel.classList.toggle('hidden');
-        };
-      }
-
-      if (playPauseBtn) {
-        playPauseBtn.addEventListener('click', window.playPauseVideo);
-      }
-
-      if (nextBtn) {
-        nextBtn.addEventListener('click', window.nextVideo);
-      }
-
-      if (prevBtn) {
-        prevBtn.addEventListener('click', window.prevVideo);
-      }
-
+      if (toggleBtn) toggleBtn.onclick = function() { musicPanel.classList.toggle('hidden'); };
+      if (playPauseBtn) playPauseBtn.addEventListener('click', window.playPauseVideo);
+      if (nextBtn) nextBtn.addEventListener('click', window.nextVideo);
+      if (prevBtn) prevBtn.addEventListener('click', window.prevVideo);
       if (volumeSlider) {
         volumeSlider.addEventListener('input', function(e) {
           var volume = parseInt(e.target.value);
@@ -1212,15 +1152,11 @@
           localStorage.setItem('danifu_volume', volume);
         });
       }
-
       if (progressBar) {
         progressBar.addEventListener('input', function(e) {
           if (!window.player || !window.player.getDuration) return;
           var duration = window.player.getDuration();
-          if (duration) {
-            var newTime = (parseInt(e.target.value) / 100) * duration;
-            window.seekVideo(newTime);
-          }
+          if (duration) { var newTime = (parseInt(e.target.value) / 100) * duration; window.seekVideo(newTime); }
         });
       }
     });
@@ -1228,8 +1164,6 @@
   <script type="module">
     import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
     
-    // --- FUNCIONES GLOBALES ---
-    // 1. CALCULADORA
     const display = document.getElementById('display');
     let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
     window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
@@ -1242,25 +1176,19 @@
       const inputValue = parseFloat(currentInput);
       if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
       if (previousInput === '') { previousInput = inputValue; }
-      else if (operation) {
-        const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result); previousInput = result;
-      }
+      else if (operation) { const result = performCalculation[operation](previousInput, inputValue); currentInput = String(result); previousInput = result; }
       waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
     };
     const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
     window.calculate = function () {
       if (!operation || waitingForSecondOperand) return;
       const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
-      updateDisplay();
+      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false; updateDisplay();
     };
     window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
     window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
 
-    // 2. BLOC DE NOTAS FIRESTORE (OPTIMIZADO A 3 PESTAÑAS)
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
-    // Seguridad: si el usuario tenía guardada una pestaña > 3, la bajamos a 1
     if (parseInt(window.activeTab) > 3) {
         window.activeTab = "1";
         localStorage.setItem('danifu_active_tab', window.activeTab);
@@ -1274,11 +1202,8 @@
           const notepadEl = document.getElementById('notepad');
           const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
           const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists()) {
-             if (notepadEl) notepadEl.value = docSnap.data().content || "";
-          } else {
-             if (notepadEl) notepadEl.value = "";
-          }
+          if (docSnap.exists()) { if (notepadEl) notepadEl.value = docSnap.data().content || ""; } 
+          else { if (notepadEl) notepadEl.value = ""; }
        } catch (error) {
           console.error("Error cargando nota:", error);
           const notepadEl = document.getElementById('notepad');
@@ -1295,14 +1220,11 @@
               try {
                  const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
                  await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
-              } catch (error) {
-                 console.error("Error guardando nota:", error);
-              }
+              } catch (error) { console.error("Error guardando nota:", error); }
            }, 2000);
         });
     }
 
-    // Generador dinámico de pestañas (limpia el HTML y evita repetir 20 botones)
     const tabsContainer = document.getElementById('notepad-tabs');
     if (tabsContainer) {
         for (let i = 1; i <= 3; i++) {
@@ -1318,29 +1240,20 @@
     window.switchTab = function(tabNum) {
       window.activeTab = String(tabNum);
       localStorage.setItem('danifu_active_tab', window.activeTab);
-      
       var notepadTitle = document.getElementById('notepad-title');
       if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Nota " + window.activeTab;
-      
       document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
       var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
       if (activeBtn) activeBtn.classList.add('active');
-      
-      if (window.auth && window.auth.currentUser) {
-        window.loadNoteFromFirestore(window.activeTab);
-      } else {
-        var notepadEl = document.getElementById('notepad');
-        if (notepadEl) notepadEl.value = "";
-      }
+      if (window.auth && window.auth.currentUser) { window.loadNoteFromFirestore(window.activeTab); } 
+      else { var notepadEl = document.getElementById('notepad'); if (notepadEl) notepadEl.value = ""; }
     };
 
-    // 3. CAMBIAR TEMA
     window.setTheme = function (color) {
       document.documentElement.style.setProperty('--color-highlight', color);
       localStorage.setItem('danifu_theme', color);
     };
 
-    // 3.5. CAMBIAR SÍMBOLO DEL GRÁFICO
     window.changeSymbol = function () {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
@@ -1350,7 +1263,6 @@
       localStorage.setItem('danifu_chart_symbol', symbol);
     };
 
-    // 4. POMODORO CON PERSONALIZACIÓN
     let pomoInterval;
     let pomoSeconds = 25 * 60;
     let isRunning = false;
@@ -1362,64 +1274,47 @@
     window.togglePomodoro = function () {
       const btn = document.getElementById('start-btn');
       if (isRunning) {
-        clearInterval(pomoInterval);
-        isRunning = false;
-        btn.innerText = "INICIAR";
-        btn.classList.remove('active');
+        clearInterval(pomoInterval); isRunning = false; btn.innerText = "INICIAR"; btn.classList.remove('active');
       } else {
-        isRunning = true;
-        btn.innerText = "PAUSAR";
-        btn.classList.add('active');
+        isRunning = true; btn.innerText = "PAUSAR"; btn.classList.add('active');
         pomoInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            updatePomoUI();
-          } else {
-            clearInterval(pomoInterval);
-            isRunning = false;
-            btn.innerText = "INICIAR";
-            btn.classList.remove('active');
-            alert("¡Tiempo terminado!");
-          }
+          if (pomoSeconds > 0) { pomoSeconds--; updatePomoUI(); } 
+          else { clearInterval(pomoInterval); isRunning = false; btn.innerText = "INICIAR"; btn.classList.remove('active'); alert("¡Tiempo terminado!"); }
         }, 1000);
       }
     };
     window.resetPomodoro = function () {
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = 25 * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
+      clearInterval(pomoInterval); isRunning = false; pomoSeconds = 25 * 60; updatePomoUI();
+      document.getElementById('start-btn').innerText = "INICIAR"; document.getElementById('start-btn').classList.remove('active');
     };
     window.setCustomTime = function () {
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
-      if (!mins || mins <= 0) {
-        alert("Por favor ingresa un número de minutos válido.");
-        return;
-      }
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = mins * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
+      if (!mins || mins <= 0) { alert("Por favor ingresa un número de minutos válido."); return; }
+      clearInterval(pomoInterval); isRunning = false; pomoSeconds = mins * 60; updatePomoUI();
+      document.getElementById('start-btn').innerText = "INICIAR"; document.getElementById('start-btn').classList.remove('active');
     };
 
-    // INIT
     window.onload = function () {
       window.switchTab(window.activeTab);
       const savedTheme = localStorage.getItem('danifu_theme');
       if (savedTheme) window.setTheme(savedTheme);
       const savedSymbol = localStorage.getItem('danifu_chart_symbol');
-      if (savedSymbol) {
-        document.getElementById('symbolSelect').value = savedSymbol;
-      }
+      if (savedSymbol) document.getElementById('symbolSelect').value = savedSymbol;
       updatePomoUI();
       updateDisplay();
     };
+  </script>
 
+  <!-- PWA: Registro del Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('[PWA] Service Worker registrado correctamente: ', reg.scope))
+          .catch(err => console.error('[PWA] Error al registrar el Service Worker: ', err));
+      });
+    }
   </script>
 </body>
 </html>
