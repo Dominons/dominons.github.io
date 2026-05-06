@@ -1,6 +1,6 @@
 {
-  "name": "DANIFU777 - Dominion",
-  "short_name": "Danifu777",
+  "name": "Dominons",
+  "short_name": "Dominons",
   "description": "Dashboard personal con herramientas de productividad",
   "start_url": "./index.html",
   "display": "standalone",
