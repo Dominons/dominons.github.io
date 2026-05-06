@@ -4,8 +4,8 @@
   "description": "Dashboard personal con herramientas de productividad",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#7B2CBF",
-  "theme_color": "#7B2CBF",
+  "background_color": "#0D0216",
+  "theme_color": "#0D0216",
   "orientation": "any",
   "icons": [
     {
