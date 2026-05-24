@@ -1,914 +1,1459 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DANIFU777 - Deep Flow Unified</title>
-<link rel="icon" type="image/ico" href="Favicon.ico">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<style>
-/* === GLOBAL ROOT & RESET === */
-:root {
-  --color-dark-bg: #1A1A1A;
-  --color-header-bg: #282828;
-  --color-border: #444;
-  --color-highlight: #A855F7;
-  --color-main-bg: #282828;
-  --color-text: #EAEAEA;
-  --color-input-bg: #1F1F1F;
-  --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
-  --main-gap: 15px;
-  --df-fs: 1;
-}
-html, body { margin: 0; padding: 0; height: 100%; }
-.hidden-view { display: none !important; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DANIFU777 - Dominon | DEEP FLOW</title>
+  <link rel="icon" type="image/ico" href="Favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       ESTILOS GLOBALES Y ARQUITECTURA SPA
+       ============================================ */
+    
+    .hidden-view {
+      display: none !important;
+    }
+    
+    /* ============================================
+       CSS ORIGINAL DE DOMINON.TXT (INTACTO)
+       ============================================ */
+    :root {
+      --color-dark-bg: #1A1A1A;
+      --color-header-bg: #282828;
+      --color-border: #444;
+      --color-highlight: #A855F7;
+      --color-main-bg: #282828;
+      --color-text: #EAEAEA;
+      --color-input-bg: #1F1F1F;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --main-gap: 15px;
+    }
+    
+    #main-dashboard-view {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-dark-bg);
+      color: var(--color-text);
+      overflow: hidden;
+      transition: background 0.3s;
+      height: 100vh;
+    }
 
-/* === DOMINON CSS SCOPE (#main-dashboard-view) === */
-#main-dashboard-view {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--color-dark-bg);
-  color: var(--color-text);
-  overflow: hidden;
-  transition: background 0.3s;
-  position: fixed;
-  inset: 0;
-}
-#main-dashboard-view h1 { display: none; }
-#main-dashboard-view .container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-}
-#main-dashboard-view .container.hidden { display: none !important; }
-#main-dashboard-view .top-bar {
-  grid-column: 1 / span 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 15px;
-  background: var(--color-header-bg);
-  border-bottom: 2px solid var(--color-highlight);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
-  z-index: 10;
-  position: sticky;
-  top: 0;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-#main-dashboard-view .top-left,
-#main-dashboard-view .top-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-#main-dashboard-view .user-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 10px;
-  background: #333;
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  font-size: 0.85em;
-}
-#main-dashboard-view .user-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid var(--color-highlight);
-  object-fit: cover;
-}
-#main-dashboard-view .user-name {
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--color-text);
-}
-#main-dashboard-view .logout-btn {
-  background: #DC2626;
-  color: white;
-  border: none;
-  padding: 4px 10px;
-  cursor: pointer;
-  border-radius: 15px;
-  font-size: 0.8em;
-  transition: background 0.2s;
-}
-#main-dashboard-view .logout-btn:hover { background: #b91c1c; }
-#main-dashboard-view .box {
-  border: 1px solid var(--color-border);
-  padding: 4px 10px;
-  background: #333;
-  border-radius: 4px;
-  box-shadow: var(--shadow-light);
-  transition: background 0.3s ease;
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-#main-dashboard-view .main {
-  grid-column: 1 / -1;
-  background: var(--color-main-bg);
-  padding: var(--main-gap);
-  display: flex;
-  flex-direction: column;
-  gap: var(--main-gap);
-  height: calc(100vh - 52px);
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-#main-dashboard-view .main::-webkit-scrollbar { width: 10px; }
-#main-dashboard-view .main::-webkit-scrollbar-track { background: var(--color-input-bg); }
-#main-dashboard-view .main::-webkit-scrollbar-thumb { background: var(--color-highlight); border-radius: 5px; }
-#main-dashboard-view .main::-webkit-scrollbar-thumb:hover { background: #8b3ed9; }
-#main-dashboard-view .chart-panel {
-  background: var(--color-input-bg);
-  border: 2px solid var(--color-highlight);
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: var(--shadow-light);
-  height: 300px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-#main-dashboard-view .chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  gap: 10px;
-}
-#main-dashboard-view .chart-header h2 {
-  color: var(--color-highlight);
-  margin: 0;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 5px;
-  font-size: 1.2em;
-  flex: 1;
-}
-#main-dashboard-view .symbol-selector {
-  background: #333;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-#main-dashboard-view .symbol-selector:hover { background: #444; }
-#main-dashboard-view .symbol-selector:focus {
-  outline: none;
-  border-color: var(--color-highlight);
-}
-#main-dashboard-view .chart-iframe {
-  width: 100%;
-  height: calc(100% - 40px);
-  border: none;
-  display: block;
-}
-#main-dashboard-view .notepad-panel {
-  background: var(--color-input-bg);
-  border: 2px solid var(--color-highlight);
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: var(--shadow-light);
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  min-height: 200px;
-}
-#main-dashboard-view .notepad-header-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 8px;
-}
-#main-dashboard-view .notepad-header-row h2 {
-  color: var(--color-highlight);
-  margin: 0;
-  font-size: 1.1em;
-}
-#main-dashboard-view .notepad-tabs {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  width: 100%;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-#main-dashboard-view .tab-btn {
-  background: #333;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 4px 8px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.75em;
-  transition: all 0.2s;
-  white-space: nowrap;
-  flex: 0 1 auto;
-}
-#main-dashboard-view .tab-btn:hover { background: #444; }
-#main-dashboard-view .tab-btn.active {
-  background: var(--color-highlight);
-  color: var(--color-dark-bg);
-  font-weight: bold;
-}
-#main-dashboard-view #notepad {
-  background: #0D0D0D;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 10px;
-  border-radius: 4px;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 0.95em;
-  resize: none;
-  flex-grow: 1;
-}
-#main-dashboard-view #notepad::placeholder { color: #666; }
-#main-dashboard-view #notepad:focus {
-  outline: none;
-  border-color: var(--color-highlight);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
-}
-#main-dashboard-view .bottom-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--main-gap);
-  flex-shrink: 0;
-  height: auto;
-}
-#main-dashboard-view .calculator-panel {
-  background: var(--color-input-bg);
-  border: 2px solid var(--color-highlight);
-  border-radius: 8px;
-  padding: 8px;
-  box-shadow: var(--shadow-light);
-  display: flex;
-  flex-direction: column;
-}
-#main-dashboard-view .calculator-panel h2 {
-  color: var(--color-highlight);
-  margin: 0 0 6px 0;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 4px;
-  font-size: 1em;
-}
-#main-dashboard-view .calculator-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-}
-#main-dashboard-view .calc-display {
-  grid-column: 1 / -1;
-  background: #0D0D0D;
-  color: var(--color-highlight);
-  border: 2px solid var(--color-highlight);
-  text-align: right;
-  padding: 10px;
-  margin-bottom: 6px;
-  font-size: 1.5em;
-  font-weight: bold;
-  overflow: hidden;
-  min-height: 32px;
-  border-radius: 4px;
-  font-family: monospace;
-  word-break: break-all;
-}
-#main-dashboard-view .calc-button {
-  background: #333;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 10px 0;
-  font-size: 0.95em;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.1s;
-}
-#main-dashboard-view .calc-button:active {
-  background: #555;
-  transform: scale(0.95);
-}
-#main-dashboard-view .calc-button:hover { background: #444; }
-#main-dashboard-view .calc-button.equals {
-  grid-column: 4 / span 1;
-  grid-row: 5 / span 1;
-  background: var(--color-highlight);
-  color: var(--color-dark-bg);
-  font-weight: bold;
-  font-size: 1.1em;
-}
-#main-dashboard-view .calc-button.equals:hover { background: #8b3ed9; }
-#main-dashboard-view .calc-button.zero { grid-column: 1 / span 2; }
-#main-dashboard-view .calc-button.operator {
-  background: var(--color-highlight);
-  color: var(--color-dark-bg);
-  font-weight: bold;
-  font-size: 1.1em;
-}
-#main-dashboard-view .calc-button.operator:hover { background: #8b3ed9; }
-#main-dashboard-view .calc-button.clear {
-  background: #DC2626;
-  color: white;
-  font-weight: bold;
-}
-#main-dashboard-view .calc-button.clear:hover { background: #b91c1c; }
-#main-dashboard-view .pomodoro-panel {
-  background: var(--color-input-bg);
-  border: 2px solid var(--color-highlight);
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: var(--shadow-light);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-#main-dashboard-view .pomodoro-panel h2 {
-  color: var(--color-highlight);
-  margin: 0 0 6px 0;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 4px;
-  font-size: 1em;
-}
-#main-dashboard-view .pomodoro-display {
-  font-size: 2em;
-  font-weight: bold;
-  color: var(--color-highlight);
-  font-family: monospace;
-  letter-spacing: 2px;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  margin: 8px 0;
-}
-#main-dashboard-view .pomodoro-controls {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-#main-dashboard-view .pomo-btn {
-  background: #333;
-  color: #ddd;
-  border: 1px solid #555;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.8em;
-  transition: background 0.2s;
-  flex: 1;
-  min-width: 55px;
-}
-#main-dashboard-view .pomo-btn:hover { background: #444; }
-#main-dashboard-view .pomo-btn.active {
-  background: var(--color-highlight);
-  color: var(--color-dark-bg);
-  font-weight: bold;
-}
-#main-dashboard-view .custom-time-input {
-  background: #0D0D0D;
-  color: var(--color-highlight);
-  border: 1px solid var(--color-highlight);
-  padding: 5px 6px;
-  border-radius: 4px;
-  width: 50px;
-  font-size: 0.8em;
-  text-align: center;
-  flex: 0 0 auto;
-}
-#main-dashboard-view .custom-time-input::placeholder { color: #777; }
-#main-dashboard-view .music-container {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  position: relative;
-}
-#main-dashboard-view .theme-buttons { display: flex; gap: 8px; }
-#main-dashboard-view .theme-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #555;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-#main-dashboard-view .theme-btn:hover { transform: scale(1.15); }
-#main-dashboard-view .theme-btn.black   { background: #000000; border-color: #FFFFFF; }
-#main-dashboard-view .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
-#main-dashboard-view .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
-#main-dashboard-view .music-btn {
-  background: #333;
-  color: var(--color-text);
-  border: 1px solid #555;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.85em;
-  transition: background 0.2s;
-}
-#main-dashboard-view .music-btn:hover { background: var(--color-highlight); }
-#main-dashboard-view .song-display {
-  background: #0D0D0D;
-  border: 1px solid var(--color-border);
-  padding: 6px 12px;
-  border-radius: 4px;
-  max-width: 180px;
-  overflow: hidden;
-}
-#main-dashboard-view .song-marquee {
-  display: block;
-  color: var(--color-highlight);
-  font-size: 0.85em;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 160px;
-}
-#main-dashboard-view #loginScreen {
-  position: fixed;
-  inset: 0;
-  background: #1A1A1A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-#main-dashboard-view #loginScreen.hidden { display: none !important; }
-#main-dashboard-view .login-container {
-  background: #1F1F1F;
-  border: 3px solid #A855F7;
-  border-radius: 15px;
-  padding: 50px;
-  text-align: center;
-  box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-}
-#main-dashboard-view .google-button {
-  background: white;
-  color: #333;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1em;
-}
-#main-dashboard-view .google-button:hover { background: #f0f0f0; }
-#main-dashboard-view .google-button svg { width: 20px; height: 20px; }
+    /* ========== LOGIN SCREEN ========== */
+    #main-dashboard-view #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    #main-dashboard-view #loginScreen.hidden {
+      display: none !important;
+    }
+    #main-dashboard-view .login-container {
+      background: #1F1F1F;
+      border: 3px solid #A855F7;
+      border-radius: 15px;
+      padding: 50px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+    }
+    #main-dashboard-view .google-button {
+      background: white;
+      color: #333;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1em;
+    }
+    #main-dashboard-view .google-button:hover {
+      background: #f0f0f0;
+    }
+    #main-dashboard-view .google-button svg {
+      width: 20px;
+      height: 20px;
+    }
 
-@media (max-width: 1024px) {
-  #main-dashboard-view .top-right { gap: 6px; }
-  #main-dashboard-view .theme-btn { width: 20px; height: 20px; }
-  #main-dashboard-view .user-name { max-width: 80px; }
-}
-@media (max-width: 768px) {
-  body { overflow: auto; }
-  #main-dashboard-view .main {
-    height: auto;
-    min-height: calc(100vh - 100px);
-    overflow-y: visible;
-  }
-  #main-dashboard-view .top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 8px 10px;
-  }
-  #main-dashboard-view .top-left, #main-dashboard-view .top-right {
-    width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-  #main-dashboard-view .theme-buttons { flex-wrap: wrap; gap: 5px; }
-  #main-dashboard-view .theme-btn { width: 18px; height: 18px; }
-  #main-dashboard-view .chart-panel { height: 45vh; min-height: 220px; }
-  #main-dashboard-view .bottom-container { grid-template-columns: 1fr; }
-  #main-dashboard-view .song-display { max-width: 130px; }
-  #main-dashboard-view .song-marquee { max-width: 110px; }
-}
-@media (max-width: 480px) {
-  :root { --main-gap: 10px; }
-  #main-dashboard-view .top-bar { padding: 6px 8px; gap: 4px; }
-  #main-dashboard-view .top-right { gap: 5px; }
-  #main-dashboard-view .user-name { display: none; }
-  #main-dashboard-view .chart-panel { height: 35vh; min-height: 180px; }
-  #main-dashboard-view .tab-btn { font-size: 0.7em; padding: 3px 6px; flex-shrink: 0; }
-  #main-dashboard-view .calc-button { padding: 8px 0; font-size: 0.85em; }
-  #main-dashboard-view .calc-display { font-size: 1.2em; padding: 8px; }
-  #main-dashboard-view .pomodoro-display { font-size: 1.6em; }
-  #main-dashboard-view .theme-btn { width: 16px; height: 16px; }
-  #main-dashboard-view .song-display { max-width: 100px; }
-  #main-dashboard-view .song-marquee { max-width: 80px; font-size: 0.78em; }
-}
+    /* ========== MAIN CONTAINER ========== */
+    #main-dashboard-view .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+    #main-dashboard-view .container.hidden {
+      display: none !important;
+    }
 
-/* === DETACHED MUSIC PLAYER (Global) === */
-#musicPanel.hidden { display: none !important; }
-.music-player-panel {
-  position: fixed;
-  top: 55px;
-  right: 15px;
-  background: #1F1F1F;
-  border: 2px solid #A855F7;
-  padding: 15px;
-  border-radius: 8px;
-  z-index: 10000;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  min-width: 280px;
-}
-.player-header {
-  text-align: center;
-  margin-bottom: 12px;
-  font-size: 0.8em;
-  color: #A855F7;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-.song-info {
-  background: #0D0D0D;
-  border: 1px solid #444;
-  padding: 8px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-.player-song-title {
-  color: #EAEAEA;
-  font-size: 0.85em;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.player-controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.progress-time {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7em;
-  color: #AAA;
-  margin-bottom: 6px;
-}
-.progress-bar-container { margin-bottom: 12px; }
-.progress-bar {
-  width: 100%;
-  height: 5px;
-  accent-color: #A855F7;
-  cursor: pointer;
-  border-radius: 2px;
-}
-.volume-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-.volume-control i { color: #A855F7; font-size: 0.85em; }
-.volume-slider {
-  flex: 1;
-  height: 4px;
-  accent-color: #A855F7;
-  cursor: pointer;
-  border-radius: 2px;
-}
-.fa-spin-slow { animation: spin 4s linear infinite; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    /* ========== TOP BAR ========== */
+    #main-dashboard-view .top-bar {
+      grid-column: 1 / span 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 15px;
+      background: var(--color-header-bg);
+      border-bottom: 2px solid var(--color-highlight);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    #main-dashboard-view .top-left,
+    #main-dashboard-view .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-/* === DEEP FLOW CSS SCOPE (#deep-flow-view) === */
-#deep-flow-view, #deep-flow-view *, #deep-flow-view *::before, #deep-flow-view *::after { box-sizing: border-box; margin: 0; padding: 0; }
-#deep-flow-view {
-  height: 100vh;
-  overflow: hidden;
-  background: #000;
-  color: #c8c8d0;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 300;
-  font-size: calc(11px * var(--df-fs));
-  line-height: 1.45;
-  -webkit-font-smoothing: antialiased;
-  position: fixed;
-  inset: 0;
-}
-#deep-flow-view::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,240,255,0.012) 2px,rgba(0,240,255,0.012) 4px);
-  pointer-events: none;
-  z-index: 9999;
-}
-#deep-flow-view #ledger-body::-webkit-scrollbar { width: 5px; }
-#deep-flow-view #ledger-body::-webkit-scrollbar-track { background: #06000e; }
-#deep-flow-view #ledger-body::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 3px; }
-#deep-flow-view #hdr {
-  display: flex;
-  align-items: center;
-  height: 36px;
-  padding: 0 8px;
-  gap: 6px;
-  background: #050008;
-  border-bottom: 1px solid transparent;
-  border-image: linear-gradient(90deg,#00F0FF 0%,#FF007F 40%,#39FF14 70%,transparent 100%) 1;
-  flex-shrink: 0;
-  z-index: 10;
-}
-#deep-flow-view #status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #FF3131;
-  box-shadow: 0 0 6px #FF3131;
-  flex-shrink: 0;
-  transition: background 0.3s,box-shadow 0.3s;
-}
-#deep-flow-view #status-dot.live { background: #39FF14; box-shadow: 0 0 6px #39FF14; }
-#deep-flow-view #hdr-brand {
-  font-family: 'Orbitron',monospace;
-  font-weight: 900;
-  font-size: calc(12px * var(--df-fs));
-  color: #00F0FF;
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(0,240,255,0.6),0 0 25px rgba(0,240,255,0.3);
-  background: rgba(0,240,255,0.06);
-  padding: 2px 10px;
-  border-radius: 3px;
-  box-shadow: 0 0 15px rgba(0,240,255,0.2),inset 0 0 8px rgba(0,240,255,0.15);
-  border: 1px solid rgba(0,240,255,0.2);
-  white-space: nowrap;
-}
-#deep-flow-view .ctrl-btn {
-  background: transparent;
-  border: 1px solid rgba(0,240,255,0.25);
-  color: #00F0FF;
-  font-family: 'JetBrains Mono',monospace;
-  font-size: 8px;
-  font-weight: 700;
-  padding: 1px 5px;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  border-radius: 2px;
-  flex-shrink: 0;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-#deep-flow-view .ctrl-btn:hover { background: rgba(0,240,255,0.08); border-color: rgba(0,240,255,0.5); }
-#deep-flow-view .ctrl-btn.muted { color: #444; border-color: rgba(255,255,255,0.08); }
-#deep-flow-view #stream-toggle {
-  border-color: #00F0FF;
-  color: #00F0FF;
-  text-shadow: 0 0 4px rgba(0,240,255,0.3);
-}
-#deep-flow-view #stream-toggle.binance-active {
-  border-color: #F0B90B;
-  color: #F0B90B;
-  text-shadow: 0 0 6px rgba(240,185,11,0.5);
-  box-shadow: 0 0 8px rgba(240,185,11,0.15);
-}
-#deep-flow-view #hdr-spacer { flex: 1; }
-#deep-flow-view #hdr-conn-status {
-  color: #FF3131;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  font-size: 9px;
-  display: none;
-  text-shadow: 0 0 8px rgba(255,49,49,0.4);
-}
-#deep-flow-view #hdr-date, #deep-flow-view #hdr-clock {
-  font-size: calc(10px * var(--df-fs));
-  color: #6a6a7a;
-  white-space: nowrap;
-}
-#deep-flow-view #hdr-clock { color: #00F0FF; opacity: 0.7; }
-#deep-flow-view .ticker-chip {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  background: rgba(255,255,255,0.03);
-  border-left: 2px solid #00F0FF;
-  border-radius: 0 3px 3px 0;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-#deep-flow-view .ticker-chip.eth-chip { border-left-color: #627EEA; }
-#deep-flow-view .ticker-chip.gas-chip { border-left-color: #FF8C00; }
-#deep-flow-view .ticker-label {
-  font-size: 9px;
-  font-weight: 700;
-  color: #888;
-  letter-spacing: 0.5px;
-}
-#deep-flow-view .ticker-price {
-  font-size: calc(11px * var(--df-fs));
-  font-weight: 500;
-  color: #e0e0e8;
-}
-#deep-flow-view .ticker-change { font-size: 9px; font-weight: 400; }
-#deep-flow-view .ticker-change.pos { color: #39FF14; }
-#deep-flow-view .ticker-change.neg { color: #FF3131; }
-#deep-flow-view .gas-unit { font-size: 8px; color: #FF8C00; opacity: 0.7; }
-#deep-flow-view #dashboard { display: flex; height: calc(100vh - 36px); }
-#deep-flow-view #sidebar {
-  width: 230px;
-  min-width: 230px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px;
-  background: #06000e;
-  border-right: 1px solid rgba(0,240,255,0.08);
-  overflow-y: auto;
-  flex-shrink: 0;
-}
-#deep-flow-view .sidebar-layer { display: none; flex-direction: column; gap: 4px; flex: 1; }
-#deep-flow-view .sidebar-layer.active { display: flex; }
-#deep-flow-view .corner-block {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5px 8px;
-  background: #090112;
-  border: 1px solid rgba(0,240,255,0.06);
-  border-radius: 3px;
-  box-shadow: 0 0 8px rgba(0,240,255,0.02),inset 0 0 8px rgba(0,240,255,0.01);
-}
-#deep-flow-view .block-label {
-  font-size: 7px;
-  font-weight: 700;
-  color: #00F0FF;
-  letter-spacing: 1.2px;
-  opacity: 0.65;
-  margin-bottom: 3px;
-}
-#deep-flow-view .block-value {
-  font-size: calc(15px * var(--df-fs));
-  font-weight: 700;
-  color: #f0f0f5;
-  line-height: 1.2;
-  margin-bottom: 2px;
-}
-#deep-flow-view .block-sub { font-size: 8px; color: #6a6a7a; margin-bottom: 3px; }
-#deep-flow-view .block-sub.pos { color: #39FF14; }
-#deep-flow-view .block-sub.neg { color: #FF3131; }
-#deep-flow-view .block-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
-#deep-flow-view .block-bar-fill {
-  height: 100%;
-  border-radius: 2px;
-  transition: width 0.4s ease,background-color 0.4s ease;
-}
-#deep-flow-view .ratio-bar {
-  display: flex;
-  height: 4px;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 2px;
-}
-#deep-flow-view .ratio-buy { background: #39FF14; transition: width 0.4s ease; }
-#deep-flow-view .ratio-sell { background: #FF3131; transition: width 0.4s ease; }
-#deep-flow-view .ratio-labels { display: flex; justify-content: space-between; font-size: 7px; font-weight: 500; }
-#deep-flow-view .ratio-buy-label { color: #39FF14; }
-#deep-flow-view .ratio-sell-label { color: #FF3131; }
-#deep-flow-view .hot-list { display: flex; flex-direction: column; gap: 1px; }
-#deep-flow-view .hot-item { display: flex; align-items: center; gap: 4px; font-size: 8px; }
-#deep-flow-view .hot-rank { color: #555; width: 12px; flex-shrink: 0; text-align: right; }
-#deep-flow-view .hot-name {
-  color: #a0a0b0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#deep-flow-view .hot-gas { color: #FF8C00; flex-shrink: 0; }
-#deep-flow-view .bn-vivid-block {
-  border: 1px solid rgba(240,185,11,0.3);
-  background: linear-gradient(135deg,#090112 0%,#10081a 100%);
-}
-#deep-flow-view .bn-vivid-block .block-label {
-  color: #00F0FF;
-  opacity: 1;
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 4px rgba(0,240,255,0.4);
-}
-#deep-flow-view .bn-vivid-block .block-value {
-  color: #F0B90B;
-  font-weight: 900;
-  text-shadow: 0 0 10px rgba(240,185,11,0.6);
-  font-size: calc(16px * var(--df-fs));
-}
-#deep-flow-view #ledger-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background: #000;
-}
-#deep-flow-view #ledger-header {
-  display: flex;
-  align-items: center;
-  height: 24px;
-  padding: 0 8px;
-  background: #0a0014;
-  border-bottom: 1px solid rgba(0,240,255,0.12);
-  flex-shrink: 0;
-}
-#deep-flow-view #ledger-header>span {
-  font-size: 8px;
-  font-weight: 700;
-  color: #00F0FF;
-  letter-spacing: 1.2px;
-  opacity: 0.6;
-}
-#deep-flow-view .sort-header { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 3px; }
-#deep-flow-view .sort-header:hover { opacity: 1 !important; }
-#deep-flow-view .sort-arrow { font-size: 7px; color: #00F0FF; opacity: 0.9; }
-#deep-flow-view .col-value { width: 100px; text-align: right; transition: width 0.2s; }
-#deep-flow-view .col-asset { width: 65px; text-align: center; transition: width 0.2s; }
-#deep-flow-view .col-action { width: 100px; text-align: center; transition: width 0.2s; }
-#deep-flow-view .col-flow { flex: 1; padding-left: 8px; transition: width 0.2s; }
-#deep-flow-view .col-time { width: 60px; text-align: right; }
-#deep-flow-view .binance-mode .col-value { width: auto; flex: 1; }
-#deep-flow-view .binance-mode .col-asset { width: 85px; }
-#deep-flow-view .binance-mode .col-action { width: 115px; }
-#deep-flow-view .binance-mode .col-flow { width: 95px; flex: none; padding-left: 8px; }
-#deep-flow-view #macro-filters {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 22px;
-  padding: 0 8px;
-  background: #030008;
-  border-bottom: 1px solid rgba(0,240,255,0.04);
-  flex-shrink: 0;
-}
-#deep-flow-view .mf-btn {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: #444;
-  font-family: 'JetBrains Mono',monospace;
-  font-size: 7px;
-  font-weight: 700;
-  padding: 2px 7px;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  border-radius: 2px;
-  transition: all 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-#deep-flow-view .mf-btn:hover { color: #777; border-color: rgba(0,240,255,0.2); }
-#deep-flow-view .mf-btn.active { color: #00F0FF; border-color: rgba(0,240,255,0.4); background: rgba(0,240,255,0.06); }
-#deep-flow-view #filter-bar {
-  width: 100%;
-  height: 22px;
-  background: #030008;
-  border: none;
-  border-bottom: 1px solid rgba(0,240,255,0.06);
-  color: #c0c0cc;
-  font-family: 'JetBrains Mono',monospace;
-  font-size: calc(10px * var(--df-fs));
-  padding: 0 8px;
-  outline: none;
-  flex-shrink: 0;
-  transition: border-bottom-color 0.2s;
-}
-#deep-flow-view #filter-bar:focus { border-bottom-color: rgba(0,240,255,0.3); }
-#deep-flow-view #filter-bar::placeholder { color: #2a2a3a; letter-spacing: 1.5px; font-size: 9px; }
-#deep-flow-view #ledger-body { flex: 1; overflow-y: auto; overflow-x: hidden; contain: strict; }
-#deep-flow-view .scroll-sentinel { height: 1px; width: 100%; flex-shrink: 0; }
-#deep-flow-view .no-results {
-  padding: 30px 10px;
-  color: #333;
-  text-align: center;
-  font-size: calc(10px * var(--df-fs));
-  letter-spacing: 1px;
-}
-#deep-flow-view #ledger-body .row {
-  display: flex;
-  align-items: center;
-  height: 26px;
-  padding: 0 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.02);
-  border-left: 2px solid transparent;
-  cursor: pointer;
-}
-#deep-flow-view #ledger-body .row:hover { background: rgba(0,240,255,0.05); }
-#deep-flow-view #ledger-body .row.active { background: rgba(0,240,255,0.08); border-left
+    /* ========== USER INFO (COMPACT) ========== */
+    #main-dashboard-view .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background: #333;
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      font-size: 0.85em;
+    }
+    #main-dashboard-view .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--color-highlight);
+      object-fit: cover;
+    }
+    #main-dashboard-view .user-name {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--color-text);
+    }
+    #main-dashboard-view .logout-btn {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 15px;
+      font-size: 0.8em;
+      transition: background 0.2s;
+    }
+    #main-dashboard-view .logout-btn:hover {
+      background: #b91c1c;
+    }
+
+    /* ========== SHARED STYLES ========== */
+    #main-dashboard-view .box {
+      border: 1px solid var(--color-border);
+      padding: 4px 10px;
+      background: #333;
+      border-radius: 4px;
+      box-shadow: var(--shadow-light);
+      transition: background 0.3s ease;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+    #main-dashboard-view .main {
+      grid-column: 1 / -1;
+      background: var(--color-main-bg);
+      padding: var(--main-gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--main-gap);
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    #main-dashboard-view .main::-webkit-scrollbar {
+      width: 10px;
+    }
+    #main-dashboard-view .main::-webkit-scrollbar-track {
+      background: var(--color-input-bg);
+    }
+    #main-dashboard-view .main::-webkit-scrollbar-thumb {
+      background: var(--color-highlight);
+      border-radius: 5px;
+    }
+    #main-dashboard-view .main::-webkit-scrollbar-thumb:hover {
+      background: #8b3ed9;
+    }
+    #main-dashboard-view h1 {
+      display: none;
+    }
+    /* --- GRÁFICO TOP --- */
+    #main-dashboard-view .chart-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      height: 300px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    #main-dashboard-view .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    #main-dashboard-view .chart-header h2 {
+      color: var(--color-highlight);
+      margin: 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 5px;
+      font-size: 1.2em;
+      flex: 1;
+    }
+    #main-dashboard-view .symbol-selector {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #main-dashboard-view .symbol-selector:hover {
+      background: #444;
+    }
+    #main-dashboard-view .symbol-selector:focus {
+      outline: none;
+      border-color: var(--color-highlight);
+    }
+    #main-dashboard-view .chart-iframe {
+      width: 100%;
+      height: calc(100% - 40px);
+      border: none;
+      display: block;
+    }
+    /* --- NOTEPAD PANEL --- */
+    #main-dashboard-view .notepad-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      min-height: 200px;
+    }
+    #main-dashboard-view .notepad-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 8px;
+    }
+    #main-dashboard-view .notepad-header-row h2 {
+      color: var(--color-highlight);
+      margin: 0;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .notepad-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    #main-dashboard-view .tab-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.75em;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex: 0 1 auto;
+    }
+    #main-dashboard-view .tab-btn:hover {
+      background: #444;
+    }
+    #main-dashboard-view .tab-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    #main-dashboard-view #notepad {
+      background: #0D0D0D;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 10px;
+      border-radius: 4px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.95em;
+      resize: none;
+      flex-grow: 1;
+    }
+    #main-dashboard-view #notepad::placeholder {
+      color: #666;
+    }
+    #main-dashboard-view #notepad:focus {
+      outline: none;
+      border-color: var(--color-highlight);
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    }
+    /* --- BOTTOM CONTAINER (CALC + POMODORO) --- */
+    #main-dashboard-view .bottom-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--main-gap);
+      flex-shrink: 0;
+      height: auto;
+    }
+    /* --- CALCULADORA --- */
+    #main-dashboard-view .calculator-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+    }
+    #main-dashboard-view .calculator-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 6px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 4px;
+      font-size: 1em;
+    }
+    #main-dashboard-view .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+    #main-dashboard-view .calc-display {
+      grid-column: 1 / -1;
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 2px solid var(--color-highlight);
+      text-align: right;
+      padding: 10px;
+      margin-bottom: 6px;
+      font-size: 1.5em;
+      font-weight: bold;
+      overflow: hidden;
+      min-height: 32px;
+      border-radius: 4px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    #main-dashboard-view .calc-button {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 10px 0;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.1s;
+    }
+    #main-dashboard-view .calc-button:active {
+      background: #555;
+      transform: scale(0.95);
+    }
+    #main-dashboard-view .calc-button:hover {
+      background: #444;
+    }
+    #main-dashboard-view .calc-button.equals {
+      grid-column: 4 / span 1;
+      grid-row: 5 / span 1;
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .calc-button.equals:hover {
+      background: #8b3ed9;
+    }
+    #main-dashboard-view .calc-button.zero {
+      grid-column: 1 / span 2;
+    }
+    #main-dashboard-view .calc-button.operator {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .calc-button.operator:hover {
+      background: #8b3ed9;
+    }
+    #main-dashboard-view .calc-button.clear {
+      background: #DC2626;
+      color: white;
+      font-weight: bold;
+    }
+    #main-dashboard-view .calc-button.clear:hover {
+      background: #b91c1c;
+    }
+    /* --- POMODORO PANEL --- */
+    #main-dashboard-view .pomodoro-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #main-dashboard-view .pomodoro-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 6px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 4px;
+      font-size: 1em;
+    }
+    #main-dashboard-view .pomodoro-display {
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--color-highlight);
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      margin: 8px 0;
+    }
+    #main-dashboard-view .pomodoro-controls {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    #main-dashboard-view .pomo-btn {
+      background: #333;
+      color: #ddd;
+      border: 1px solid #555;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.8em;
+      transition: background 0.2s;
+      flex: 1;
+      min-width: 55px;
+    }
+    #main-dashboard-view .pomo-btn:hover {
+      background: #444;
+    }
+    #main-dashboard-view .pomo-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    #main-dashboard-view .custom-time-input {
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      padding: 5px 6px;
+      border-radius: 4px;
+      width: 50px;
+      font-size: 0.8em;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+    #main-dashboard-view .custom-time-input::placeholder {
+      color: #777;
+    }
+    /* --- MÚSICA Y CONTROLES --- */
+    #main-dashboard-view .music-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+    }
+    #main-dashboard-view .theme-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    #main-dashboard-view .theme-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #main-dashboard-view .theme-btn:hover {
+      transform: scale(1.15);
+    }
+    #main-dashboard-view .theme-btn.black   { background: #000000; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
+
+    /* ============================================
+       RESPONSIVE - MEDIA QUERIES (DOMINON)
+       ============================================ */
+    @media (max-width: 1024px) {
+      #main-dashboard-view .top-right {
+        gap: 6px;
+      }
+      #main-dashboard-view .theme-btn {
+        width: 20px;
+        height: 20px;
+      }
+      #main-dashboard-view .user-name {
+        max-width: 80px;
+      }
+    }
+    @media (max-width: 768px) {
+      #main-dashboard-view {
+        overflow: auto;
+      }
+      #main-dashboard-view .main {
+        height: auto;
+        min-height: calc(100vh - 100px);
+        overflow-y: visible;
+      }
+      #main-dashboard-view .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 10px;
+      }
+      #main-dashboard-view .top-left, #main-dashboard-view .top-right {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      #main-dashboard-view .theme-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      #main-dashboard-view .theme-btn {
+        width: 18px;
+        height: 18px;
+      }
+      #main-dashboard-view .chart-panel {
+        height: 45vh;
+        min-height: 220px;
+      }
+      #main-dashboard-view .bottom-container {
+        grid-template-columns: 1fr;
+      }
+      #main-dashboard-view .song-display {
+        max-width: 130px;
+      }
+      #main-dashboard-view .song-marquee {
+        max-width: 110px;
+      }
+    }
+    @media (max-width: 480px) {
+      :root { --main-gap: 10px; }
+      #main-dashboard-view .top-bar {
+        padding: 6px 8px;
+        gap: 4px;
+      }
+      #main-dashboard-view .top-right {
+        gap: 5px;
+      }
+      #main-dashboard-view .user-name {
+        display: none;
+      }
+      #main-dashboard-view .chart-panel {
+        height: 35vh;
+        min-height: 180px;
+      }
+      #main-dashboard-view .tab-btn {
+        font-size: 0.7em;
+        padding: 3px 6px;
+        flex-shrink: 0;
+      }
+      #main-dashboard-view .calc-button {
+        padding: 8px 0;
+        font-size: 0.85em;
+      }
+      #main-dashboard-view .calc-display {
+        font-size: 1.2em;
+        padding: 8px;
+      }
+      #main-dashboard-view .pomodoro-display {
+        font-size: 1.6em;
+      }
+      #main-dashboard-view .theme-btn {
+        width: 16px;
+        height: 16px;
+      }
+      #main-dashboard-view .song-display {
+        max-width: 100px;
+      }
+      #main-dashboard-view .song-marquee {
+        max-width: 80px;
+        font-size: 0.78em;
+      }
+      #main-dashboard-view .music-player-panel {
+        right: auto;
+        left: 0;
+        min-width: 240px;
+      }
+    }
+    #main-dashboard-view .music-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid #555;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: background 0.2s;
+    }
+    #main-dashboard-view .music-btn:hover {
+      background: var(--color-highlight);
+    }
+    #main-dashboard-view .fa-spin-slow { animation: spin 4s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    #main-dashboard-view .song-display {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 6px 12px;
+      border-radius: 4px;
+      max-width: 180px;
+      overflow: hidden;
+    }
+    #main-dashboard-view .song-marquee {
+      display: block;
+      color: var(--color-highlight);
+      font-size: 0.85em;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+    
+    #main-dashboard-view #musicPanel.hidden { display: none !important; }
+    #main-dashboard-view .music-player-panel {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      min-width: 280px;
+    }
+    #main-dashboard-view .player-header {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 0.8em;
+      color: var(--color-highlight);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    #main-dashboard-view .song-info {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    #main-dashboard-view .player-song-title {
+      color: var(--color-text);
+      font-size: 0.85em;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #main-dashboard-view .player-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    #main-dashboard-view .progress-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7em;
+      color: #AAA;
+      margin-bottom: 6px;
+    }
+    #main-dashboard-view .progress-bar-container {
+      margin-bottom: 12px;
+    }
+    #main-dashboard-view .progress-bar {
+      width: 100%;
+      height: 5px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    #main-dashboard-view .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    #main-dashboard-view .volume-control i {
+      color: var(--color-highlight);
+      font-size: 0.85em;
+    }
+    #main-dashboard-view .volume-slider {
+      flex: 1;
+      height: 4px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       CSS ORIGINAL DE DATOS.TXT (CON PREFIJO #deep-flow-view)
+       ============================================ */
+    #deep-flow-view :root{--fs:1}
+    #deep-flow-view *, #deep-flow-view *::before, #deep-flow-view *::after{box-sizing:border-box;margin:0;padding:0}
+    #deep-flow-view html, #deep-flow-view body{height:100%;overflow:hidden;background:#000;color:#c8c8d0;font-family:'JetBrains Mono',monospace;font-weight:300;font-size:calc(11px * var(--fs));line-height:1.45;-webkit-font-smoothing:antialiased}
+    #deep-flow-view body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,240,255,0.012) 2px,rgba(0,240,255,0.012) 4px);pointer-events:none;z-index:9999}
+    #deep-flow-view #ledger-body::-webkit-scrollbar{width:5px}
+    #deep-flow-view #ledger-body::-webkit-scrollbar-track{background:#06000e}
+    #deep-flow-view #ledger-body::-webkit-scrollbar-thumb{background:rgba(0,240,255,0.2);border-radius:3px}
+    #deep-flow-view #hdr{display:flex;align-items:center;height:36px;padding:0 8px;gap:6px;background:#050008;border-bottom:1px solid transparent;border-image:linear-gradient(90deg,#00F0FF 0%,#FF007F 40%,#39FF14 70%,transparent 100%) 1;flex-shrink:0;z-index:10}
+    #deep-flow-view #status-dot{width:6px;height:6px;border-radius:50%;background:#FF3131;box-shadow:0 0 6px #FF3131;flex-shrink:0;transition:background 0.3s,box-shadow 0.3s}
+    #deep-flow-view #status-dot.live{background:#39FF14;box-shadow:0 0 6px #39FF14}
+    #deep-flow-view #hdr-brand{font-family:'Orbitron',monospace;font-weight:900;font-size:calc(12px * var(--fs));color:#00F0FF;letter-spacing:3px;text-shadow:0 0 10px rgba(0,240,255,0.6),0 0 25px rgba(0,240,255,0.3);background:rgba(0,240,255,0.06);padding:2px 10px;border-radius:3px;box-shadow:0 0 15px rgba(0,240,255,0.2),inset 0 0 8px rgba(0,240,255,0.15);border:1px solid rgba(0,240,255,0.2);white-space:nowrap}
+    #deep-flow-view .ctrl-btn{background:transparent;border:1px solid rgba(0,240,255,0.25);color:#00F0FF;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:1px 5px;cursor:pointer;letter-spacing:0.5px;border-radius:2px;flex-shrink:0;transition:all 0.15s;white-space:nowrap}
+    #deep-flow-view .ctrl-btn:hover{background:rgba(0,240,255,0.08);border-color:rgba(0,240,255,0.5)}
+    #deep-flow-view .ctrl-btn.muted{color:#444;border-color:rgba(255,255,255,0.08)}
+    #deep-flow-view #stream-toggle{border-color:#00F0FF;color:#00F0FF;text-shadow:0 0 4px rgba(0,240,255,0.3)}
+    #deep-flow-view #stream-toggle.binance-active{border-color:#F0B90B;color:#F0B90B;text-shadow:0 0 6px rgba(240,185,11,0.5);box-shadow:0 0 8px rgba(240,185,11,0.15)}
+    #deep-flow-view #hdr-spacer{flex:1}
+    #deep-flow-view #hdr-conn-status{color:#FF3131;font-weight:700;letter-spacing:1.5px;font-size:9px;display:none;text-shadow:0 0 8px rgba(255,49,49,0.4)}
+    #deep-flow-view #hdr-date, #deep-flow-view #hdr-clock{font-size:calc(10px * var(--fs));color:#6a6a7a;white-space:nowrap}
+    #deep-flow-view #hdr-clock{color:#00F0FF;opacity:0.7}
+    #deep-flow-view .ticker-chip{display:flex;align-items:center;gap:5px;padding:2px 7px;background:rgba(255,255,255,0.03);border-left:2px solid #00F0FF;border-radius:0 3px 3px 0;white-space:nowrap;flex-shrink:0}
+    #deep-flow-view .ticker-chip.eth-chip{border-left-color:#627EEA}
+    #deep-flow-view .ticker-chip.gas-chip{border-left-color:#FF8C00}
+    #deep-flow-view .ticker-label{font-size:9px;font-weight:700;color:#888;letter-spacing:0.5px}
+    #deep-flow-view .ticker-price{font-size:calc(11px * var(--fs));font-weight:500;color:#e0e0e8}
+    #deep-flow-view .ticker-change{font-size:9px;font-weight:400}
+    #deep-flow-view .ticker-change.pos{color:#39FF14}
+    #deep-flow-view .ticker-change.neg{color:#FF3131}
+    #deep-flow-view .gas-unit{font-size:8px;color:#FF8C00;opacity:0.7}
+    #deep-flow-view #dashboard{display:flex;height:calc(100vh - 36px)}
+    #deep-flow-view #sidebar{width:230px;min-width:230px;display:flex;flex-direction:column;gap:4px;padding:4px;background:#06000e;border-right:1px solid rgba(0,240,255,0.08);overflow-y:auto;flex-shrink:0}
+    #deep-flow-view .sidebar-layer{display:none;flex-direction:column;gap:4px;flex:1}
+    #deep-flow-view .sidebar-layer.active{display:flex}
+    #deep-flow-view .corner-block{flex:1;display:flex;flex-direction:column;justify-content:center;padding:5px 8px;background:#090112;border:1px solid rgba(0,240,255,0.06);border-radius:3px;box-shadow:0 0 8px rgba(0,240,255,0.02),inset 0 0 8px rgba(0,240,255,0.01)}
+    #deep-flow-view .block-label{font-size:7px;font-weight:700;color:#00F0FF;letter-spacing:1.2px;opacity:0.65;margin-bottom:3px}
+    #deep-flow-view .block-value{font-size:calc(15px * var(--fs));font-weight:700;color:#f0f0f5;line-height:1.2;margin-bottom:2px}
+    #deep-flow-view .block-sub{font-size:8px;color:#6a6a7a;margin-bottom:3px}
+    #deep-flow-view .block-sub.pos{color:#39FF14}
+    #deep-flow-view .block-sub.neg{color:#FF3131}
+    #deep-flow-view .block-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+    #deep-flow-view .block-bar-fill{height:100%;border-radius:2px;transition:width 0.4s ease,background-color 0.4s ease}
+    #deep-flow-view .ratio-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:2px}
+    #deep-flow-view .ratio-buy{background:#39FF14;transition:width 0.4s ease}
+    #deep-flow-view .ratio-sell{background:#FF3131;transition:width 0.4s ease}
+    #deep-flow-view .ratio-labels{display:flex;justify-content:space-between;font-size:7px;font-weight:500}
+    #deep-flow-view .ratio-buy-label{color:#39FF14}
+    #deep-flow-view .ratio-sell-label{color:#FF3131}
+    #deep-flow-view .hot-list{display:flex;flex-direction:column;gap:1px}
+    #deep-flow-view .hot-item{display:flex;align-items:center;gap:4px;font-size:8px}
+    #deep-flow-view .hot-rank{color:#555;width:12px;flex-shrink:0;text-align:right}
+    #deep-flow-view .hot-name{color:#a0a0b0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    #deep-flow-view .hot-gas{color:#FF8C00;flex-shrink:0}
+    #deep-flow-view .bn-vivid-block{border:1px solid rgba(240,185,11,0.3);background:linear-gradient(135deg,#090112 0%,#10081a 100%)}
+    #deep-flow-view .bn-vivid-block .block-label{color:#00F0FF;opacity:1;letter-spacing:1.5px;text-shadow:0 0 4px rgba(0,240,255,0.4)}
+    #deep-flow-view .bn-vivid-block .block-value{color:#F0B90B;font-weight:900;text-shadow:0 0 10px rgba(240,185,11,0.6);font-size:calc(16px * var(--fs))}
+    #deep-flow-view #ledger-section{flex:1;display:flex;flex-direction:column;min-width:0;background:#000}
+    #deep-flow-view #ledger-header{display:flex;align-items:center;height:24px;padding:0 8px;background:#0a0014;border-bottom:1px solid rgba(0,240,255,0.12);flex-shrink:0}
+    #deep-flow-view #ledger-header>span{font-size:8px;font-weight:700;color:#00F0FF;letter-spacing:1.2px;opacity:0.6}
+    #deep-flow-view .sort-header{cursor:pointer;user-select:none;display:flex;align-items:center;gap:3px}
+    #deep-flow-view .sort-header:hover{opacity:1!important}
+    #deep-flow-view .sort-arrow{font-size:7px;color:#00F0FF;opacity:0.9}
+    #deep-flow-view .col-value{width:100px;text-align:right;transition:width 0.2s}
+    #deep-flow-view .col-asset{width:65px;text-align:center;transition:width 0.2s}
+    #deep-flow-view .col-action{width:100px;text-align:center;transition:width 0.2s}
+    #deep-flow-view .col-flow{flex:1;padding-left:8px;transition:width 0.2s}
+    #deep-flow-view .col-time{width:60px;text-align:right}
+    #deep-flow-view .binance-mode .col-value{width:auto;flex:1}
+    #deep-flow-view .binance-mode .col-asset{width:85px}
+    #deep-flow-view .binance-mode .col-action{width:115px}
+    #deep-flow-view .binance-mode .col-flow{width:95px;flex:none;padding-left:8px}
+    #deep-flow-view #macro-filters{display:flex;align-items:center;gap:4px;height:22px;padding:0 8px;background:#030008;border-bottom:1px solid rgba(0,240,255,0.04);flex-shrink:0}
+    #deep-flow-view .mf-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#444;font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:700;padding:2px 7px;cursor:pointer;letter-spacing:0.5px;border-radius:2px;transition:all 0.15s;white-space:nowrap;flex-shrink:0}
+    #deep-flow-view .mf-btn:hover{color:#777;border-color:rgba(0,240,255,0.2)}
+    #deep-flow-view .mf-btn.active{color:#00F0FF;border-color:rgba(0,240,255,0.4);background:rgba(0,240,255,0.06)}
+    #deep-flow-view #filter-bar{width:100%;height:22px;background:#030008;border:none;border-bottom:1px solid rgba(0,240,255,0.06);color:#c0c0cc;font-family:'JetBrains Mono',monospace;font-size:calc(10px * var(--fs));padding:0 8px;outline:none;flex-shrink:0;transition:border-bottom-color 0.2s}
+    #deep-flow-view #filter-bar:focus{border-bottom-color:rgba(0,240,255,0.3)}
+    #deep-flow-view #filter-bar::placeholder{color:#2a2a3a;letter-spacing:1.5px;font-size:9px}
+    #deep-flow-view #ledger-body{flex:1;overflow-y:auto;overflow-x:hidden;contain:strict}
+    #deep-flow-view .scroll-sentinel{height:1px;width:100%;flex-shrink:0}
+    #deep-flow-view .no-results{padding:30px 10px;color:#333;text-align:center;font-size:calc(10px * var(--fs));letter-spacing:1px}
+    #deep-flow-view #ledger-body .row{display:flex;align-items:center;height:26px;padding:0 8px;border-bottom:1px solid rgba(255,255,255,0.02);border-left:2px solid transparent;cursor:pointer}
+    #deep-flow-view #ledger-body .row:hover{background:rgba(0,240,255,0.05)}
+    #deep-flow-view #ledger-body .row.active{background:rgba(0,240,255,0.08);border-left-color:#00F0FF}
+    #deep-flow-view #ledger-body .row.live-new{border-left-color:#39FF14}
+    #deep-flow-view #ledger-body .row.live-new.anomaly{border-left-color:#FF007F}
+    #deep-flow-view #ledger-body .rv{text-align:right;width:100px;font-weight:500;color:#e0e0e8;flex-shrink:0;transition:width 0.2s,flex 0.2s}
+    #deep-flow-view #ledger-body .rv.anomaly{color:#FF007F;text-shadow:0 0 6px rgba(255,0,127,0.3)}
+    #deep-flow-view .binance-mode .rv{width:auto;flex:1}
+    #deep-flow-view .token-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 4px;border-radius:2px;background:rgba(255,255,255,0.04);white-space:nowrap}
+    #deep-flow-view .token-icon{width:13px;height:13px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#000;flex-shrink:0}
+    #deep-flow-view .token-ticker{font-size:calc(9px * var(--fs));font-weight:500;color:#d0d0d8}
+    #deep-flow-view .action-tag{display:inline-block;padding:0 4px;border-left:2px solid;font-size:8px;font-weight:500;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:94px;line-height:1.6}
+    #deep-flow-view #ledger-body .rf{flex:1;padding-left:8px;color:#5a5a6e;font-size:calc(10px * var(--fs));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:width 0.2s,flex 0.2s}
+    #deep-flow-view .binance-mode .rf{width:95px;flex:none}
+    #deep-flow-view #ledger-body .rt{text-align:right;width:60px;color:#7a7a8e;font-size:calc(10px * var(--fs));flex-shrink:0}
+    #deep-flow-view .submenu{display:none;margin-left:14px;padding:6px 10px;background:rgba(9,1,18,0.9);border-left:2px solid rgba(0,240,255,0.2);border-bottom:1px solid rgba(0,240,255,0.06)}
+    #deep-flow-view .submenu.open{display:block}
+    #deep-flow-view .sub-row{display:flex;align-items:flex-start;gap:8px;padding:2px 0;font-size:calc(10px * var(--fs))}
+    #deep-flow-view .sub-label{color:#5a5a6e;min-width:72px;flex-shrink:0;padding-top:1px}
+    #deep-flow-view .sub-val{color:#c0c0cc;word-break:break-word;line-height:1.5}
+    #deep-flow-view .sub-val.deep-meta{color:#d0d0dd;font-size:calc(9.5px * var(--fs))}
+    #deep-flow-view .hash-clickable{color:#00F0FF;cursor:pointer;text-decoration:none;user-select:none}
+    #deep-flow-view .hash-clickable:hover{text-decoration:underline}
+    #deep-flow-view .sub-analysis{margin-top:5px;padding:5px 8px;border-left:2px solid rgba(255,215,0,0.5);background:rgba(255,215,0,0.025);border-radius:0 2px 2px 0}
+    #deep-flow-view .sub-analysis-label{font-size:8px;font-weight:700;color:#FFD700;letter-spacing:0.8px;margin-bottom:3px;opacity:0.85}
+    #deep-flow-view .sub-analysis-text{font-size:calc(9.5px * var(--fs));line-height:1.55;color:#9a9aaa;font-weight:300}
+    #deep-flow-view .loading{opacity:0.3;animation:pulse 1.5s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.6}}
+    @media(max-width:700px){#deep-flow-view #sidebar{display:none}}
+
+    /* ============================================
+       BOTÓN DE INTERCAMBIO DE VISTAS
+       ============================================ */
+    .view-switch-btn {
+      background: var(--color-highlight);
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.2s;
+      margin-left: 10px;
+    }
+    .view-switch-btn:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+    #deep-flow-view .view-switch-btn-df {
+      background: #00F0FF;
+      color: #000;
+      border: none;
+      padding: 1px 8px;
+      border-radius: 2px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 8px;
+      margin-left: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #deep-flow-view .view-switch-btn-df:hover {
+      background: #39FF14;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       VISTA 1: DOMINON DASHBOARD (Cyberpunk Violeta)
+       ============================================ -->
+  <div id="main-dashboard-view">
+    <div id="loginScreen">
+      <div class="login-container">
+        <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
+        <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
+        <button class="google-button" id="googleSignInBtn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Iniciar sesión con Google
+        </button>
+      </div>
+    </div>
+
+    <div class="container hidden" id="mainApp">
+      <div class="top-bar">
+        <div class="top-left">
+          <div class="box" id="fecha-hora">Cargando...</div>
+          <button class="view-switch-btn" onclick="switchView()" title="Cambiar a Deep Flow">🔄 DEEP FLOW</button>
+        </div>
+        <div class="top-right">
+          <div class="user-info" id="userInfo">
+            <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
+            <span class="user-name" id="userName"></span>
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+          <div class="theme-buttons">
+            <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
+            <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
+            <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Morado"></button>
+          </div>
+          <div class="music-container">
+            <div class="song-display">
+              <span id="songTitle" class="song-marquee">Listo para Play</span>
+            </div>
+            <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
+              <i class="fa-solid fa-music"></i>
+            </button>
+            
+            <div id="musicPanel" class="hidden music-player-panel">
+              <div class="player-header">REPRODUCTOR</div>
+              
+              <div class="player-controls">
+                <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+                <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+                <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+              </div>
+              
+              <div class="progress-time">
+                <span id="current-time">0:00</span>
+                <span id="duration-time">0:00</span>
+              </div>
+              
+              <div class="progress-bar-container">
+                <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+              </div>
+              
+              <div class="volume-control">
+                <i class="fa-solid fa-volume-low"></i>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+                <i class="fa-solid fa-volume-high"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main class="main">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <h2>Mini-Gráfico</h2>
+            <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
+              <option value="BINANCE:USDTARS">USDT/ARS</option>
+              <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
+              <option value="FOREXCOM:EURUSD">EUR/USD</option>
+              <option value="FOREXCOM:GBPUSD">GBP/USD</option>
+              <option value="FOREXCOM:JPYUSD">JPY/USD</option>
+              <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
+              <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
+              <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
+              <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
+              <option value="FOREXCOM:NGAS">Gas Natural</option>
+            </select>
+          </div>
+          <iframe class="chart-iframe" id="tradingViewChart"
+            src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
+            frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <div class="notepad-panel">
+          <div class="notepad-header-row">
+            <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
+            <div class="notepad-tabs" id="notepad-tabs">
+            </div>
+          </div>
+          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+        </div>
+
+        <div class="bottom-container">
+          <div class="calculator-panel">
+            <h2>Calculadora</h2>
+            <div id="display" class="calc-display">0</div>
+            <div class="calculator-grid">
+              <button class="calc-button clear" onclick="clearDisplay()">C</button>
+              <button class="calc-button" onclick="backspace()">⌫</button>
+              <button class="calc-button operator" onclick="appendOperator('/')">/</button>
+              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
+              <button class="calc-button" onclick="appendNumber('7')">7</button>
+              <button class="calc-button" onclick="appendNumber('8')">8</button>
+              <button class="calc-button" onclick="appendNumber('9')">9</button>
+              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+              <button class="calc-button" onclick="appendNumber('4')">4</button>
+              <button class="calc-button" onclick="appendNumber('5')">5</button>
+              <button class="calc-button" onclick="appendNumber('6')">6</button>
+              <button class="calc-button operator" onclick="appendOperator('+')">+</button>
+              <button class="calc-button" onclick="appendNumber('1')">1</button>
+              <button class="calc-button" onclick="appendNumber('2')">2</button>
+              <button class="calc-button" onclick="appendNumber('3')">3</button>
+              <button class="calc-button equals" onclick="calculate()">=</button>
+              <button class="calc-button zero" onclick="appendNumber('0')">0</button>
+              <button class="calc-button" onclick="appendNumber('.')">.</button>
+            </div>
+          </div>
+
+          <div class="pomodoro-panel">
+            <h2>Pomodoro</h2>
+            <div class="pomodoro-display" id="pomo-display">25:00</div>
+            <div class="pomodoro-controls">
+              <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
+              <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
+              <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
+              <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================
+       VISTA 2: DEEP FLOW (Terminal Crypto)
+       ============================================ -->
+  <div id="deep-flow-view" class="hidden-view">
+    <header id="hdr">
+      <span id="status-dot"></span>
+      <span id="hdr-brand">DEEP FLOW</span>
+      <button class="view-switch-btn-df" onclick="switchView()" title="Cambiar a Dominon">🔄 DOMINON</button>
+      <button class="ctrl-btn" id="font-dec">A-</button>
+      <button class="ctrl-btn" id="font-inc">A+</button>
+      <button class="ctrl-btn" id="sound-toggle">SND ON</button>
+      <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
+      <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
+      <span id="hdr-spacer"></span>
+      <span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
+      <span id="hdr-date"></span>
+      <span id="hdr-clock"></span>
+      <div class="ticker-chip">
+        <span class="ticker-label">BTC</span>
+        <span class="ticker-price" id="btc-price">---</span>
+        <span class="ticker-change" id="btc-change"></span>
+      </div>
+      <div class="ticker-chip eth-chip">
+        <span class="ticker-label">ETH</span>
+        <span class="ticker-price" id="eth-price">---</span>
+        <span class="ticker-change" id="eth-change"></span>
+      </div>
+      <div class="ticker-chip gas-chip">
+        <span class="ticker-label">GAS</span>
+        <span class="ticker-price" id="gas-value">--</span>
+        <span class="gas-unit">Gwei</span>
+      </div>
+    </header>
+    
+    <main id="dashboard">
+      <aside id="sidebar">
+        <div id="sidebar-onchain" class="sidebar-layer active">
+          <div class="corner-block">
+            <div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div>
+            <div class="block-value loading" id="btc-dom-value">--%</div>
+            <div class="block-bar">
+              <div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div>
+            </div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div>
+            <div class="block-value loading" id="mcap-value">---</div>
+            <div class="block-sub" id="mcap-change"></div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div>
+            <div class="block-value" id="vol-value">0</div>
+            <div class="block-bar">
+              <div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div>
+            </div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div>
+            <div class="block-value" id="ssr-value">--%</div>
+            <div class="block-bar">
+              <div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div>
+            </div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div>
+            <div class="ratio-bar">
+              <div class="ratio-buy" id="ratio-buy" style="width:50%;"></div>
+              <div class="ratio-sell" id="ratio-sell" style="width:50%;"></div>
+            </div>
+            <div class="ratio-labels">
+              <span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span>
+              <span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span>
+            </div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div>
+            <div class="hot-list" id="hot-list"></div>
+          </div>
+        </div>
+        
+        <div id="sidebar-binance" class="sidebar-layer">
+          <div class="corner-block">
+            <div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div>
+            <div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div>
+            <div class="block-sub" id="bn-volume-change"></div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div>
+            <div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div>
+            <div class="block-bar" style="margin-top:4px;">
+              <div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div>
+            </div>
+            <div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div>
+          </div>
+          <div class="corner-block">
+            <div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div>
+            <div class="hot-list" id="bn-pairs-list"></div>
+          </div>
+          <div class="corner-block bn-vivid-block">
+            <div class="block-label">FUTURES OPEN INT.</div>
+            <div class="block-value" id="bn-oi-value">$18.4B</div>
+          </div>
+          <div class="corner-block bn-vivid-block">
+            <div class="block-label">TOP FUTURES PAIR</div>
+            <div class="block-value">BTC/USDT</div>
+          </div>
+          <div class="corner-block bn-vivid-block">
+            <div class="block-label">BTC DOMINANCE</div>
+            <div class="block-value" id="btc-dom-value-2">52.4%</div>
+          </div>
+        </div>
+      </aside>
+      
+      <section id="ledger-section">
+        <div id="ledger-header">
+          <span class="col-value sort-header" id="sort-value" data-sort="value">
+            <span data-i18n="value">VALUE (USD)</span>
+            <span class="sort-arrow" id="arrow-value">&#9660;</span>
+          </span>
+          <span class="col-asset" data-i18n="asset">ASSET</span>
+          <span class="col-action" data-i18n="action">ACTION</span>
+          <span class="col-flow" data-i18n="fromTo">FROM / TO</span>
+          <span class="col-time sort-header" id="sort-time" data-sort="timestamp">
+            <span data-i18n="time">TIME</span>
+            <span class="sort-arrow" id="arrow-time"></span>
+          </span>
+        </div>
+        
+        <div id="macro-filters">
+          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button>
+          <button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button>
+          <button class="mf-btn" data-mf="filter3" data-i18n="swapsOnly">SWAPS ONLY</button>
+          <button class="mf-btn" data-mf="filter4" data-i18n="yieldOnly">YIELD ONLY</button>
+        </div>
+        
+        <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
+        
+        <div id="ledger-body">
+          <div class="scroll-sentinel" id="scroll-sentinel"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================================
+       REPRODUCTOR YOUTUBE (FUERA DE VISTAS MUTABLES)
+       ============================================ -->
+  <div id="youtube-player"></div>
+
+  <!-- ============================================
+       SCRIPTS DE DOMINON (INTACTOS)
+       ============================================ -->
+  <script>
+    // Variables globales para el reproductor
+    window.youtubePlayerReady = false;
+    window.player = null;
+    window.playerCommands = [];
+    var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+
+    window.executeWhenPlayerReady = function(command) {
+      if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
+        window.player[command.fn].apply(window.player, command.args);
+      } else {
+        window.playerCommands.push(command);
+      }
+    };
+
+    function onYouTubeIframeAPIReady() {
+      var savedVolume = localStorage.getItem('danifu_volume') || 50;
+      window.player = new YT.Player('youtube-player', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          'listType': 'playlist',
+          'list': playlistId,
+          'autoplay': 0,
+          'controls': 0,
+          'fs': 0,
+          'index': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+          'onError': function(e) {
+             console.error('Error del player:', e.data);
+          }
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      var savedVolume = localStorage.getItem('danifu_volume') || 50;
+      event.target.setVolume(parseInt(savedVolume));
+      var volSlider = document.getElementById('volumeSlider');
+      if (volSlider) volSlider.value = savedVolume;
+      window.youtubePlayerReady = true;
+      var plist = window.player.getPlaylist();
+      if (!plist || plist.length === 0) {
+        window.player.cuePlaylist({
+          listType: 'playlist',
+          list: playlistId,
+          index: 0,
+          startSeconds: 0
+        });
+      }
+      setTimeout(updateSongDisplay, 1000);
+      while (window.playerCommands.length > 0) {
+        var cmd = window.playerCommands.shift();
+        if (window.player && window.player[cmd.fn]) {
+          window.player[cmd.fn].apply(window.player, cmd.args);
+        }
+      }
+      if (window.loadSavedMusic) {
+        window.loadSavedMusic();
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      var playBtn = document.getElementById('playPauseBtn');
+      if (event.data === YT.PlayerState.PLAYING) {
+        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        updateSongDisplay();
+      } else {
+        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      }
+    }
+
+    function updateSongDisplay() {
+      if (!window.player || !window.player.getVideoData) return;
+      try {
+        var videoData = window.player.getVideoData();
+        var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
+        if (_elSongTitle) _elSongTitle.textContent = title;
+      } catch (error) {}
+    }
+
+    var _elFechaHora  = document.getElementById('fecha-hora');
+    var _elCurrentTime = document.getElementById('current-time');
+    var _elDuration    = document.getElementById('duration-time');
+    var _elProgress    = document.getElementById('progressBar');
+    var _elSongTitle   = document.getElementById('songTitle');
+    var _masterTick    = 0;
+
+    setInterval(function() {
+      _masterTick++;
+      if (_masterTick % 2 === 0) {
+        var d = new Date();
+        if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+      }
+      if (window.player && window.player.getCurrentTime) {
+        try {
+          var cur = Math.floor(window.player.getCurrentTime());
+          var dur = Math.floor(window.player.getDuration());
+          if (_elCurrentTime) _elCurrentTime.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+          if (dur > 0) {
+            if (_elDuration) _elDuration.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+            if (_elProgress) _elProgress.value = (cur / dur) * 100;
+          }
+        } catch(e) {}
+      }
+      if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
+        try {
+          var videoData = window.player.getVideoData();
+          var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
+          if (_elSongTitle) _elSongTitle.textContent = title;
+        } catch(e) {}
+      }
+      if (_masterTick >= 600) _masterTick = 0;
+    }, 500);
+
+    window.playPauseVideo = function() {
+      if (window.youtubePlayerReady && window.player) {
+        var state = window.player.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+          window.player.pauseVideo();
+        } else {
+          window.player.playVideo();
+        }
+      }
+    };
+
+    window.nextVideo = function() {
+      if (!window.youtubePlayerReady || !window.player) return;
+      try {
+        window.player.nextVideo();
+        setTimeout(updateSongDisplay, 1000);
+      } catch(err) {
+        console.error('Error en nextVideo:', err);
+      }
+    };
+
+    window.prevVideo = function() {
+      if (!window.youtubePlayerReady || !window.player) return;
+      try {
+        window.player.previousVideo();
+        setTimeout(updateSongDisplay, 1000);
+      } catch(err) {
+        console.error('Error en prevVideo:', err);
+      }
+    };
+
+    window.seekVideo = function(time) {
+      if (window.youtubePlayerReady && window.player) {
+        window.player.seekTo(time, true);
+      }
+    };
+
+    window.setVideoVolume = function(volume) {
+      if (window.youtubePlayerReady && window.player) {
+        window.player.setVolume(volume);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var playPauseBtn = document.getElementById('playPauseBtn');
+      var nextBtn = document.getElementById('nextBtn');
+      var prevBtn = document.getElementById('prevBtn');
+      var volumeSlider = document.getElementById('volumeSlider');
+      var progressBar = document.getElementById('progressBar');
+      var toggleBtn = document.getElementById('toggleMusicPanel');
+      var musicPanel = document.getElementById('musicPanel');
+
+      if (toggleBtn) {
+        toggleBtn.onclick = function() {
+          musicPanel.classList.toggle('hidden');
+        };
+      }
+      if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', window.playPauseVideo);
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', window.nextVideo);
+      }
+      if (prevBtn) {
+        prevBtn.addEventListener('click', window.prevVideo);
+      }
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', function(e) {
+          var volume = parseInt(e.target.value);
+          window.setVideoVolume(volume);
+          localStorage.setItem('danifu_volume', volume);
+        });
+      }
+      if (progressBar) {
+        progressBar.addEventListener('input', function(e) {
+          if (!window.player || !window.player.getDuration) return;
+          var duration = window.player.getDuration();
+          if (duration) {
+            var newTime = (parseInt(e.target.value) / 100) * duration;
+            window.seekVideo(newTime);
+          }
+        });
+      }
+    });
+  </script>
+
+  <!-- ============================================
+       SCRIPTS DE DEEP FLOW (INTACTOS)
+       ============================================ -->
+  <script>
+    const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
+    const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
+    const IT=[{name:'DeFi Liquidation',short:'LIQUIDATION',color:'#FF3131',anomalous:true},{name:'Staking Lock',short:'STAKE LOCK',color:'#00F0FF',anomalous:false},{name:'Whale Outflow',short:'OUTFLOW',color:'#FF007F',anomalous:true},{name:'Whale Inflow',short:'INFLOW',color:'#39FF14',anomalous:false},{name:'DEX Swap',short:'DEX SWAP',color:'#FFD700',anomalous:false},{name:'Bridge Transfer',short:'BRIDGE',color:'#8A2BE2',anomalous:false},{name:'OTC Settlement',short:'OTC DEAL',color:'#FF8C00',anomalous:false},{name:'Treasury Movement',short:'TREASURY',color:'#00CED1',anomalous:false},{name:'Yield Deposit',short:'YIELD DEP',color:'#7FFF00',anomalous:false},{name:'Margin Repayment',short:'MARGIN REP',color:'#DC143C',anomalous:false}];
+    const BP=[{sym:'BTC/USDT',base:'BTC',price:104500},{sym:'ETH/USDT',base:'ETH',price:3850},{sym:'SOL/USDT',base:'SOL',price:178},{sym:'BNB/USDT',base:'BNB',price:615},{sym:'XRP/USDT',base:'XRP',price:2.45}];
+    const BA=[{name:'LARGE SPOT BUY',short:'SPOT BUY',color:'#39FF14',isBuy:true,isFutures:false},{name:'LARGE SPOT SELL',short:'SPOT SELL',color:'#FF3131',isBuy:false,isFutures:false},{name:'FUTURES LONG OPEN',short:'FUT LONG',color:'#00F0FF',isBuy:true,isFutures:true},{name:'FUTURES SHORT OPEN',short:'FUT SHORT',color:'#FF007F',isBuy:false,isFutures:true}];
+    const AP={BTC:104500,ETH:3800,USDT:1,USDC:1,DAI:1,STETH:3800,WBTC:104000,LINK:18,UNI:14,AAVE:260,CRV:0.55,MKR:1800,COMP:55,SNX:3.2,LDO:2.1};
+    const DV=['Uniswap V3','Curve Finance','1inch','SushiSwap','Balancer V2'],YV=['Aave V3','Compound V3','Curve 3pool','Lido Staking','MakerDAO DSR'],VL=['Coinbase Custody','Binance Cold Wallet','Gemini Deep Cold','Kraken Reserve','BitGo Vault'];
+    const _cw=[];(function(){let s=0;for(const t of TOKENS){s+=t.weight;_cw.push(s);}_cw._t=s;})();
+    const BATCH_SIZE=50,MAX_VISIBLE=150,INITIAL_POOL=300,POLL_INTERVAL=45000,SONAR_THRESHOLD=500000000,FONT_STEPS=[0.85,0.95,1.0,1.15,1.3];
+    const MACRO_CONFIGS={onchain:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'swaps',i18n:'swapsOnly'},{key:'yield',i18n:'yieldOnly'}],binance:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'spotbuy',i18n:'spotBuyOnly'},{key:'futures',i18n:'futuresOnly'}]};
+    const FALLBACK={bitcoin:{usd:104500,usd_24h_change:1.52},ethereum:{usd:3850,usd_24h_change:-0.83},data:{total_market_cap:{usd:3620000000000},market_cap_change_percentage_24h_usd:1.24,market_cap_percentage:{btc:52.4}}};
+
+    const STATE={lang:'en',sortField:'value',sortDir:'desc',filterText:'',macroFilter:'all',dataStream:'onchain',poolOnchain:[],poolBinance:[],pool:[],visible:[],renderedCount:0,nextIdOnchain:0,nextIdBinance:0,openSubmenuRow:null,openSubmenuEl:null,apiAlive:false,btcPrice:104500,ethPrice:3850,lastKnownBtc:104500,lastKnownEth:3850,btcChange:1.52,ethChange:-0.83,btcDom:52.4,totalMcap:3620000000000,mcapChange:1.24,gasPrice:32,volScore:0,priceHistory:[{price:104500,ts:Date.now()}],ssr:4.5,observer:null,fontStepIndex:2,soundEnabled:true,bnVolume:32e9,bnPor:540000};
+
+    let _audioCtx=null;
+    function getAudioCtx(){if(!_audioCtx){try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(_audioCtx.state==='suspended')try{_audioCtx.resume()}catch(e){}return _audioCtx}
+    function playClickSound(){if(!STATE.soundEnabled)return;const ctx=getAudioCtx();if(!ctx)return;try{const t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.setValueAtTime(1400,t);o.frequency.exponentialRampToValueAtTime(900,t+0.04);g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.06);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+0.06)}catch(e){}}
+    function playRadarPulse(){if(!STATE.soundEnabled)return;const ctx=getAudioCtx();if(!ctx)return;try{const t=ctx.currentTime,o1=ctx.createOscillator(),g1=ctx.createGain();o1.type='sine';o1.frequency.setValueAtTime(180,t);o1.frequency.exponentialRampToValueAtTime(70,t+0.5);g1.gain.setValueAtTime(0.12,t);g1.gain.exponentialRampToValueAtTime(0.001,t+0.55);o1.connect(g1);g1.connect(ctx.destination);o1.start(t);o1.stop(t+0.55);const o2=ctx.createOscillator(),g2=ctx.createGain();o2.type='sine';o2.frequency.setValueAtTime(480,t);o2.frequency.exponentialRampToValueAtTime(220,t+0.25);g2.gain.setValueAtTime(0.04,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.3);o2.connect(g2);g2.connect(ctx.destination);o2.start(t);o2.stop(t+0.3)}catch(e){}}
+
+    function createRNG(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return function(){s=(s*16807)%2147483647;return(s-1)/2147483646}}
+    function pickToken(rng){const r=rng()*_cw._t;let l=0,h=_cw.length-1;while(l<h){const m=(l+h)>>1;_cw[m]<r?l=m+1:h=m}return TOKENS[l]}
+    function pickNonStable(rng){const ns=TOKENS.filter(t=>!isStable(t.sym));return ns[Math.floor(rng()*ns.length)]}
+    function isStable(s){return s==='USDT'||s==='USDC'||s==='DAI'}
+    function formatUSD(v){return v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+(v/1e3).toFixed(1)+'K':'$'+v.toFixed(0)}
+    function formatMcap(v){return v>=1e12?'$'+(v/1e12).toFixed(2)+'T':v>=1e9?'$'+(v/1e9).toFixed(2)+'B':'$'+(v/1e6).toFixed(1)+'M'}
+    function formatTokenAmt(a){return a>=1000?Math.round(a).toLocaleString('en-US'):a>=1?a.toFixed(2):a>=0.01?a.toFixed(4):a.toFixed(6)}
+    function formatTime(ts){const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(d/3600000),dy=Math.floor(d/86400000);if(m<60)return m+'m ago';if(h<24)return h+'h ago';if(dy<7)return dy+'d ago';const dt=new Date(ts),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return mo[dt.getMonth()]+' '+dt.getDate()}
+    function abbrevHash(h){return h.slice(0,8)+'...'+h.slice(-4)}
+    function randomHash(rng){const x='0123456789abcdef';let h='0x';for(let i=0;i<40;i++)h+=x[Math.floor(rng()*16)];return h}
+    function randomTxHash(rng){const x='0123456789abcdef';let h='0x';for(let i=0;i<64;i++)h+=x[Math.floor(rng()*16)];return h}
+    function randomOrderId(rng){const x='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';let h='';for(let i=0;i<24;i++)h+=x[Math.floor(rng()*x.length)];return h}
+    async function copyToClipboard(txt){if(navigator.clipboard&&window.isSecureContext){try{return await navigator.clipboard.writeText(txt)}catch(e){}}const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta)}
+    function t(key){return LANG[STATE.lang][key]||key}
+
+    function generateAnalysis(tx){
+      const sw=tx.value>=200e6?'an extraordinary ':tx.value>=100e6?'a massive ':tx.value>=50e6?'a significant ':'',swEs=tx.value>=200e6?'de escala extraordinaria ':tx.value>=100e6?'de escala masiva ':tx.value>=50e6?'de escala significativa ':'';
+      if(tx.stream==='binance'){const p=tx.pair;if(tx.actionType==='LARGE SPOT BUY')return{en:`This represents ${sw}aggressive spot accumulation of ${p}. Executing a market buy of this size implies extreme urgency and strong conviction of an imminent price breakout.`,es:`Esto representa ${swEs}acumulaci\u00f3n spot agresiva de ${p}.`};if(tx.actionType==='LARGE SPOT SELL')return{en:`Deliberate spot dumping of ${p} at ${sw}scale. This whale is liquidating a massive position, signaling a potential shift to stablecoins.`,es:`Descarga spot deliberada de ${p} a ${swEs}escala.`};if(tx.actionType==='FUTURES LONG OPEN')return{en:`High-leverage long exposure initiated on ${p} at ${sw}scale. Signals speculative conviction that this asset will outperform.`,es:`Exposici\u00f3n larga de alta palanca iniciada en ${p} a ${swEs}escala.`};return{en:`Short position opened on ${p} at ${sw}scale. Indicates the whale is actively betting against this asset.`,es:`Posici\u00f3n corta abierta en ${p} a ${swEs}escala.`}}
+      const st=isStable(tx.token.sym),bt=tx.token.sym==='BTC'||tx.token.sym==='WBTC';
+      switch(tx.interaction.name){
+        case'DEX Swap':if(st){if(bt)return{en:`Direct buying pressure on Bitcoin at ${sw}scale. Converting stablecoins to BTC implies strong conviction.`,es:`Presi\u00f3n compradora directa sobre Bitcoin a ${swEs}escala.`};return{en:`${sw}capital deployment into a volatile asset via DEX.`,es:`${swEs}despliegue de capital hacia un activo vol\u00e1til.`}}return{en:`Deliberate de-risking at ${sw}scale. Swapping volatile assets for stablecoins.`,es:`Desapalancamiento deliberado a ${swEs}escala.`};
+        case'Yield Deposit':return{en:`Classic risk-off positioning at ${sw}scale. Earning yield suggests expecting sideways/downward action.`,es:`Posicionamiento risk-off a ${swEs}escala.`};
+        case'Staking Lock':return{en:`Supply constriction signal at ${sw}scale. Locking tokens removes them from circulating supply.`,es:`Se\u00f1al de restricci\u00f3n de oferta a ${swEs}escala.`};
+        case'DeFi Liquidation':return{en:`Forced closure at ${sw}scale. Leveraged position failed to meet margin requirements.`,es:`Cierre forzado a ${swEs}escala.`};
+        case'Whale Outflow':return{en:`Exchange withdrawal at ${sw}scale. Moving assets off-exchange typically signals accumulation intent.`,es:`Retiro de exchange a ${swEs}escala.`};
+        case'Whale Inflow':return{en:`Exchange deposit at ${sw}scale. Moving assets to a trading platform suggests an impending sell order.`,es:`Dep\u00f3sito en exchange a ${swEs}escala.`};
+        default:return{en:formatUSD(tx.value)+' '+tx.token.name+' transaction.',es:'Transacci\u00f3n de '+formatUSD(tx.value)+' '+tx.token.name+'.'}
+      }
+    }
+
+    function enrichTx(tx,rng){
+      tx.direction='neutral';if(tx.stream==='binance'){tx.deepMeta='Via Binance Matching Engine';tx.venue=tx.location;const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es;return}
+      switch(tx.interaction.name){
+        case'DEX Swap':{const v=DV[Math.floor(rng()*DV.length)];tx.venue=v;if(isStable(tx.token.sym)){const tgt=pickNonStable(rng);tx.deepMeta='Swapped '+formatUSD(tx.value)+' '+tx.token.sym+' for '+formatTokenAmt(tx.value/(AP[tgt.sym]||100))+' '+tgt.sym+' on '+v;tx.direction='buy'}else{tx.deepMeta='Swapped '+formatTokenAmt(tx.value/(AP[tx.token.sym]||1000))+' '+tx.token.sym+' for '+formatUSD(tx.value)+' USDT on '+v;tx.direction='sell'}break}
+        case'Yield Deposit':{const v=YV[Math.floor(rng()*YV.length)];tx.venue=v;tx.deepMeta='Deposited '+formatUSD(tx.value)+' '+tx.token.sym+' into '+v;tx.direction='buy';break}
+        case'Staking Lock':{const v=YV[Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Locked '+formatUSD(tx.value)+' '+tx.token.sym+' in '+v;tx.direction='buy';break}
+        case'Whale Outflow':{const v=VL[Math.floor(rng()*VL.length)];tx.venue=v;tx.deepMeta='Moved '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='sell';break}
+        case'Whale Inflow':{const v=['Binance','Coinbase','Kraken','OKX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Transferred '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='buy';break}
+        case'DeFi Liquidation':{const v=['Aave V3','Compound V3','MakerDAO','dYdX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Liquidated on '+v;tx.direction='sell';break}
+        default:tx.venue='Unknown';tx.deepMeta=formatUSD(tx.value)+' '+tx.token.sym
+      }
+      const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es
+    }
+
+    function generateHistoricalOnchain(count){const rng=createRNG(7919),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const token=pickToken(rng),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(rng(),2.5),interaction=IT[Math.floor(rng()*IT.length)],gp=12+rng()*53,gu=21000*3*(1+rng()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:i,value:Math.round(val),token,interaction,fromHash:randomHash(rng),toHash:randomHash(rng),txHash:randomTxHash(rng),gasFeeUSD:gUSD,timestamp:now-td+td*Math.pow(rng(),0.7),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdOnchain=count;return txs}
+    function generateHistoricalBinance(count){const rng=createRNG(8147),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const pair=BP[Math.floor(rng()*BP.length)],action=BA[Math.floor(rng()*BA.length)],baseUsdVal=500000+(Math.pow(rng(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:i,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(rng),timestamp:now-td+td*Math.pow(rng(),0.7),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdBinance=count;return txs}
+    function generateLiveOnchainTx(){const token=pickToken(Math.random),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(Math.random(),2.5),interaction=IT[Math.floor(Math.random()*IT.length)],gp=12+Math.random()*53,gu=21000*3*(1+Math.random()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:STATE.nextIdOnchain++,value:Math.round(val),token,interaction,fromHash:randomHash(Math.random),toHash:randomHash(Math.random),txHash:randomTxHash(Math.random),gasFeeUSD:gUSD,timestamp:Date.now(),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,Math.random);return tx}
+    function generateLiveBinanceTx(){const pair=BP[Math.floor(Math.random()*BP.length)],action=BA[Math.floor(Math.random()*BA.length)],baseUsdVal=500000+(Math.pow(Math.random(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:STATE.nextIdBinance++,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(Math.random),timestamp:Date.now(),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,Math.random);return tx}
+
+    function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction
