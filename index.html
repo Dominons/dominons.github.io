@@ -3,74 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DANIFU777 - Unified Terminal & Dashboard</title>
+    <title>DANIFU777 - Unified Cyber-Terminal</title>
     <link rel="icon" type="image/ico" href="Favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
+        /* [1, 2] ESTILOS RAÍZ Y DOMINONS */
         :root {
-            --color-dark-bg: #000000;
-            --color-header-bg: #0D0D0D;
-            --color-border: #333;
+            --color-dark-bg: #1A1A1A;
+            --color-header-bg: #282828;
+            --color-border: #444;
             --color-highlight: #A855F7;
-            --color-main-bg: #000000;
+            --color-main-bg: #282828;
             --color-text: #EAEAEA;
-            --color-input-bg: #0D0D0D;
-            --shadow-light: 0 0 10px rgba(168, 85, 247, 0.2);
+            --color-input-bg: #1F1F1F;
+            --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
             --main-gap: 15px;
-            --fs: 14px;
+            --fs: 14px; /* Default for Datos */
         }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--color-dark-bg);
-            color: var(--color-text);
-            overflow: hidden;
-        }
-
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--color-dark-bg); color: var(--color-text); overflow: hidden; transition: background 0.3s; }
         .hidden-view { display: none !important; }
 
-        /* Estilos Globales de Dominon */
-        #loginScreen { position: fixed; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        /* [2-7] LOGIN Y BARRA SUPERIOR */
+        #loginScreen { position: fixed; inset: 0; background: #1A1A1A; display: flex; align-items: center; justify-content: center; z-index: 9999; }
         #loginScreen.hidden { display: none !important; }
-        .login-container { background: #0D0D0D; border: 3px solid var(--color-highlight); border-radius: 15px; padding: 50px; text-align: center; box-shadow: 0 0 30px rgba(168, 85, 247, 0.3); }
+        .login-container { background: #1F1F1F; border: 3px solid #A855F7; border-radius: 15px; padding: 50px; text-align: center; box-shadow: 0 0 30px rgba(168, 85, 247, 0.3); }
         .google-button { background: white; color: #333; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; display: flex; align-items: center; gap: 10px; font-size: 1em; }
-        
         .container { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100vh; }
-        .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; background: var(--color-header-bg); border-bottom: 2px solid var(--color-highlight); z-index: 100; gap: 10px; }
-        .top-left, .top-right { display: flex; align-items: center; gap: 10px; }
-        
-        .box { border: 1px solid var(--color-border); padding: 4px 10px; background: #111; border-radius: 4px; font-size: 0.9em; }
-        .view-switch-btn { background: var(--color-highlight); color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .view-switch-btn:hover { filter: brightness(1.2); box-shadow: 0 0 10px var(--color-highlight); }
+        .top-bar { grid-column: 1 / span 1; display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; background: var(--color-header-bg); border-bottom: 2px solid var(--color-highlight); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8); z-index: 10; position: sticky; top: 0; flex-wrap: wrap; gap: 6px; }
+        .top-left, .top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .user-info { display: flex; align-items: center; gap: 8px; padding: 4px 10px; background: #333; border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85em; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--color-highlight); object-fit: cover; }
+        .logout-btn { background: #DC2626; color: white; border: none; padding: 4px 10px; cursor: pointer; border-radius: 15px; font-size: 0.8em; }
+        .box { border: 1px solid var(--color-border); padding: 4px 10px; background: #333; border-radius: 4px; box-shadow: var(--shadow-light); transition: background 0.3s ease; font-size: 0.9em; white-space: nowrap; }
 
-        .main { padding: var(--main-gap); display: flex; flex-direction: column; gap: var(--main-gap); height: calc(100vh - 60px); overflow-y: auto; box-sizing: border-box; }
-        .chart-panel, .notepad-panel, .calculator-panel, .pomodoro-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 12px; box-shadow: var(--shadow-light); }
-        
-        /* Aislamiento Estilos Terminal DATOS */
-        #deep-flow-view { height: calc(100vh - 60px); display: flex; flex-direction: column; background: #000; font-family: 'Courier New', monospace; font-size: var(--fs); }
-        #deep-flow-view .terminal-header { display: flex; gap: 20px; padding: 10px; border-bottom: 1px solid #222; background: #050505; }
-        #deep-flow-view .ledger-container { flex: 1; display: flex; overflow: hidden; }
-        #deep-flow-view .ledger-main { flex: 1; display: flex; flex-direction: column; border-right: 1px solid #222; }
-        #deep-flow-view .ledger-body { flex: 1; overflow-y: auto; position: relative; }
-        #deep-flow-view .row { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #111; cursor: pointer; transition: background 0.2s; }
-        #deep-flow-view .row:hover { background: #0A0A0A; }
-        #deep-flow-view .row.active { background: #151515; }
-        #deep-flow-view .action-tag { padding: 2px 6px; border-left: 3px solid; font-size: 0.8em; font-weight: bold; }
-        #deep-flow-view .submenu { display: none; background: #080808; padding: 15px; border-bottom: 1px solid #222; }
+        /* [8-30] DASHBOARD DOMINONS STYLES */
+        .main { grid-column: 1 / -1; background: var(--color-main-bg); padding: var(--main-gap); display: flex; flex-direction: column; gap: var(--main-gap); height: calc(100vh - 52px); overflow-y: auto; box-sizing: border-box; }
+        .chart-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 10px; height: 300px; display: flex; flex-direction: column; }
+        .notepad-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; flex-grow: 1; min-height: 200px; }
+        #notepad { background: #0D0D0D; color: var(--color-text); border: 1px solid var(--color-border); padding: 10px; border-radius: 4px; resize: none; flex-grow: 1; }
+        .calculator-panel, .pomodoro-panel { background: var(--color-input-bg); border: 2px solid var(--color-highlight); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; }
+        .calc-display { background: #0D0D0D; color: var(--color-highlight); border: 2px solid var(--color-highlight); text-align: right; padding: 10px; font-size: 1.5em; font-family: monospace; }
+        .pomodoro-display { font-size: 2em; font-weight: bold; color: var(--color-highlight); font-family: monospace; text-align: center; }
+
+        /* [Fuente 1 - AISLAMIENTO] ESTILOS TERMINAL DE DATOS */
+        #deep-flow-view { background: #000; color: #EAEAEA; font-family: 'Courier New', monospace; display: flex; flex-direction: column; height: 100%; }
+        #deep-flow-view .terminal-header { display: flex; align-items: center; gap: 12px; padding: 8px; border-bottom: 1px solid #222; background: #050505; flex-wrap: wrap; }
+        #deep-flow-view .ledger-container { flex: 1; display: flex; overflow: hidden; position: relative; }
+        #deep-flow-view .ledger-main { flex: 1; display: flex; flex-direction: column; border-right: 1px solid #111; min-width: 0; }
+        #deep-flow-view .ledger-body { flex: 1; overflow-y: auto; background: #000; position: relative; }
+        #deep-flow-view .row { display: flex; align-items: center; padding: 6px 8px; border-bottom: 1px solid #0a0a0a; cursor: pointer; transition: background 0.2s; font-size: var(--fs); }
+        #deep-flow-view .row:hover { background: #080808; }
+        #deep-flow-view .row.active { background: #111 !important; }
+        #deep-flow-view .submenu { display: none; background: #030303; border-bottom: 1px solid #222; padding: 12px 20px; overflow: hidden; }
         #deep-flow-view .submenu.open { display: block; }
-        #deep-flow-view .sidebar { width: 280px; padding: 15px; background: #030303; display: none; }
+        #deep-flow-view .action-tag { padding: 1px 5px; border-left: 3px solid; font-size: 0.85em; font-weight: bold; background: rgba(255,255,255,0.03); }
+        #deep-flow-view .sidebar { width: 260px; background: #020202; overflow-y: auto; display: none; padding: 15px; }
         #deep-flow-view .sidebar.active { display: block; }
-        #deep-flow-view .status-dot.live { color: #39FF14; text-shadow: 0 0 5px #39FF14; }
-        #deep-flow-view .pos { color: #39FF14; }
-        #deep-flow-view .neg { color: #FF3131; }
+        #deep-flow-view .status-dot.live { color: #39FF14; text-shadow: 0 0 5px #39FF14; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* Estilos Música (Global) */
-        .music-player-panel { position: fixed; bottom: 20px; right: 20px; background: #0D0D0D; border: 2px solid var(--color-highlight); padding: 15px; border-radius: 8px; z-index: 1001; width: 280px; }
-        .music-player-panel.hidden { display: none !important; }
-        
-        /* Utility */
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--color-highlight); }
+        /* [30-34] ESTILOS MÚSICA Y REPRODUCTOR */
+        .music-player-panel { position: fixed; top: 50px; right: 15px; background: var(--color-input-bg); border: 2px solid var(--color-highlight); padding: 15px; border-radius: 8px; z-index: 1000; min-width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .view-switch-btn { background: var(--color-highlight); color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-right: 10px; }
     </style>
 </head>
 <body>
@@ -78,10 +73,10 @@
 <div id="loginScreen">
     <div class="login-container">
         <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
-        <p style="color: #EAEAEA; margin-top: 10px;">Acceso Terminal Unificada</p>
+        <p style="color: #EAEAEA; margin-top: 10px;">Dominon & Deep Flow Unified</p>
         <button class="google-button" id="googleSignInBtn">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-            Iniciar con Google
+            Iniciar sesión con Google
         </button>
     </div>
 </div>
@@ -89,47 +84,44 @@
 <div class="container hidden" id="mainApp">
     <header class="top-bar">
         <div class="top-left">
+            <button class="view-switch-btn" onclick="toggleView()"><i class="fas fa-terminal"></i> SWAP VIEW</button>
             <div class="box" id="fecha-hora">Cargando...</div>
-            <button class="view-switch-btn" onclick="toggleViews()">
-                <i class="fas fa-exchange-alt"></i> CAMBIAR VISTA
-            </button>
         </div>
         <div class="top-right">
-            <div id="userInfo" style="display:flex; align-items:center; gap:8px;">
+            <div class="user-info" id="userInfo">
                 <img class="user-avatar" id="userAvatar" src="">
-                <span id="userName" class="box">Usuario</span>
-                <button class="box" id="logoutBtn" style="color:#FF3131; cursor:pointer;"><i class="fas fa-sign-out-alt"></i></button>
+                <span class="user-name" id="userName"></span>
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
             </div>
-            <div class="box" id="songTitle">Silencio</div>
+            <div class="box" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis;"><span id="songTitle">Silencio</span></div>
             <button class="box" id="toggleMusicPanel"><i class="fa-solid fa-music"></i></button>
         </div>
     </header>
 
-    <!-- VISTA 1: DOMINON DASHBOARD -->
+    <!-- [8-24, 35-39] VISTA 1: DASHBOARD -->
     <main id="main-dashboard-view" class="main">
         <div class="chart-panel">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                <h2 style="margin:0; font-size:1em; color:var(--color-highlight);">LIVE CHART</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h2 style="margin:0; color:var(--color-highlight); font-size:1em;">MARKET CHART</h2>
                 <select id="symbolSelect" class="box" style="background:#000; color:white;" onchange="changeSymbol()">
                     <option value="BINANCE:BTCUSDT">BTC/USDT</option>
                     <option value="BINANCE:ETHUSDT">ETH/USDT</option>
+                    <option value="FOREXCOM:XAUUSD">GOLD</option>
                 </select>
             </div>
-            <iframe id="tradingViewChart" style="width:100%; height:250px; border:none;" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ABTCUSDT&theme=dark"></iframe>
+            <iframe id="tradingViewChart" style="width:100%; height:100%; border:none;" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ABTCUSDT&theme=dark"></iframe>
         </div>
-
         <div class="notepad-panel">
-            <div id="notepad-tabs" style="display:flex; gap:5px; margin-bottom:8px;"></div>
-            <textarea id="notepad" style="width:100%; height:150px; background:#000; color:white; border:1px solid #333; resize:none;" placeholder="Notas de sesión..."></textarea>
+            <div id="notepad-tabs" style="display:flex; gap:5px; margin-bottom:10px;"></div>
+            <textarea id="notepad" placeholder="Notas de sesión..."></textarea>
         </div>
-
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
             <div class="calculator-panel">
-                <div id="display" style="background:#000; color:var(--color-highlight); padding:10px; text-align:right; font-family:monospace; font-size:1.5em; border:1px solid #333; margin-bottom:5px;">0</div>
-                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:4px;">
-                    <button class="box" onclick="clearDisplay()">C</button>
+                <div id="display" class="calc-display">0</div>
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; margin-top:8px;">
+                    <button class="box" onclick="clearDisplay()" style="background:#DC2626; color:white;">C</button>
                     <button class="box" onclick="appendOperator('/')">/</button>
-                    <button class="box" onclick="appendOperator('*')">*</button>
+                    <button class="box" onclick="appendOperator('*')">×</button>
                     <button class="box" onclick="appendNumber('7')">7</button>
                     <button class="box" onclick="appendNumber('8')">8</button>
                     <button class="box" onclick="appendNumber('9')">9</button>
@@ -138,7 +130,7 @@
                 </div>
             </div>
             <div class="pomodoro-panel">
-                <div id="pomo-display" style="font-size:2.5em; text-align:center; color:var(--color-highlight); font-family:monospace;">25:00</div>
+                <div class="pomodoro-display" id="pomo-display">25:00</div>
                 <div style="display:flex; gap:5px; margin-top:10px;">
                     <button class="box" id="start-btn" onclick="togglePomodoro()" style="flex:1;">START</button>
                     <button class="box" onclick="resetPomodoro()">RST</button>
@@ -147,29 +139,30 @@
         </div>
     </main>
 
-    <!-- VISTA 2: DEEP FLOW TERMINAL (DATOS) -->
+    <!-- [Fuente 1] VISTA 2: DEEP FLOW TERMINAL -->
     <div id="deep-flow-view" class="hidden-view">
         <div class="terminal-header">
-            <div class="box"><i id="status-dot" class="fas fa-circle"></i> <span id="hdr-conn-status">CONNECTING...</span></div>
+            <div class="box"><i id="status-dot" class="fas fa-circle status-dot"></i> <span id="hdr-conn-status">WAITING...</span></div>
             <div class="box">BTC: <span id="btc-price">---</span> <small id="btc-change"></small></div>
-            <div class="box">GAS: <span id="gas-value">--</span> gwei</div>
+            <div class="box">ETH: <span id="eth-price">---</span></div>
+            <div class="box">GAS: <span id="gas-value">--</span></div>
             <div class="box" id="hdr-clock">00:00:00</div>
         </div>
         <div class="ledger-container">
             <div class="ledger-main">
                 <div id="ledger-header" class="row" style="background:#080808; font-weight:bold; border-bottom:2px solid #222;">
-                    <span style="flex:1;" data-sort="value" class="sort-header">VALUE <span id="arrow-value"></span></span>
-                    <span style="width:100px; text-align:center;">ASSET</span>
+                    <span style="flex:1;">VALUE</span>
+                    <span style="width:80px; text-align:center;">ASSET</span>
                     <span style="width:115px; text-align:center;">ACTION</span>
-                    <span style="flex:1;">FROM/TO</span>
+                    <span style="flex:1;">TRACE</span>
                 </div>
                 <div id="ledger-body" class="ledger-body">
                     <div id="scroll-sentinel"></div>
                 </div>
             </div>
             <aside id="sidebar-onchain" class="sidebar active">
-                <div class="box" style="margin-bottom:10px;">FLOW RATIO</div>
-                <div style="height:10px; background:#222; display:flex; border-radius:5px; overflow:hidden;">
+                <div class="box" style="margin-bottom:10px;">BUY/SELL RATIO</div>
+                <div style="height:8px; background:#222; display:flex; border-radius:4px; overflow:hidden;">
                     <div id="ratio-buy" style="background:#39FF14; width:50%;"></div>
                     <div id="ratio-sell" style="background:#FF3131; width:50%;"></div>
                 </div>
@@ -177,28 +170,30 @@
                     <span id="ratio-buy-label">BUY 50%</span>
                     <span id="ratio-sell-label">SELL 50%</span>
                 </div>
+                <hr style="border:0; border-top:1px solid #222; margin:15px 0;">
+                <div id="hot-list"></div>
             </aside>
         </div>
     </div>
 </div>
 
-<!-- ELEMENTOS GLOBALES -->
+<!-- ELEMENTOS GLOBALES DE MÚSICA -->
 <div id="musicPanel" class="hidden music-player-panel">
     <div style="text-align:center; font-weight:bold; color:var(--color-highlight); margin-bottom:10px;">CYBER-PLAYER</div>
-    <div style="display:flex; justify-content:center; gap:15px; margin-bottom:10px;">
+    <div style="display:flex; justify-content:center; gap:15px;">
         <button id="prevBtn" class="box"><i class="fas fa-backward"></i></button>
         <button id="playPauseBtn" class="box"><i class="fas fa-play"></i></button>
         <button id="nextBtn" class="box"><i class="fas fa-forward"></i></button>
     </div>
-    <input type="range" id="progressBar" style="width:100%; accent-color:var(--color-highlight);" value="0">
+    <input type="range" id="progressBar" style="width:100%; accent-color:var(--color-highlight); margin-top:10px;" value="0">
     <div style="display:flex; justify-content:space-between; font-size:0.7em; color:#888;">
         <span id="current-time">0:00</span>
         <span id="duration-time">0:00</span>
     </div>
 </div>
-<div id="youtube-player" style="position:absolute; visibility:hidden;"></div>
+<div id="youtube-player" style="position:absolute; top:-1000px;"></div>
 
-<!-- SCRIPTS UNIFICADOS -->
+<!-- [40-50] SCRIPTS UNIFICADOS DE FIREBASE -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -231,8 +226,7 @@
             document.getElementById('userName').textContent = user.displayName;
             document.getElementById('userAvatar').src = user.photoURL;
             window.loadNoteFromFirestore(window.activeTab);
-            // Iniciar motores de datos tras login
-            if(typeof initTerminal === 'function') initTerminal();
+            if(window.initTerminal) window.initTerminal();
         } else {
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('mainApp').classList.add('hidden');
@@ -244,39 +238,46 @@
 </script>
 
 <script>
-    // CONTROL DE VISTAS (SPA SWITCH) [Fuente 2]
-    function toggleViews() {
-        const dash = document.getElementById('main-dashboard-view');
-        const flow = document.getElementById('deep-flow-view');
-        dash.classList.toggle('hidden-view');
-        flow.classList.toggle('hidden-view');
-        console.log("View switched. Deep Flow Engine remains active.");
+    // [Fuente 2] LOGICA DE NAVEGACION SPA
+    function toggleView() {
+        const dashboard = document.getElementById('main-dashboard-view');
+        const terminal = document.getElementById('deep-flow-view');
+        dashboard.classList.toggle('hidden-view');
+        terminal.classList.toggle('hidden-view');
     }
 
-    // --- LÓGICA TERMINAL DATOS (DEEP FLOW) [Fuente 1] ---
-    const STATE = { 
-        lang:'en', sortField:'value', sortDir:'desc', dataStream:'onchain', 
-        pool:[], visible:[], renderedCount:0, apiAlive:false, btcPrice:104500, gasPrice:32 
+    // [Fuente 1] LOGICA COMPLETA DE DATOS (DEEP FLOW ENGINE)
+    const STATE = {
+        lang: 'en', sortField: 'value', sortDir: 'desc', dataStream: 'onchain',
+        pool: [], visible: [], renderedCount: 0, apiAlive: false,
+        btcPrice: 104500, ethPrice: 3850, gasPrice: 32, soundEnabled: true
     };
 
-    const DOM = {
-        statusDot: document.getElementById('status-dot'),
-        hdrClock: document.getElementById('hdr-clock'),
-        btcPrice: document.getElementById('btc-price'),
-        ledgerBody: document.getElementById('ledger-body'),
-        scrollSentinel: document.getElementById('scroll-sentinel')
-    };
+    const TOKENS = [
+        { sym: 'BTC', name: 'Bitcoin', color: '#F7931A', icon: '₿', minVal: 500000, maxVal: 50000000 },
+        { sym: 'ETH', name: 'Ethereum', color: '#627EEA', icon: 'Ξ', minVal: 200000, maxVal: 25000000 },
+        { sym: 'USDT', name: 'Tether', color: '#26A17B', icon: '₮', minVal: 1000000, maxVal: 100000000 }
+    ];
 
-    function formatUSD(v) { return '$' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(1)+'K'); }
+    const IT = [
+        { name: 'DEX Swap', short: 'SWAP', color: '#A855F7' },
+        { name: 'Yield Deposit', short: 'YIELD', color: '#39FF14' },
+        { name: 'Whale Inflow', short: 'INFLOW', color: '#FF3131' }
+    ];
 
-    function generateFakeTx() {
+    function formatUSD(v) { return v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + (v / 1e3).toFixed(1) + 'K'; }
+
+    function generateLiveOnchainTx() {
+        const token = TOKENS[Math.floor(Math.random() * TOKENS.length)];
+        const interaction = IT[Math.floor(Math.random() * IT.length)];
         return {
-            id: Date.now(), value: Math.floor(Math.random()*5000000)+100000,
-            token: { sym: 'BTC', color: '#F7931A', icon: '?' },
-            interaction: { short: 'SWAP', color: '#A855F7' },
-            fromHash: '0x'+Math.random().toString(16).slice(2,10),
-            toHash: '0x'+Math.random().toString(16).slice(2,10),
-            timestamp: Date.now()
+            id: Date.now() + Math.random(),
+            value: token.minVal + Math.random() * (token.maxVal - token.minVal),
+            token, interaction,
+            fromHash: '0x' + Math.random().toString(16).slice(2, 8),
+            toHash: '0x' + Math.random().toString(16).slice(2, 8),
+            timestamp: Date.now(),
+            direction: Math.random() > 0.5 ? 'buy' : 'sell'
         };
     }
 
@@ -284,59 +285,106 @@
         const row = document.createElement('div');
         row.className = 'row';
         row.innerHTML = `
-            <span style="flex:1; color:#39FF14">${formatUSD(tx.value)}</span>
-            <span style="width:100px; text-align:center;">${tx.token.sym}</span>
-            <span style="width:115px; text-align:center; color:${tx.interaction.color}">${tx.interaction.short}</span>
-            <span style="flex:1; font-size:0.8em; color:#666;">${tx.fromHash}...</span>
+            <span style="flex:1; color:#39FF14; font-weight:bold;">${formatUSD(tx.value)}</span>
+            <span style="width:80px; text-align:center;">${tx.token.sym}</span>
+            <span style="width:115px; text-align:center;"><span class="action-tag" style="color:${tx.interaction.color}; border-color:${tx.interaction.color}">${tx.interaction.short}</span></span>
+            <span style="flex:1; font-size:0.8em; color:#666;">${tx.fromHash}... → ${tx.toHash}...</span>
         `;
         return row;
     }
 
-    function initTerminal() {
+    window.initTerminal = function() {
         setInterval(() => {
-            const tx = generateFakeTx();
-            const el = createRowEl(tx);
-            DOM.ledgerBody.insertBefore(el, DOM.ledgerBody.firstChild);
-            if(DOM.ledgerBody.children.length > 50) DOM.ledgerBody.lastElementChild.remove();
+            const tx = generateLiveOnchainTx();
+            STATE.pool.unshift(tx);
+            const row = createRowEl(tx);
+            const body = document.getElementById('ledger-body');
+            body.insertBefore(row, body.firstChild);
+            if(body.children.length > 40) body.lastElementChild.remove();
             
-            // Update Mini UI
-            STATE.btcPrice += (Math.random()-0.5)*50;
-            DOM.btcPrice.textContent = '$' + Math.floor(STATE.btcPrice).toLocaleString();
-            DOM.hdrClock.textContent = new Date().toLocaleTimeString();
+            // UI Updates
+            STATE.btcPrice += (Math.random() - 0.5) * 10;
+            document.getElementById('btc-price').textContent = '$' + Math.floor(STATE.btcPrice).toLocaleString();
+            document.getElementById('hdr-clock').textContent = new Date().toLocaleTimeString();
+            updateSidebar();
         }, 3000);
-        DOM.statusDot.classList.add('live');
+        document.getElementById('status-dot').classList.add('live');
+        document.getElementById('hdr-conn-status').textContent = 'CONNECTED';
+    };
+
+    function updateSidebar() {
+        const buy = Math.random() * 100;
+        document.getElementById('ratio-buy').style.width = buy + '%';
+        document.getElementById('ratio-sell').style.width = (100 - buy) + '%';
+        document.getElementById('ratio-buy-label').textContent = 'BUY ' + buy.toFixed(0) + '%';
     }
 
-    // --- LÓGICA DASHBOARD DOMINON [Fuente 2] ---
+    // [51-66] LOGICA DASHBOARD (CALC, POMO, NOTEPAD)
     const display = document.getElementById('display');
     let currentInput = '0';
     window.appendNumber = (n) => { currentInput = currentInput === '0' ? n : currentInput + n; display.textContent = currentInput; };
+    window.appendOperator = (op) => { currentInput += op; display.textContent = currentInput; };
+    window.calculate = () => { try { currentInput = eval(currentInput).toString(); display.textContent = currentInput; } catch { display.textContent = 'ERROR'; currentInput = '0'; } };
     window.clearDisplay = () => { currentInput = '0'; display.textContent = '0'; };
-    
+
     let pomoSeconds = 1500; let pomoInterval;
+    window.togglePomodoro = () => {
+        if(pomoInterval) { clearInterval(pomoInterval); pomoInterval = null; document.getElementById('start-btn').textContent = 'START'; }
+        else { pomoInterval = setInterval(() => { pomoSeconds--; updatePomoUI(); }, 1000); document.getElementById('start-btn').textContent = 'PAUSE'; }
+    };
     function updatePomoUI() { 
         const m = Math.floor(pomoSeconds/60).toString().padStart(2,'0');
         const s = (pomoSeconds%60).toString().padStart(2,'0');
         document.getElementById('pomo-display').textContent = `${m}:${s}`;
     }
-    window.togglePomodoro = () => {
-        if(pomoInterval) { clearInterval(pomoInterval); pomoInterval = null; }
-        else { pomoInterval = setInterval(() => { pomoSeconds--; updatePomoUI(); }, 1000); }
-    };
 
-    // --- REPRODUCTOR YOUTUBE (CONTINUO) [Fuente 2] ---
+    // [67-80] REPRODUCTOR YOUTUBE
     let player;
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('youtube-player', {
             height: '0', width: '0',
             playerVars: { 'listType': 'playlist', 'list': 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG' },
-            events: { 'onStateChange': (e) => { if(e.data === 1) document.getElementById('songTitle').textContent = "Reproduciendo..."; } }
+            events: { 
+                'onReady': (e) => { e.target.setVolume(50); },
+                'onStateChange': (e) => { 
+                    if(e.data === YT.PlayerState.PLAYING) {
+                        const data = player.getVideoData();
+                        document.getElementById('songTitle').textContent = data.title;
+                        document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                } 
+            }
         });
     }
     document.getElementById('toggleMusicPanel').onclick = () => document.getElementById('musicPanel').classList.toggle('hidden');
     document.getElementById('playPauseBtn').onclick = () => {
-        const state = player.getPlayerState();
-        state === 1 ? player.pauseVideo() : player.playVideo();
+        player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo();
+    };
+    document.getElementById('nextBtn').onclick = () => player.nextVideo();
+    document.getElementById('prevBtn').onclick = () => player.previousVideo();
+    
+    // [54-60] NOTEPAD TABS FIRESTORE
+    window.activeTab = "1";
+    const tabsContainer = document.getElementById('notepad-tabs');
+    for (let i = 1; i <= 3; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'box tab-btn'; btn.textContent = 'Nota ' + i;
+        btn.onclick = () => { window.activeTab = i.toString(); window.loadNoteFromFirestore(i); };
+        tabsContainer.appendChild(btn);
+    }
+    window.loadNoteFromFirestore = async (tab) => {
+        if(!window.auth.currentUser) return;
+        const snap = await getDoc(doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tab));
+        document.getElementById('notepad').value = snap.exists() ? snap.data().content : "";
+    };
+    document.getElementById('notepad').oninput = async (e) => {
+        if(!window.auth.currentUser) return;
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(() => {
+            setDoc(doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab), { content: e.target.value }, { merge: true });
+        }, 1000);
     };
 </script>
 </body>
