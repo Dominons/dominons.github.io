@@ -910,7 +910,7 @@
                             <button class="calc-button" onclick="appendNumber('7')">7</button>
                             <button class="calc-button" onclick="appendNumber('8')">8</button>
                             <button class="calc-button" onclick="appendNumber('9')">9</button>
-                            <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+                            <button class="calc-button operator" onclick="appendOperator('+')">+</button>
                             <button class="calc-button" onclick="appendNumber('4')">4</button>
                             <button class="calc-button" onclick="appendNumber('5')">5</button>
                             <button class="calc-button" onclick="appendNumber('6')">6</button>
@@ -1085,135 +1085,124 @@
     </div>
     <div id="youtube-player"></div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
-    <script>
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-    // Configuración de Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyBtZyVQ6jVgT2Pw4my8awQ30Y52KkBM960",
-        authDomain: "danifu777-4732c.firebaseapp.com",
-        projectId: "danifu777-4732c",
-        databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
-        storageBucket: "danifu777-4732c.firebasestorage.app",
-        messagingSenderId: "171480985650",
-        appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
-        measurementId: "G-SL032V9XGM"
-    };
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const rtdb = getDatabase(app);
-    const provider = new GoogleAuthProvider();
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtZyVQ6jVgT2Pw4my8awQ30Y52KkBM960",
+            authDomain: "danifu777-4732c.firebaseapp.com",
+            projectId: "danifu777-4732c",
+            databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
+            storageBucket: "danifu777-4732c.firebasestorage.app",
+            messagingSenderId: "171480985650",
+            appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
+            measurementId: "G-SL032V9XGM"
+        };
 
-    // Exportar variables a window para que los scripts de abajo las puedan usar
-    window.db = db;
-    window.auth = auth;
-    window.rtdb = rtdb;
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const rtdb = getDatabase(app);
+        const provider = new GoogleAuthProvider();
 
-    // Estado global para el reproductor
-    let currentSongIndex = 0;
-    let isPlaying = false;
-    let player;
-    let currentPlaylist = [
-        { title: "LoFi Study", url: "https://www.youtube.com/watch?v=jfKfPfyJRdk" },
-        { title: "LoFi Chill", url: "https://www.youtube.com/watch?v=rUxyKA_-grg" },
-        { title: "Chillhop Mix", url: "https://www.youtube.com/watch?v=ofhPmYvnP0I" }
-    ];
+        // Exportar variables a window para que los scripts de abajo las puedan usar
+        window.db = db;
+        window.auth = auth;
+        window.rtdb = rtdb;
 
-    // Cargar API de YouTube
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // Estado global para el reproductor
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        let player;
+        let currentPlaylist = [
+            { title: "LoFi Study", url: "https://www.youtube.com/watch?v=jfKfPfyJRdk" },
+            { title: "LoFi Chill", url: "https://www.youtube.com/watch?v=rUxyKA_-grg" },
+            { title: "Chillhop Mix", url: "https://www.youtube.com/watch?v=ofhPmYvnP0I" }
+        ];
 
-    // Funciones del reproductor
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-player', {
-            height: '0',
-            width: '0',
-            videoId: extractVideoId(currentPlaylist[currentSongIndex].url),
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+        // Funciones del reproductor
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: extractVideoId(currentPlaylist[currentSongIndex].url),
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Exponer la función para que YouTube API la pueda llamar
+        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function onPlayerReady(event) {
+            updateSongDisplay();
+            document.getElementById('volumeSlider').value = player.getVolume();
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                playNext();
+            } else if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.CUED) {
+                isPlaying = false;
+                document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-play"></i>';
             }
-        });
-    }
-    // Aseguramos que la API de YouTube encuentre la función desde el entorno global del objeto window
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-
-    function extractVideoId(url) {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
-
-    function onPlayerReady(event) {
-        updateSongDisplay();
-        document.getElementById('volumeSlider').value = player.getVolume();
-    }
-
-    function onPlayerStateChange(event) {
-        if (event.data === YT.PlayerState.ENDED) {
-            playNext();
-        } else if (event.data === YT.PlayerState.PLAYING) {
-            isPlaying = true;
-            document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-pause"></i>';
-        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.CUED) {
-            isPlaying = false;
-            document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-play"></i>';
         }
-    }
 
-    function playPause() {
-        if (!player) return;
-        if (isPlaying) {
-            player.pauseVideo();
-        } else {
-            player.playVideo();
+        function playPause() {
+            if (!player) return;
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
         }
-    }
 
-    function playNext() {
-        currentSongIndex = (currentSongIndex + 1) % currentPlaylist.length;
-        player.loadVideoById(extractVideoId(currentPlaylist[currentSongIndex].url));
-        updateSongDisplay();
-    }
+        function playNext() {
+            currentSongIndex = (currentSongIndex + 1) % currentPlaylist.length;
+            player.loadVideoById(extractVideoId(currentPlaylist[currentSongIndex].url));
+            updateSongDisplay();
+        }
 
-    function playPrev() {
-        currentSongIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-        player.loadVideoById(extractVideoId(currentPlaylist[currentSongIndex].url));
-        updateSongDisplay();
-    }
+        function playPrev() {
+            currentSongIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+            player.loadVideoById(extractVideoId(currentPlaylist[currentSongIndex].url));
+            updateSongDisplay();
+        }
 
-    function updateSongDisplay() {
-        document.getElementById('currentSong').textContent = currentPlaylist[currentSongIndex].title;
-    }
+        function updateSongDisplay() {
+            document.getElementById('currentSong').textContent = currentPlaylist[currentSongIndex].title;
+        }
 
-    function setVolume() {
-        if (!player) return;
-        const volume = parseInt(document.getElementById('volumeSlider').value);
-        player.setVolume(volume);
-    }
+        function setVolume() {
+            if (!player) return;
+            const volume = parseInt(document.getElementById('volumeSlider').value);
+            player.setVolume(volume);
+        }
 
-    function updateProgress() {
-        if (!player) return;
-        const currentTime = player.getCurrentTime();
-        const duration = player.getDuration();
-        const progressPercent = (currentTime / duration) * 100;
-        document.getElementById('progressBar').value = isNaN(progressPercent) ? 0 : progressPercent;
-    }
-</script>
+        function updateProgress() {
+            if (!player) return;
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            const progressPercent = (currentTime / duration) * 100;
+            document.getElementById('progressBar').value = isNaN(progressPercent) ? 0 : progressPercent;
+        }
+
         // Inicialización del reproductor
         setInterval(updateProgress, 1000);
 
@@ -1224,7 +1213,7 @@
         document.getElementById('volumeSlider').addEventListener('input', setVolume);
 
         // 1. AUTENTICACIÓN Y ESTADO DE SESIÓN
-        auth.onAuthStateChanged((user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('userName').textContent = user.displayName || user.email;
                 document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/28';
@@ -1254,7 +1243,7 @@
         });
 
         // 2. BLOC DE NOTAS
-        window.saveTimeout = null;
+        let saveTimeout = null;
         window.activeTab = 1;
 
         async function loadNoteContent() {
@@ -1277,8 +1266,8 @@
         if (notepadEl) {
             notepadEl.addEventListener('input', function() {
                 if (!window.auth || !window.auth.currentUser) return;
-                clearTimeout(window.saveTimeout);
-                window.saveTimeout = setTimeout(async function() {
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(async function() {
                     try {
                         const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
                         await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
