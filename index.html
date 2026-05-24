@@ -1085,35 +1085,36 @@
     </div>
     <div id="youtube-player"></div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBtZyVQ6jVgT2Pw4my8awQ30Y52KkBM960",
-            authDomain: "danifu777-4732c.firebaseapp.com",
-            projectId: "danifu777-4732c",
-            databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
-            storageBucket: "danifu777-4732c.firebasestorage.app",
-            messagingSenderId: "171480985650",
-            appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
-            measurementId: "G-SL032V9XGM"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
+      authDomain: "danifu777-4732c.firebaseapp.com",
+      projectId: "danifu777-4732c",
+      databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
+      storageBucket: "danifu777-4732c.firebasestorage.app",
+      messagingSenderId: "171480985650",
+      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
+      measurementId: "G-SL032V9XGM"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const rtdb = getDatabase(app);
-        const provider = new GoogleAuthProvider();
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
+    const provider = new GoogleAuthProvider();
 
-        // Exportar variables a window para que los scripts de abajo las puedan usar
-        window.db = db;
-        window.auth = auth;
-        window.rtdb = rtdb;
+    // Exportar variables a window para que los scripts de abajo las puedan usar
+    window.db = db;
+    window.auth = auth;
+    window.rtdb = rtdb;
 
         // Estado global para el reproductor
         let currentSongIndex = 0;
