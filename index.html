@@ -1,26 +1,20 @@
+Aquí tiene la solución unificada y completa en un único bloque de código HTML
+que integra ambos sistemas de manera integrada, implementando aislamiento CSS
+estricto mediante especificidad para evitar que los estilos colisionen y
+manteniendo el estado de ejecución de forma independiente.
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANIFU777 - Dominon | DEEP FLOW</title>
+  <title>DANIFU777 - Dominon & DEEP FLOW</title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
-    /* ============================================
-       ESTILOS GLOBALES Y ARQUITECTURA SPA
-       ============================================ */
-    
-    .hidden-view {
-      display: none !important;
-    }
-    
-    /* ============================================
-       CSS ORIGINAL DE DOMINON.TXT (INTACTO)
-       ============================================ */
+    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
     :root {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
@@ -32,31 +26,35 @@
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
       --main-gap: 15px;
     }
-    
-    #main-dashboard-view {
+
+    /* ========== ESTILOS GLOBALES DE SOPORTE SPA ========== */
+    body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--color-dark-bg);
       color: var(--color-text);
       overflow: hidden;
       transition: background 0.3s;
-      height: 100vh;
     }
 
-    /* ========== LOGIN SCREEN ========== */
-    #main-dashboard-view #loginScreen {
+    .hidden-view {
+      display: none !important;
+    }
+
+    /* ========== LOGIN SCREEN (ESTÁTICA EN LA RAÍZ) ========== */
+    #loginScreen {
       position: fixed;
       inset: 0;
       background: #1A1A1A;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 99999;
     }
-    #main-dashboard-view #loginScreen.hidden {
+    #loginScreen.hidden {
       display: none !important;
     }
-    #main-dashboard-view .login-container {
+    .login-container {
       background: #1F1F1F;
       border: 3px solid #A855F7;
       border-radius: 15px;
@@ -64,7 +62,7 @@
       text-align: center;
       box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
     }
-    #main-dashboard-view .google-button {
+    .google-button {
       background: white;
       color: #333;
       border: none;
@@ -78,15 +76,19 @@
       gap: 10px;
       font-size: 1em;
     }
-    #main-dashboard-view .google-button:hover {
+    .google-button:hover {
       background: #f0f0f0;
     }
-    #main-dashboard-view .google-button svg {
+    .google-button svg {
       width: 20px;
       height: 20px;
     }
 
-    /* ========== MAIN CONTAINER ========== */
+    /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW) ========== */
+    #main-dashboard-view {
+      width: 100%;
+      height: 100vh;
+    }
     #main-dashboard-view .container {
       display: grid;
       grid-template-columns: 1fr;
@@ -96,8 +98,6 @@
     #main-dashboard-view .container.hidden {
       display: none !important;
     }
-
-    /* ========== TOP BAR ========== */
     #main-dashboard-view .top-bar {
       grid-column: 1 / span 1;
       display: flex;
@@ -120,8 +120,6 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-
-    /* ========== USER INFO (COMPACT) ========== */
     #main-dashboard-view .user-info {
       display: flex;
       align-items: center;
@@ -159,8 +157,6 @@
     #main-dashboard-view .logout-btn:hover {
       background: #b91c1c;
     }
-
-    /* ========== SHARED STYLES ========== */
     #main-dashboard-view .box {
       border: 1px solid var(--color-border);
       padding: 4px 10px;
@@ -195,10 +191,6 @@
     #main-dashboard-view .main::-webkit-scrollbar-thumb:hover {
       background: #8b3ed9;
     }
-    #main-dashboard-view h1 {
-      display: none;
-    }
-    /* --- GRÁFICO TOP --- */
     #main-dashboard-view .chart-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -249,7 +241,6 @@
       border: none;
       display: block;
     }
-    /* --- NOTEPAD PANEL --- */
     #main-dashboard-view .notepad-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -323,7 +314,6 @@
       border-color: var(--color-highlight);
       box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
     }
-    /* --- BOTTOM CONTAINER (CALC + POMODORO) --- */
     #main-dashboard-view .bottom-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -331,7 +321,6 @@
       flex-shrink: 0;
       height: auto;
     }
-    /* --- CALCULADORA --- */
     #main-dashboard-view .calculator-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -418,7 +407,6 @@
     #main-dashboard-view .calc-button.clear:hover {
       background: #b91c1c;
     }
-    /* --- POMODORO PANEL --- */
     #main-dashboard-view .pomodoro-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
@@ -486,7 +474,6 @@
     #main-dashboard-view .custom-time-input::placeholder {
       color: #777;
     }
-    /* --- MÚSICA Y CONTROLES --- */
     #main-dashboard-view .music-container {
       display: flex;
       gap: 10px;
@@ -508,114 +495,35 @@
     #main-dashboard-view .theme-btn:hover {
       transform: scale(1.15);
     }
-    #main-dashboard-view .theme-btn.black   { background: #000000; border-color: #FFFFFF; }
-    #main-dashboard-view .theme-btn.white   { background: #FFFFFF; border-color: #FFFFFF; }
-    #main-dashboard-view .theme-btn.purple  { background: #A855F7; border-color: #A855F7; }
+    #main-dashboard-view .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
 
-    /* ============================================
-       RESPONSIVE - MEDIA QUERIES (DOMINON)
-       ============================================ */
     @media (max-width: 1024px) {
-      #main-dashboard-view .top-right {
-        gap: 6px;
-      }
-      #main-dashboard-view .theme-btn {
-        width: 20px;
-        height: 20px;
-      }
-      #main-dashboard-view .user-name {
-        max-width: 80px;
-      }
+      #main-dashboard-view .top-right { gap: 6px; }
+      #main-dashboard-view .theme-btn { width: 20px; height: 20px; }
+      #main-dashboard-view .user-name { max-width: 80px; }
     }
     @media (max-width: 768px) {
-      #main-dashboard-view {
-        overflow: auto;
-      }
-      #main-dashboard-view .main {
-        height: auto;
-        min-height: calc(100vh - 100px);
-        overflow-y: visible;
-      }
-      #main-dashboard-view .top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 8px 10px;
-      }
-      #main-dashboard-view .top-left, #main-dashboard-view .top-right {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      #main-dashboard-view .theme-buttons {
-        flex-wrap: wrap;
-        gap: 5px;
-      }
-      #main-dashboard-view .theme-btn {
-        width: 18px;
-        height: 18px;
-      }
-      #main-dashboard-view .chart-panel {
-        height: 45vh;
-        min-height: 220px;
-      }
-      #main-dashboard-view .bottom-container {
-        grid-template-columns: 1fr;
-      }
-      #main-dashboard-view .song-display {
-        max-width: 130px;
-      }
-      #main-dashboard-view .song-marquee {
-        max-width: 110px;
-      }
+      #main-dashboard-view .main { height: auto; min-height: calc(100vh - 100px); overflow-y: visible; }
+      #main-dashboard-view .top-bar { flex-direction: column; align-items: flex-start; padding: 8px 10px; }
+      #main-dashboard-view .top-left, #main-dashboard-view .top-right { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      #main-dashboard-view .theme-buttons { flex-wrap: wrap; gap: 5px; }
+      #main-dashboard-view .theme-btn { width: 18px; height: 18px; }
+      #main-dashboard-view .chart-panel { height: 45vh; min-height: 220px; }
+      #main-dashboard-view .bottom-container { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
-      :root { --main-gap: 10px; }
-      #main-dashboard-view .top-bar {
-        padding: 6px 8px;
-        gap: 4px;
-      }
-      #main-dashboard-view .top-right {
-        gap: 5px;
-      }
-      #main-dashboard-view .user-name {
-        display: none;
-      }
-      #main-dashboard-view .chart-panel {
-        height: 35vh;
-        min-height: 180px;
-      }
-      #main-dashboard-view .tab-btn {
-        font-size: 0.7em;
-        padding: 3px 6px;
-        flex-shrink: 0;
-      }
-      #main-dashboard-view .calc-button {
-        padding: 8px 0;
-        font-size: 0.85em;
-      }
-      #main-dashboard-view .calc-display {
-        font-size: 1.2em;
-        padding: 8px;
-      }
-      #main-dashboard-view .pomodoro-display {
-        font-size: 1.6em;
-      }
-      #main-dashboard-view .theme-btn {
-        width: 16px;
-        height: 16px;
-      }
-      #main-dashboard-view .song-display {
-        max-width: 100px;
-      }
-      #main-dashboard-view .song-marquee {
-        max-width: 80px;
-        font-size: 0.78em;
-      }
-      #main-dashboard-view .music-player-panel {
-        right: auto;
-        left: 0;
-        min-width: 240px;
-      }
+      #main-dashboard-view { --main-gap: 10px; }
+      #main-dashboard-view .top-bar { padding: 6px 8px; gap: 4px; }
+      #main-dashboard-view .top-right { gap: 5px; }
+      #main-dashboard-view .user-name { display: none; }
+      #main-dashboard-view .chart-panel { height: 35vh; min-height: 180px; }
+      #main-dashboard-view .tab-btn { font-size: 0.7em; padding: 3px 6px; flex-shrink: 0; }
+      #main-dashboard-view .calc-button { padding: 8px 0; font-size: 0.85em; }
+      #main-dashboard-view .calc-display { font-size: 1.2em; padding: 8px; }
+      #main-dashboard-view .pomodoro-display { font-size: 1.6em; }
+      #main-dashboard-view .theme-btn { width: 16px; height: 16px; }
     }
     #main-dashboard-view .music-btn {
       background: #333;
@@ -630,9 +538,6 @@
     #main-dashboard-view .music-btn:hover {
       background: var(--color-highlight);
     }
-    #main-dashboard-view .fa-spin-slow { animation: spin 4s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    
     #main-dashboard-view .song-display {
       background: #0D0D0D;
       border: 1px solid var(--color-border);
@@ -651,21 +556,674 @@
       text-overflow: ellipsis;
       max-width: 160px;
     }
-    
-    #main-dashboard-view #musicPanel.hidden { display: none !important; }
-    #main-dashboard-view .music-player-panel {
+
+    /* ========== PREVENCIÓN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
+    #deep-flow-view {
+      --fs: 1;
       position: absolute;
-      top: 40px;
-      right: 0;
-      background: var(--color-input-bg);
+      inset: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      color: #c8c8d0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 300;
+      font-size: calc(11px * var(--fs));
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      z-index: 5;
+    }
+    #deep-flow-view::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 240, 255, 0.012) 2px, rgba(0, 240, 255, 0.012) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar {
+      width: 5px;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar-track {
+      background: #06000e;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 240, 255, 0.2);
+      border-radius: 3px;
+    }
+    #deep-flow-view #hdr {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 8px;
+      gap: 6px;
+      background: #050008;
+      border-bottom: 1px solid transparent;
+      border-image: linear-gradient(90deg, #00F0FF 0%, #FF007F 40%, #39FF14 70%, transparent 100%) 1;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    #deep-flow-view #status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FF3131;
+      box-shadow: 0 0 6px #FF3131;
+      flex-shrink: 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    #deep-flow-view #status-dot.live {
+      background: #39FF14;
+      box-shadow: 0 0 6px #39FF14;
+    }
+    #deep-flow-view #hdr-brand {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: calc(12px * var(--fs));
+      color: #00F0FF;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 25px rgba(0, 240, 255, 0.3);
+      background: rgba(0, 240, 255, 0.06);
+      padding: 2px 10px;
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2), inset 0 0 8px rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      white-space: nowrap;
+    }
+    #deep-flow-view .ctrl-btn {
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: #00F0FF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 1px 5px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    #deep-flow-view .ctrl-btn:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: rgba(0, 240, 255, 0.5);
+    }
+    #deep-flow-view .ctrl-btn.muted {
+      color: #444;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    #deep-flow-view #stream-toggle {
+      border-color: #00F0FF;
+      color: #00F0FF;
+      text-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
+    }
+    #deep-flow-view #stream-toggle.binance-active {
+      border-color: #F0B90B;
+      color: #F0B90B;
+      text-shadow: 0 0 6px rgba(240, 185, 11, 0.5);
+      box-shadow: 0 0 8px rgba(240, 185, 11, 0.15);
+    }
+    #deep-flow-view #hdr-spacer {
+      flex: 1;
+    }
+    #deep-flow-view #hdr-conn-status {
+      color: #FF3131;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      font-size: 9px;
+      display: none;
+      text-shadow: 0 0 8px rgba(255, 49, 49, 0.4);
+    }
+    #deep-flow-view #hdr-date,
+    #deep-flow-view #hdr-clock {
+      font-size: calc(10px * var(--fs));
+      color: #6a6a7a;
+      white-space: nowrap;
+    }
+    #deep-flow-view #hdr-clock {
+      color: #00F0FF;
+      opacity: 0.7;
+    }
+    #deep-flow-view .ticker-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 7px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 2px solid #00F0FF;
+      border-radius: 0 3px 3px 0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .ticker-chip.eth-chip {
+      border-left-color: #627EEA;
+    }
+    #deep-flow-view .ticker-chip.gas-chip {
+      border-left-color: #FF8C00;
+    }
+    #deep-flow-view .ticker-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #888;
+      letter-spacing: 0.5px;
+    }
+    #deep-flow-view .ticker-price {
+      font-size: calc(11px * var(--fs));
+      font-weight: 500;
+      color: #e0e0e8;
+    }
+    #deep-flow-view .ticker-change {
+      font-size: 9px;
+      font-weight: 400;
+    }
+    #deep-flow-view .ticker-change.pos {
+      color: #39FF14;
+    }
+    #deep-flow-view .ticker-change.neg {
+      color: #FF3131;
+    }
+    #deep-flow-view .gas-unit {
+      font-size: 8px;
+      color: #FF8C00;
+      opacity: 0.7;
+    }
+    #deep-flow-view #dashboard {
+      display: flex;
+      height: calc(100vh - 36px);
+    }
+    #deep-flow-view #sidebar {
+      width: 230px;
+      min-width: 230px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px;
+      background: #06000e;
+      border-right: 1px solid rgba(0, 240, 255, 0.08);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .sidebar-layer {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    #deep-flow-view .sidebar-layer.active {
+      display: flex;
+    }
+    #deep-flow-view .corner-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px 8px;
+      background: #090112;
+      border: 1px solid rgba(0, 240, 255, 0.06);
+      border-radius: 3px;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.02), inset 0 0 8px rgba(0, 240, 255, 0.01);
+    }
+    #deep-flow-view .block-label {
+      font-size: 7px;
+      font-weight: 700;
+      color: #00F0FF;
+      letter-spacing: 1.2px;
+      opacity: 0.65;
+      margin-bottom: 3px;
+    }
+    #deep-flow-view .block-value {
+      font-size: calc(15px * var(--fs));
+      font-weight: 700;
+      color: #f0f0f5;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    #deep-flow-view .block-sub {
+      font-size: 8px;
+      color: #6a6a7a;
+      margin-bottom: 3px;
+    }
+    #deep-flow-view .block-sub.pos {
+      color: #39FF14;
+    }
+    #deep-flow-view .block-sub.neg {
+      color: #FF3131;
+    }
+    #deep-flow-view .block-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #deep-flow-view .block-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease, background-color 0.4s ease;
+    }
+    #deep-flow-view .ratio-bar {
+      display: flex;
+      height: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 2px;
+    }
+    #deep-flow-view .ratio-buy {
+      background: #39FF14;
+      transition: width 0.4s ease;
+    }
+    #deep-flow-view .ratio-sell {
+      background: #FF3131;
+      transition: width 0.4s ease;
+    }
+    #deep-flow-view .ratio-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 7px;
+      font-weight: 500;
+    }
+    #deep-flow-view .ratio-buy-label {
+      color: #39FF14;
+    }
+    #deep-flow-view .ratio-sell-label {
+      color: #FF3131;
+    }
+    #deep-flow-view .hot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    #deep-flow-view .hot-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 8px;
+    }
+    #deep-flow-view .hot-rank {
+      color: #555;
+      width: 12px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    #deep-flow-view .hot-name {
+      color: #a0a0b0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #deep-flow-view .hot-gas {
+      color: #FF8C00;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .bn-vivid-block {
+      border: 1px solid rgba(240, 185, 11, 0.3);
+      background: linear-gradient(135deg, #090112 0%, #10081a 100%);
+    }
+    #deep-flow-view .bn-vivid-block .block-label {
+      color: #00F0FF;
+      opacity: 1;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 4px rgba(0, 240, 255, 0.4);
+    }
+    #deep-flow-view .bn-vivid-block .block-value {
+      color: #F0B90B;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(240, 185, 11, 0.6);
+      font-size: calc(16px * var(--fs));
+    }
+    #deep-flow-view #ledger-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: #000;
+    }
+    #deep-flow-view #ledger-header {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      background: #0a0014;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+      flex-shrink: 0;
+    }
+    #deep-flow-view #ledger-header > span {
+      font-size: 8px;
+      font-weight: 700;
+      color: #00F0FF;
+      letter-spacing: 1.2px;
+      opacity: 0.6;
+    }
+    #deep-flow-view .sort-header {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    #deep-flow-view .sort-header:hover {
+      opacity: 1 !important;
+    }
+    #deep-flow-view .sort-arrow {
+      font-size: 7px;
+      color: #00F0FF;
+      opacity: 0.9;
+    }
+    #deep-flow-view .col-value {
+      width: 100px;
+      text-align: right;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-asset {
+      width: 65px;
+      text-align: center;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-action {
+      width: 100px;
+      text-align: center;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-flow {
+      flex: 1;
+      padding-left: 8px;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-time {
+      width: 60px;
+      text-align: right;
+    }
+    #deep-flow-view .binance-mode .col-value {
+      width: auto;
+      flex: 1;
+    }
+    #deep-flow-view .binance-mode .col-asset {
+      width: 85px;
+    }
+    #deep-flow-view .binance-mode .col-action {
+      width: 115px;
+    }
+    #deep-flow-view .binance-mode .col-flow {
+      width: 95px;
+      flex: none;
+      padding-left: 8px;
+    }
+    #deep-flow-view #macro-filters {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 22px;
+      padding: 0 8px;
+      background: #030008;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.04);
+      flex-shrink: 0;
+    }
+    #deep-flow-view .mf-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #444;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      padding: 2px 7px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .mf-btn:hover {
+      color: #777;
+      border-color: rgba(0, 240, 255, 0.2);
+    }
+    #deep-flow-view .mf-btn.active {
+      color: #00F0FF;
+      border-color: rgba(0, 240, 255, 0.4);
+      background: rgba(0, 240, 255, 0.06);
+    }
+    #deep-flow-view #filter-bar {
+      width: 100%;
+      height: 22px;
+      background: #030008;
+      border: none;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+      color: #c0c0cc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(10px * var(--fs));
+      padding: 0 8px;
+      outline: none;
+      flex-shrink: 0;
+      transition: border-bottom-color 0.2s;
+    }
+    #deep-flow-view #filter-bar:focus {
+      border-bottom-color: rgba(0, 240, 255, 0.3);
+    }
+    #deep-flow-view #filter-bar::placeholder {
+      color: #2a2a3a;
+      letter-spacing: 1.5px;
+      font-size: 9px;
+    }
+    #deep-flow-view #ledger-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      contain: strict;
+    }
+    #deep-flow-view .scroll-sentinel {
+      height: 1px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .no-results {
+      padding: 30px 10px;
+      color: #333;
+      text-align: center;
+      font-size: calc(10px * var(--fs));
+      letter-spacing: 1px;
+    }
+    #deep-flow-view #ledger-body .row {
+      display: flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      border-left: 2px solid transparent;
+      cursor: pointer;
+    }
+    #deep-flow-view #ledger-body .row:hover {
+      background: rgba(0, 240, 255, 0.05);
+    }
+    #deep-flow-view #ledger-body .row.active {
+      background: rgba(0, 240, 255, 0.08);
+      border-left-color: #00F0FF;
+    }
+    #deep-flow-view #ledger-body .row.live-new {
+      border-left-color: #39FF14;
+    }
+    #deep-flow-view #ledger-body .row.live-new.anomaly {
+      border-left-color: #FF007F;
+    }
+    #deep-flow-view .rv {
+      text-align: right;
+      width: 100px;
+      font-weight: 500;
+      color: #e0e0e8;
+      flex-shrink: 0;
+      transition: width 0.2s, flex 0.2s;
+    }
+    #deep-flow-view .rv.anomaly {
+      color: #FF007F;
+      text-shadow: 0 0 6px rgba(255, 0, 127, 0.3);
+    }
+    #deep-flow-view .binance-mode .rv {
+      width: auto;
+      flex: 1;
+    }
+    #deep-flow-view .token-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
+    }
+    #deep-flow-view .token-icon {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      color: #000;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .token-ticker {
+      font-size: calc(9px * var(--fs));
+      font-weight: 500;
+      color: #d0d0d8;
+    }
+    #deep-flow-view .action-tag {
+      display: inline-block;
+      padding: 0 4px;
+      border-left: 2px solid;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 94px;
+      line-height: 1.6;
+    }
+    #deep-flow-view #ledger-body .rf {
+      flex: 1;
+      padding-left: 8px;
+      color: #5a5a6e;
+      font-size: calc(10px * var(--fs));
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: width 0.2s, flex 0.2s;
+    }
+    #deep-flow-view .binance-mode .rf {
+      width: 95px;
+      flex: none;
+    }
+    #deep-flow-view #ledger-body .rt {
+      text-align: right;
+      width: 60px;
+      color: #7a7a8e;
+      font-size: calc(10px * var(--fs));
+      flex-shrink: 0;
+    }
+    #deep-flow-view .submenu {
+      display: none;
+      margin-left: 14px;
+      padding: 6px 10px;
+      background: rgba(9, 1, 18, 0.9);
+      border-left: 2px solid rgba(0, 240, 255, 0.2);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    }
+    #deep-flow-view .submenu.open {
+      display: block;
+    }
+    #deep-flow-view .sub-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 2px 0;
+      font-size: calc(10px * var(--fs));
+    }
+    #deep-flow-view .sub-label {
+      color: #5a5a6e;
+      min-width: 72px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    #deep-flow-view .sub-val {
+      color: #c0c0cc;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+    #deep-flow-view .sub-val.deep-meta {
+      color: #d0d0dd;
+      font-size: calc(9.5px * var(--fs));
+    }
+    #deep-flow-view .hash-clickable {
+      color: #00F0FF;
+      cursor: pointer;
+      text-decoration: none;
+      user-select: none;
+    }
+    #deep-flow-view .hash-clickable:hover {
+      text-decoration: underline;
+    }
+    #deep-flow-view .sub-analysis {
+      margin-top: 5px;
+      padding: 5px 8px;
+      border-left: 2px solid rgba(255, 215, 0, 0.5);
+      background: rgba(255, 215, 0, 0.025);
+      border-radius: 0 2px 2px 0;
+    }
+    #deep-flow-view .sub-analysis-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: #FFD700;
+      letter-spacing: 0.8px;
+      margin-bottom: 3px;
+      opacity: 0.85;
+    }
+    #deep-flow-view .sub-analysis-text {
+      font-size: calc(9.5px * var(--fs));
+      line-height: 1.55;
+      color: #9a9aaa;
+      font-weight: 300;
+    }
+    #deep-flow-view .loading {
+      opacity: 0.3;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3 }
+      50% { opacity: 0.6 }
+    }
+    @media(max-width: 700px) {
+      #deep-flow-view #sidebar { display: none; }
+    }
+
+    /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAÍZ ========== */
+    #musicPanel {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background: #1F1F1F;
       border: 2px solid var(--color-highlight);
       padding: 15px;
       border-radius: 8px;
-      z-index: 1000;
+      z-index: 10000;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       min-width: 280px;
     }
-    #main-dashboard-view .player-header {
+    #musicPanel.hidden {
+      display: none !important;
+    }
+    .music-player-panel {
+      position: relative !important;
+      top: 0 !important;
+      right: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      min-width: auto !important;
+    }
+    .player-header {
       text-align: center;
       margin-bottom: 12px;
       font-size: 0.8em;
@@ -673,239 +1231,84 @@
       font-weight: 700;
       letter-spacing: 1px;
     }
-    #main-dashboard-view .song-info {
-      background: #0D0D0D;
-      border: 1px solid var(--color-border);
-      padding: 8px;
-      border-radius: 4px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    #main-dashboard-view .player-song-title {
-      color: var(--color-text);
-      font-size: 0.85em;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    #main-dashboard-view .player-controls {
+    .player-controls {
       display: flex;
       justify-content: center;
       gap: 10px;
       margin-bottom: 12px;
     }
-    #main-dashboard-view .progress-time {
+    .progress-time {
       display: flex;
       justify-content: space-between;
       font-size: 0.7em;
       color: #AAA;
       margin-bottom: 6px;
     }
-    #main-dashboard-view .progress-bar-container {
+    .progress-bar-container {
       margin-bottom: 12px;
     }
-    #main-dashboard-view .progress-bar {
+    .progress-bar {
       width: 100%;
       height: 5px;
       accent-color: var(--color-highlight);
       cursor: pointer;
       border-radius: 2px;
     }
-    #main-dashboard-view .volume-control {
+    .volume-control {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-top: 10px;
     }
-    #main-dashboard-view .volume-control i {
+    .volume-control i {
       color: var(--color-highlight);
       font-size: 0.85em;
     }
-    #main-dashboard-view .volume-slider {
+    .volume-slider {
       flex: 1;
       height: 4px;
       accent-color: var(--color-highlight);
       cursor: pointer;
       border-radius: 2px;
     }
-
-    /* ============================================
-       CSS ORIGINAL DE DATOS.TXT (CON PREFIJO #deep-flow-view)
-       ============================================ */
-    #deep-flow-view :root{--fs:1}
-    #deep-flow-view *, #deep-flow-view *::before, #deep-flow-view *::after{box-sizing:border-box;margin:0;padding:0}
-    #deep-flow-view html, #deep-flow-view body{height:100%;overflow:hidden;background:#000;color:#c8c8d0;font-family:'JetBrains Mono',monospace;font-weight:300;font-size:calc(11px * var(--fs));line-height:1.45;-webkit-font-smoothing:antialiased}
-    #deep-flow-view body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,240,255,0.012) 2px,rgba(0,240,255,0.012) 4px);pointer-events:none;z-index:9999}
-    #deep-flow-view #ledger-body::-webkit-scrollbar{width:5px}
-    #deep-flow-view #ledger-body::-webkit-scrollbar-track{background:#06000e}
-    #deep-flow-view #ledger-body::-webkit-scrollbar-thumb{background:rgba(0,240,255,0.2);border-radius:3px}
-    #deep-flow-view #hdr{display:flex;align-items:center;height:36px;padding:0 8px;gap:6px;background:#050008;border-bottom:1px solid transparent;border-image:linear-gradient(90deg,#00F0FF 0%,#FF007F 40%,#39FF14 70%,transparent 100%) 1;flex-shrink:0;z-index:10}
-    #deep-flow-view #status-dot{width:6px;height:6px;border-radius:50%;background:#FF3131;box-shadow:0 0 6px #FF3131;flex-shrink:0;transition:background 0.3s,box-shadow 0.3s}
-    #deep-flow-view #status-dot.live{background:#39FF14;box-shadow:0 0 6px #39FF14}
-    #deep-flow-view #hdr-brand{font-family:'Orbitron',monospace;font-weight:900;font-size:calc(12px * var(--fs));color:#00F0FF;letter-spacing:3px;text-shadow:0 0 10px rgba(0,240,255,0.6),0 0 25px rgba(0,240,255,0.3);background:rgba(0,240,255,0.06);padding:2px 10px;border-radius:3px;box-shadow:0 0 15px rgba(0,240,255,0.2),inset 0 0 8px rgba(0,240,255,0.15);border:1px solid rgba(0,240,255,0.2);white-space:nowrap}
-    #deep-flow-view .ctrl-btn{background:transparent;border:1px solid rgba(0,240,255,0.25);color:#00F0FF;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:1px 5px;cursor:pointer;letter-spacing:0.5px;border-radius:2px;flex-shrink:0;transition:all 0.15s;white-space:nowrap}
-    #deep-flow-view .ctrl-btn:hover{background:rgba(0,240,255,0.08);border-color:rgba(0,240,255,0.5)}
-    #deep-flow-view .ctrl-btn.muted{color:#444;border-color:rgba(255,255,255,0.08)}
-    #deep-flow-view #stream-toggle{border-color:#00F0FF;color:#00F0FF;text-shadow:0 0 4px rgba(0,240,255,0.3)}
-    #deep-flow-view #stream-toggle.binance-active{border-color:#F0B90B;color:#F0B90B;text-shadow:0 0 6px rgba(240,185,11,0.5);box-shadow:0 0 8px rgba(240,185,11,0.15)}
-    #deep-flow-view #hdr-spacer{flex:1}
-    #deep-flow-view #hdr-conn-status{color:#FF3131;font-weight:700;letter-spacing:1.5px;font-size:9px;display:none;text-shadow:0 0 8px rgba(255,49,49,0.4)}
-    #deep-flow-view #hdr-date, #deep-flow-view #hdr-clock{font-size:calc(10px * var(--fs));color:#6a6a7a;white-space:nowrap}
-    #deep-flow-view #hdr-clock{color:#00F0FF;opacity:0.7}
-    #deep-flow-view .ticker-chip{display:flex;align-items:center;gap:5px;padding:2px 7px;background:rgba(255,255,255,0.03);border-left:2px solid #00F0FF;border-radius:0 3px 3px 0;white-space:nowrap;flex-shrink:0}
-    #deep-flow-view .ticker-chip.eth-chip{border-left-color:#627EEA}
-    #deep-flow-view .ticker-chip.gas-chip{border-left-color:#FF8C00}
-    #deep-flow-view .ticker-label{font-size:9px;font-weight:700;color:#888;letter-spacing:0.5px}
-    #deep-flow-view .ticker-price{font-size:calc(11px * var(--fs));font-weight:500;color:#e0e0e8}
-    #deep-flow-view .ticker-change{font-size:9px;font-weight:400}
-    #deep-flow-view .ticker-change.pos{color:#39FF14}
-    #deep-flow-view .ticker-change.neg{color:#FF3131}
-    #deep-flow-view .gas-unit{font-size:8px;color:#FF8C00;opacity:0.7}
-    #deep-flow-view #dashboard{display:flex;height:calc(100vh - 36px)}
-    #deep-flow-view #sidebar{width:230px;min-width:230px;display:flex;flex-direction:column;gap:4px;padding:4px;background:#06000e;border-right:1px solid rgba(0,240,255,0.08);overflow-y:auto;flex-shrink:0}
-    #deep-flow-view .sidebar-layer{display:none;flex-direction:column;gap:4px;flex:1}
-    #deep-flow-view .sidebar-layer.active{display:flex}
-    #deep-flow-view .corner-block{flex:1;display:flex;flex-direction:column;justify-content:center;padding:5px 8px;background:#090112;border:1px solid rgba(0,240,255,0.06);border-radius:3px;box-shadow:0 0 8px rgba(0,240,255,0.02),inset 0 0 8px rgba(0,240,255,0.01)}
-    #deep-flow-view .block-label{font-size:7px;font-weight:700;color:#00F0FF;letter-spacing:1.2px;opacity:0.65;margin-bottom:3px}
-    #deep-flow-view .block-value{font-size:calc(15px * var(--fs));font-weight:700;color:#f0f0f5;line-height:1.2;margin-bottom:2px}
-    #deep-flow-view .block-sub{font-size:8px;color:#6a6a7a;margin-bottom:3px}
-    #deep-flow-view .block-sub.pos{color:#39FF14}
-    #deep-flow-view .block-sub.neg{color:#FF3131}
-    #deep-flow-view .block-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-    #deep-flow-view .block-bar-fill{height:100%;border-radius:2px;transition:width 0.4s ease,background-color 0.4s ease}
-    #deep-flow-view .ratio-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:2px}
-    #deep-flow-view .ratio-buy{background:#39FF14;transition:width 0.4s ease}
-    #deep-flow-view .ratio-sell{background:#FF3131;transition:width 0.4s ease}
-    #deep-flow-view .ratio-labels{display:flex;justify-content:space-between;font-size:7px;font-weight:500}
-    #deep-flow-view .ratio-buy-label{color:#39FF14}
-    #deep-flow-view .ratio-sell-label{color:#FF3131}
-    #deep-flow-view .hot-list{display:flex;flex-direction:column;gap:1px}
-    #deep-flow-view .hot-item{display:flex;align-items:center;gap:4px;font-size:8px}
-    #deep-flow-view .hot-rank{color:#555;width:12px;flex-shrink:0;text-align:right}
-    #deep-flow-view .hot-name{color:#a0a0b0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    #deep-flow-view .hot-gas{color:#FF8C00;flex-shrink:0}
-    #deep-flow-view .bn-vivid-block{border:1px solid rgba(240,185,11,0.3);background:linear-gradient(135deg,#090112 0%,#10081a 100%)}
-    #deep-flow-view .bn-vivid-block .block-label{color:#00F0FF;opacity:1;letter-spacing:1.5px;text-shadow:0 0 4px rgba(0,240,255,0.4)}
-    #deep-flow-view .bn-vivid-block .block-value{color:#F0B90B;font-weight:900;text-shadow:0 0 10px rgba(240,185,11,0.6);font-size:calc(16px * var(--fs))}
-    #deep-flow-view #ledger-section{flex:1;display:flex;flex-direction:column;min-width:0;background:#000}
-    #deep-flow-view #ledger-header{display:flex;align-items:center;height:24px;padding:0 8px;background:#0a0014;border-bottom:1px solid rgba(0,240,255,0.12);flex-shrink:0}
-    #deep-flow-view #ledger-header>span{font-size:8px;font-weight:700;color:#00F0FF;letter-spacing:1.2px;opacity:0.6}
-    #deep-flow-view .sort-header{cursor:pointer;user-select:none;display:flex;align-items:center;gap:3px}
-    #deep-flow-view .sort-header:hover{opacity:1!important}
-    #deep-flow-view .sort-arrow{font-size:7px;color:#00F0FF;opacity:0.9}
-    #deep-flow-view .col-value{width:100px;text-align:right;transition:width 0.2s}
-    #deep-flow-view .col-asset{width:65px;text-align:center;transition:width 0.2s}
-    #deep-flow-view .col-action{width:100px;text-align:center;transition:width 0.2s}
-    #deep-flow-view .col-flow{flex:1;padding-left:8px;transition:width 0.2s}
-    #deep-flow-view .col-time{width:60px;text-align:right}
-    #deep-flow-view .binance-mode .col-value{width:auto;flex:1}
-    #deep-flow-view .binance-mode .col-asset{width:85px}
-    #deep-flow-view .binance-mode .col-action{width:115px}
-    #deep-flow-view .binance-mode .col-flow{width:95px;flex:none;padding-left:8px}
-    #deep-flow-view #macro-filters{display:flex;align-items:center;gap:4px;height:22px;padding:0 8px;background:#030008;border-bottom:1px solid rgba(0,240,255,0.04);flex-shrink:0}
-    #deep-flow-view .mf-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#444;font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:700;padding:2px 7px;cursor:pointer;letter-spacing:0.5px;border-radius:2px;transition:all 0.15s;white-space:nowrap;flex-shrink:0}
-    #deep-flow-view .mf-btn:hover{color:#777;border-color:rgba(0,240,255,0.2)}
-    #deep-flow-view .mf-btn.active{color:#00F0FF;border-color:rgba(0,240,255,0.4);background:rgba(0,240,255,0.06)}
-    #deep-flow-view #filter-bar{width:100%;height:22px;background:#030008;border:none;border-bottom:1px solid rgba(0,240,255,0.06);color:#c0c0cc;font-family:'JetBrains Mono',monospace;font-size:calc(10px * var(--fs));padding:0 8px;outline:none;flex-shrink:0;transition:border-bottom-color 0.2s}
-    #deep-flow-view #filter-bar:focus{border-bottom-color:rgba(0,240,255,0.3)}
-    #deep-flow-view #filter-bar::placeholder{color:#2a2a3a;letter-spacing:1.5px;font-size:9px}
-    #deep-flow-view #ledger-body{flex:1;overflow-y:auto;overflow-x:hidden;contain:strict}
-    #deep-flow-view .scroll-sentinel{height:1px;width:100%;flex-shrink:0}
-    #deep-flow-view .no-results{padding:30px 10px;color:#333;text-align:center;font-size:calc(10px * var(--fs));letter-spacing:1px}
-    #deep-flow-view #ledger-body .row{display:flex;align-items:center;height:26px;padding:0 8px;border-bottom:1px solid rgba(255,255,255,0.02);border-left:2px solid transparent;cursor:pointer}
-    #deep-flow-view #ledger-body .row:hover{background:rgba(0,240,255,0.05)}
-    #deep-flow-view #ledger-body .row.active{background:rgba(0,240,255,0.08);border-left-color:#00F0FF}
-    #deep-flow-view #ledger-body .row.live-new{border-left-color:#39FF14}
-    #deep-flow-view #ledger-body .row.live-new.anomaly{border-left-color:#FF007F}
-    #deep-flow-view #ledger-body .rv{text-align:right;width:100px;font-weight:500;color:#e0e0e8;flex-shrink:0;transition:width 0.2s,flex 0.2s}
-    #deep-flow-view #ledger-body .rv.anomaly{color:#FF007F;text-shadow:0 0 6px rgba(255,0,127,0.3)}
-    #deep-flow-view .binance-mode .rv{width:auto;flex:1}
-    #deep-flow-view .token-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 4px;border-radius:2px;background:rgba(255,255,255,0.04);white-space:nowrap}
-    #deep-flow-view .token-icon{width:13px;height:13px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#000;flex-shrink:0}
-    #deep-flow-view .token-ticker{font-size:calc(9px * var(--fs));font-weight:500;color:#d0d0d8}
-    #deep-flow-view .action-tag{display:inline-block;padding:0 4px;border-left:2px solid;font-size:8px;font-weight:500;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:94px;line-height:1.6}
-    #deep-flow-view #ledger-body .rf{flex:1;padding-left:8px;color:#5a5a6e;font-size:calc(10px * var(--fs));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:width 0.2s,flex 0.2s}
-    #deep-flow-view .binance-mode .rf{width:95px;flex:none}
-    #deep-flow-view #ledger-body .rt{text-align:right;width:60px;color:#7a7a8e;font-size:calc(10px * var(--fs));flex-shrink:0}
-    #deep-flow-view .submenu{display:none;margin-left:14px;padding:6px 10px;background:rgba(9,1,18,0.9);border-left:2px solid rgba(0,240,255,0.2);border-bottom:1px solid rgba(0,240,255,0.06)}
-    #deep-flow-view .submenu.open{display:block}
-    #deep-flow-view .sub-row{display:flex;align-items:flex-start;gap:8px;padding:2px 0;font-size:calc(10px * var(--fs))}
-    #deep-flow-view .sub-label{color:#5a5a6e;min-width:72px;flex-shrink:0;padding-top:1px}
-    #deep-flow-view .sub-val{color:#c0c0cc;word-break:break-word;line-height:1.5}
-    #deep-flow-view .sub-val.deep-meta{color:#d0d0dd;font-size:calc(9.5px * var(--fs))}
-    #deep-flow-view .hash-clickable{color:#00F0FF;cursor:pointer;text-decoration:none;user-select:none}
-    #deep-flow-view .hash-clickable:hover{text-decoration:underline}
-    #deep-flow-view .sub-analysis{margin-top:5px;padding:5px 8px;border-left:2px solid rgba(255,215,0,0.5);background:rgba(255,215,0,0.025);border-radius:0 2px 2px 0}
-    #deep-flow-view .sub-analysis-label{font-size:8px;font-weight:700;color:#FFD700;letter-spacing:0.8px;margin-bottom:3px;opacity:0.85}
-    #deep-flow-view .sub-analysis-text{font-size:calc(9.5px * var(--fs));line-height:1.55;color:#9a9aaa;font-weight:300}
-    #deep-flow-view .loading{opacity:0.3;animation:pulse 1.5s ease-in-out infinite}
-    @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.6}}
-    @media(max-width:700px){#deep-flow-view #sidebar{display:none}}
-
-    /* ============================================
-       BOTÓN DE INTERCAMBIO DE VISTAS
-       ============================================ */
-    .view-switch-btn {
-      background: var(--color-highlight);
-      color: #000;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.85em;
-      transition: all 0.2s;
-      margin-left: 10px;
-    }
-    .view-switch-btn:hover {
-      opacity: 0.8;
-      transform: scale(1.05);
-    }
-    #deep-flow-view .view-switch-btn-df {
-      background: #00F0FF;
-      color: #000;
-      border: none;
-      padding: 1px 8px;
-      border-radius: 2px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 8px;
-      margin-left: 6px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    #deep-flow-view .view-switch-btn-df:hover {
-      background: #39FF14;
+    #youtube-player {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================
-       VISTA 1: DOMINON DASHBOARD (Cyberpunk Violeta)
-       ============================================ -->
-  <div id="main-dashboard-view">
-    <div id="loginScreen">
-      <div class="login-container">
-        <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
-        <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
-        <button class="google-button" id="googleSignInBtn">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-          </svg>
-          Iniciar sesión con Google
-        </button>
-      </div>
+  <!-- PANTALLA DE AUTENTICACIÓN (FIREBASE) -->
+  <div id="loginScreen">
+    <div class="login-container">
+      <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
+      <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
+      <button class="google-button" id="googleSignInBtn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Iniciar sesión con Google
+      </button>
     </div>
+  </div>
 
+  <!-- VISTA SPA 1: DOMINON DASHBOARD -->
+  <div id="main-dashboard-view">
     <div class="container hidden" id="mainApp">
       <div class="top-bar">
         <div class="top-left">
           <div class="box" id="fecha-hora">Cargando...</div>
-          <button class="view-switch-btn" onclick="switchView()" title="Cambiar a Deep Flow">🔄 DEEP FLOW</button>
+          <button id="toggle-view-to-flow" class="music-btn" onclick="window.toggleAppView()" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
+            <i class="fa-solid fa-chart-line"></i> DEEP FLOW
+          </button>
         </div>
         <div class="top-right">
           <div class="user-info" id="userInfo">
@@ -927,31 +1330,6 @@
             <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
               <i class="fa-solid fa-music"></i>
             </button>
-            
-            <div id="musicPanel" class="hidden music-player-panel">
-              <div class="player-header">REPRODUCTOR</div>
-              
-              <div class="player-controls">
-                <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
-                <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
-                <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
-              </div>
-              
-              <div class="progress-time">
-                <span id="current-time">0:00</span>
-                <span id="duration-time">0:00</span>
-              </div>
-              
-              <div class="progress-bar-container">
-                <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
-              </div>
-              
-              <div class="volume-control">
-                <i class="fa-solid fa-volume-low"></i>
-                <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
-                <i class="fa-solid fa-volume-high"></i>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -982,6 +1360,7 @@
           <div class="notepad-header-row">
             <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
             <div class="notepad-tabs" id="notepad-tabs">
+              <!-- Pestañas dinámicas -->
             </div>
           </div>
           <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
@@ -993,7 +1372,7 @@
             <div id="display" class="calc-display">0</div>
             <div class="calculator-grid">
               <button class="calc-button clear" onclick="clearDisplay()">C</button>
-              <button class="calc-button" onclick="backspace()">⌫</button>
+              <button class="calc-button" onclick="backspace()">?</button>
               <button class="calc-button operator" onclick="appendOperator('/')">/</button>
               <button class="calc-button operator" onclick="appendOperator('*')">×</button>
               <button class="calc-button" onclick="appendNumber('7')">7</button>
@@ -1028,160 +1407,293 @@
     </div>
   </div>
 
-  <!-- ============================================
-       VISTA 2: DEEP FLOW (Terminal Crypto)
-       ============================================ -->
+  <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
   <div id="deep-flow-view" class="hidden-view">
     <header id="hdr">
-      <span id="status-dot"></span>
-      <span id="hdr-brand">DEEP FLOW</span>
-      <button class="view-switch-btn-df" onclick="switchView()" title="Cambiar a Dominon">🔄 DOMINON</button>
-      <button class="ctrl-btn" id="font-dec">A-</button>
-      <button class="ctrl-btn" id="font-inc">A+</button>
+      <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span>
+      <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
       <button class="ctrl-btn" id="sound-toggle">SND ON</button>
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
-      <span id="hdr-spacer"></span>
-      <span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
-      <span id="hdr-date"></span>
-      <span id="hdr-clock"></span>
-      <div class="ticker-chip">
-        <span class="ticker-label">BTC</span>
-        <span class="ticker-price" id="btc-price">---</span>
-        <span class="ticker-change" id="btc-change"></span>
-      </div>
-      <div class="ticker-chip eth-chip">
-        <span class="ticker-label">ETH</span>
-        <span class="ticker-price" id="eth-price">---</span>
-        <span class="ticker-change" id="eth-change"></span>
-      </div>
-      <div class="ticker-chip gas-chip">
-        <span class="ticker-label">GAS</span>
-        <span class="ticker-price" id="gas-value">--</span>
-        <span class="gas-unit">Gwei</span>
-      </div>
+      <button class="ctrl-btn" id="view-toggle" onclick="window.toggleAppView()" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
+      <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
+      <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
+      <span id="hdr-date"></span><span id="hdr-clock"></span>
+      <div class="ticker-chip"><span class="ticker-label">BTC</span><span class="ticker-price" id="btc-price">---</span><span class="ticker-change" id="btc-change"></span></div>
+      <div class="ticker-chip eth-chip"><span class="ticker-label">ETH</span><span class="ticker-price" id="eth-price">---</span><span class="ticker-change" id="eth-change"></span></div>
+      <div class="ticker-chip gas-chip"><span class="ticker-label">GAS</span><span class="ticker-price" id="gas-value">--</span><span class="gas-unit">Gwei</span></div>
     </header>
-    
     <main id="dashboard">
       <aside id="sidebar">
         <div id="sidebar-onchain" class="sidebar-layer active">
-          <div class="corner-block">
-            <div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div>
-            <div class="block-value loading" id="btc-dom-value">--%</div>
-            <div class="block-bar">
-              <div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div>
-            </div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div>
-            <div class="block-value loading" id="mcap-value">---</div>
-            <div class="block-sub" id="mcap-change"></div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div>
-            <div class="block-value" id="vol-value">0</div>
-            <div class="block-bar">
-              <div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div>
-            </div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div>
-            <div class="block-value" id="ssr-value">--%</div>
-            <div class="block-bar">
-              <div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div>
-            </div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div>
-            <div class="ratio-bar">
-              <div class="ratio-buy" id="ratio-buy" style="width:50%;"></div>
-              <div class="ratio-sell" id="ratio-sell" style="width:50%;"></div>
-            </div>
-            <div class="ratio-labels">
-              <span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span>
-              <span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span>
-            </div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div>
-            <div class="hot-list" id="hot-list"></div>
-          </div>
+          <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div><div class="block-value" id="vol-value">0</div><div class="block-bar"><div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div><div class="block-value" id="ssr-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div><div class="ratio-bar"><div class="ratio-buy" id="ratio-buy" style="width:50%;"></div><div class="ratio-sell" id="ratio-sell" style="width:50%;"></div></div><div class="ratio-labels"><span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span><span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div><div class="hot-list" id="hot-list"></div></div>
         </div>
-        
         <div id="sidebar-binance" class="sidebar-layer">
-          <div class="corner-block">
-            <div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div>
-            <div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div>
-            <div class="block-sub" id="bn-volume-change"></div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div>
-            <div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div>
-            <div class="block-bar" style="margin-top:4px;">
-              <div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div>
-            </div>
-            <div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div>
-          </div>
-          <div class="corner-block">
-            <div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div>
-            <div class="hot-list" id="bn-pairs-list"></div>
-          </div>
-          <div class="corner-block bn-vivid-block">
-            <div class="block-label">FUTURES OPEN INT.</div>
-            <div class="block-value" id="bn-oi-value">$18.4B</div>
-          </div>
-          <div class="corner-block bn-vivid-block">
-            <div class="block-label">TOP FUTURES PAIR</div>
-            <div class="block-value">BTC/USDT</div>
-          </div>
-          <div class="corner-block bn-vivid-block">
-            <div class="block-label">BTC DOMINANCE</div>
-            <div class="block-value" id="btc-dom-value-2">52.4%</div>
-          </div>
+          <div class="corner-block"><div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div><div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div><div class="block-sub" id="bn-volume-change"></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div><div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div><div class="block-bar" style="margin-top:4px;"><div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div></div><div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div><div class="hot-list" id="bn-pairs-list"></div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">FUTURES OPEN INT.</div><div class="block-value" id="bn-oi-value">$18.4B</div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">TOP FUTURES PAIR</div><div class="block-value">BTC/USDT</div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">BTC DOMINANCE</div><div class="block-value" id="btc-dom-value-2">52.4%</div></div>
         </div>
       </aside>
-      
       <section id="ledger-section">
         <div id="ledger-header">
-          <span class="col-value sort-header" id="sort-value" data-sort="value">
-            <span data-i18n="value">VALUE (USD)</span>
-            <span class="sort-arrow" id="arrow-value">&#9660;</span>
-          </span>
-          <span class="col-asset" data-i18n="asset">ASSET</span>
-          <span class="col-action" data-i18n="action">ACTION</span>
-          <span class="col-flow" data-i18n="fromTo">FROM / TO</span>
-          <span class="col-time sort-header" id="sort-time" data-sort="timestamp">
-            <span data-i18n="time">TIME</span>
-            <span class="sort-arrow" id="arrow-time"></span>
-          </span>
+          <span class="col-value sort-header" id="sort-value" data-sort="value"><span data-i18n="value">VALUE (USD)</span><span class="sort-arrow" id="arrow-value">&#9660;</span></span>
+          <span class="col-asset" data-i18n="asset">ASSET</span><span class="col-action" data-i18n="action">ACTION</span><span class="col-flow" data-i18n="fromTo">FROM / TO</span>
+          <span class="col-time sort-header" id="sort-time" data-sort="timestamp"><span data-i18n="time">TIME</span><span class="sort-arrow" id="arrow-time"></span></span>
         </div>
-        
         <div id="macro-filters">
-          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button>
-          <button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button>
-          <button class="mf-btn" data-mf="filter3" data-i18n="swapsOnly">SWAPS ONLY</button>
-          <button class="mf-btn" data-mf="filter4" data-i18n="yieldOnly">YIELD ONLY</button>
+          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="filter3" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="filter4" data-i18n="yieldOnly">YIELD ONLY</button>
         </div>
-        
         <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
-        
-        <div id="ledger-body">
-          <div class="scroll-sentinel" id="scroll-sentinel"></div>
-        </div>
+        <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
       </section>
     </main>
   </div>
 
-  <!-- ============================================
-       REPRODUCTOR YOUTUBE (FUERA DE VISTAS MUTABLES)
-       ============================================ -->
+  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
   <div id="youtube-player"></div>
 
-  <!-- ============================================
-       SCRIPTS DE DOMINON (INTACTOS)
-       ============================================ -->
+  <div id="musicPanel" class="hidden">
+    <div class="music-player-panel">
+      <div class="player-header">REPRODUCTOR</div>
+      
+      <div class="player-controls">
+        <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+        <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+        <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+      </div>
+      
+      <div class="progress-time">
+        <span id="current-time">0:00</span>
+        <span id="duration-time">0:00</span>
+      </div>
+      
+      <div class="progress-bar-container">
+        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+      </div>
+      
+      <div class="volume-control">
+        <i class="fa-solid fa-volume-low"></i>
+        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+        <i class="fa-solid fa-volume-high"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
+      authDomain: "danifu777-4732c.firebaseapp.com",
+      projectId: "danifu777-4732c",
+      databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
+      storageBucket: "danifu777-4732c.firebasestorage.app",
+      messagingSenderId: "171480985650",
+      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
+      measurementId: "G-SL032V9XGM"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    // Exportar instancias de bases de datos y auth al contexto de window
+    window.db = db;
+    window.auth = auth;
+    window.rtdb = rtdb;
+
+    // Listener del estado de autenticación
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        document.getElementById('userName').textContent = user.displayName;
+        document.getElementById('userAvatar').src = user.photoURL;
+
+        // Carga de la nota activa en Firestore
+        window.loadNoteFromFirestore(window.activeTab);
+
+        // Carga del estado y progreso del reproductor
+        window.loadSavedMusic = function() {
+          if (!auth.currentUser) return;
+          var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
+          onValue(musicRef, function(snapshot) {
+            var data = snapshot.val();
+            if (data && data.videoId && window.player) {
+              setTimeout(function() {
+                try {
+                  var videoIdToLoad = data.videoId;
+                  if (videoIdToLoad.indexOf('watch') !== -1 || videoIdToLoad.indexOf('v=') !== -1) {
+                    var urlParts = videoIdToLoad.split('?');
+                    if (urlParts.length > 1) {
+                      var params = urlParts[1].split('&');
+                      for (var i = 0; i < params.length; i++) {
+                        if (params[i].indexOf('v=') === 0) {
+                          videoIdToLoad = params[i].split('=')[1];
+                          break;
+                        }
+                      }
+                    }
+                  }
+
+                  window.player.cuePlaylist({
+                    listType: 'playlist',
+                    list: playlistId,
+                    index: 0,
+                    startSeconds: 0
+                  });
+
+                  setTimeout(function() {
+                    var plist = window.player.getPlaylist();
+                    if (plist && plist.length > 0) {
+                      var idx = plist.indexOf(videoIdToLoad);
+                      if (idx >= 0) {
+                        window.player.playVideoAt(idx);
+                        setTimeout(function() {
+                          window.player.seekTo(data.time || 0, true);
+                          window.player.pauseVideo();
+                          updateSongDisplay();
+                        }, 1000);
+                      } else {
+                        window.player.playVideoAt(0);
+                        setTimeout(function() { window.player.pauseVideo(); }, 800);
+                      }
+                    } else {
+                      window.player.playVideoAt(0);
+                      setTimeout(function() { window.player.pauseVideo(); }, 800);
+                    }
+                  }, 2000);
+
+                } catch (e) {
+                  console.error('Error cargando música guardada:', e);
+                }
+              }, 1500);
+            }
+          }, { onlyOnce: true });
+        };
+
+      } else {
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+    // Auto-guardado de progreso de música
+    setInterval(() => {
+       if (auth.currentUser && window.player) {
+          try {
+             const currentTime = Math.floor(window.player.getCurrentTime());
+             const videoData = window.player.getVideoData();
+             if (videoData && videoData.video_id) {
+                set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+                   videoId: videoData.video_id,
+                   time: currentTime,
+                   timestamp: new Date().getTime()
+                });
+             }
+          } catch (error) {
+             console.log("Error guardando música:", error);
+          }
+       }
+    }, 30000);
+
+    // Bloc de notas Firestore (Lógica compartida)
+    window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
+    if (parseInt(window.activeTab) > 3) {
+        window.activeTab = "1";
+        localStorage.setItem('danifu_active_tab', window.activeTab);
+    }
+    
+    let saveTimeout;
+    
+    window.loadNoteFromFirestore = async function(tabNum) {
+       if (!window.auth || !window.auth.currentUser) return;
+       try {
+          const notepadEl = document.getElementById('notepad');
+          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
+          const docSnap = await getDoc(userDocRef);
+          if (docSnap.exists()) {
+             if (notepadEl) notepadEl.value = docSnap.data().content || "";
+          } else {
+             if (notepadEl) notepadEl.value = "";
+          }
+       } catch (error) {
+          console.error("Error cargando nota:", error);
+          const notepadEl = document.getElementById('notepad');
+          if (notepadEl) notepadEl.value = "";
+       }
+    }
+
+    const notepadEl = document.getElementById('notepad');
+    if (notepadEl) {
+        notepadEl.addEventListener('input', function() {
+           if (!window.auth || !window.auth.currentUser) return;
+           clearTimeout(saveTimeout);
+           saveTimeout = setTimeout(async function() {
+              try {
+                 const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
+                 await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
+              } catch (error) {
+                 console.error("Error guardando nota:", error);
+              }
+           }, 2000);
+        });
+    }
+
+    const tabsContainer = document.getElementById('notepad-tabs');
+    if (tabsContainer) {
+        for (let i = 1; i <= 3; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
+            btn.id = 'btn-tab-' + i;
+            btn.textContent = 'Nota ' + i;
+            btn.onclick = function() { window.switchTab(i); };
+            tabsContainer.appendChild(btn);
+        }
+    }
+
+    window.switchTab = function(tabNum) {
+      window.activeTab = String(tabNum);
+      localStorage.setItem('danifu_active_tab', window.activeTab);
+      
+      var notepadTitle = document.getElementById('notepad-title');
+      if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Nota " + window.activeTab;
+      
+      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+      var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      if (window.auth && window.auth.currentUser) {
+        window.loadNoteFromFirestore(window.activeTab);
+      } else {
+        var notepadEl = document.getElementById('notepad');
+        if (notepadEl) notepadEl.value = "";
+      }
+    };
+  </script>
+
+  <!-- LÓGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // Variables globales para el reproductor
     window.youtubePlayerReady = false;
     window.player = null;
     window.playerCommands = [];
@@ -1217,13 +1729,17 @@
         }
       });
     }
+    // Exponer la inicialización globalmente para YouTube iframe API
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
     function onPlayerReady(event) {
       var savedVolume = localStorage.getItem('danifu_volume') || 50;
       event.target.setVolume(parseInt(savedVolume));
       var volSlider = document.getElementById('volumeSlider');
       if (volSlider) volSlider.value = savedVolume;
+
       window.youtubePlayerReady = true;
+
       var plist = window.player.getPlaylist();
       if (!plist || plist.length === 0) {
         window.player.cuePlaylist({
@@ -1233,13 +1749,16 @@
           startSeconds: 0
         });
       }
+
       setTimeout(updateSongDisplay, 1000);
+
       while (window.playerCommands.length > 0) {
         var cmd = window.playerCommands.shift();
         if (window.player && window.player[cmd.fn]) {
           window.player[cmd.fn].apply(window.player, cmd.args);
         }
       }
+
       if (window.loadSavedMusic) {
         window.loadSavedMusic();
       }
@@ -1273,10 +1792,12 @@
 
     setInterval(function() {
       _masterTick++;
+
       if (_masterTick % 2 === 0) {
         var d = new Date();
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
       }
+
       if (window.player && window.player.getCurrentTime) {
         try {
           var cur = Math.floor(window.player.getCurrentTime());
@@ -1288,6 +1809,7 @@
           }
         } catch(e) {}
       }
+
       if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
         try {
           var videoData = window.player.getVideoData();
@@ -1295,7 +1817,9 @@
           if (_elSongTitle) _elSongTitle.textContent = title;
         } catch(e) {}
       }
+
       if (_masterTick >= 600) _masterTick = 0;
+
     }, 500);
 
     window.playPauseVideo = function() {
@@ -1348,6 +1872,7 @@
       var volumeSlider = document.getElementById('volumeSlider');
       var progressBar = document.getElementById('progressBar');
       var toggleBtn = document.getElementById('toggleMusicPanel');
+      var toggleBtnFlow = document.getElementById('toggleMusicPanelFlow');
       var musicPanel = document.getElementById('musicPanel');
 
       if (toggleBtn) {
@@ -1355,15 +1880,24 @@
           musicPanel.classList.toggle('hidden');
         };
       }
+      if (toggleBtnFlow) {
+        toggleBtnFlow.onclick = function() {
+          musicPanel.classList.toggle('hidden');
+        };
+      }
+
       if (playPauseBtn) {
         playPauseBtn.addEventListener('click', window.playPauseVideo);
       }
+
       if (nextBtn) {
         nextBtn.addEventListener('click', window.nextVideo);
       }
+
       if (prevBtn) {
         prevBtn.addEventListener('click', window.prevVideo);
       }
+
       if (volumeSlider) {
         volumeSlider.addEventListener('input', function(e) {
           var volume = parseInt(e.target.value);
@@ -1371,6 +1905,7 @@
           localStorage.setItem('danifu_volume', volume);
         });
       }
+
       if (progressBar) {
         progressBar.addEventListener('input', function(e) {
           if (!window.player || !window.player.getDuration) return;
@@ -1384,9 +1919,133 @@
     });
   </script>
 
-  <!-- ============================================
-       SCRIPTS DE DEEP FLOW (INTACTOS)
-       ============================================ -->
+  <!-- CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS) -->
+  <script>
+    window.toggleAppView = function() {
+      var mainDash = document.getElementById('main-dashboard-view');
+      var deepFlow = document.getElementById('deep-flow-view');
+      if (mainDash && deepFlow) {
+        var isFlowHidden = deepFlow.classList.contains('hidden-view');
+        if (isFlowHidden) {
+          mainDash.classList.add('hidden-view');
+          deepFlow.classList.remove('hidden-view');
+        } else {
+          deepFlow.classList.add('hidden-view');
+          mainDash.classList.remove('hidden-view');
+        }
+        if (typeof playClickSound === 'function') {
+          try { playClickSound(); } catch(e) {}
+        }
+      }
+    };
+  </script>
+
+  <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
+  <script>
+    // Calculadora
+    const display = document.getElementById('display');
+    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
+    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
+    window.appendNumber = function (number) {
+      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
+      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
+      updateDisplay();
+    };
+    window.appendOperator = function (nextOperation) {
+      const inputValue = parseFloat(currentInput);
+      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
+      if (previousInput === '') { previousInput = inputValue; }
+      else if (operation) {
+        const result = performCalculation[operation](previousInput, inputValue);
+        currentInput = String(result); previousInput = result;
+      }
+      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
+    };
+    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
+    window.calculate = function () {
+      if (!operation || waitingForSecondOperand) return;
+      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
+      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
+      updateDisplay();
+    };
+    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
+    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
+
+    // Tema visual
+    window.setTheme = function (color) {
+      document.documentElement.style.setProperty('--color-highlight', color);
+      localStorage.setItem('danifu_theme', color);
+    };
+
+    // Gráfico TradingView
+    window.changeSymbol = function () {
+      const select = document.getElementById('symbolSelect');
+      const symbol = select.value;
+      const iframe = document.getElementById('tradingViewChart');
+      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
+      iframe.src = newSrc;
+      localStorage.setItem('danifu_chart_symbol', symbol);
+    };
+
+    // Pomodoro
+    let pomoInterval;
+    let pomoSeconds = 25 * 60;
+    let isRunning = false;
+    window.updatePomoUI = function () {
+      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+      const s = (pomoSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('pomo-display').innerText = `${m}:${s}`;
+    };
+    window.togglePomodoro = function () {
+      const btn = document.getElementById('start-btn');
+      if (isRunning) {
+        clearInterval(pomoInterval);
+        isRunning = false;
+        btn.innerText = "INICIAR";
+        btn.classList.remove('active');
+      } else {
+        isRunning = true;
+        btn.innerText = "PAUSAR";
+        btn.classList.add('active');
+        pomoInterval = setInterval(() => {
+          if (pomoSeconds > 0) {
+            pomoSeconds--;
+            updatePomoUI();
+          } else {
+            clearInterval(pomoInterval);
+            isRunning = false;
+            btn.innerText = "INICIAR";
+            btn.classList.remove('active');
+            alert("¡Tiempo terminado!");
+          }
+        }, 1000);
+      }
+    };
+    window.resetPomodoro = function () {
+      clearInterval(pomoInterval);
+      isRunning = false;
+      pomoSeconds = 25 * 60;
+      updatePomoUI();
+      document.getElementById('start-btn').innerText = "INICIAR";
+      document.getElementById('start-btn').classList.remove('active');
+    };
+    window.setCustomTime = function () {
+      const input = document.getElementById('custom-min');
+      const mins = parseInt(input.value);
+      if (!mins || mins <= 0) {
+        alert("Por favor ingresa un número de minutos válido.");
+        return;
+      }
+      clearInterval(pomoInterval);
+      isRunning = false;
+      pomoSeconds = mins * 60;
+      updatePomoUI();
+      document.getElementById('start-btn').innerText = "INICIAR";
+      document.getElementById('start-btn').classList.remove('active');
+    };
+  </script>
+
+  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
   <script>
     const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
     const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
@@ -1423,37 +2082,150 @@
     function t(key){return LANG[STATE.lang][key]||key}
 
     function generateAnalysis(tx){
-      const sw=tx.value>=200e6?'an extraordinary ':tx.value>=100e6?'a massive ':tx.value>=50e6?'a significant ':'',swEs=tx.value>=200e6?'de escala extraordinaria ':tx.value>=100e6?'de escala masiva ':tx.value>=50e6?'de escala significativa ':'';
-      if(tx.stream==='binance'){const p=tx.pair;if(tx.actionType==='LARGE SPOT BUY')return{en:`This represents ${sw}aggressive spot accumulation of ${p}. Executing a market buy of this size implies extreme urgency and strong conviction of an imminent price breakout.`,es:`Esto representa ${swEs}acumulaci\u00f3n spot agresiva de ${p}.`};if(tx.actionType==='LARGE SPOT SELL')return{en:`Deliberate spot dumping of ${p} at ${sw}scale. This whale is liquidating a massive position, signaling a potential shift to stablecoins.`,es:`Descarga spot deliberada de ${p} a ${swEs}escala.`};if(tx.actionType==='FUTURES LONG OPEN')return{en:`High-leverage long exposure initiated on ${p} at ${sw}scale. Signals speculative conviction that this asset will outperform.`,es:`Exposici\u00f3n larga de alta palanca iniciada en ${p} a ${swEs}escala.`};return{en:`Short position opened on ${p} at ${sw}scale. Indicates the whale is actively betting against this asset.`,es:`Posici\u00f3n corta abierta en ${p} a ${swEs}escala.`}}
-      const st=isStable(tx.token.sym),bt=tx.token.sym==='BTC'||tx.token.sym==='WBTC';
-      switch(tx.interaction.name){
-        case'DEX Swap':if(st){if(bt)return{en:`Direct buying pressure on Bitcoin at ${sw}scale. Converting stablecoins to BTC implies strong conviction.`,es:`Presi\u00f3n compradora directa sobre Bitcoin a ${swEs}escala.`};return{en:`${sw}capital deployment into a volatile asset via DEX.`,es:`${swEs}despliegue de capital hacia un activo vol\u00e1til.`}}return{en:`Deliberate de-risking at ${sw}scale. Swapping volatile assets for stablecoins.`,es:`Desapalancamiento deliberado a ${swEs}escala.`};
-        case'Yield Deposit':return{en:`Classic risk-off positioning at ${sw}scale. Earning yield suggests expecting sideways/downward action.`,es:`Posicionamiento risk-off a ${swEs}escala.`};
-        case'Staking Lock':return{en:`Supply constriction signal at ${sw}scale. Locking tokens removes them from circulating supply.`,es:`Se\u00f1al de restricci\u00f3n de oferta a ${swEs}escala.`};
-        case'DeFi Liquidation':return{en:`Forced closure at ${sw}scale. Leveraged position failed to meet margin requirements.`,es:`Cierre forzado a ${swEs}escala.`};
-        case'Whale Outflow':return{en:`Exchange withdrawal at ${sw}scale. Moving assets off-exchange typically signals accumulation intent.`,es:`Retiro de exchange a ${swEs}escala.`};
-        case'Whale Inflow':return{en:`Exchange deposit at ${sw}scale. Moving assets to a trading platform suggests an impending sell order.`,es:`Dep\u00f3sito en exchange a ${swEs}escala.`};
-        default:return{en:formatUSD(tx.value)+' '+tx.token.name+' transaction.',es:'Transacci\u00f3n de '+formatUSD(tx.value)+' '+tx.token.name+'.'}
-      }
-    }
+    const sw=tx.value>=200e6?'an extraordinary ':tx.value>=100e6?'a massive ':tx.value>=50e6?'a significant ':'',swEs=tx.value>=200e6?'de escala extraordinaria ':tx.value>=100e6?'de escala masiva ':tx.value>=50e6?'de escala significativa ':'';
+    if(tx.stream==='binance'){const p=tx.pair;if(tx.actionType==='LARGE SPOT BUY')return{en:`This represents ${sw}aggressive spot accumulation of ${p}. Executing a market buy of this size implies extreme urgency and strong conviction of an imminent price breakout.`,es:`Esto representa ${swEs}acumulaci\u00f3n spot agresiva de ${p}.`};if(tx.actionType==='LARGE SPOT SELL')return{en:`Deliberate spot dumping of ${p} at ${sw}scale. This whale is liquidating a massive position, signaling a potential shift to stablecoins.`,es:`Descarga spot deliberada de ${p} a ${swEs}escala.`};if(tx.actionType==='FUTURES LONG OPEN')return{en:`High-leverage long exposure initiated on ${p} at ${sw}scale. Signals speculative conviction that this asset will outperform.`,es:`Exposici\u00f3n larga de alta palanca iniciada en ${p} a ${swEs}escala.`};return{en:`Short position opened on ${p} at ${sw}scale. Indicates the whale is actively betting against this asset.`,es:`Posici\u00f3n corta abierta en ${p} a ${swEs}escala.`}}
+    const st=isStable(tx.token.sym),bt=tx.token.sym==='BTC'||tx.token.sym==='WBTC';
+    switch(tx.interaction.name){
+    case'DEX Swap':if(st){if(bt)return{en:`Direct buying pressure on Bitcoin at ${sw}scale. Converting stablecoins to BTC implies strong conviction.`,es:`Presi\u00f3n compradora directa sobre Bitcoin a ${swEs}escala.`};return{en:`${sw}capital deployment into a volatile asset via DEX.`,es:`${swEs}despliegue de capital hacia un activo vol\u00e1til.`}}return{en:`Deliberate de-risking at ${sw}scale. Swapping volatile assets for stablecoins.`,es:`Desapalancamiento deliberado a ${swEs}escala.`};
+    case'Yield Deposit':return{en:`Classic risk-off positioning at ${sw}scale. Earning yield suggests expecting sideways/downward action.`,es:`Posicionamiento risk-off a ${swEs}escala.`};
+    case'Staking Lock':return{en:`Supply constriction signal at ${sw}scale. Locking tokens removes them from circulating supply.`,es:`Se\u00f1al de restricci\u00f3n de oferta a ${swEs}escala.`};
+    case'DeFi Liquidation':return{en:`Forced closure at ${sw}scale. Leveraged position failed to meet margin requirements.`,es:`Cierre forzado a ${swEs}escala.`};
+    case'Whale Outflow':return{en:`Exchange withdrawal at ${sw}scale. Moving assets off-exchange typically signals accumulation intent.`,es:`Retiro de exchange a ${swEs}escala.`};
+    case'Whale Inflow':return{en:`Exchange deposit at ${sw}scale. Moving assets to a trading platform suggests an impending sell order.`,es:`Dep\u00f3sito en exchange a ${swEs}escala.`};
+    default:return{en:formatUSD(tx.value)+' '+tx.token.name+' transaction.',es:'Transacci\u00f3n de '+formatUSD(tx.value)+' '+tx.token.name+'.'}}}
 
     function enrichTx(tx,rng){
-      tx.direction='neutral';if(tx.stream==='binance'){tx.deepMeta='Via Binance Matching Engine';tx.venue=tx.location;const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es;return}
-      switch(tx.interaction.name){
-        case'DEX Swap':{const v=DV[Math.floor(rng()*DV.length)];tx.venue=v;if(isStable(tx.token.sym)){const tgt=pickNonStable(rng);tx.deepMeta='Swapped '+formatUSD(tx.value)+' '+tx.token.sym+' for '+formatTokenAmt(tx.value/(AP[tgt.sym]||100))+' '+tgt.sym+' on '+v;tx.direction='buy'}else{tx.deepMeta='Swapped '+formatTokenAmt(tx.value/(AP[tx.token.sym]||1000))+' '+tx.token.sym+' for '+formatUSD(tx.value)+' USDT on '+v;tx.direction='sell'}break}
-        case'Yield Deposit':{const v=YV[Math.floor(rng()*YV.length)];tx.venue=v;tx.deepMeta='Deposited '+formatUSD(tx.value)+' '+tx.token.sym+' into '+v;tx.direction='buy';break}
-        case'Staking Lock':{const v=YV[Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Locked '+formatUSD(tx.value)+' '+tx.token.sym+' in '+v;tx.direction='buy';break}
-        case'Whale Outflow':{const v=VL[Math.floor(rng()*VL.length)];tx.venue=v;tx.deepMeta='Moved '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='sell';break}
-        case'Whale Inflow':{const v=['Binance','Coinbase','Kraken','OKX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Transferred '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='buy';break}
-        case'DeFi Liquidation':{const v=['Aave V3','Compound V3','MakerDAO','dYdX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Liquidated on '+v;tx.direction='sell';break}
-        default:tx.venue='Unknown';tx.deepMeta=formatUSD(tx.value)+' '+tx.token.sym
-      }
-      const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es
-    }
+    tx.direction='neutral';if(tx.stream==='binance'){tx.deepMeta='Via Binance Matching Engine';tx.venue=tx.location;const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es;return}
+    switch(tx.interaction.name){
+    case'DEX Swap':{const v=DV[Math.floor(rng()*DV.length)];tx.venue=v;if(isStable(tx.token.sym)){const tgt=pickNonStable(rng);tx.deepMeta='Swapped '+formatUSD(tx.value)+' '+tx.token.sym+' for '+formatTokenAmt(tx.value/(AP[tgt.sym]||100))+' '+tgt.sym+' on '+v;tx.direction='buy'}else{tx.deepMeta='Swapped '+formatTokenAmt(tx.value/(AP[tx.token.sym]||1000))+' '+tx.token.sym+' for '+formatUSD(tx.value)+' USDT on '+v;tx.direction='sell'}break}
+    case'Yield Deposit':{const v=YV[Math.floor(rng()*YV.length)];tx.venue=v;tx.deepMeta='Deposited '+formatUSD(tx.value)+' '+tx.token.sym+' into '+v;tx.direction='buy';break}
+    case'Staking Lock':{const v=YV[Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Locked '+formatUSD(tx.value)+' '+tx.token.sym+' in '+v;tx.direction='buy';break}
+    case'Whale Outflow':{const v=VL[Math.floor(rng()*VL.length)];tx.venue=v;tx.deepMeta='Moved '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='sell';break}
+    case'Whale Inflow':{const v=['Binance','Coinbase','Kraken','OKX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Transferred '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='buy';break}
+    case'DeFi Liquidation':{const v=['Aave V3','Compound V3','MakerDAO','dYdX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Liquidated on '+v;tx.direction='sell';break}
+    default:tx.venue='Unknown';tx.deepMeta=formatUSD(tx.value)+' '+tx.token.sym}
+    const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es}
 
     function generateHistoricalOnchain(count){const rng=createRNG(7919),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const token=pickToken(rng),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(rng(),2.5),interaction=IT[Math.floor(rng()*IT.length)],gp=12+rng()*53,gu=21000*3*(1+rng()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:i,value:Math.round(val),token,interaction,fromHash:randomHash(rng),toHash:randomHash(rng),txHash:randomTxHash(rng),gasFeeUSD:gUSD,timestamp:now-td+td*Math.pow(rng(),0.7),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdOnchain=count;return txs}
     function generateHistoricalBinance(count){const rng=createRNG(8147),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const pair=BP[Math.floor(rng()*BP.length)],action=BA[Math.floor(rng()*BA.length)],baseUsdVal=500000+(Math.pow(rng(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:i,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(rng),timestamp:now-td+td*Math.pow(rng(),0.7),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdBinance=count;return txs}
     function generateLiveOnchainTx(){const token=pickToken(Math.random),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(Math.random(),2.5),interaction=IT[Math.floor(Math.random()*IT.length)],gp=12+Math.random()*53,gu=21000*3*(1+Math.random()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:STATE.nextIdOnchain++,value:Math.round(val),token,interaction,fromHash:randomHash(Math.random),toHash:randomHash(Math.random),txHash:randomTxHash(Math.random),gasFeeUSD:gUSD,timestamp:Date.now(),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,Math.random);return tx}
     function generateLiveBinanceTx(){const pair=BP[Math.floor(Math.random()*BP.length)],action=BA[Math.floor(Math.random()*BA.length)],baseUsdVal=500000+(Math.pow(Math.random(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:STATE.nextIdBinance++,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(Math.random),timestamp:Date.now(),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,Math.random);return tx}
 
-    function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction
+    function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction.name==='Yield Deposit'||tx.interaction.name==='Staking Lock')}else{if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='spotbuy')arr=arr.filter(tx=>tx.actionType==='LARGE SPOT BUY');else if(STATE.macroFilter==='futures')arr=arr.filter(tx=>tx.isFutures)}if(STATE.filterText){const ft=STATE.filterText;arr=arr.filter(tx=>(tx.token?tx.token.sym:tx.pair).toUpperCase().includes(ft))}arr=arr.slice();const sf=STATE.sortField,sd=STATE.sortDir;arr.sort((a,b)=>{const av=sf==='value'?a.value:a.timestamp,bv=sf==='value'?b.value:b.timestamp;return sd==='desc'?bv-av:av-bv});STATE.visible=arr}
+
+    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
+
+    async function apiFetch(url){try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),8000),r=await fetch(url,{signal:c.signal});clearTimeout(tm);return(r.status===429||!r.ok)?null:await r.json()}catch(e){return null}}
+    const fetchPrices=()=>apiFetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
+    const fetchGlobal=()=>apiFetch('https://api.coingecko.com/api/v3/global');
+
+    function createRowEl(tx,isNew){const row=document.createElement('div');row.className='row'+(tx.interaction&&tx.interaction.anomalous?' anomaly-row':'')+(isNew?' live-new':'');row.setAttribute('data-id',tx.id);if(tx.stream==='binance'){const rv=document.createElement('span');rv.className='rv';rv.textContent=formatTokenAmt(tx.baseAmt)+' '+tx.baseToken+' ('+formatUSD(tx.value)+')';row.appendChild(rv);const ra=document.createElement('span');ra.style.cssText='width:85px;text-align:center;flex-shrink:0;';const badge=document.createElement('span');badge.className='token-badge';badge.style.cssText='background:rgba(240,185,11,0.1);border-left:2px solid #F0B90B';const tick=document.createElement('span');tick.className='token-ticker';tick.style.color='#F0B90B';tick.textContent=tx.pair;badge.appendChild(tick);ra.appendChild(badge);row.appendChild(ra);const rac=document.createElement('span');rac.style.cssText='width:115px;text-align:center;flex-shrink:0;';const at=document.createElement('span');at.className='action-tag';at.style.borderLeftColor=tx.actionColor;at.style.color=tx.actionColor;at.textContent=tx.actionShort;rac.appendChild(at);row.appendChild(rac);const rf=document.createElement('span');rf.className='rf';rf.textContent=tx.location;row.appendChild(rf)}else{const rv=document.createElement('span');rv.className='rv'+(tx.interaction.anomalous?' anomaly':'');rv.textContent=formatUSD(tx.value);row.appendChild(rv);const ra=document.createElement('span');ra.style.cssText='width:65px;text-align:center;flex-shrink:0;';const badge=document.createElement('span');badge.className='token-badge';const icon=document.createElement('span');icon.className='token-icon';icon.style.background=tx.token.color;icon.textContent=tx.token.icon;badge.appendChild(icon);const tick=document.createElement('span');tick.className='token-ticker';tick.textContent=tx.token.sym;badge.appendChild(tick);ra.appendChild(badge);row.appendChild(ra);const rac=document.createElement('span');rac.style.cssText='width:100px;text-align:center;flex-shrink:0;';const at=document.createElement('span');at.className='action-tag';at.style.borderLeftColor=tx.interaction.color;at.style.color=tx.interaction.color;at.textContent=tx.interaction.short;rac.appendChild(at);row.appendChild(rac);const rf=document.createElement('span');rf.className='rf';rf.textContent=abbrevHash(tx.fromHash)+' \u2192 '+abbrevHash(tx.toHash);row.appendChild(rf)}const rt=document.createElement('span');rt.className='rt';rt.textContent=formatTime(tx.timestamp);row.appendChild(rt);return row}
+    function addSubRow(p,l,v){const sr=document.createElement('div');sr.className='sub-row';const sl=document.createElement('span');sl.className='sub-label';sl.textContent=l;const sv=document.createElement('span');sv.className='sub-val';sv.innerHTML=v;sr.appendChild(sl);sr.appendChild(sv);p.appendChild(sr)}
+    function createSubEl(tx){const sub=document.createElement('div');sub.className='submenu';sub.setAttribute('data-sub-id',tx.id);if(tx.stream==='binance'){addSubRow(sub,t('orderId'),'<span class="hash-clickable" data-copy-hash="'+tx.orderId+'">'+tx.orderId+'</span>');addSubRow(sub,t('executedPrice'),'$'+tx.execPrice.toLocaleString('en-US')+' USD');addSubRow(sub,t('location'),tx.location);addSubRow(sub,'FEE','$'+tx.fee.toFixed(2)+' USD')}else{addSubRow(sub,t('txHash'),'<span class="hash-clickable" data-copy-hash="'+tx.txHash+'">'+tx.txHash+'</span>');addSubRow(sub,t('gasFee'),'$'+tx.gasFeeUSD.toFixed(2)+' USD');addSubRow(sub,t('onChain'),tx.deepMeta)}const ad=document.createElement('div');ad.className='sub-analysis';const al=document.createElement('div');al.className='sub-analysis-label';al.textContent=t('terminalAnalysis');ad.appendChild(al);const atx=document.createElement('div');atx.className='sub-analysis-text';atx.textContent=STATE.lang==='es'?tx.analysisEs:tx.analysisEn;atx.setAttribute('data-analysis-en',tx.analysisEn);atx.setAttribute('data-analysis-es',tx.analysisEs);ad.appendChild(atx);sub.appendChild(ad);return sub}
+
+    function clearLedger(){if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}const b=DOM.ledgerBody;while(b.firstChild&&b.firstChild!==DOM.scrollSentinel)b.removeChild(b.firstChild);STATE.renderedCount=0}
+    function renderBatch(){const s=STATE.renderedCount,e=Math.min(s+BATCH_SIZE,STATE.visible.length);if(s>=e)return;const f=document.createDocumentFragment();for(let i=s;i<e;i++){f.appendChild(createRowEl(STATE.visible[i],false));f.appendChild(createSubEl(STATE.visible[i]))}DOM.ledgerBody.insertBefore(f,DOM.scrollSentinel);STATE.renderedCount=e}
+    function fullRender(){clearLedger();if(STATE.visible.length===0){const nr=document.createElement('div');nr.className='no-results';nr.textContent=t('noResults');DOM.ledgerBody.insertBefore(nr,DOM.scrollSentinel);STATE.renderedCount=0;return}const c=Math.min(BATCH_SIZE,STATE.visible.length,MAX_VISIBLE),f=document.createDocumentFragment();for(let i=0;i<c;i++){f.appendChild(createRowEl(STATE.visible[i],false));f.appendChild(createSubEl(STATE.visible[i]))}DOM.ledgerBody.insertBefore(f,DOM.scrollSentinel);STATE.renderedCount=c;connectObserver()}
+
+    function prependLiveTxs(newTxs){const targetPool=STATE.dataStream==='binance'?STATE.poolBinance:STATE.poolOnchain;for(const tx of newTxs)targetPool.unshift(tx);STATE.pool=targetPool;if(newTxs.some(tx=>tx.value>=SONAR_THRESHOLD))playRadarPulse();rebuildVisible();if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}const nIds=new Set(newTxs.map(tx=>tx.id)),topNew=[];for(const tx of STATE.visible){if(nIds.has(tx.id))topNew.push(tx);else break}if(topNew.length===0)return;const f=document.createDocumentFragment();for(const tx of topNew){f.appendChild(createRowEl(tx,true));f.appendChild(createSubEl(tx))}DOM.ledgerBody.insertBefore(f,DOM.ledgerBody.firstChild);STATE.renderedCount+=topNew.length;while(STATE.renderedCount>MAX_VISIBLE){const b=DOM.ledgerBody,se=DOM.scrollSentinel,ls=se.previousElementSibling;if(!ls||ls===se)break;const lr=ls.previousElementSibling;if(!lr)break;b.removeChild(ls);b.removeChild(lr);STATE.renderedCount--}setTimeout(()=>{DOM.ledgerBody.querySelectorAll('.live-new').forEach(el=>el.classList.remove('live-new'))},3000)}
+
+    function updateOnchainSidebar(){let buy=0,sell=0;for(const tx of STATE.poolOnchain){if(tx.direction==='buy')buy+=tx.value;else if(tx.direction==='sell')sell+=tx.value}const total=buy+sell;if(total===0){DOM.ratioBuy.style.width='50%';DOM.ratioSell.style.width='50%'}else{DOM.ratioBuy.style.width=(buy/total*100).toFixed(1)+'%';DOM.ratioSell.style.width=(sell/total*100).toFixed(1)+'%'}DOM.ratioBuyLabel.textContent=t('buy')+' '+((buy/total*100)||50).toFixed(0)+'%';DOM.ratioSellLabel.textContent=t('sell')+' '+((sell/total*100)||50).toFixed(0)+'%';const map=new Map();for(const tx of STATE.poolOnchain){if(!tx.venue||tx.venue==='Unknown')continue;map.set(tx.venue,(map.get(tx.venue)||0)+tx.gasFeeUSD)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.hotList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">$${(e[1]>=1000?(e[1]/1000).toFixed(1)+'K':e[1].toFixed(0))}</span>`;DOM.hotList.appendChild(item)})}
+    function updateBinanceSidebar(){STATE.bnVolume+=(Math.random()-0.5)*1.5e9;STATE.bnVolume=Math.max(15e9,Math.min(50e9,STATE.bnVolume));DOM.bnVolumeValue.textContent=formatMcap(STATE.bnVolume);DOM.bnVolumeChange.textContent=(Math.random()>0.5?'+':'-')+(Math.random()*3).toFixed(2)+'%';DOM.bnVolumeChange.className='block-sub '+(Math.random()>0.5?'pos':'neg');STATE.bnPor+=Math.floor((Math.random()-0.5)*500);STATE.bnPor=Math.max(535000,Math.min(545000,STATE.bnPor));DOM.bnPorValue.textContent=STATE.bnPor.toLocaleString('en-US')+' BTC';DOM.bnPorBar.style.width='100%';DOM.bnPorLabel.textContent=t('backed');DOM.btcDomValue2.textContent=(STATE.btcDom||52.4).toFixed(1)+'%';const map=new Map();for(const tx of STATE.poolBinance){map.set(tx.pair,(map.get(tx.pair)||0)+tx.value)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.bnPairsList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">${formatUSD(e[1])}</span>`;DOM.bnPairsList.appendChild(item)})}
+
+    function switchStream(){playClickSound();STATE.dataStream=STATE.dataStream==='onchain'?'binance':'onchain';const isB=STATE.dataStream==='binance';DOM.ledgerHeader.classList.toggle('binance-mode',isB);DOM.ledgerBody.classList.toggle('binance-mode',isB);DOM.sidebarOnchain.classList.toggle('active',!isB);DOM.sidebarBinance.classList.toggle('active',isB);DOM.streamToggle.textContent=isB?t('binanceStream'):t('onChainStream');DOM.streamToggle.classList.toggle('binance-active',isB);DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream],btns=DOM.macroFilters.querySelectorAll('.mf-btn');btns.forEach((b,i)=>{b.setAttribute('data-mf',cfg[i].key);b.textContent=t(cfg[i].i18n);b.classList.toggle('active',i===0)});STATE.macroFilter='all';STATE.pool=isB?STATE.poolBinance:STATE.poolOnchain;rebuildVisible();fullRender()}
+
+    function applyLanguage(){const L=LANG[STATE.lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(L[k])el.textContent=L[k]});DOM.filterBar.placeholder=L.filterPlaceholder;DOM.soundToggle.textContent=STATE.soundEnabled?L.sndOn:L.sndOff;DOM.streamToggle.textContent=STATE.dataStream==='binance'?L.binanceStream:L.onChainStream;const isB=STATE.dataStream==='binance';DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream];DOM.macroFilters.querySelectorAll('.mf-btn').forEach((b,i)=>{b.textContent=t(cfg[i].i18n)});if(!isB)updateOnchainSidebar();else updateBinanceSidebar();DOM.ledgerBody.querySelectorAll('.sub-analysis-text').forEach(el=>{el.textContent=STATE.lang==='es'?el.getAttribute('data-analysis-es'):el.getAttribute('data-analysis-en')});DOM.ledgerBody.querySelectorAll('.sub-analysis-label').forEach(al=>{al.textContent=L.terminalAnalysis});const lk=[isB?t('orderId'):t('txHash'),isB?t('executedPrice'):t('gasFee'),isB?t('location'):t('onChain')];let li=0;DOM.ledgerBody.querySelectorAll('.sub-row .sub-label').forEach(sl=>{if(li<lk.length){sl.textContent=lk[li];li++}})}
+    function applyFontScale(){document.documentElement.style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
+
+    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0')}
+    function updateDate(){const n=new Date(),mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];DOM.hdrDate.textContent=n.getDate()+' '+mo[n.getMonth()]+' '+n.getFullYear()}
+    function updateTickers(pd){if(!pd){DOM.btcPrice.textContent='---';DOM.ethPrice.textContent='---';DOM.btcChange.textContent='';DOM.ethChange.textContent='';return}const btc=pd.bitcoin||FALLBACK.bitcoin,eth=pd.ethereum||FALLBACK.ethereum;DOM.btcPrice.textContent='$'+btc.usd.toLocaleString('en-US',{maximumFractionDigits:0});DOM.ethPrice.textContent='$'+eth.usd.toLocaleString('en-US',{maximumFractionDigits:0});const bc=btc.usd_24h_change;DOM.btcChange.textContent=(bc>=0?'+':'')+bc.toFixed(2)+'%';DOM.btcChange.className='ticker-change '+(bc>=0?'pos':'neg');const ec=eth.usd_24h_change;DOM.ethChange.textContent=(ec>=0?'+':'')+ec.toFixed(2)+'%';DOM.ethChange.className='ticker-change '+(ec>=0?'pos':'neg');STATE.btcPrice=btc.usd;STATE.ethPrice=eth.usd;STATE.lastKnownBtc=btc.usd;STATE.lastKnownEth=eth.usd;STATE.btcChange=bc;STATE.ethChange=ec;STATE.priceHistory.push({price:btc.usd,ts:Date.now()});if(STATE.priceHistory.length>20)STATE.priceHistory.shift()}
+    function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;DOM.btcDomValue.textContent=dom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dom.toFixed(1)+'%';STATE.btcDom=dom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;DOM.mcapValue.textContent=formatMcap(mcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=mcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){DOM.mcapChange.textContent=(mc>=0?'+':'')+mc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(mc>=0?'pos':'neg');STATE.mcapChange=mc}}
+    function updateVolatility(){const h=STATE.priceHistory;if(h.length<3){DOM.volValue.textContent='--';DOM.volBar.style.width='0%';return}const ch=[];for(let i=1;i<h.length;i++)ch.push(Math.abs((h[i].price-h[i-1].price)/h[i-1].price)*100);const m=ch.reduce((a,b)=>a+b,0)/ch.length,v=ch.reduce((a,b)=>a+(b-m)**2,0)/ch.length,s=Math.max(0,Math.min(100,Math.round(Math.sqrt(v)*400)));STATE.volScore=s;DOM.volValue.textContent=s;const c=s<34?'#39FF14':s<67?'#FFD700':'#FF3131';DOM.volBar.style.width=s+'%';DOM.volBar.style.background=c;DOM.volValue.style.color=c}
+    function updateGas(){STATE.gasPrice+=(Math.random()-0.5)*6;STATE.gasPrice+=(30-STATE.gasPrice)*0.1;STATE.gasPrice=Math.max(8,Math.min(90,STATE.gasPrice));DOM.gasValue.textContent=Math.max(1,Math.round(STATE.gasPrice+(Math.random()-0.5)*2))}
+    function updateSSR(){STATE.ssr+=(Math.random()-0.5)*0.25;STATE.ssr+=(4.5-STATE.ssr)*0.08;STATE.ssr=Math.max(2.5,Math.min(8,STATE.ssr));const v=STATE.ssr;DOM.ssrValue.textContent=v.toFixed(1)+'%';DOM.ssrBar.style.width=((v-2.5)/5.5*100).toFixed(1)+'%';DOM.ssrBar.style.background=v<4?'#39FF14':v<5.5?'#FFD700':'#FF3131'}
+    function updateSortArrows(){if(STATE.sortField==='value'){DOM.arrowValue.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowTime.textContent=''}else{DOM.arrowTime.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowValue.textContent=''}}
+
+    function handleSortClick(e){const h=e.target.closest('.sort-header');if(!h)return;const f=h.getAttribute('data-sort');if(STATE.sortField===f)STATE.sortDir=STATE.sortDir==='desc'?'asc':'desc';else{STATE.sortField=f;STATE.sortDir='desc'}playClickSound();updateSortArrows();rebuildVisible();fullRender()}
+    function handleMacroFilter(e){const b=e.target.closest('.mf-btn');if(!b)return;const mf=b.getAttribute('data-mf');if(mf===STATE.macroFilter)return;STATE.macroFilter=mf;playClickSound();DOM.macroFilters.querySelectorAll('.mf-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');rebuildVisible();fullRender()}
+    let _ft=null;function handleFilterInput(){clearTimeout(_ft);_ft=setTimeout(()=>{STATE.filterText=DOM.filterBar.value.trim().toUpperCase();rebuildVisible();fullRender()},150)}
+    function handleLangToggle(){STATE.lang=STATE.lang==='en'?'es':'en';playClickSound();applyLanguage()}
+    function handleFontDec(){if(STATE.fontStepIndex<=0)return;STATE.fontStepIndex--;playClickSound();applyFontScale()}
+    function handleFontInc(){if(STATE.fontStepIndex>=FONT_STEPS.length-1)return;STATE.fontStepIndex++;playClickSound();applyFontScale()}
+    function handleSoundToggle(){STATE.soundEnabled=!STATE.soundEnabled;if(STATE.soundEnabled)getAudioCtx();playClickSound();DOM.soundToggle.textContent=STATE.soundEnabled?t('sndOn'):t('sndOff');DOM.soundToggle.classList.toggle('muted',!STATE.soundEnabled)}
+    function handleLedgerClick(e){const h=e.target.closest('.hash-clickable');if(h){e.stopPropagation();const hash=h.getAttribute('data-copy-hash');if(!hash)return;copyToClipboard(hash).then(()=>{const o=h.textContent,oc=h.style.color;h.textContent=t('copied');h.style.color='#39FF14';setTimeout(()=>{h.textContent=o;h.style.color=oc},1000)});return}const r=e.target.closest('.row');if(!r)return;const tid=r.getAttribute('data-id'),sub=DOM.ledgerBody.querySelector('.submenu[data-sub-id="'+tid+'"]');if(!sub)return;playClickSound();if(STATE.openSubmenuEl===sub){sub.classList.remove('open');r.classList.remove('active');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}else{if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');if(STATE.openSubmenuRow)STATE.openSubmenuRow.classList.remove('active')}sub.classList.add('open');r.classList.add('active');STATE.openSubmenuRow=r;STATE.openSubmenuEl=sub;setTimeout(()=>sub.scrollIntoView({block:'nearest',behavior:'instant'}),0)}}
+    function connectObserver(){if(STATE.observer)STATE.observer.disconnect();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)return;STATE.observer=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){renderBatch();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)STATE.observer.disconnect()}},{root:DOM.ledgerBody,rootMargin:'0px 0px 100px 0px',threshold:0});STATE.observer.observe(DOM.scrollSentinel)}
+
+    function startTimerEngine(){setInterval(updateClock,1000);setInterval(updateDate,60000);setInterval(async()=>{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();if(STATE.apiAlive){const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT)}},POLL_INTERVAL)}
+
+    function initDeepFlow(){
+      STATE.poolOnchain=generateHistoricalOnchain(INITIAL_POOL);
+      STATE.poolBinance=generateHistoricalBinance(INITIAL_POOL);
+      STATE.pool=STATE.poolOnchain;
+      rebuildVisible();
+      fullRender();
+      updateDate();
+      updateClock();
+      updateSortArrows();
+      applyFontScale();
+      document.getElementById('ledger-header').addEventListener('click',handleSortClick);
+      DOM.macroFilters.addEventListener('click',handleMacroFilter);
+      DOM.filterBar.addEventListener('input',handleFilterInput);
+      DOM.langToggle.addEventListener('click',handleLangToggle);
+      DOM.fontDec.addEventListener('click',handleFontDec);
+      DOM.fontInc.addEventListener('click',handleFontInc);
+      DOM.soundToggle.addEventListener('click',handleSoundToggle);
+      DOM.streamToggle.addEventListener('click',switchStream);
+      DOM.ledgerBody.addEventListener('click',handleLedgerClick);
+      updateVolatility();
+      
+      // Llamada asíncrona inicial de APIs de Coingecko
+      Promise.all([fetchPrices(),fetchGlobal()]).then(([pd,gd])=>{
+        if(pd||gd){
+          STATE.apiAlive=true;
+          DOM.statusDot.classList.add('live');
+          DOM.hdrConnStatus.style.display='none';
+          updateTickers(pd);
+          updateGlobalData(gd);
+        }else{
+          STATE.apiAlive=false;
+          DOM.statusDot.classList.remove('live');
+          DOM.hdrConnStatus.style.display='inline';
+          updateTickers(null);
+        }
+        updateSSR();
+        updateOnchainSidebar();
+        startTimerEngine();
+      });
+    }
+
+    // Unificación de la ejecución de carga inicial para ambas plataformas
+    function initAll() {
+      initDeepFlow();
+      if (typeof window.switchTab === 'function') {
+        window.switchTab(window.activeTab);
+      }
+      const savedTheme = localStorage.getItem('danifu_theme');
+      if (savedTheme && typeof window.setTheme === 'function') {
+        window.setTheme(savedTheme);
+      }
+      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
+      if (savedSymbol && document.getElementById('symbolSelect')) {
+        document.getElementById('symbolSelect').value = savedSymbol;
+      }
+      if (typeof window.updatePomoUI === 'function') {
+        window.updatePomoUI();
+      }
+      if (typeof window.updateDisplay === 'function') {
+        window.updateDisplay();
+      }
+    }
+
+    if(document.readyState==='loading') {
+      document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
+  </script>
+</body>
+</html>
