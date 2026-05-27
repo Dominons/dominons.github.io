@@ -36,7 +36,7 @@
       display: none !important;
     }
 
-    /* ========== LOGIN SCREEN (ESTÁTICA EN LA RAÍZ) ========== */
+    /* ========== LOGIN SCREEN (ESTTICA EN LA RAZ) ========== */
     #loginScreen {
       position: fixed;
       inset: 0;
@@ -552,7 +552,7 @@
       max-width: 160px;
     }
 
-    /* ========== PREVENCIÓN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
+    /* ========== PREVENCIN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
     #deep-flow-view {
       --fs: 1;
       position: absolute;
@@ -1192,7 +1192,7 @@
       #deep-flow-view #sidebar { display: none; }
     }
 
-    /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAÍZ ========== */
+    /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAZ ========== */
     #musicPanel {
       position: fixed;
       top: 60px;
@@ -1278,7 +1278,7 @@
 </head>
 <body>
 
-  <!-- PANTALLA DE AUTENTICACIÓN (FIREBASE) -->
+  <!-- PANTALLA DE AUTENTICACIN (FIREBASE) -->
   <div id="loginScreen">
     <div class="login-container">
       <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
@@ -1290,7 +1290,7 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesión con Google
+        Iniciar sesin con Google
       </button>
     </div>
   </div>
@@ -1309,7 +1309,7 @@
           <div class="user-info" id="userInfo">
             <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
             <span class="user-name" id="userName"></span>
-            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesin">
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </div>
@@ -1332,7 +1332,7 @@
       <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
-            <h2>Mini-Gráfico</h2>
+            <h2>Mini-Grfico</h2>
             <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
               <option value="BINANCE:USDTARS">USDT/ARS</option>
               <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
@@ -1342,7 +1342,7 @@
               <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
               <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
               <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-              <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
+              <option value="FOREXCOM:WTIUSD">Petrleo (WTI/USD)</option>
               <option value="FOREXCOM:NGAS">Gas Natural</option>
             </select>
           </div>
@@ -1355,10 +1355,10 @@
           <div class="notepad-header-row">
             <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
             <div class="notepad-tabs" id="notepad-tabs">
-              <!-- Pestañas dinámicas -->
+              <!-- Pestaas dinmicas -->
             </div>
           </div>
-          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+          <textarea id="notepad" placeholder="Escribe tus notas aqu..."></textarea>
         </div>
 
         <div class="bottom-container">
@@ -1369,7 +1369,7 @@
               <button class="calc-button clear" onclick="clearDisplay()">C</button>
               <button class="calc-button" onclick="backspace()">?</button>
               <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
+              <button class="calc-button operator" onclick="appendOperator('*')"></button>
               <button class="calc-button" onclick="appendNumber('7')">7</button>
               <button class="calc-button" onclick="appendNumber('8')">8</button>
               <button class="calc-button" onclick="appendNumber('9')">9</button>
@@ -1444,7 +1444,7 @@
           <span class="col-time sort-header" id="sort-time" data-sort="timestamp"><span data-i18n="time">TIME</span><span class="sort-arrow" id="arrow-time"></span></span>
         </div>
         <div id="macro-filters">
-          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="filter3" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="filter4" data-i18n="yieldOnly">YIELD ONLY</button>
+          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="swaps" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="yield" data-i18n="yieldOnly">YIELD ONLY</button>
         </div>
         <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
         <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
@@ -1482,7 +1482,7 @@
     </div>
   </div>
 
-  <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
+  <!-- SCRIPTS DE INICIALIZACIN DE FIREBASE (V10 MODULAR) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -1513,7 +1513,7 @@
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // Listener del estado de autenticación
+    // Listener del estado de autenticacin
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -1576,7 +1576,7 @@
                   }, 2000);
 
                 } catch (e) {
-                  console.error('Error cargando música guardada:', e);
+                  console.error('Error cargando msica guardada:', e);
                 }
               }, 1500);
             }
@@ -1592,7 +1592,7 @@
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    // Auto-guardado de progreso de música
+    // Auto-guardado de progreso de msica
     setInterval(() => {
        if (auth.currentUser && window.player) {
           try {
@@ -1606,12 +1606,12 @@
                 });
              }
           } catch (error) {
-             console.log("Error guardando música:", error);
+             console.log("Error guardando msica:", error);
           }
        }
     }, 30000);
 
-    // Bloc de notas Firestore (Lógica compartida)
+    // Bloc de notas Firestore (Lgica compartida)
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
     if (parseInt(window.activeTab) > 3) {
         window.activeTab = "1";
@@ -1686,7 +1686,7 @@
     };
   </script>
 
-  <!-- LÓGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
+  <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     window.youtubePlayerReady = false;
@@ -1724,7 +1724,7 @@
         }
       });
     }
-    // Exponer la inicialización globalmente para YouTube iframe API
+    // Exponer la inicializacin globalmente para YouTube iframe API
     window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
     function onPlayerReady(event) {
@@ -1935,7 +1935,7 @@
     };
   </script>
 
-  <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
+  <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
   <script>
     // Calculadora
     const display = document.getElementById('display');
@@ -1972,7 +1972,7 @@
       localStorage.setItem('danifu_theme', color);
     };
 
-    // Gráfico TradingView
+    // Grfico TradingView
     window.changeSymbol = function () {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
@@ -2011,7 +2011,7 @@
             isRunning = false;
             btn.innerText = "INICIAR";
             btn.classList.remove('active');
-            alert("¡Tiempo terminado!");
+            alert("Tiempo terminado!");
           }
         }, 1000);
       }
@@ -2028,7 +2028,7 @@
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
-        alert("Por favor ingresa un número de minutos válido.");
+        alert("Por favor ingresa un nmero de minutos vlido.");
         return;
       }
       clearInterval(pomoInterval);
@@ -2040,7 +2040,7 @@
     };
   </script>
 
-  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
+  <!-- LGICA DE OPERACIN DE TERMINAL CRYPTO: DEEP FLOW -->
   <script>
     const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
     const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
@@ -2054,7 +2054,7 @@
     const MACRO_CONFIGS={onchain:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'swaps',i18n:'swapsOnly'},{key:'yield',i18n:'yieldOnly'}],binance:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'spotbuy',i18n:'spotBuyOnly'},{key:'futures',i18n:'futuresOnly'}]};
     const FALLBACK={bitcoin:{usd:104500,usd_24h_change:1.52},ethereum:{usd:3850,usd_24h_change:-0.83},data:{total_market_cap:{usd:3620000000000},market_cap_change_percentage_24h_usd:1.24,market_cap_percentage:{btc:52.4}}};
 
-    const STATE={lang:'en',sortField:'value',sortDir:'desc',filterText:'',macroFilter:'all',dataStream:'onchain',poolOnchain:[],poolBinance:[],pool:[],visible:[],renderedCount:0,nextIdOnchain:0,nextIdBinance:0,openSubmenuRow:null,openSubmenuEl:null,apiAlive:false,btcPrice:104500,ethPrice:3850,lastKnownBtc:104500,lastKnownEth:3850,btcChange:1.52,ethChange:-0.83,btcDom:52.4,totalMcap:3620000000000,mcapChange:1.24,gasPrice:32,volScore:0,priceHistory:[{price:104500,ts:Date.now()}],ssr:4.5,observer:null,fontStepIndex:2,soundEnabled:true,bnVolume:32e9,bnPor:540000};
+    const STATE={lang:'en',sortField:'value',sortDir:'desc',filterText:'',macroFilter:'all',dataStream:'onchain',poolOnchain:[],poolBinance:[],pool:[],visible:[],renderedCount:0,nextIdOnchain:0,nextIdBinance:0,openSubmenuRow:null,openSubmenuEl:null,apiAlive:false,btcPrice:104500,ethPrice:3850,lastKnownBtc:104500,lastKnownEth:3850,btcChange:1.52,ethChange:-0.83,btcDom:52.4,totalMcap:3620000000000,mcapChange:1.24,gasPrice:32,volScore:45,priceHistory:[{price:104500,ts:Date.now()}],ssr:4.5,observer:null,fontStepIndex:2,soundEnabled:true,bnVolume:32e9,bnPor:540000};
 
     let _audioCtx=null;
     function getAudioCtx(){if(!_audioCtx){try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(_audioCtx.state==='suspended')try{_audioCtx.resume()}catch(e){}return _audioCtx}
@@ -2125,24 +2125,24 @@
     function prependLiveTxs(newTxs){const targetPool=STATE.dataStream==='binance'?STATE.poolBinance:STATE.poolOnchain;for(const tx of newTxs)targetPool.unshift(tx);STATE.pool=targetPool;if(newTxs.some(tx=>tx.value>=SONAR_THRESHOLD))playRadarPulse();rebuildVisible();if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}const nIds=new Set(newTxs.map(tx=>tx.id)),topNew=[];for(const tx of STATE.visible){if(nIds.has(tx.id))topNew.push(tx);else break}if(topNew.length===0)return;const f=document.createDocumentFragment();for(const tx of topNew){f.appendChild(createRowEl(tx,true));f.appendChild(createSubEl(tx))}DOM.ledgerBody.insertBefore(f,DOM.ledgerBody.firstChild);STATE.renderedCount+=topNew.length;while(STATE.renderedCount>MAX_VISIBLE){const b=DOM.ledgerBody,se=DOM.scrollSentinel,ls=se.previousElementSibling;if(!ls||ls===se)break;const lr=ls.previousElementSibling;if(!lr)break;b.removeChild(ls);b.removeChild(lr);STATE.renderedCount--}setTimeout(()=>{DOM.ledgerBody.querySelectorAll('.live-new').forEach(el=>el.classList.remove('live-new'))},3000)}
 
     function updateOnchainSidebar(){let buy=0,sell=0;for(const tx of STATE.poolOnchain){if(tx.direction==='buy')buy+=tx.value;else if(tx.direction==='sell')sell+=tx.value}const total=buy+sell;if(total===0){DOM.ratioBuy.style.width='50%';DOM.ratioSell.style.width='50%'}else{DOM.ratioBuy.style.width=(buy/total*100).toFixed(1)+'%';DOM.ratioSell.style.width=(sell/total*100).toFixed(1)+'%'}DOM.ratioBuyLabel.textContent=t('buy')+' '+((buy/total*100)||50).toFixed(0)+'%';DOM.ratioSellLabel.textContent=t('sell')+' '+((sell/total*100)||50).toFixed(0)+'%';const map=new Map();for(const tx of STATE.poolOnchain){if(!tx.venue||tx.venue==='Unknown')continue;map.set(tx.venue,(map.get(tx.venue)||0)+tx.gasFeeUSD)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.hotList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">$${(e[1]>=1000?(e[1]/1000).toFixed(1)+'K':e[1].toFixed(0))}</span>`;DOM.hotList.appendChild(item)})}
-    function updateBinanceSidebar(){STATE.bnVolume+=(Math.random()-0.5)*1.5e9;STATE.bnVolume=Math.max(15e9,Math.min(50e9,STATE.bnVolume));DOM.bnVolumeValue.textContent=formatMcap(STATE.bnVolume);DOM.bnVolumeChange.textContent=(Math.random()>0.5?'+':'-')+(Math.random()*3).toFixed(2)+'%';DOM.bnVolumeChange.className='block-sub '+(Math.random()>0.5?'pos':'neg');STATE.bnPor+=Math.floor((Math.random()-0.5)*500);STATE.bnPor=Math.max(535000,Math.min(545000,STATE.bnPor));DOM.bnPorValue.textContent=STATE.bnPor.toLocaleString('en-US')+' BTC';DOM.bnPorBar.style.width='100%';DOM.bnPorLabel.textContent=t('backed');DOM.btcDomValue2.textContent=(STATE.btcDom||52.4).toFixed(1)+'%';const map=new Map();for(const tx of STATE.poolBinance){map.set(tx.pair,(map.get(tx.pair)||0)+tx.value)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.bnPairsList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">${formatUSD(e[1])}</span>`;DOM.bnPairsList.appendChild(item)})}
+    function updateBinanceSidebar(){STATE.bnVolume+=(Math.random()-0.5)*4.5e9;STATE.bnVolume=Math.max(12e9,Math.min(55e9,STATE.bnVolume));DOM.bnVolumeValue.textContent=formatMcap(STATE.bnVolume);DOM.bnVolumeChange.textContent=(Math.random()>0.5?'+':'-')+(Math.random()*6).toFixed(2)+'%';DOM.bnVolumeChange.className='block-sub '+(Math.random()>0.5?'pos':'neg');STATE.bnPor+=Math.floor((Math.random()-0.5)*1200);STATE.bnPor=Math.max(530000,Math.min(550000,STATE.bnPor));DOM.bnPorValue.textContent=STATE.bnPor.toLocaleString('en-US')+' BTC';DOM.bnPorBar.style.width='100%';DOM.bnPorLabel.textContent=t('backed');DOM.btcDomValue2.textContent=(STATE.btcDom||52.4).toFixed(1)+'%';const map=new Map();for(const tx of STATE.poolBinance){map.set(tx.pair,(map.get(tx.pair)||0)+tx.value)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.bnPairsList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">${formatUSD(e[1])}</span>`;DOM.bnPairsList.appendChild(item)})}
 
     function switchStream(){playClickSound();STATE.dataStream=STATE.dataStream==='onchain'?'binance':'onchain';const isB=STATE.dataStream==='binance';DOM.ledgerHeader.classList.toggle('binance-mode',isB);DOM.ledgerBody.classList.toggle('binance-mode',isB);DOM.sidebarOnchain.classList.toggle('active',!isB);DOM.sidebarBinance.classList.toggle('active',isB);DOM.streamToggle.textContent=isB?t('binanceStream'):t('onChainStream');DOM.streamToggle.classList.toggle('binance-active',isB);DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream],btns=DOM.macroFilters.querySelectorAll('.mf-btn');btns.forEach((b,i)=>{b.setAttribute('data-mf',cfg[i].key);b.textContent=t(cfg[i].i18n);b.classList.toggle('active',i===0)});STATE.macroFilter='all';STATE.pool=isB?STATE.poolBinance:STATE.poolOnchain;rebuildVisible();fullRender()}
 
     function applyLanguage(){const L=LANG[STATE.lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(L[k])el.textContent=L[k]});DOM.filterBar.placeholder=L.filterPlaceholder;DOM.soundToggle.textContent=STATE.soundEnabled?L.sndOn:L.sndOff;DOM.streamToggle.textContent=STATE.dataStream==='binance'?L.binanceStream:L.onChainStream;const isB=STATE.dataStream==='binance';DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream];DOM.macroFilters.querySelectorAll('.mf-btn').forEach((b,i)=>{b.textContent=t(cfg[i].i18n)});if(!isB)updateOnchainSidebar();else updateBinanceSidebar();DOM.ledgerBody.querySelectorAll('.sub-analysis-text').forEach(el=>{el.textContent=STATE.lang==='es'?el.getAttribute('data-analysis-es'):el.getAttribute('data-analysis-en')});DOM.ledgerBody.querySelectorAll('.sub-analysis-label').forEach(al=>{al.textContent=L.terminalAnalysis});const lk=[isB?t('orderId'):t('txHash'),isB?t('executedPrice'):t('gasFee'),isB?t('location'):t('onChain')];let li=0;DOM.ledgerBody.querySelectorAll('.sub-row .sub-label').forEach(sl=>{if(li<lk.length){sl.textContent=lk[li];li++}})}
-    function applyFontScale(){document.documentElement.style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
+    function applyFontScale(){document.getElementById('deep-flow-view').style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
 
     function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0')}
     function updateDate(){const n=new Date(),mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];DOM.hdrDate.textContent=n.getDate()+' '+mo[n.getMonth()]+' '+n.getFullYear()}
     function updateTickers(pd){if(!pd){DOM.btcPrice.textContent='---';DOM.ethPrice.textContent='---';DOM.btcChange.textContent='';DOM.ethChange.textContent='';return}const btc=pd.bitcoin||FALLBACK.bitcoin,eth=pd.ethereum||FALLBACK.ethereum;DOM.btcPrice.textContent='$'+btc.usd.toLocaleString('en-US',{maximumFractionDigits:0});DOM.ethPrice.textContent='$'+eth.usd.toLocaleString('en-US',{maximumFractionDigits:0});const bc=btc.usd_24h_change;DOM.btcChange.textContent=(bc>=0?'+':'')+bc.toFixed(2)+'%';DOM.btcChange.className='ticker-change '+(bc>=0?'pos':'neg');const ec=eth.usd_24h_change;DOM.ethChange.textContent=(ec>=0?'+':'')+ec.toFixed(2)+'%';DOM.ethChange.className='ticker-change '+(ec>=0?'pos':'neg');STATE.btcPrice=btc.usd;STATE.ethPrice=eth.usd;STATE.lastKnownBtc=btc.usd;STATE.lastKnownEth=eth.usd;STATE.btcChange=bc;STATE.ethChange=ec;STATE.priceHistory.push({price:btc.usd,ts:Date.now()});if(STATE.priceHistory.length>20)STATE.priceHistory.shift()}
-    function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;DOM.btcDomValue.textContent=dom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dom.toFixed(1)+'%';STATE.btcDom=dom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;DOM.mcapValue.textContent=formatMcap(mcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=mcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){DOM.mcapChange.textContent=(mc>=0?'+':'')+mc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(mc>=0?'pos':'neg');STATE.mcapChange=mc}}
-    function updateVolatility(){const h=STATE.priceHistory;if(h.length<3){DOM.volValue.textContent='--';DOM.volBar.style.width='0%';return}const ch=[];for(let i=1;i<h.length;i++)ch.push(Math.abs((h[i].price-h[i-1].price)/h[i-1].price)*100);const m=ch.reduce((a,b)=>a+b,0)/ch.length,v=ch.reduce((a,b)=>a+(b-m)**2,0)/ch.length,s=Math.max(0,Math.min(100,Math.round(Math.sqrt(v)*400)));STATE.volScore=s;DOM.volValue.textContent=s;const c=s<34?'#39FF14':s<67?'#FFD700':'#FF3131';DOM.volBar.style.width=s+'%';DOM.volBar.style.background=c;DOM.volValue.style.color=c}
-    function updateGas(){STATE.gasPrice+=(Math.random()-0.5)*6;STATE.gasPrice+=(30-STATE.gasPrice)*0.1;STATE.gasPrice=Math.max(8,Math.min(90,STATE.gasPrice));DOM.gasValue.textContent=Math.max(1,Math.round(STATE.gasPrice+(Math.random()-0.5)*2))}
-    function updateSSR(){STATE.ssr+=(Math.random()-0.5)*0.25;STATE.ssr+=(4.5-STATE.ssr)*0.08;STATE.ssr=Math.max(2.5,Math.min(8,STATE.ssr));const v=STATE.ssr;DOM.ssrValue.textContent=v.toFixed(1)+'%';DOM.ssrBar.style.width=((v-2.5)/5.5*100).toFixed(1)+'%';DOM.ssrBar.style.background=v<4?'#39FF14':v<5.5?'#FFD700':'#FF3131'}
+    function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;const dynamicDom=dom + (Math.random()-0.5)*2;DOM.btcDomValue.textContent=dynamicDom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dynamicDom.toFixed(1)+'%';STATE.btcDom=dynamicDom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;const dynamicMcap = mcap * (1 + (Math.random()-0.5)*0.02);DOM.mcapValue.textContent=formatMcap(dynamicMcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=dynamicMcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){const dynamicMc = mc + (Math.random()-0.5)*1.5;DOM.mcapChange.textContent=(dynamicMc>=0?'+':'')+dynamicMc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(dynamicMc>=0?'pos':'neg');STATE.mcapChange=dynamicMc}}
+    function updateVolatility(){let next=STATE.volScore+((Math.random()-0.5)*12);if(next<15)next=15+Math.random()*8;if(next>85)next=85-Math.random()*8;STATE.volScore=Math.round(next);DOM.volValue.textContent=STATE.volScore;const c=STATE.volScore<34?'#39FF14':STATE.volScore<67?'#FFD700':'#FF3131';DOM.volBar.style.width=STATE.volScore+'%';DOM.volBar.style.background=c;DOM.volValue.style.color=c}
+    function updateGas(){STATE.gasPrice+=(Math.random()-0.5)*15;STATE.gasPrice+=(35-STATE.gasPrice)*0.15;STATE.gasPrice=Math.max(5,Math.min(120,STATE.gasPrice));DOM.gasValue.textContent=Math.max(1,Math.round(STATE.gasPrice+(Math.random()-0.5)*5))}
+    function updateSSR(){STATE.ssr+=(Math.random()-0.5)*1.4;STATE.ssr+=(4.5-STATE.ssr)*0.12;STATE.ssr=Math.max(1.5,Math.min(9.5,STATE.ssr));const v=STATE.ssr;DOM.ssrValue.textContent=v.toFixed(1)+'%';DOM.ssrBar.style.width=((v-1.5)/8*100).toFixed(1)+'%';DOM.ssrBar.style.background=v<4?'#39FF14':v<6?'#FFD700':'#FF3131'}
     function updateSortArrows(){if(STATE.sortField==='value'){DOM.arrowValue.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowTime.textContent=''}else{DOM.arrowTime.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowValue.textContent=''}}
 
     function handleSortClick(e){const h=e.target.closest('.sort-header');if(!h)return;const f=h.getAttribute('data-sort');if(STATE.sortField===f)STATE.sortDir=STATE.sortDir==='desc'?'asc':'desc';else{STATE.sortField=f;STATE.sortDir='desc'}playClickSound();updateSortArrows();rebuildVisible();fullRender()}
-    function handleMacroFilter(e){const b=e.target.closest('.mf-btn');if(!b)return;const mf=b.getAttribute('data-mf');if(mf===STATE.macroFilter)return;STATE.macroFilter=mf;playClickSound();DOM.macroFilters.querySelectorAll('.mf-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');rebuildVisible();fullRender()}
+    function handleMacroFilter(e){const b=e.target.closest('.mf-btn');if(!b)return;let mf=b.getAttribute('data-mf');if(mf===STATE.macroFilter)mf='all';STATE.macroFilter=mf;playClickSound();DOM.macroFilters.querySelectorAll('.mf-btn').forEach(x=>x.classList.toggle('active',x.getAttribute('data-mf')===mf));rebuildVisible();fullRender()}
     let _ft=null;function handleFilterInput(){clearTimeout(_ft);_ft=setTimeout(()=>{STATE.filterText=DOM.filterBar.value.trim().toUpperCase();rebuildVisible();fullRender()},150)}
     function handleLangToggle(){STATE.lang=STATE.lang==='en'?'es':'en';playClickSound();applyLanguage()}
     function handleFontDec(){if(STATE.fontStepIndex<=0)return;STATE.fontStepIndex--;playClickSound();applyFontScale()}
@@ -2174,7 +2174,7 @@
       DOM.ledgerBody.addEventListener('click',handleLedgerClick);
       updateVolatility();
       
-      // Llamada asíncrona inicial de APIs de Coingecko
+      // Llamada asncrona inicial de APIs de Coingecko
       Promise.all([fetchPrices(),fetchGlobal()]).then(([pd,gd])=>{
         if(pd||gd){
           STATE.apiAlive=true;
@@ -2194,7 +2194,7 @@
       });
     }
 
-    // Unificación de la ejecución de carga inicial para ambas plataformas
+    // Unificacin de la ejecucin de carga inicial para ambas plataformas
     function initAll() {
       initDeepFlow();
       if (typeof window.switchTab === 'function') {
