@@ -1342,6 +1342,7 @@
               <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
               <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
               <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
+              <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
               <option value="FOREXCOM:WTIUSD">Petrleo (WTI/USD)</option>
               <option value="FOREXCOM:NGAS">Gas Natural</option>
             </select>
@@ -1513,13 +1514,51 @@
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // Listener del estado de autenticacin
-    onAuthStateChanged(auth, (user) => {
+    // === CAMBIO: Variables de estado globales para el control de planes y límites del bloc de notas ===
+    window.userPlan = 'normal';
+    window.maxPages = 3;
+    window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count')) || 3;
+
+    // Listener del estado de autenticacin (Se añade async para permitir el flujo asíncrono con Firestore)
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
+
+        // === CAMBIO: Lectura asíncrona del plan del usuario desde Firestore ===
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(userDocRef);
+          if (docSnap.exists() && docSnap.data().plan === 'Premium') {
+            window.userPlan = 'Premium';
+            window.maxPages = 4;
+          } else {
+            window.userPlan = 'normal';
+            window.maxPages = 3;
+          }
+        } catch (error) {
+          console.error("Error al obtener el plan del usuario de Firestore:", error);
+          window.userPlan = 'normal';
+          window.maxPages = 3;
+        }
+
+        // Validación estricta de coherencia de límites tras detectar el plan
+        if (window.createdPagesCount > window.maxPages) {
+          window.createdPagesCount = window.maxPages;
+          localStorage.setItem('danifu_pages_count', window.createdPagesCount);
+        }
+        if (parseInt(window.activeTab) > window.maxPages) {
+          window.activeTab = "1";
+          localStorage.setItem('danifu_active_tab', window.activeTab);
+        }
+
+        // Renderizado dinámico de pestañas conforme al estado del plan detectado
+        if (typeof window.renderTabs === 'function') {
+          window.renderTabs();
+        }
+        // === FIN DE CAMBIO ===
 
         // Carga de la nota activa en Firestore
         window.loadNoteFromFirestore(window.activeTab);
@@ -1613,7 +1652,9 @@
 
     // Bloc de notas Firestore (Lgica compartida)
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
-    if (parseInt(window.activeTab) > 3) {
+
+    // === CAMBIO: Lógica de inicialización de límites del Bloc de Notas ===
+    if (parseInt(window.activeTab) > window.maxPages) {
         window.activeTab = "1";
         localStorage.setItem('danifu_active_tab', window.activeTab);
     }
@@ -1654,17 +1695,52 @@
         });
     }
 
-    const tabsContainer = document.getElementById('notepad-tabs');
-    if (tabsContainer) {
-        for (let i = 1; i <= 3; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
-            btn.id = 'btn-tab-' + i;
-            btn.textContent = 'Nota ' + i;
-            btn.onclick = function() { window.switchTab(i); };
-            tabsContainer.appendChild(btn);
-        }
-    }
+    // === CAMBIO: Renderizador de pestañas dinámicas con soporte para botón "+" de creación y limitación estricta por Plan ===
+    window.renderTabs = function() {
+      const tabsContainer = document.getElementById('notepad-tabs');
+      if (!tabsContainer) return;
+      
+      tabsContainer.innerHTML = '';
+
+      // Se generan dinámicamente los botones de las páginas creadas
+      for (let i = 1; i <= window.createdPagesCount; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
+        btn.id = 'btn-tab-' + i;
+        btn.textContent = 'Nota ' + i;
+        btn.onclick = function() { window.switchTab(i); };
+        tabsContainer.appendChild(btn);
+      }
+
+      // Se añade el botón "+" sólo si la cantidad creada es menor al límite máximo absoluto de la plataforma (4)
+      if (window.createdPagesCount < 4) {
+        const plusBtn = document.createElement('button');
+        plusBtn.className = 'tab-btn';
+        plusBtn.id = 'btn-add-tab';
+        plusBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        plusBtn.style.background = '#1F1F1F';
+        plusBtn.style.borderColor = 'var(--color-highlight)';
+        plusBtn.style.color = 'var(--color-highlight)';
+        plusBtn.style.padding = '4px 12px';
+
+        plusBtn.onclick = function() {
+          // Bloqueo estricto basado en la evaluación del plan actual en tiempo de ejecución
+          if (window.createdPagesCount >= window.maxPages) {
+            alert('Límite de páginas alcanzado para tu plan actual.');
+          } else {
+            window.createdPagesCount++;
+            localStorage.setItem('danifu_pages_count', window.createdPagesCount);
+            window.switchTab(window.createdPagesCount);
+            window.renderTabs();
+          }
+        };
+        tabsContainer.appendChild(plusBtn);
+      }
+    };
+
+    // Renderizado por primera vez de la interfaz de pestañas
+    window.renderTabs();
+    // === FIN DE CAMBIO ===
 
     window.switchTab = function(tabNum) {
       window.activeTab = String(tabNum);
@@ -2108,7 +2184,7 @@
 
     function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction.name==='Yield Deposit'||tx.interaction.name==='Staking Lock')}else{if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='spotbuy')arr=arr.filter(tx=>tx.actionType==='LARGE SPOT BUY');else if(STATE.macroFilter==='futures')arr=arr.filter(tx=>tx.isFutures)}if(STATE.filterText){const ft=STATE.filterText;arr=arr.filter(tx=>(tx.token?tx.token.sym:tx.pair).toUpperCase().includes(ft))}arr=arr.slice();const sf=STATE.sortField,sd=STATE.sortDir;arr.sort((a,b)=>{const av=sf==='value'?a.value:a.timestamp,bv=sf==='value'?b.value:b.timestamp;return sd==='desc'?bv-av:av-bv});STATE.visible=arr}
 
-    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
+    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),focus:null,ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
 
     async function apiFetch(url){try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),8000),r=await fetch(url,{signal:c.signal});clearTimeout(tm);return(r.status===429||!r.ok)?null:await r.json()}catch(e){return null}}
     const fetchPrices=()=>apiFetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
