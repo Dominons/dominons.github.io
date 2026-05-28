@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <!-- Tailwind CSS CDN solo para Quantis (Lienzo Infinito) para asegurar consistencia estética -->
+  <!-- Tailwind CSS CDN para el motor estructural de Quantis -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <script>
@@ -514,68 +514,46 @@
     #main-dashboard-view .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     #main-dashboard-view .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
 
-    @media (max-width: 1024px) {
-      #main-dashboard-view .top-right { gap: 6px; }
-      #main-dashboard-view .theme-btn { width: 20px; height: 20px; }
-      #main-dashboard-view .user-name { max-width: 80px; }
+    /* ========== CORRECCIÓN DE MAQUETACIÓN: CONTROL DEL SIDEBAR DEEPFLOW ========== */
+    #deep-flow-view #sidebar {
+      width: 230px;
+      min-width: 230px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px;
+      background: #06000e;
+      border-right: 1px solid rgba(0, 240, 255, 0.08);
+      overflow-y: auto;
+      flex-shrink: 0;
     }
-    @media (max-width: 768px) {
-      #main-dashboard-view .main { height: auto; min-height: calc(100vh - 100px); overflow-y: visible; }
-      #main-dashboard-view .top-bar { flex-direction: column; align-items: flex-start; padding: 8px 10px; }
-      #main-dashboard-view .top-left, #main-dashboard-view .top-right { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
-      #main-dashboard-view .theme-buttons { flex-wrap: wrap; gap: 5px; }
-      #main-dashboard-view .theme-btn { width: 18px; height: 18px; }
-      #main-dashboard-view .chart-panel { height: 45vh; min-height: 220px; }
-      #main-dashboard-view .bottom-container { grid-template-columns: 1fr; }
+
+    /* ========== CORRECCIÓN: SELECTOR DE COLOR COMPACTO Y FLOTANTE ========== */
+    #deep-flow-view .flow-color-widget {
+      position: fixed;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(10, 0, 20, 0.9);
+      border: 1px solid var(--flow-highlight, #00F0FF);
+      border-radius: 6px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 9999;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
     }
-    @media (max-width: 480px) {
-      #main-dashboard-view { --main-gap: 10px; }
-      #main-dashboard-view .top-bar { padding: 6px 8px; gap: 4px; }
-      #main-dashboard-view .top-right { gap: 5px; }
-      #main-dashboard-view .user-name { display: none; }
-      #main-dashboard-view .chart-panel { height: 35vh; min-height: 180px; }
-      #main-dashboard-view .tab-btn { font-size: 0.7em; padding: 3px 6px; flex-shrink: 0; }
-      #main-dashboard-view .calc-button { padding: 8px 0; font-size: 0.85em; }
-      #main-dashboard-view .calc-display { font-size: 1.2em; padding: 8px; }
-      #main-dashboard-view .pomodoro-display { font-size: 1.6em; }
-      #main-dashboard-view .theme-btn { width: 16px; height: 16px; }
-    }
-    #main-dashboard-view .music-btn {
-      background: #333;
-      color: var(--color-text);
-      border: 1px solid #555;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.85em;
-      transition: background 0.2s;
-    }
-    #main-dashboard-view .music-btn:hover {
-      background: var(--color-highlight);
-    }
-    #main-dashboard-view .song-display {
-      background: #0D0D0D;
-      border: 1px solid var(--color-border);
-      padding: 6px 12px;
-      border-radius: 4px;
-      max-width: 180px;
-      overflow: hidden;
-    }
-    #main-dashboard-view .song-marquee {
-      display: block;
-      color: var(--color-highlight);
-      font-size: 0.85em;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 160px;
+    #deep-flow-view .flow-color-widget .widget-label {
+      font-size: 7px;
+      font-weight: 700;
+      color: var(--flow-highlight, #00F0FF);
+      letter-spacing: 0.8px;
     }
 
     /* ========== ESTILOS DE VISTA: DEEP FLOW TERMINAL ========== */
     #deep-flow-view {
       --fs: 1;
-      --flow-highlight: #00F0FF; /* Variable dinámica inyectada para el cambio de colores */
+      --flow-highlight: #00F0FF;
       position: absolute;
       inset: 0;
       height: 100vh;
@@ -748,18 +726,6 @@
     #deep-flow-view #dashboard {
       display: flex;
       height: calc(100vh - 36px);
-    }
-    #deep-flow-view #sidebar {
-      width: 230px;
-      min-width: 230px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 4px;
-      background: #06000e;
-      border-right: 1px solid rgba(0, 240, 255, 0.08);
-      overflow-y: auto;
-      flex-shrink: 0;
     }
     #deep-flow-view .sidebar-layer {
       display: none;
@@ -1328,7 +1294,7 @@
 </head>
 <body class="bg-zinc-100 dark:bg-brand-950 text-zinc-800 dark:text-zinc-100 font-sans overflow-hidden select-none h-screen w-screen flex flex-col">
 
-  <!-- PANTALLA DE AUTENTICACIN (FIREBASE) -->
+  <!-- PANTALLA DE AUTENTICACIÓN (FIREBASE) -->
   <div id="loginScreen">
     <div class="login-container">
       <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
@@ -1340,7 +1306,7 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesin con Google
+        Iniciar sesión con Google
       </button>
     </div>
   </div>
@@ -1352,7 +1318,6 @@
         <div class="top-left">
           <div class="box" id="fecha-hora">Cargando...</div>
           
-          <!-- === CAMBIO: Botones pequeños y compactos de navegación unificada === -->
           <button class="music-btn" onclick="window.switchAppView('dominon')" style="background: var(--color-highlight); color: var(--color-dark-bg); font-weight: bold;">
             DOMINON
           </button>
@@ -1362,19 +1327,16 @@
           <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis')" title="Abrir Lienzo QUANTIS" style="background: var(--color-input-bg); color: #39FF14; border: 1px solid #39FF14;">
             <i class="fa-solid fa-compass"></i> QUANTIS
           </button>
-          <!-- === FIN DE CAMBIO === -->
         </div>
         <div class="top-right">
-          <!-- === CAMBIO: Icono "$" de Ventas e Interfaz de Rangos exclusivo de Dominon === -->
           <button class="music-btn" onclick="window.openSalesModal()" title="Adquirir Rango" style="border-color: #39FF14; color: #39FF14; padding: 4px 10px;">
             <i class="fa-solid fa-dollar-sign"></i>
           </button>
-          <!-- === FIN DE CAMBIO === -->
 
           <div class="user-info" id="userInfo">
             <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
             <span class="user-name" id="userName"></span>
-            <button class="logout-btn" id="logoutBtn" title="Cerrar sesin">
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </div>
@@ -1397,7 +1359,7 @@
       <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
-            <h2>Mini-Grfico</h2>
+            <h2>Mini-Gráfico</h2>
             <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
               <option value="BINANCE:USDTARS">USDT/ARS</option>
               <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
@@ -1407,7 +1369,7 @@
               <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
               <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
               <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-              <option value="FOREXCOM:WTIUSD">Petrleo (WTI/USD)</option>
+              <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
               <option value="FOREXCOM:NGAS">Gas Natural</option>
             </select>
           </div>
@@ -1420,10 +1382,10 @@
           <div class="notepad-header-row">
             <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
             <div class="notepad-tabs" id="notepad-tabs">
-              <!-- Pestaas dinmicas de bloc de notas basadas en el Rango -->
+              <!-- Pestañas dinámicas basadas en Rango -->
             </div>
           </div>
-          <textarea id="notepad" placeholder="Escribe tus notas aqu..."></textarea>
+          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
         </div>
 
         <div class="bottom-container">
@@ -1469,6 +1431,14 @@
 
   <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
   <div id="deep-flow-view" class="hidden-view">
+    <!-- Selector de colores minimalista flotante -->
+    <div class="flow-color-widget">
+      <div class="widget-label">COLOR NEÓN</div>
+      <div class="flex gap-1" id="flow-color-palette">
+        <!-- Renderizado dinámico de color-chips -->
+      </div>
+    </div>
+
     <header id="hdr">
       <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span>
       <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
@@ -1476,7 +1446,6 @@
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
       
-      <!-- === CAMBIO: Alternancia compacta entre tres vistas en Deep Flow === -->
       <button class="ctrl-btn" onclick="window.switchAppView('dominon')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
       <button class="ctrl-btn" onclick="window.switchAppView('quantis')" style="border-color:#39FF14; color:#39FF14; font-weight:bold; text-shadow:0 0 4px rgba(57,255,20,0.4);">QUANTIS</button>
       
@@ -1489,15 +1458,7 @@
     </header>
     <main id="dashboard">
       <aside id="sidebar">
-        <!-- === CAMBIO: Selector de color dinámico integrado en el Sidebar de Deep Flow === -->
-        <div class="corner-block">
-          <div class="block-label">COLOR NEÓN (RANGOS)</div>
-          <div class="flex flex-wrap gap-1.5 mt-1" id="flow-color-palette">
-            <!-- Renderizado dinámico de colores según rango -->
-          </div>
-        </div>
-        <!-- === FIN DE CAMBIO === -->
-
+        <!-- El panel de selección de colores original fue retirado de aquí para eliminar la barra intrusa -->
         <div id="sidebar-onchain" class="sidebar-layer active">
           <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
           <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
@@ -1532,15 +1493,12 @@
 
   <!-- VISTA SPA 3: QUANTIS (LIENZO INFINITO COMPLETO) -->
   <div id="quantis-view" class="hidden-view flex flex-col h-screen w-screen bg-zinc-100 dark:bg-brand-950 text-zinc-800 dark:text-zinc-100 relative">
-    
-    <!-- barra superior de Quantis -->
     <header class="h-14 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-6 z-30 shrink-0">
       <div class="flex items-center space-x-2">
         <button onclick="window.switchAppView('dominon')" class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white">Dominon</button>
         <button onclick="window.switchAppView('flow')" class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white">Deep Flow</button>
         <button class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-300 dark:border-zinc-700">Quantis</button>
         
-        <!-- === CAMBIO: Caja compacta de herramientas de dibujo (Pincel y Puntero) === -->
         <div id="paint-toolbar" class="flex items-center space-x-1.5 border-l border-zinc-300 dark:border-zinc-700 pl-4">
           <button id="tool-hand" onclick="window.setQuantisTool('hand')" class="px-2.5 py-1.5 rounded-sm bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white hover:bg-zinc-300 text-xs flex items-center gap-1 border border-zinc-300 dark:border-zinc-700" title="Selección / Arrastre">
             <i class="fa-solid fa-hand"></i>
@@ -1549,7 +1507,6 @@
             <i class="fa-solid fa-brush"></i>
           </button>
           
-          <!-- Panel flotante del Pincel (oculto por defecto) -->
           <div id="brush-options" class="hidden flex items-center space-x-1.5 bg-zinc-800 dark:bg-zinc-900 px-2 py-1 rounded border border-zinc-700 text-xs">
             <input type="color" id="brush-color" value="#39FF14" onchange="window.updateBrushSettings()" class="w-5 h-5 bg-transparent border-0 cursor-pointer">
             <select id="brush-size" onchange="window.updateBrushSettings()" class="bg-zinc-900 text-white rounded border border-zinc-700 px-1 py-0.5 text-[10px]">
@@ -1568,17 +1525,13 @@
             </select>
           </div>
         </div>
-        <!-- === FIN DE CAMBIO === -->
       </div>
 
-      <!-- Reloj Quantis -->
       <div class="text-xs font-mono tracking-wider text-zinc-500 dark:text-zinc-400" id="quantis-time-visor">
         00/00/0000 00:00:00
       </div>
 
-      <!-- Configuración y Reproductor Integrado de Quantis -->
       <div class="flex items-center space-x-3">
-        <!-- === CAMBIO: Reproductor duplicado idénticamente para Quantis === -->
         <div class="music-container flex items-center space-x-2">
           <div class="song-display bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-sm px-3 py-1 max-w-[150px] overflow-hidden">
             <span id="songTitleQuantis" class="song-marquee text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold whitespace-nowrap block">Listo para Play</span>
@@ -1587,7 +1540,6 @@
             <i class="fa-solid fa-music"></i>
           </button>
         </div>
-        <!-- === FIN DE CAMBIO === -->
 
         <button onclick="openSettings()" class="flex items-center space-x-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-3 py-1.5 rounded-sm text-xs border border-zinc-300 dark:border-zinc-700">
           <i class="fa-solid fa-gear"></i>
@@ -1597,9 +1549,7 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-      <!-- Barra lateral izquierda de Proyectos de Quantis -->
       <aside class="w-64 bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col justify-between z-20 shrink-0">
-        <!-- === CAMBIO: Scroll infinito para Premium (coherencia estructural) === -->
         <div class="p-4 flex-1 overflow-y-auto no-scrollbar" id="quantis-sidebar-scroll" style="max-height: calc(100vh - 120px);">
           <div class="flex items-center justify-between mb-4">
             <h2 data-i18n="projectsTitle" class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Proyectos</h2>
@@ -1613,10 +1563,8 @@
         </div>
       </aside>
 
-      <!-- Viewport del Lienzo Infinito -->
       <main id="viewport" class="flex-1 relative overflow-hidden bg-zinc-100 dark:bg-brand-950 cursor-grab active:cursor-grabbing">
         <div id="canvas-container" class="absolute w-[8000px] h-[8000px] top-[-4000px] left-[-4000px] infinite-grid transform origin-center">
-          <!-- === CAMBIO: Canvas nativo HTML5 integrado para el Kit de Pintura === -->
           <canvas id="paint-canvas" width="8000" height="8000" style="position: absolute; top:0; left:0; width:8000px; height:8000px; z-index: 1; pointer-events: none;"></canvas>
           <!-- Elementos cargados dinámicamente -->
         </div>
@@ -1624,7 +1572,7 @@
     </div>
   </div>
 
-  <!-- === CAMBIO: MODAL INFORMATIVO DE VENTAS (MONEY.PNG) === -->
+  <!-- MODAL INFORMATIVO DE VENTAS -->
   <div id="sales-modal" class="hidden fixed inset-0 z-[99999] flex items-center justify-center bg-black/75 backdrop-blur-sm">
     <div class="bg-[#1A1A1A] border-2 border-[#A855F7] w-[450px] rounded-lg p-6 relative shadow-[0_0_30px_rgba(168,85,247,0.3)] text-zinc-100">
       <button onclick="window.closeSalesModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
@@ -1636,7 +1584,6 @@
       </h3>
       
       <div class="space-y-4">
-        <!-- Extended -->
         <div class="bg-[#242424] border border-zinc-700 p-4 rounded-md">
           <div class="flex justify-between items-center mb-2">
             <span class="font-bold text-white text-sm">Extended</span>
@@ -1650,7 +1597,6 @@
           </button>
         </div>
 
-        <!-- Premium -->
         <div class="bg-[#242424] border-2 border-[#39FF14] p-4 rounded-md shadow-[0_0_15px_rgba(57,255,20,0.1)]">
           <div class="flex justify-between items-center mb-2">
             <span class="font-bold text-white text-sm flex items-center gap-1">
@@ -1669,7 +1615,7 @@
     </div>
   </div>
 
-  <!-- === CAMBIO: MODAL DE CONTACTO (NEY.PNG) === -->
+  <!-- MODAL DE CONTACTO -->
   <div id="contact-modal" class="hidden fixed inset-0 z-[100000] flex items-center justify-center bg-black/80 backdrop-blur-sm">
     <div class="bg-[#111111] border-2 border-[#39FF14] w-[400px] rounded-lg p-6 relative shadow-[0_0_30px_rgba(57,255,20,0.2)] text-zinc-100">
       <button onclick="window.closeContactModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
@@ -1700,51 +1646,35 @@
       </p>
     </div>
   </div>
-  <!-- === FIN DE CAMBIO === -->
 
-  <!-- MENÚ CONTEXTUAL PERSONALIZADO (QUANTIS) -->
-  <div id="custom-context-menu" class="hidden absolute z-50 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-sm py-1 text-sm text-zinc-700 dark:text-zinc-300">
-    <button onclick="triggerFileInput()" class="w-full text-left px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white flex items-center space-x-2">
-      <i class="fa-solid fa-file-arrow-up text-zinc-400"></i>
-      <span data-i18n="openFile">Abrir archivo</span>
-    </button>
-  </div>
-
-  <input type="file" id="file-loader" class="hidden" onchange="handleFileSelection(event)">
-
-  <!-- MODAL DE CONFIGURACIÓN (QUANTIS) -->
-  <div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 w-96 rounded-sm p-6 relative">
-      <h3 class="text-base font-semibold mb-4 text-zinc-900 dark:text-white flex items-center space-x-2">
-        <i class="fa-solid fa-sliders text-zinc-400"></i>
-        <span data-i18n="configTitle">Preferencias del Sistema</span>
-      </h3>
-      <div class="mb-4">
-        <label data-i18n="themeLabel" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Tema</label>
-        <select id="theme-select" onchange="changeTheme(this.value)" class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 rounded-sm p-2 focus:outline-none focus:border-zinc-500">
-          <option value="dark" data-i18n="themeDark">Oscuro</option>
-          <option value="light" data-i18n="themeLight">Claro</option>
-        </select>
+  <div id="musicPanel" class="hidden">
+    <div class="music-player-panel">
+      <div class="player-header">REPRODUCTOR</div>
+      
+      <div class="player-controls">
+        <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+        <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+        <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
       </div>
-      <div class="mb-6">
-        <label data-i18n="langLabel" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Idioma</label>
-        <select id="lang-select" onchange="changeLanguage(this.value)" class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 rounded-sm p-2 focus:outline-none focus:border-zinc-500">
-          <option value="es">Español</option>
-          <option value="en">English</option>
-        </select>
+      
+      <div class="progress-time">
+        <span id="current-time">0:00</span>
+        <span id="duration-time">0:00</span>
       </div>
-      <div class="flex justify-end">
-        <button onclick="closeSettings()" data-i18n="closeBtn" class="bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs px-4 py-2 rounded-sm">
-          Cerrar
-        </button>
+      
+      <div class="progress-bar-container">
+        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+      </div>
+      
+      <div class="volume-control">
+        <i class="fa-solid fa-volume-low"></i>
+        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+        <i class="fa-solid fa-volume-high"></i>
       </div>
     </div>
   </div>
 
-  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
-  <div id="youtube-player"></div>
-
-  <!-- SCRIPTS DE INICIALIZACIN DE FIREBASE (V10 MODULAR) -->
+  <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -1774,12 +1704,10 @@
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // === CAMBIO: Variables de estado globales y de límites en Firestore ===
     window.userPlan = 'normal';
     window.maxPages = 3;
     window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count')) || 3;
 
-    // Listener de autenticacin
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -1787,21 +1715,19 @@
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // === CAMBIO: Recuperación asíncrona del plan del usuario ===
         try {
           const userDocRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(userDocRef);
           if (docSnap.exists() && docSnap.data().plan) {
-            window.userPlan = docSnap.data().plan; // Extended, Premium o normal
+            window.userPlan = docSnap.data().plan;
           } else {
             window.userPlan = 'normal';
           }
         } catch (error) {
-          console.error("Error cargando el plan del usuario de Firestore:", error);
+          console.error("Error al obtener el plan del usuario de Firestore:", error);
           window.userPlan = 'normal';
         }
 
-        // Estructura de límites de páginas de Notas según Plan
         if (window.userPlan === 'Premium') {
           window.maxPages = 20;
         } else if (window.userPlan === 'Extended') {
@@ -1819,15 +1745,12 @@
           localStorage.setItem('danifu_active_tab', window.activeTab);
         }
 
-        // Renderizado dinámico de pestañas, paleta de colores y proyectos de Quantis
         if (typeof window.renderTabs === 'function') window.renderTabs();
         if (typeof window.renderFlowPalette === 'function') window.renderFlowPalette();
         if (typeof window.loadQuantisFromFirestore === 'function') window.loadQuantisFromFirestore();
 
-        // Carga de la nota activa en Firestore
         window.loadNoteFromFirestore(window.activeTab);
 
-        // Carga de música
         if (window.loadSavedMusic) {
           window.loadSavedMusic();
         }
@@ -1841,7 +1764,6 @@
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    // Auto-guardado de progreso de msica
     setInterval(() => {
        if (auth.currentUser && window.player) {
           try {
@@ -1855,12 +1777,11 @@
                 });
              }
           } catch (error) {
-             console.log("Error guardando msica:", error);
+             console.log("Error guardando música:", error);
           }
        }
     }, 30000);
 
-    // Bloc de notas
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
     if (parseInt(window.activeTab) > window.maxPages) {
         window.activeTab = "1";
@@ -1903,7 +1824,6 @@
         });
     }
 
-    // === CAMBIO: Renderizador de notas dinámico con validación estricta de límites ===
     window.renderTabs = function() {
       const tabsContainer = document.getElementById('notepad-tabs');
       if (!tabsContainer) return;
@@ -1918,7 +1838,6 @@
         tabsContainer.appendChild(btn);
       }
 
-      // Se muestra botón "+" si no se superó el límite absoluto
       if (window.createdPagesCount < window.maxPages) {
         const plusBtn = document.createElement('button');
         plusBtn.className = 'tab-btn';
@@ -1962,13 +1881,11 @@
       }
     };
 
-    // === CAMBIO: Sincronización automática asíncrona de Quantis con Cloud Firestore ===
     window.saveQuantisToFirestore = async function() {
       if (!window.auth || !window.auth.currentUser) return;
       try {
         const userUid = window.auth.currentUser.uid;
         const mainDataRef = doc(db, "users", userUid, "proyectos_quantis", "main_data");
-        
         const paintCanvas = document.getElementById('paint-canvas');
         const drawingDataUrl = paintCanvas ? paintCanvas.toDataURL("image/png") : "";
 
@@ -2013,10 +1930,9 @@
         console.error("Error al cargar Quantis desde Firestore:", error);
       }
     };
-    // === FIN DE CAMBIO ===
   </script>
 
-  <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
+  <!-- LÓGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     window.youtubePlayerReady = false;
@@ -2105,10 +2021,8 @@
         var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
         if (_elSongTitle) _elSongTitle.textContent = title;
         
-        // === CAMBIO: Actualización del reproductor en la vista Quantis ===
         const qTitle = document.getElementById('songTitleQuantis');
         if (qTitle) qTitle.textContent = title;
-        // === FIN DE CAMBIO ===
       } catch (error) {}
     }
 
@@ -2248,7 +2162,7 @@
     });
   </script>
 
-  <!-- === CAMBIO: CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS UNIFICADAS) === -->
+  <!-- CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS UNIFICADAS) -->
   <script>
     window.switchAppView = function(viewName) {
       var mainDash = document.getElementById('main-dashboard-view');
@@ -2265,7 +2179,6 @@
         deepFlow.classList.remove('hidden-view');
       } else if (viewName === 'quantis') {
         quantisView.classList.remove('hidden-view');
-        // Asegura que las dimensiones del canvas de dibujo estén sincronizadas
         initPaintCanvas();
       }
       if (typeof playClickSound === 'function') {
@@ -2273,9 +2186,8 @@
       }
     };
   </script>
-  <!-- === FIN DE CAMBIO === -->
 
-  <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
+  <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
   <script>
     // Calculadora
     const display = document.getElementById('display');
@@ -2312,7 +2224,7 @@
       localStorage.setItem('danifu_theme', color);
     };
 
-    // Grfico TradingView
+    // Gráfico TradingView
     window.changeSymbol = function () {
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
@@ -2368,7 +2280,7 @@
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
-        alert("Por favor ingresa un nmero de minutos vlido.");
+        alert("Por favor ingresa un número de minutos válido.");
         return;
       }
       clearInterval(pomoInterval);
@@ -2380,7 +2292,7 @@
     };
   </script>
 
-  <!-- LGICA DE OPERACIN DE TERMINAL CRYPTO: DEEP FLOW -->
+  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
   <script>
     const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
     const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
@@ -2448,7 +2360,7 @@
 
     function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction.name==='Yield Deposit'||tx.interaction.name==='Staking Lock')}else{if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='spotbuy')arr=arr.filter(tx=>tx.actionType==='LARGE SPOT BUY');else if(STATE.macroFilter==='futures')arr=arr.filter(tx=>tx.isFutures)}if(STATE.filterText){const ft=STATE.filterText;arr=arr.filter(tx=>(tx.token?tx.token.sym:tx.pair).toUpperCase().includes(ft))}arr=arr.slice();const sf=STATE.sortField,sd=STATE.sortDir;arr.sort((a,b)=>{const av=sf==='value'?a.value:a.timestamp,bv=sf==='value'?b.value:b.timestamp;return sd==='desc'?bv-av:av-bv});STATE.visible=arr}
 
-    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),focus:null,ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
+    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
 
     async function apiFetch(url){try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),8000),r=await fetch(url,{signal:c.signal});clearTimeout(tm);return(r.status===429||!r.ok)?null:await r.json()}catch(e){return null}}
     const fetchPrices=()=>apiFetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
@@ -2491,7 +2403,43 @@
     function handleLedgerClick(e){const h=e.target.closest('.hash-clickable');if(h){e.stopPropagation();const hash=h.getAttribute('data-copy-hash');if(!hash)return;copyToClipboard(hash).then(()=>{const o=h.textContent,oc=h.style.color;h.textContent=t('copied');h.style.color='#39FF14';setTimeout(()=>{h.textContent=o;h.style.color=oc},1000)});return}const r=e.target.closest('.row');if(!r)return;const tid=r.getAttribute('data-id'),sub=DOM.ledgerBody.querySelector('.submenu[data-sub-id="'+tid+'"]');if(!sub)return;playClickSound();if(STATE.openSubmenuEl===sub){sub.classList.remove('open');r.classList.remove('active');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}else{if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');if(STATE.openSubmenuRow)STATE.openSubmenuRow.classList.remove('active')}sub.classList.add('open');r.classList.add('active');STATE.openSubmenuRow=r;STATE.openSubmenuEl=sub;setTimeout(()=>sub.scrollIntoView({block:'nearest',behavior:'instant'}),0)}}
     function connectObserver(){if(STATE.observer)STATE.observer.disconnect();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)return;STATE.observer=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){renderBatch();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)STATE.observer.disconnect()}},{root:DOM.ledgerBody,rootMargin:'0px 0px 100px 0px',threshold:0});STATE.observer.observe(DOM.scrollSentinel)}
 
-    function startTimerEngine(){setInterval(updateClock,1000);setInterval(updateDate,60000);setInterval(async()=>{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();if(STATE.apiAlive){const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT)}},POLL_INTERVAL)}
+    // === CORRECCIÓN: Arreglo de WebSocket / Motor de datos simulados continuos para ledger-body ===
+    function startTimerEngine(){
+      setInterval(updateClock,1000);
+      setInterval(updateDate,60000);
+      
+      // Ciclo de alimentación de datos en tiempo real al ledger
+      setInterval(() => {
+        const gen = STATE.dataStream === 'binance' ? generateLiveBinanceTx : generateLiveOnchainTx;
+        const cnt = 1 + Math.floor(Math.random() * 2);
+        const nT = [];
+        for (let i = 0; i < cnt; i++) nT.push(gen());
+        prependLiveTxs(nT);
+      }, 3000); // Alimentación de red fluida cada 3 segundos
+
+      setInterval(async()=>{
+        const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);
+        if(!pd&&!gd){
+          STATE.apiAlive=false;
+          DOM.statusDot.classList.remove('live');
+          DOM.hdrConnStatus.style.display='inline';
+          updateTickers(null);
+          updateGlobalData(null);
+          return;
+        }
+        if(!STATE.apiAlive){
+          STATE.apiAlive=true;
+          DOM.statusDot.classList.add('live');
+          DOM.hdrConnStatus.style.display='none';
+        }
+        updateTickers(pd);
+        updateGlobalData(gd);
+        updateVolatility();
+        updateGas();
+        updateSSR();
+        if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();
+      },POLL_INTERVAL);
+    }
 
     function initDeepFlow(){
       STATE.poolOnchain=generateHistoricalOnchain(INITIAL_POOL);
@@ -2533,63 +2481,35 @@
       });
     }
 
-    // === CAMBIO: Renderizador dinámico de la paleta de colores de Deep Flow según el Rango ===
-    window.renderFlowPalette = function() {
-      const paletteContainer = document.getElementById('flow-color-palette');
-      if (!paletteContainer) return;
-      paletteContainer.innerHTML = '';
-
-      // Colores base para todos los planes
-      let colors = [
-        { hex: '#00F0FF', name: 'Ciano Base' }
-      ];
-
-      if (window.userPlan === 'Extended' || window.userPlan === 'Premium') {
-        colors = [
-          { hex: '#00F0FF', name: 'Ciano Base' },
-          { hex: '#FFFFFF', name: 'Blanco Neón' },
-          { hex: '#39FF14', name: 'Verde Neón' },
-          { hex: '#FF3131', name: 'Rojo Neón' },
-          { hex: '#090112', name: 'Negro Profundo' }
-        ];
+    function initAll() {
+      initDeepFlow();
+      if (typeof window.switchTab === 'function') {
+        window.switchTab(window.activeTab);
       }
-
-      if (window.userPlan === 'Premium') {
-        colors = colors.concat([
-          { hex: '#A855F7', name: 'Violeta Neón' },
-          { hex: '#FF8C00', name: 'Naranja Eléctrico' },
-          { hex: '#FFD700', name: 'Oro Imperial' },
-          { hex: '#FF007F', name: 'Rosa Neón' },
-          { hex: '#00D1FF', name: 'Celeste Neón' }
-        ]);
+      const savedTheme = localStorage.getItem('danifu_theme');
+      if (savedTheme && typeof window.setTheme === 'function') {
+        window.setTheme(savedTheme);
       }
-
-      colors.forEach(col => {
-        const btn = document.createElement('button');
-        btn.className = 'w-5 h-5 rounded-full border border-zinc-700 hover:scale-110 transition-transform';
-        btn.style.background = col.hex;
-        btn.title = col.name;
-        btn.onclick = function() {
-          window.setDeepFlowColor(col.hex);
-        };
-        paletteContainer.appendChild(btn);
-      });
-    };
-
-    window.setDeepFlowColor = function(colorHex) {
-      // Protección de cambio de color en plan normal
-      if (window.userPlan === 'normal') {
-        alert("Opción bloqueada para tu plan actual. Adquiere el plan Extended o Premium para cambiar colores.");
-        return;
+      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
+      if (savedSymbol && document.getElementById('symbolSelect')) {
+        document.getElementById('symbolSelect').value = savedSymbol;
       }
-      document.getElementById('deep-flow-view').style.setProperty('--flow-highlight', colorHex);
-      localStorage.setItem('danifu_flow_color', colorHex);
-      if (typeof playClickSound === 'function') playClickSound();
-    };
-    // === FIN DE CAMBIO ===
+      if (typeof window.updatePomoUI === 'function') {
+        window.updatePomoUI();
+      }
+      if (typeof window.updateDisplay === 'function') {
+        window.updateDisplay();
+      }
+    }
+
+    if(document.readyState==='loading') {
+      document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
   </script>
 
-  <!-- === CAMBIO: LÓGICA DE NEGOCIO Y CONFIGURACIÓN COMPLETA DE QUANTIS === -->
+  <!-- LÓGICA DE NEGOCIO Y CONFIGURACIÓN COMPLETA DE QUANTIS -->
   <script>
     const state = {
       lang: 'es',
@@ -2713,7 +2633,6 @@
       });
       state.canvasData[key] = elements;
       
-      // Auto-guardado en Firestore
       if (typeof window.saveQuantisToFirestore === 'function') {
         window.saveQuantisToFirestore();
       }
@@ -2724,7 +2643,6 @@
       state.activeProjectIdx = projIdx;
       state.activePageIdx = pageIdx;
 
-      // Limpia todo conservando únicamente el Canvas de pintura nativo
       const blocks = canvasContainer.querySelectorAll('.canvas-element');
       blocks.forEach(b => b.remove());
 
@@ -2772,7 +2690,6 @@
     function renderProjects() {
       projectsListContainer.innerHTML = '';
       
-      // Control de scroll infinito en la barra lateral para usuarios Premium
       const sidebarScroll = document.getElementById('quantis-sidebar-scroll');
       if (window.userPlan === 'Premium') {
         sidebarScroll.style.overflowY = 'auto';
@@ -2820,7 +2737,6 @@
     }
 
     window.addNewProject = function() {
-      // Límites estrictos por rango
       let limit = 3;
       if (window.userPlan === 'Extended') limit = 5;
       if (window.userPlan === 'Premium') limit = Infinity;
@@ -2897,7 +2813,7 @@
       }, { passive: false });
 
       viewport.addEventListener('mousedown', (e) => {
-        if (window.quantisTool !== 'hand') return; // Evita panning en modo pincel
+        if (window.quantisTool !== 'hand') return;
         if (e.target === viewport || e.target === canvasContainer || e.target.id === 'paint-canvas') {
           if (e.button === 0) {
             state.isPanning = true;
@@ -3210,7 +3126,6 @@
       canvasContainer.appendChild(block);
     }
 
-    // === CAMBIO: LÓGICA DE CONTROL DEL KIT DE PINTURA (HTML5 CANVAS) ===
     window.quantisTool = 'hand'; 
     window.eraserActive = false;
     window.brushColor = '#39FF14';
@@ -3218,7 +3133,6 @@
     window.brushShape = 'free';
 
     window.setQuantisTool = function(tool) {
-      // Protección de herramienta Kit de Pintura (Premium)
       if (tool === 'brush' && window.userPlan !== 'Premium') {
         alert("Límite de páginas/proyectos alcanzado para tu plan actual. El Kit de Pintura está disponible solo para miembros Premium.");
         return;
@@ -3299,7 +3213,6 @@
           ctx.lineTo(currentX, currentY);
           ctx.stroke();
         } else {
-          // Restauración para renderizado interactivo click-and-drag (MS Paint style)
           ctx.putImageData(canvasBackup, 0, 0);
           ctx.beginPath();
           ctx.moveTo(strokeStartX, strokeStartY);
@@ -3321,7 +3234,6 @@
       const finishDrawing = () => {
         if (isDrawing) {
           isDrawing = false;
-          // Dispara persistencia tras el dibujo
           if (typeof window.saveQuantisToFirestore === 'function') {
             window.saveQuantisToFirestore();
           }
@@ -3331,9 +3243,7 @@
       paintCanvas.addEventListener('mouseup', finishDrawing);
       paintCanvas.addEventListener('mouseleave', finishDrawing);
     }
-    // === FIN DE CAMBIO ===
 
-// === CAMBIO: Lógica para alternar Modales de Ventas, Soporte e Inicializaciones ===
     window.openSalesModal = function() {
       const modal = document.getElementById('sales-modal');
       if (modal) modal.classList.remove('hidden');
@@ -3347,7 +3257,6 @@
     };
 
     window.openContactModal = function() {
-      // Cierra el modal de ventas primero para evitar solapamiento
       window.closeSalesModal();
       const modal = document.getElementById('contact-modal');
       if (modal) modal.classList.remove('hidden');
@@ -3360,7 +3269,6 @@
       if (typeof playClickSound === 'function') playClickSound();
     };
 
-    // Unificación de la inicialización de Quantis
     function initAllQuantis() {
       initQuantisClock();
       setupCanvasEventListeners();
@@ -3374,7 +3282,6 @@
     } else {
       initAllQuantis();
     }
-    // === FIN DE CAMBIO ===
   </script>
 </body>
 </html>
