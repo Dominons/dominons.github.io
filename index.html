@@ -3,11 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANIFU777 - Dominon & DEEP FLOW</title>
+  <title>DANIFU777 - Dominon & DEEP FLOW & QUANTIS</title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Tailwind CSS CDN solo para Quantis (Lienzo Infinito) para asegurar consistencia estética -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f5f7fa',
+              900: '#111318',
+              950: '#0b0c10'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
     /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
     :root {
@@ -36,7 +56,7 @@
       display: none !important;
     }
 
-    /* ========== LOGIN SCREEN (ESTTICA EN LA RAZ) ========== */
+    /* ========== LOGIN SCREEN ========== */
     #loginScreen {
       position: fixed;
       inset: 0;
@@ -79,7 +99,7 @@
       height: 20px;
     }
 
-    /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW) ========== */
+    /* ========== ESTILOS DE VISTA: DOMINON ========== */
     #main-dashboard-view {
       width: 100%;
       height: 100vh;
@@ -552,9 +572,10 @@
       max-width: 160px;
     }
 
-    /* ========== PREVENCIN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
+    /* ========== ESTILOS DE VISTA: DEEP FLOW TERMINAL ========== */
     #deep-flow-view {
       --fs: 1;
+      --flow-highlight: #00F0FF; /* Variable dinámica inyectada para el cambio de colores */
       position: absolute;
       inset: 0;
       height: 100vh;
@@ -595,7 +616,7 @@
       gap: 6px;
       background: #050008;
       border-bottom: 1px solid transparent;
-      border-image: linear-gradient(90deg, #00F0FF 0%, #FF007F 40%, #39FF14 70%, transparent 100%) 1;
+      border-image: linear-gradient(90deg, var(--flow-highlight) 0%, #FF007F 40%, #39FF14 70%, transparent 100%) 1;
       flex-shrink: 0;
       z-index: 10;
     }
@@ -616,7 +637,7 @@
       font-family: 'Orbitron', monospace;
       font-weight: 900;
       font-size: calc(12px * var(--fs));
-      color: #00F0FF;
+      color: var(--flow-highlight);
       letter-spacing: 3px;
       text-shadow: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 25px rgba(0, 240, 255, 0.3);
       background: rgba(0, 240, 255, 0.06);
@@ -629,7 +650,7 @@
     #deep-flow-view .ctrl-btn {
       background: transparent;
       border: 1px solid rgba(0, 240, 255, 0.25);
-      color: #00F0FF;
+      color: var(--flow-highlight);
       font-family: 'JetBrains Mono', monospace;
       font-size: 8px;
       font-weight: 700;
@@ -650,8 +671,8 @@
       border-color: rgba(255, 255, 255, 0.08);
     }
     #deep-flow-view #stream-toggle {
-      border-color: #00F0FF;
-      color: #00F0FF;
+      border-color: var(--flow-highlight);
+      color: var(--flow-highlight);
       text-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
     }
     #deep-flow-view #stream-toggle.binance-active {
@@ -678,7 +699,7 @@
       white-space: nowrap;
     }
     #deep-flow-view #hdr-clock {
-      color: #00F0FF;
+      color: var(--flow-highlight);
       opacity: 0.7;
     }
     #deep-flow-view .ticker-chip {
@@ -687,7 +708,7 @@
       gap: 5px;
       padding: 2px 7px;
       background: rgba(255, 255, 255, 0.03);
-      border-left: 2px solid #00F0FF;
+      border-left: 2px solid var(--flow-highlight);
       border-radius: 0 3px 3px 0;
       white-space: nowrap;
       flex-shrink: 0;
@@ -763,7 +784,7 @@
     #deep-flow-view .block-label {
       font-size: 7px;
       font-weight: 700;
-      color: #00F0FF;
+      color: var(--flow-highlight);
       letter-spacing: 1.2px;
       opacity: 0.65;
       margin-bottom: 3px;
@@ -857,7 +878,7 @@
       background: linear-gradient(135deg, #090112 0%, #10081a 100%);
     }
     #deep-flow-view .bn-vivid-block .block-label {
-      color: #00F0FF;
+      color: var(--flow-highlight);
       opacity: 1;
       letter-spacing: 1.5px;
       text-shadow: 0 0 4px rgba(0, 240, 255, 0.4);
@@ -887,7 +908,7 @@
     #deep-flow-view #ledger-header > span {
       font-size: 8px;
       font-weight: 700;
-      color: #00F0FF;
+      color: var(--flow-highlight);
       letter-spacing: 1.2px;
       opacity: 0.6;
     }
@@ -903,7 +924,7 @@
     }
     #deep-flow-view .sort-arrow {
       font-size: 7px;
-      color: #00F0FF;
+      color: var(--flow-highlight);
       opacity: 0.9;
     }
     #deep-flow-view .col-value {
@@ -975,7 +996,7 @@
       border-color: rgba(0, 240, 255, 0.2);
     }
     #deep-flow-view .mf-btn.active {
-      color: #00F0FF;
+      color: var(--flow-highlight);
       border-color: rgba(0, 240, 255, 0.4);
       background: rgba(0, 240, 255, 0.06);
     }
@@ -1033,7 +1054,7 @@
     }
     #deep-flow-view #ledger-body .row.active {
       background: rgba(0, 240, 255, 0.08);
-      border-left-color: #00F0FF;
+      border-left-color: var(--flow-highlight);
     }
     #deep-flow-view #ledger-body .row.live-new {
       border-left-color: #39FF14;
@@ -1151,7 +1172,7 @@
       font-size: calc(9.5px * var(--fs));
     }
     #deep-flow-view .hash-clickable {
-      color: #00F0FF;
+      color: var(--flow-highlight);
       cursor: pointer;
       text-decoration: none;
       user-select: none;
@@ -1190,6 +1211,35 @@
     }
     @media(max-width: 700px) {
       #deep-flow-view #sidebar { display: none; }
+    }
+
+    /* ========== ESTILOS DE VISTA: QUANTIS (LIENZO INFINITO) ========== */
+    #quantis-view {
+      position: absolute;
+      inset: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      z-index: 4;
+    }
+    .infinite-grid {
+      background-size: 30px 30px;
+      background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+    }
+    .dark .infinite-grid {
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    }
+    .canvas-element {
+      will-change: transform, width, height;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAZ ========== */
@@ -1276,7 +1326,7 @@
     }
   </style>
 </head>
-<body>
+<body class="bg-zinc-100 dark:bg-brand-950 text-zinc-800 dark:text-zinc-100 font-sans overflow-hidden select-none h-screen w-screen flex flex-col">
 
   <!-- PANTALLA DE AUTENTICACIN (FIREBASE) -->
   <div id="loginScreen">
@@ -1301,11 +1351,26 @@
       <div class="top-bar">
         <div class="top-left">
           <div class="box" id="fecha-hora">Cargando...</div>
-          <button id="toggle-view-to-flow" class="music-btn" onclick="window.toggleAppView()" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
+          
+          <!-- === CAMBIO: Botones pequeños y compactos de navegación unificada === -->
+          <button class="music-btn" onclick="window.switchAppView('dominon')" style="background: var(--color-highlight); color: var(--color-dark-bg); font-weight: bold;">
+            DOMINON
+          </button>
+          <button id="toggle-view-to-flow" class="music-btn" onclick="window.switchAppView('flow')" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
             <i class="fa-solid fa-chart-line"></i> DEEP FLOW
           </button>
+          <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis')" title="Abrir Lienzo QUANTIS" style="background: var(--color-input-bg); color: #39FF14; border: 1px solid #39FF14;">
+            <i class="fa-solid fa-compass"></i> QUANTIS
+          </button>
+          <!-- === FIN DE CAMBIO === -->
         </div>
         <div class="top-right">
+          <!-- === CAMBIO: Icono "$" de Ventas e Interfaz de Rangos exclusivo de Dominon === -->
+          <button class="music-btn" onclick="window.openSalesModal()" title="Adquirir Rango" style="border-color: #39FF14; color: #39FF14; padding: 4px 10px;">
+            <i class="fa-solid fa-dollar-sign"></i>
+          </button>
+          <!-- === FIN DE CAMBIO === -->
+
           <div class="user-info" id="userInfo">
             <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
             <span class="user-name" id="userName"></span>
@@ -1342,7 +1407,6 @@
               <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
               <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
               <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-              <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
               <option value="FOREXCOM:WTIUSD">Petrleo (WTI/USD)</option>
               <option value="FOREXCOM:NGAS">Gas Natural</option>
             </select>
@@ -1356,7 +1420,7 @@
           <div class="notepad-header-row">
             <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
             <div class="notepad-tabs" id="notepad-tabs">
-              <!-- Pestaas dinmicas -->
+              <!-- Pestaas dinmicas de bloc de notas basadas en el Rango -->
             </div>
           </div>
           <textarea id="notepad" placeholder="Escribe tus notas aqu..."></textarea>
@@ -1411,7 +1475,11 @@
       <button class="ctrl-btn" id="sound-toggle">SND ON</button>
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
-      <button class="ctrl-btn" id="view-toggle" onclick="window.toggleAppView()" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
+      
+      <!-- === CAMBIO: Alternancia compacta entre tres vistas en Deep Flow === -->
+      <button class="ctrl-btn" onclick="window.switchAppView('dominon')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
+      <button class="ctrl-btn" onclick="window.switchAppView('quantis')" style="border-color:#39FF14; color:#39FF14; font-weight:bold; text-shadow:0 0 4px rgba(57,255,20,0.4);">QUANTIS</button>
+      
       <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
       <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
       <span id="hdr-date"></span><span id="hdr-clock"></span>
@@ -1421,6 +1489,15 @@
     </header>
     <main id="dashboard">
       <aside id="sidebar">
+        <!-- === CAMBIO: Selector de color dinámico integrado en el Sidebar de Deep Flow === -->
+        <div class="corner-block">
+          <div class="block-label">COLOR NEÓN (RANGOS)</div>
+          <div class="flex flex-wrap gap-1.5 mt-1" id="flow-color-palette">
+            <!-- Renderizado dinámico de colores según rango -->
+          </div>
+        </div>
+        <!-- === FIN DE CAMBIO === -->
+
         <div id="sidebar-onchain" class="sidebar-layer active">
           <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
           <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
@@ -1453,35 +1530,219 @@
     </main>
   </div>
 
-  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
-  <div id="youtube-player"></div>
+  <!-- VISTA SPA 3: QUANTIS (LIENZO INFINITO COMPLETO) -->
+  <div id="quantis-view" class="hidden-view flex flex-col h-screen w-screen bg-zinc-100 dark:bg-brand-950 text-zinc-800 dark:text-zinc-100 relative">
+    
+    <!-- barra superior de Quantis -->
+    <header class="h-14 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-6 z-30 shrink-0">
+      <div class="flex items-center space-x-2">
+        <button onclick="window.switchAppView('dominon')" class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white">Dominon</button>
+        <button onclick="window.switchAppView('flow')" class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-800 hover:bg-zinc-700 text-white">Deep Flow</button>
+        <button class="px-3 py-1.5 text-xs font-semibold rounded-sm bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-300 dark:border-zinc-700">Quantis</button>
+        
+        <!-- === CAMBIO: Caja compacta de herramientas de dibujo (Pincel y Puntero) === -->
+        <div id="paint-toolbar" class="flex items-center space-x-1.5 border-l border-zinc-300 dark:border-zinc-700 pl-4">
+          <button id="tool-hand" onclick="window.setQuantisTool('hand')" class="px-2.5 py-1.5 rounded-sm bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white hover:bg-zinc-300 text-xs flex items-center gap-1 border border-zinc-300 dark:border-zinc-700" title="Selección / Arrastre">
+            <i class="fa-solid fa-hand"></i>
+          </button>
+          <button id="tool-brush" onclick="window.setQuantisTool('brush')" class="px-2.5 py-1.5 rounded-sm bg-zinc-800 text-zinc-400 hover:bg-zinc-700 text-xs flex items-center gap-1 border border-transparent" title="Kit de Pintura">
+            <i class="fa-solid fa-brush"></i>
+          </button>
+          
+          <!-- Panel flotante del Pincel (oculto por defecto) -->
+          <div id="brush-options" class="hidden flex items-center space-x-1.5 bg-zinc-800 dark:bg-zinc-900 px-2 py-1 rounded border border-zinc-700 text-xs">
+            <input type="color" id="brush-color" value="#39FF14" onchange="window.updateBrushSettings()" class="w-5 h-5 bg-transparent border-0 cursor-pointer">
+            <select id="brush-size" onchange="window.updateBrushSettings()" class="bg-zinc-900 text-white rounded border border-zinc-700 px-1 py-0.5 text-[10px]">
+              <option value="3">3px</option>
+              <option value="6" selected>6px</option>
+              <option value="12">12px</option>
+              <option value="24">24px</option>
+            </select>
+            <button id="tool-eraser" onclick="window.toggleEraser()" class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-[10px]" title="Borrador">
+              <i class="fa-solid fa-eraser"></i>
+            </button>
+            <select id="brush-shape" onchange="window.updateBrushSettings()" class="bg-zinc-900 text-white rounded border border-zinc-700 px-1 py-0.5 text-[10px]">
+              <option value="free" selected>Libre</option>
+              <option value="line">Línea</option>
+              <option value="arrow">Flecha</option>
+            </select>
+          </div>
+        </div>
+        <!-- === FIN DE CAMBIO === -->
+      </div>
 
-  <div id="musicPanel" class="hidden">
-    <div class="music-player-panel">
-      <div class="player-header">REPRODUCTOR</div>
-      
-      <div class="player-controls">
-        <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
-        <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
-        <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+      <!-- Reloj Quantis -->
+      <div class="text-xs font-mono tracking-wider text-zinc-500 dark:text-zinc-400" id="quantis-time-visor">
+        00/00/0000 00:00:00
       </div>
-      
-      <div class="progress-time">
-        <span id="current-time">0:00</span>
-        <span id="duration-time">0:00</span>
+
+      <!-- Configuración y Reproductor Integrado de Quantis -->
+      <div class="flex items-center space-x-3">
+        <!-- === CAMBIO: Reproductor duplicado idénticamente para Quantis === -->
+        <div class="music-container flex items-center space-x-2">
+          <div class="song-display bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-sm px-3 py-1 max-w-[150px] overflow-hidden">
+            <span id="songTitleQuantis" class="song-marquee text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold whitespace-nowrap block">Listo para Play</span>
+          </div>
+          <button class="music-btn" onclick="document.getElementById('musicPanel').classList.toggle('hidden')" title="Reproductor">
+            <i class="fa-solid fa-music"></i>
+          </button>
+        </div>
+        <!-- === FIN DE CAMBIO === -->
+
+        <button onclick="openSettings()" class="flex items-center space-x-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-3 py-1.5 rounded-sm text-xs border border-zinc-300 dark:border-zinc-700">
+          <i class="fa-solid fa-gear"></i>
+          <span data-i18n="configBtn" class="font-medium">Configuración</span>
+        </button>
       </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+      <!-- Barra lateral izquierda de Proyectos de Quantis -->
+      <aside class="w-64 bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col justify-between z-20 shrink-0">
+        <!-- === CAMBIO: Scroll infinito para Premium (coherencia estructural) === -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar" id="quantis-sidebar-scroll" style="max-height: calc(100vh - 120px);">
+          <div class="flex items-center justify-between mb-4">
+            <h2 data-i18n="projectsTitle" class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Proyectos</h2>
+            <button onclick="window.addNewProject()" class="text-zinc-500 hover:text-zinc-800 dark:hover:text-white text-xs p-1" title="Añadir Proyecto">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div id="projects-list" class="space-y-4">
+            <!-- Inyección dinámica -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- Viewport del Lienzo Infinito -->
+      <main id="viewport" class="flex-1 relative overflow-hidden bg-zinc-100 dark:bg-brand-950 cursor-grab active:cursor-grabbing">
+        <div id="canvas-container" class="absolute w-[8000px] h-[8000px] top-[-4000px] left-[-4000px] infinite-grid transform origin-center">
+          <!-- === CAMBIO: Canvas nativo HTML5 integrado para el Kit de Pintura === -->
+          <canvas id="paint-canvas" width="8000" height="8000" style="position: absolute; top:0; left:0; width:8000px; height:8000px; z-index: 1; pointer-events: none;"></canvas>
+          <!-- Elementos cargados dinámicamente -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- === CAMBIO: MODAL INFORMATIVO DE VENTAS (MONEY.PNG) === -->
+  <div id="sales-modal" class="hidden fixed inset-0 z-[99999] flex items-center justify-center bg-black/75 backdrop-blur-sm">
+    <div class="bg-[#1A1A1A] border-2 border-[#A855F7] w-[450px] rounded-lg p-6 relative shadow-[0_0_30px_rgba(168,85,247,0.3)] text-zinc-100">
+      <button onclick="window.closeSalesModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3 class="text-lg font-bold mb-4 text-[#A855F7] flex items-center gap-2">
+        <i class="fa-solid fa-gem"></i>
+        Compra tu rango para desbloquear más opciones
+      </h3>
       
-      <div class="progress-bar-container">
-        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
-      </div>
-      
-      <div class="volume-control">
-        <i class="fa-solid fa-volume-low"></i>
-        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
-        <i class="fa-solid fa-volume-high"></i>
+      <div class="space-y-4">
+        <!-- Extended -->
+        <div class="bg-[#242424] border border-zinc-700 p-4 rounded-md">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-white text-sm">Extended</span>
+            <span class="text-sm font-bold text-[#39FF14]">$5 USD / mes</span>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Desbloquea hasta 10 páginas en el Bloc de Notas, colores de Deep Flow personalizables (Blanco, Verde, Rojo, Negro) y hasta 5 proyectos y páginas en Quantis.
+          </p>
+          <button onclick="window.openContactModal()" class="w-full mt-3 bg-[#A855F7] hover:bg-[#8b3ed9] text-white text-xs py-2 rounded font-semibold transition">
+            Adquirir Extended
+          </button>
+        </div>
+
+        <!-- Premium -->
+        <div class="bg-[#242424] border-2 border-[#39FF14] p-4 rounded-md shadow-[0_0_15px_rgba(57,255,20,0.1)]">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-white text-sm flex items-center gap-1">
+              Premium <i class="fa-solid fa-crown text-yellow-500"></i>
+            </span>
+            <span class="text-sm font-bold text-[#39FF14]">$20 USD / mes</span>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Soporta hasta 20 páginas de notas, personalización completa de 10 colores neón en Deepflow, páginas y proyectos ilimitados en Quantis, scroll infinito y el Kit de Pintura completamente desbloqueado.
+          </p>
+          <button onclick="window.openContactModal()" class="w-full mt-3 bg-[#39FF14] hover:bg-[#32e011] text-black text-xs py-2 rounded font-bold transition">
+            Adquirir Premium
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- === CAMBIO: MODAL DE CONTACTO (NEY.PNG) === -->
+  <div id="contact-modal" class="hidden fixed inset-0 z-[100000] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+    <div class="bg-[#111111] border-2 border-[#39FF14] w-[400px] rounded-lg p-6 relative shadow-[0_0_30px_rgba(57,255,20,0.2)] text-zinc-100">
+      <button onclick="window.closeContactModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3 class="text-md font-bold mb-4 text-[#39FF14] flex items-center gap-2">
+        <i class="fa-solid fa-envelope"></i>
+        Contacto para la compra mensual del rango
+      </h3>
+      
+      <div class="space-y-4 text-sm bg-[#1A1A1A] p-4 border border-zinc-800 rounded">
+        <div class="flex justify-between items-center py-1.5 border-b border-zinc-800">
+          <span class="text-zinc-400 text-xs">Discord ID:</span>
+          <span class="font-mono text-xs select-all text-white font-bold">DANIFU777</span>
+        </div>
+        <div class="flex justify-between items-center py-1.5 border-b border-zinc-800">
+          <span class="text-zinc-400 text-xs">Email:</span>
+          <span class="font-mono text-xs select-all text-white font-bold">danielproooogamer41@gmail.com</span>
+        </div>
+        <div class="flex justify-between items-center py-1.5">
+          <span class="text-zinc-400 text-xs">Github Repo:</span>
+          <span class="font-mono text-xs select-all text-[#39FF14] hover:underline">github.com/Dominons/dominons.github.io</span>
+        </div>
+      </div>
+      
+      <p class="text-[10px] text-zinc-500 mt-4 text-center leading-relaxed">
+        Copia los datos de contacto anteriores para concretar la activación manual de tu rango.
+      </p>
+    </div>
+  </div>
+  <!-- === FIN DE CAMBIO === -->
+
+  <!-- MENÚ CONTEXTUAL PERSONALIZADO (QUANTIS) -->
+  <div id="custom-context-menu" class="hidden absolute z-50 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-sm py-1 text-sm text-zinc-700 dark:text-zinc-300">
+    <button onclick="triggerFileInput()" class="w-full text-left px-4 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white flex items-center space-x-2">
+      <i class="fa-solid fa-file-arrow-up text-zinc-400"></i>
+      <span data-i18n="openFile">Abrir archivo</span>
+    </button>
+  </div>
+
+  <input type="file" id="file-loader" class="hidden" onchange="handleFileSelection(event)">
+
+  <!-- MODAL DE CONFIGURACIÓN (QUANTIS) -->
+  <div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 w-96 rounded-sm p-6 relative">
+      <h3 class="text-base font-semibold mb-4 text-zinc-900 dark:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-sliders text-zinc-400"></i>
+        <span data-i18n="configTitle">Preferencias del Sistema</span>
+      </h3>
+      <div class="mb-4">
+        <label data-i18n="themeLabel" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Tema</label>
+        <select id="theme-select" onchange="changeTheme(this.value)" class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 rounded-sm p-2 focus:outline-none focus:border-zinc-500">
+          <option value="dark" data-i18n="themeDark">Oscuro</option>
+          <option value="light" data-i18n="themeLight">Claro</option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label data-i18n="langLabel" class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Idioma</label>
+        <select id="lang-select" onchange="changeLanguage(this.value)" class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 rounded-sm p-2 focus:outline-none focus:border-zinc-500">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="flex justify-end">
+        <button onclick="closeSettings()" data-i18n="closeBtn" class="bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs px-4 py-2 rounded-sm">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
+  <div id="youtube-player"></div>
 
   <!-- SCRIPTS DE INICIALIZACIN DE FIREBASE (V10 MODULAR) -->
   <script type="module">
@@ -1509,17 +1770,16 @@
     const rtdb = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
-    // Exportar instancias de bases de datos y auth al contexto de window
     window.db = db;
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // === CAMBIO: Variables de estado globales para el control de planes y límites del bloc de notas ===
+    // === CAMBIO: Variables de estado globales y de límites en Firestore ===
     window.userPlan = 'normal';
     window.maxPages = 3;
     window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count')) || 3;
 
-    // Listener del estado de autenticacin (Se añade async para permitir el flujo asíncrono con Firestore)
+    // Listener de autenticacin
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -1527,24 +1787,29 @@
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // === CAMBIO: Lectura asíncrona del plan del usuario desde Firestore ===
+        // === CAMBIO: Recuperación asíncrona del plan del usuario ===
         try {
           const userDocRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists() && docSnap.data().plan === 'Premium') {
-            window.userPlan = 'Premium';
-            window.maxPages = 4;
+          if (docSnap.exists() && docSnap.data().plan) {
+            window.userPlan = docSnap.data().plan; // Extended, Premium o normal
           } else {
             window.userPlan = 'normal';
-            window.maxPages = 3;
           }
         } catch (error) {
-          console.error("Error al obtener el plan del usuario de Firestore:", error);
+          console.error("Error cargando el plan del usuario de Firestore:", error);
           window.userPlan = 'normal';
+        }
+
+        // Estructura de límites de páginas de Notas según Plan
+        if (window.userPlan === 'Premium') {
+          window.maxPages = 20;
+        } else if (window.userPlan === 'Extended') {
+          window.maxPages = 10;
+        } else {
           window.maxPages = 3;
         }
 
-        // Validación estricta de coherencia de límites tras detectar el plan
         if (window.createdPagesCount > window.maxPages) {
           window.createdPagesCount = window.maxPages;
           localStorage.setItem('danifu_pages_count', window.createdPagesCount);
@@ -1554,73 +1819,18 @@
           localStorage.setItem('danifu_active_tab', window.activeTab);
         }
 
-        // Renderizado dinámico de pestañas conforme al estado del plan detectado
-        if (typeof window.renderTabs === 'function') {
-          window.renderTabs();
-        }
-        // === FIN DE CAMBIO ===
+        // Renderizado dinámico de pestañas, paleta de colores y proyectos de Quantis
+        if (typeof window.renderTabs === 'function') window.renderTabs();
+        if (typeof window.renderFlowPalette === 'function') window.renderFlowPalette();
+        if (typeof window.loadQuantisFromFirestore === 'function') window.loadQuantisFromFirestore();
 
         // Carga de la nota activa en Firestore
         window.loadNoteFromFirestore(window.activeTab);
 
-        // Carga del estado y progreso del reproductor
-        window.loadSavedMusic = function() {
-          if (!auth.currentUser) return;
-          var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
-          onValue(musicRef, function(snapshot) {
-            var data = snapshot.val();
-            if (data && data.videoId && window.player) {
-              setTimeout(function() {
-                try {
-                  var videoIdToLoad = data.videoId;
-                  if (videoIdToLoad.indexOf('watch') !== -1 || videoIdToLoad.indexOf('v=') !== -1) {
-                    var urlParts = videoIdToLoad.split('?');
-                    if (urlParts.length > 1) {
-                      var params = urlParts[1].split('&');
-                      for (var i = 0; i < params.length; i++) {
-                        if (params[i].indexOf('v=') === 0) {
-                          videoIdToLoad = params[i].split('=')[1];
-                          break;
-                        }
-                      }
-                    }
-                  }
-
-                  window.player.cuePlaylist({
-                    listType: 'playlist',
-                    list: playlistId,
-                    index: 0,
-                    startSeconds: 0
-                  });
-
-                  setTimeout(function() {
-                    var plist = window.player.getPlaylist();
-                    if (plist && plist.length > 0) {
-                      var idx = plist.indexOf(videoIdToLoad);
-                      if (idx >= 0) {
-                        window.player.playVideoAt(idx);
-                        setTimeout(function() {
-                          window.player.seekTo(data.time || 0, true);
-                          window.player.pauseVideo();
-                          updateSongDisplay();
-                        }, 1000);
-                      } else {
-                        window.player.playVideoAt(0);
-                        setTimeout(function() { window.player.pauseVideo(); }, 800);
-                      }
-                    } else {
-                      window.player.playVideoAt(0);
-                      setTimeout(function() { window.player.pauseVideo(); }, 800);
-                    }
-                  }, 2000);
-
-                } catch (e) {
-                  console.error('Error cargando msica guardada:', e);
-                }
-              }, 1500);
-            }
-          }, { onlyOnce: true });
-        };
+        // Carga de música
+        if (window.loadSavedMusic) {
+          window.loadSavedMusic();
+        }
 
       } else {
         document.getElementById('loginScreen').classList.remove('hidden');
@@ -1650,10 +1860,8 @@
        }
     }, 30000);
 
-    // Bloc de notas Firestore (Lgica compartida)
+    // Bloc de notas
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
-
-    // === CAMBIO: Lógica de inicialización de límites del Bloc de Notas ===
     if (parseInt(window.activeTab) > window.maxPages) {
         window.activeTab = "1";
         localStorage.setItem('danifu_active_tab', window.activeTab);
@@ -1695,14 +1903,12 @@
         });
     }
 
-    // === CAMBIO: Renderizador de pestañas dinámicas con soporte para botón "+" de creación y limitación estricta por Plan ===
+    // === CAMBIO: Renderizador de notas dinámico con validación estricta de límites ===
     window.renderTabs = function() {
       const tabsContainer = document.getElementById('notepad-tabs');
       if (!tabsContainer) return;
-      
       tabsContainer.innerHTML = '';
-
-      // Se generan dinámicamente los botones de las páginas creadas
+      
       for (let i = 1; i <= window.createdPagesCount; i++) {
         const btn = document.createElement('button');
         btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
@@ -1712,8 +1918,8 @@
         tabsContainer.appendChild(btn);
       }
 
-      // Se añade el botón "+" sólo si la cantidad creada es menor al límite máximo absoluto de la plataforma (4)
-      if (window.createdPagesCount < 4) {
+      // Se muestra botón "+" si no se superó el límite absoluto
+      if (window.createdPagesCount < window.maxPages) {
         const plusBtn = document.createElement('button');
         plusBtn.className = 'tab-btn';
         plusBtn.id = 'btn-add-tab';
@@ -1722,9 +1928,8 @@
         plusBtn.style.borderColor = 'var(--color-highlight)';
         plusBtn.style.color = 'var(--color-highlight)';
         plusBtn.style.padding = '4px 12px';
-
+        
         plusBtn.onclick = function() {
-          // Bloqueo estricto basado en la evaluación del plan actual en tiempo de ejecución
           if (window.createdPagesCount >= window.maxPages) {
             alert('Límite de páginas alcanzado para tu plan actual.');
           } else {
@@ -1737,10 +1942,6 @@
         tabsContainer.appendChild(plusBtn);
       }
     };
-
-    // Renderizado por primera vez de la interfaz de pestañas
-    window.renderTabs();
-    // === FIN DE CAMBIO ===
 
     window.switchTab = function(tabNum) {
       window.activeTab = String(tabNum);
@@ -1760,6 +1961,59 @@
         if (notepadEl) notepadEl.value = "";
       }
     };
+
+    // === CAMBIO: Sincronización automática asíncrona de Quantis con Cloud Firestore ===
+    window.saveQuantisToFirestore = async function() {
+      if (!window.auth || !window.auth.currentUser) return;
+      try {
+        const userUid = window.auth.currentUser.uid;
+        const mainDataRef = doc(db, "users", userUid, "proyectos_quantis", "main_data");
+        
+        const paintCanvas = document.getElementById('paint-canvas');
+        const drawingDataUrl = paintCanvas ? paintCanvas.toDataURL("image/png") : "";
+
+        await setDoc(mainDataRef, {
+          projects: state.projects,
+          canvasData: state.canvasData,
+          drawing: drawingDataUrl,
+          updatedAt: Date.now()
+        }, { merge: true });
+        console.log("Quantis guardado automáticamente en Firestore.");
+      } catch (error) {
+        console.error("Error al guardar Quantis en Firestore:", error);
+      }
+    };
+
+    window.loadQuantisFromFirestore = async function() {
+      if (!window.auth || !window.auth.currentUser) return;
+      try {
+        const userUid = window.auth.currentUser.uid;
+        const docRef = doc(db, "users", userUid, "proyectos_quantis", "main_data");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.projects) state.projects = data.projects;
+          if (data.canvasData) state.canvasData = data.canvasData;
+          if (data.drawing) {
+            const paintCanvas = document.getElementById('paint-canvas');
+            if (paintCanvas) {
+              const ctx = paintCanvas.getContext('2d');
+              const img = new Image();
+              img.onload = function() {
+                ctx.clearRect(0, 0, paintCanvas.width, paintCanvas.height);
+                ctx.drawImage(img, 0, 0);
+              };
+              img.src = data.drawing;
+            }
+          }
+        }
+        renderProjects();
+        loadPageCanvas(state.activeProjectIdx, state.activePageIdx);
+      } catch (error) {
+        console.error("Error al cargar Quantis desde Firestore:", error);
+      }
+    };
+    // === FIN DE CAMBIO ===
   </script>
 
   <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
@@ -1800,7 +2054,6 @@
         }
       });
     }
-    // Exponer la inicializacin globalmente para YouTube iframe API
     window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
     function onPlayerReady(event) {
@@ -1851,6 +2104,11 @@
         var videoData = window.player.getVideoData();
         var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
         if (_elSongTitle) _elSongTitle.textContent = title;
+        
+        // === CAMBIO: Actualización del reproductor en la vista Quantis ===
+        const qTitle = document.getElementById('songTitleQuantis');
+        if (qTitle) qTitle.textContent = title;
+        // === FIN DE CAMBIO ===
       } catch (error) {}
     }
 
@@ -1990,26 +2248,32 @@
     });
   </script>
 
-  <!-- CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS) -->
+  <!-- === CAMBIO: CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS UNIFICADAS) === -->
   <script>
-    window.toggleAppView = function() {
+    window.switchAppView = function(viewName) {
       var mainDash = document.getElementById('main-dashboard-view');
       var deepFlow = document.getElementById('deep-flow-view');
-      if (mainDash && deepFlow) {
-        var isFlowHidden = deepFlow.classList.contains('hidden-view');
-        if (isFlowHidden) {
-          mainDash.classList.add('hidden-view');
-          deepFlow.classList.remove('hidden-view');
-        } else {
-          deepFlow.classList.add('hidden-view');
-          mainDash.classList.remove('hidden-view');
-        }
-        if (typeof playClickSound === 'function') {
-          try { playClickSound(); } catch(e) {}
-        }
+      var quantisView = document.getElementById('quantis-view');
+      
+      mainDash.classList.add('hidden-view');
+      deepFlow.classList.add('hidden-view');
+      quantisView.classList.add('hidden-view');
+      
+      if (viewName === 'dominon') {
+        mainDash.classList.remove('hidden-view');
+      } else if (viewName === 'flow') {
+        deepFlow.classList.remove('hidden-view');
+      } else if (viewName === 'quantis') {
+        quantisView.classList.remove('hidden-view');
+        // Asegura que las dimensiones del canvas de dibujo estén sincronizadas
+        initPaintCanvas();
+      }
+      if (typeof playClickSound === 'function') {
+        try { playClickSound(); } catch(e) {}
       }
     };
   </script>
+  <!-- === FIN DE CAMBIO === -->
 
   <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
   <script>
@@ -2250,7 +2514,6 @@
       DOM.ledgerBody.addEventListener('click',handleLedgerClick);
       updateVolatility();
       
-      // Llamada asncrona inicial de APIs de Coingecko
       Promise.all([fetchPrices(),fetchGlobal()]).then(([pd,gd])=>{
         if(pd||gd){
           STATE.apiAlive=true;
@@ -2270,33 +2533,848 @@
       });
     }
 
-    // Unificacin de la ejecucin de carga inicial para ambas plataformas
-    function initAll() {
-      initDeepFlow();
-      if (typeof window.switchTab === 'function') {
-        window.switchTab(window.activeTab);
+    // === CAMBIO: Renderizador dinámico de la paleta de colores de Deep Flow según el Rango ===
+    window.renderFlowPalette = function() {
+      const paletteContainer = document.getElementById('flow-color-palette');
+      if (!paletteContainer) return;
+      paletteContainer.innerHTML = '';
+
+      // Colores base para todos los planes
+      let colors = [
+        { hex: '#00F0FF', name: 'Ciano Base' }
+      ];
+
+      if (window.userPlan === 'Extended' || window.userPlan === 'Premium') {
+        colors = [
+          { hex: '#00F0FF', name: 'Ciano Base' },
+          { hex: '#FFFFFF', name: 'Blanco Neón' },
+          { hex: '#39FF14', name: 'Verde Neón' },
+          { hex: '#FF3131', name: 'Rojo Neón' },
+          { hex: '#090112', name: 'Negro Profundo' }
+        ];
       }
-      const savedTheme = localStorage.getItem('danifu_theme');
-      if (savedTheme && typeof window.setTheme === 'function') {
-        window.setTheme(savedTheme);
+
+      if (window.userPlan === 'Premium') {
+        colors = colors.concat([
+          { hex: '#A855F7', name: 'Violeta Neón' },
+          { hex: '#FF8C00', name: 'Naranja Eléctrico' },
+          { hex: '#FFD700', name: 'Oro Imperial' },
+          { hex: '#FF007F', name: 'Rosa Neón' },
+          { hex: '#00D1FF', name: 'Celeste Neón' }
+        ]);
       }
-      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
-      if (savedSymbol && document.getElementById('symbolSelect')) {
-        document.getElementById('symbolSelect').value = savedSymbol;
+
+      colors.forEach(col => {
+        const btn = document.createElement('button');
+        btn.className = 'w-5 h-5 rounded-full border border-zinc-700 hover:scale-110 transition-transform';
+        btn.style.background = col.hex;
+        btn.title = col.name;
+        btn.onclick = function() {
+          window.setDeepFlowColor(col.hex);
+        };
+        paletteContainer.appendChild(btn);
+      });
+    };
+
+    window.setDeepFlowColor = function(colorHex) {
+      // Protección de cambio de color en plan normal
+      if (window.userPlan === 'normal') {
+        alert("Opción bloqueada para tu plan actual. Adquiere el plan Extended o Premium para cambiar colores.");
+        return;
       }
-      if (typeof window.updatePomoUI === 'function') {
-        window.updatePomoUI();
+      document.getElementById('deep-flow-view').style.setProperty('--flow-highlight', colorHex);
+      localStorage.setItem('danifu_flow_color', colorHex);
+      if (typeof playClickSound === 'function') playClickSound();
+    };
+    // === FIN DE CAMBIO ===
+  </script>
+
+  <!-- === CAMBIO: LÓGICA DE NEGOCIO Y CONFIGURACIÓN COMPLETA DE QUANTIS === -->
+  <script>
+    const state = {
+      lang: 'es',
+      theme: 'dark',
+      zoom: 1.0,
+      panX: 0,
+      panY: 0,
+      isPanning: false,
+      startX: 0,
+      startY: 0,
+      contextMenuCoords: { x: 0, y: 0 },
+      activeProjectIdx: 0,
+      activePageIdx: 0,
+      
+      projects: [
+        {
+          id: 'proj-1',
+          name: 'Proyecto Alpha',
+          pages: ['Página Inicial', 'Investigación']
+        }
+      ],
+
+      canvasData: {
+        "0-0": [
+          { type: 'text', x: 3900, y: 3900, desc: "Introducción", content: "Bienvenido a tu Lienzo Infinito. Puedes arrastrar este bloque, editar el contenido o agregar enlaces como https://google.com para probar la detección automática." }
+        ]
       }
-      if (typeof window.updateDisplay === 'function') {
-        window.updateDisplay();
+    };
+
+    const translations = {
+      es: {
+        configTitle: "Preferencias del Sistema",
+        themeLabel: "Tema",
+        themeDark: "Oscuro (Por defecto)",
+        themeLight: "Claro",
+        langLabel: "Idioma",
+        closeBtn: "Cerrar",
+        openFile: "Abrir archivo",
+        defaultDesc: "Añadir descripción...",
+        defaultText: "Escribe algo aquí...",
+        projectsTitle: "Proyectos",
+        configBtn: "Configuración",
+        promptNewProject: "Nombre del nuevo proyecto:",
+        promptNewPage: "Nombre de la nueva página:",
+        promptRenameProject: "Cambiar nombre de proyecto:",
+        promptRenamePage: "Cambiar nombre de página:",
+        confirmDeletePage: "¿Estás seguro de eliminar esta página?"
+      },
+      en: {
+        configTitle: "System Preferences",
+        themeLabel: "Theme",
+        themeDark: "Dark (Default)",
+        themeLight: "Light",
+        langLabel: "Language",
+        closeBtn: "Close",
+        openFile: "Open file",
+        defaultDesc: "Add description...",
+        defaultText: "Type something here...",
+        projectsTitle: "Projects",
+        configBtn: "Settings",
+        promptNewProject: "New project name:",
+        promptNewPage: "New page name:",
+        promptRenameProject: "Rename project:",
+        promptRenamePage: "Rename page:",
+        confirmDeletePage: "Are you sure you want to delete this page?"
+      }
+    };
+
+    const viewport = document.getElementById('viewport');
+    const canvasContainer = document.getElementById('canvas-container');
+    const customContextMenu = document.getElementById('custom-context-menu');
+    const fileLoader = document.getElementById('file-loader');
+    const settingsModal = document.getElementById('settings-modal');
+    const projectsListContainer = document.getElementById('projects-list');
+
+    function initQuantisClock() {
+      const updateClock = () => {
+        const now = new Date();
+        const pad = (num) => String(num).padStart(2, '0');
+        const dateStr = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
+        const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const qVisor = document.getElementById('quantis-time-visor');
+        if (qVisor) qVisor.textContent = `${dateStr} ${timeStr}`;
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    function saveCurrentPageCanvas() {
+      const key = `${state.activeProjectIdx}-${state.activePageIdx}`;
+      const elements = [];
+      const blocks = canvasContainer.querySelectorAll('.canvas-element');
+      
+      blocks.forEach(block => {
+        const x = parseFloat(block.style.left);
+        const y = parseFloat(block.style.top);
+        const w = block.style.width ? parseFloat(block.style.width) : null;
+        const h = block.style.height ? parseFloat(block.style.height) : null;
+        const desc = block.querySelector('.desc-input').value;
+        const textNode = block.querySelector('.content-text');
+        
+        if (textNode) {
+          elements.push({
+            type: 'text',
+            x, y, desc,
+            content: textNode.innerText,
+            isLink: textNode.getAttribute('data-is-link') === 'true'
+          });
+        } else {
+          const fileImg = block.querySelector('.file-img');
+          const fileName = block.querySelector('.file-label')?.textContent;
+          const fileType = block.getAttribute('data-file-type');
+          elements.push({
+            type: 'file',
+            x, y, w, h, desc,
+            fileName,
+            fileType,
+            fileData: fileImg ? fileImg.src : null
+          });
+        }
+      });
+      state.canvasData[key] = elements;
+      
+      // Auto-guardado en Firestore
+      if (typeof window.saveQuantisToFirestore === 'function') {
+        window.saveQuantisToFirestore();
       }
     }
 
-    if(document.readyState==='loading') {
-      document.addEventListener('DOMContentLoaded', initAll);
-    } else {
-      initAll();
+    function loadPageCanvas(projIdx, pageIdx) {
+      saveCurrentPageCanvas();
+      state.activeProjectIdx = projIdx;
+      state.activePageIdx = pageIdx;
+
+      // Limpia todo conservando únicamente el Canvas de pintura nativo
+      const blocks = canvasContainer.querySelectorAll('.canvas-element');
+      blocks.forEach(b => b.remove());
+
+      const key = `${projIdx}-${pageIdx}`;
+      const elements = state.canvasData[key] || [];
+      
+      elements.forEach(el => {
+        if (el.type === 'text') {
+          recreateTextElement(el.x, el.y, el.desc, el.content, el.isLink);
+        } else if (el.type === 'file') {
+          recreateFileElement(el.x, el.y, el.desc, el.fileName, el.fileType, el.fileData, el.w, el.h);
+        }
+      });
+
+      renderProjects();
     }
+
+    function openSettings() { settingsModal.classList.remove('hidden'); }
+    function closeSettings() { settingsModal.classList.add('hidden'); }
+
+    function changeTheme(themeVal) {
+      state.theme = themeVal;
+      if (themeVal === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      }
+    }
+
+    function changeLanguage(langVal) {
+      state.lang = langVal;
+      updateDOMTranslations();
+    }
+
+    function updateDOMTranslations() {
+      const currentTrans = translations[state.lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (currentTrans[key]) el.textContent = currentTrans[key];
+      });
+    }
+
+    function renderProjects() {
+      projectsListContainer.innerHTML = '';
+      
+      // Control de scroll infinito en la barra lateral para usuarios Premium
+      const sidebarScroll = document.getElementById('quantis-sidebar-scroll');
+      if (window.userPlan === 'Premium') {
+        sidebarScroll.style.overflowY = 'auto';
+        sidebarScroll.classList.add('no-scrollbar');
+      } else {
+        sidebarScroll.style.overflowY = 'hidden';
+      }
+
+      state.projects.forEach((proj, projIdx) => {
+        const projDiv = document.createElement('div');
+        projDiv.className = "mb-4";
+        const isProjectActive = state.activeProjectIdx === projIdx;
+        
+        projDiv.innerHTML = `
+          <div class="flex items-center justify-between text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1 px-1 group">
+            <span class="truncate cursor-pointer hover:text-zinc-800 dark:hover:text-white" onclick="window.renameProject(${projIdx})">
+              <i class="fa-solid fa-folder text-amber-500/80 mr-1.5"></i>${proj.name}
+            </span>
+            <button onclick="window.addNewPage(${projIdx})" class="text-zinc-500 hover:text-zinc-800 dark:hover:text-white" title="Nueva Página">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+            </button>
+          </div>
+          <ul class="pl-3 border-l border-zinc-200 dark:border-zinc-800 space-y-1 mt-1">
+            ${proj.pages.map((page, pageIdx) => {
+              const isPageActive = isProjectActive && state.activePageIdx === pageIdx;
+              const activeClass = isPageActive 
+                ? "bg-zinc-200 dark:bg-zinc-800/80 text-zinc-900 dark:text-white border-l-2 border-indigo-500 font-medium" 
+                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/40 hover:text-zinc-800 dark:hover:text-zinc-200";
+              
+              return `
+                <li class="group/page flex items-center justify-between text-xs py-1 px-2 rounded-sm cursor-pointer transition-none ${activeClass}" onclick="loadPageCanvas(${projIdx}, ${pageIdx})">
+                  <span class="truncate flex-1">
+                    <i class="fa-solid fa-file-lines text-zinc-400 dark:text-zinc-600 mr-2"></i>${page}
+                  </span>
+                  <button onclick="event.stopPropagation(); window.deletePage(${projIdx}, ${pageIdx})" class="text-zinc-400 hover:text-red-500 px-1">
+                    <i class="fa-solid fa-trash-can text-[9px]"></i>
+                  </button>
+                </li>
+              `;
+            }).join('')}
+          </ul>
+        `;
+        projectsListContainer.appendChild(projDiv);
+      });
+    }
+
+    window.addNewProject = function() {
+      // Límites estrictos por rango
+      let limit = 3;
+      if (window.userPlan === 'Extended') limit = 5;
+      if (window.userPlan === 'Premium') limit = Infinity;
+
+      if (state.projects.length >= limit) {
+        alert("Límite de proyectos alcanzado para tu plan actual.");
+        return;
+      }
+
+      const name = prompt(translations[state.lang].promptNewProject);
+      if (name && name.trim()) {
+        state.projects.push({
+          id: 'proj-' + Date.now(),
+          name: name.trim(),
+          pages: ['Página Inicial']
+        });
+        saveCurrentPageCanvas();
+        renderProjects();
+      }
+    };
+
+    window.renameProject = function(idx) {
+      const current = state.projects[idx].name;
+      const name = prompt(translations[state.lang].promptRenameProject, current);
+      if (name && name.trim()) {
+        state.projects[idx].name = name.trim();
+        saveCurrentPageCanvas();
+        renderProjects();
+      }
+    };
+
+    window.addNewPage = function(projIdx) {
+      let limit = 3;
+      if (window.userPlan === 'Extended') limit = 5;
+      if (window.userPlan === 'Premium') limit = Infinity;
+
+      if (state.projects[projIdx].pages.length >= limit) {
+        alert("Límite de páginas alcanzado para tu plan actual.");
+        return;
+      }
+
+      const name = prompt(translations[state.lang].promptNewPage);
+      if (name && name.trim()) {
+        state.projects[projIdx].pages.push(name.trim());
+        const newPageIdx = state.projects[projIdx].pages.length - 1;
+        state.canvasData[`${projIdx}-${newPageIdx}`] = [];
+        loadPageCanvas(projIdx, newPageIdx);
+      }
+    };
+
+    window.deletePage = function(projIdx, pageIdx) {
+      if (confirm(translations[state.lang].confirmDeletePage)) {
+        state.projects[projIdx].pages.splice(pageIdx, 1);
+        delete state.canvasData[`${projIdx}-${pageIdx}`];
+        saveCurrentPageCanvas();
+        if (state.activeProjectIdx === projIdx && state.activePageIdx === pageIdx) {
+          loadPageCanvas(0, 0);
+        } else {
+          renderProjects();
+        }
+      }
+    };
+
+    function setupCanvasEventListeners() {
+      viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomIntensity = 0.05;
+        if (e.deltaY < 0) {
+          state.zoom = Math.min(state.zoom + zoomIntensity, 3);
+        } else {
+          state.zoom = Math.max(state.zoom - zoomIntensity, 0.4);
+        }
+        updateTransform();
+      }, { passive: false });
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (window.quantisTool !== 'hand') return; // Evita panning en modo pincel
+        if (e.target === viewport || e.target === canvasContainer || e.target.id === 'paint-canvas') {
+          if (e.button === 0) {
+            state.isPanning = true;
+            state.startX = e.clientX - state.panX;
+            state.startY = e.clientY - state.panY;
+            customContextMenu.classList.add('hidden');
+          }
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (state.isPanning) {
+          state.panX = e.clientX - state.startX;
+          state.panY = e.clientY - state.startY;
+          updateTransform();
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (state.isPanning) state.isPanning = false;
+      });
+
+      let clickStartTime = 0;
+      let clickStartX = 0;
+      let clickStartY = 0;
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (window.quantisTool !== 'hand') return;
+        if (e.target === viewport || e.target === canvasContainer || e.target.id === 'paint-canvas') {
+          if (e.button === 0) {
+            clickStartTime = Date.now();
+            clickStartX = e.clientX;
+            clickStartY = e.clientY;
+          }
+        }
+      });
+
+      viewport.addEventListener('mouseup', (e) => {
+        if (window.quantisTool !== 'hand') return;
+        if (e.target === viewport || e.target === canvasContainer || e.target.id === 'paint-canvas') {
+          if (e.button === 0) {
+            const timeDiff = Date.now() - clickStartTime;
+            const dist = Math.hypot(e.clientX - clickStartX, e.clientY - clickStartY);
+            if (timeDiff < 250 && dist < 5) {
+              const rect = canvasContainer.getBoundingClientRect();
+              const x = (e.clientX - rect.left) / state.zoom;
+              const y = (e.clientY - rect.top) / state.zoom;
+              createTextElement(x, y);
+            }
+          }
+        }
+      });
+    }
+
+    function setupGlobalEventListeners() {
+      viewport.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const rect = canvasContainer.getBoundingClientRect();
+        state.contextMenuCoords.x = (e.clientX - rect.left) / state.zoom;
+        state.contextMenuCoords.y = (e.clientY - rect.top) / state.zoom;
+        customContextMenu.classList.remove('hidden');
+        customContextMenu.style.left = `${e.clientX}px`;
+        customContextMenu.style.top = `${e.clientY}px`;
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!customContextMenu.contains(e.target)) {
+          customContextMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    function updateTransform() {
+      canvasContainer.style.transform = `translate3d(${state.panX}px, ${state.panY}px, 0) scale(${state.zoom})`;
+    }
+
+    function createGenericBlock(x, y, descValue = "") {
+      const block = document.createElement('div');
+      block.className = "canvas-element absolute bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-sm flex flex-col group min-w-[150px] select-none text-left";
+      block.style.left = `${x}px`;
+      block.style.top = `${y}px`;
+
+      block.addEventListener('mousedown', (e) => {
+        if (e.target.closest('input') || e.target.closest('a') || e.target.closest('.resize-handle') || e.target.isContentEditable) {
+          return;
+        }
+        e.stopPropagation();
+        const previousZ = block.style.zIndex;
+        block.style.zIndex = '40';
+        let startX = e.clientX;
+        let startY = e.clientY;
+
+        const onMouseMove = (moveEvent) => {
+          const dx = (moveEvent.clientX - startX) / state.zoom;
+          const dy = (moveEvent.clientY - startY) / state.zoom;
+          const currentLeft = parseFloat(block.style.left);
+          const currentTop = parseFloat(block.style.top);
+          block.style.left = `${currentLeft + dx}px`;
+          block.style.top = `${currentTop + dy}px`;
+          startX = moveEvent.clientX;
+          startY = moveEvent.clientY;
+        };
+
+        const onMouseUp = () => {
+          block.style.zIndex = previousZ;
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+          saveCurrentPageCanvas();
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+
+      const descInput = document.createElement('input');
+      descInput.type = "text";
+      descInput.value = descValue;
+      descInput.placeholder = translations[state.lang].defaultDesc;
+      descInput.className = "desc-input text-[10px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider bg-transparent focus:outline-none border-b border-transparent focus:border-zinc-200 dark:focus:border-zinc-700 w-full mb-2 shrink-0";
+      descInput.addEventListener('blur', saveCurrentPageCanvas);
+      block.appendChild(descInput);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = "absolute -top-2 -right-2 bg-red-600 hover:bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[9px] opacity-0 group-hover:opacity-100 transition-none z-30";
+      deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      deleteBtn.onclick = () => {
+        block.remove();
+        saveCurrentPageCanvas();
+      };
+      block.appendChild(deleteBtn);
+
+      return block;
+    }
+
+    function isURL(str) {
+      const pattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[a-zA-Z0-9-._~:\/?#[\]@!$&'()*+,;=]*)?$/i;
+      return pattern.test(str);
+    }
+
+    function formatURL(url) {
+      if (!/^https?:\/\//i.test(url)) return `https://${url}`;
+      return url;
+    }
+
+    function createTextElement(x, y) {
+      recreateTextElement(x, y, "", translations[state.lang].defaultText, false);
+      saveCurrentPageCanvas();
+    }
+
+    function recreateTextElement(x, y, desc, content, isLink) {
+      const block = createGenericBlock(x, y, desc);
+      block.classList.add("w-[240px]", "z-20");
+      block.style.zIndex = "20";
+      
+      const contentContainer = document.createElement('div');
+      contentContainer.className = "w-full min-h-[30px] flex items-center";
+
+      const textNode = document.createElement('div');
+      textNode.className = "content-text w-full text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none leading-relaxed py-1 px-0.5 break-all whitespace-pre-wrap";
+      
+      if (isLink) {
+        convertToLink(textNode, content);
+      } else {
+        textNode.setAttribute('data-is-link', 'false');
+        textNode.contentEditable = true;
+        textNode.innerText = content;
+        setupTextBlurEvent(textNode);
+      }
+
+      contentContainer.appendChild(textNode);
+      block.appendChild(contentContainer);
+      canvasContainer.appendChild(block);
+
+      if (content === translations[state.lang].defaultText) {
+        textNode.focus();
+        document.execCommand('selectAll', false, null);
+      }
+    }
+
+    function enableTextEditing(textNode, rawText) {
+      textNode.contentEditable = true;
+      textNode.setAttribute('data-is-link', 'false');
+      textNode.className = "content-text w-full text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none leading-relaxed py-1 px-0.5 break-all whitespace-pre-wrap";
+      textNode.innerText = rawText;
+      textNode.focus();
+      setupTextBlurEvent(textNode);
+    }
+
+    function setupTextBlurEvent(textNode) {
+      const handler = () => {
+        const text = textNode.innerText.trim();
+        if (isURL(text)) convertToLink(textNode, text);
+        saveCurrentPageCanvas();
+      };
+      textNode.addEventListener('blur', handler, { once: true });
+    }
+
+    function convertToLink(textNode, url) {
+      textNode.contentEditable = false;
+      textNode.setAttribute('data-is-link', 'true');
+      textNode.className = "content-text w-full text-xs text-blue-500 dark:text-blue-400 underline font-medium cursor-pointer py-1 px-0.5 break-all";
+      const link = document.createElement('a');
+      link.href = formatURL(url);
+      link.target = "_blank";
+      link.textContent = url;
+      link.addEventListener('mousedown', (e) => e.stopPropagation());
+      textNode.innerHTML = '';
+      textNode.appendChild(link);
+      textNode.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        enableTextEditing(textNode, url);
+      });
+    }
+
+    function triggerFileInput() {
+      customContextMenu.classList.add('hidden');
+      setTimeout(() => { fileLoader.click(); }, 50);
+    }
+
+    function handleFileSelection(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const x = state.contextMenuCoords.x;
+      const y = state.contextMenuCoords.y;
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          recreateFileElement(x, y, "", file.name, 'image', event.target.result, 240, 200);
+          saveCurrentPageCanvas();
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        recreateFileElement(x, y, "", file.name, 'pdf', null);
+        saveCurrentPageCanvas();
+      } else {
+        recreateFileElement(x, y, "", file.name, 'unknown', null);
+        saveCurrentPageCanvas();
+      }
+      fileLoader.value = "";
+    }
+
+    function recreateFileElement(x, y, desc, fileName, fileType, fileData, w, h) {
+      const block = createGenericBlock(x, y, desc);
+      block.setAttribute('data-file-type', fileType);
+      block.classList.add("z-10");
+      block.style.zIndex = "10";
+      if (w) block.style.width = `${w}px`;
+      if (h) block.style.height = `${h}px`;
+
+      const fileContainer = document.createElement('div');
+      fileContainer.className = "flex-1 w-full h-full min-h-0 relative rounded-sm overflow-hidden flex flex-col items-center justify-center bg-zinc-100 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-800/60";
+
+      if (fileType === 'image') {
+        const img = document.createElement('img');
+        img.className = "file-img w-full h-full object-cover pointer-events-none";
+        img.src = fileData;
+        fileContainer.appendChild(img);
+        if (!w) block.style.width = "240px";
+        if (!h) block.style.height = "200px";
+
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = "resize-handle absolute bottom-0.5 right-0.5 w-4 h-4 cursor-se-resize flex items-center justify-center text-zinc-400 dark:text-zinc-600 hover:text-indigo-500 z-10";
+        resizeHandle.innerHTML = `
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" class="transform rotate-90">
+            <path d="M10 0L0 10M10 4L4 10M10 8L8 10" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        `;
+
+        resizeHandle.addEventListener('mousedown', (resizeEvent) => {
+          resizeEvent.stopPropagation();
+          resizeEvent.preventDefault();
+          const startWidth = block.offsetWidth;
+          const startHeight = block.offsetHeight;
+          const startX = resizeEvent.clientX;
+          const startY = resizeEvent.clientY;
+
+          const onMouseMove = (moveEvent) => {
+            const dw = (moveEvent.clientX - startX) / state.zoom;
+            const dh = (moveEvent.clientY - startY) / state.zoom;
+            block.style.width = `${Math.max(140, startWidth + dw)}px`;
+            block.style.height = `${Math.max(120, startHeight + dh)}px`;
+          };
+
+          const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            saveCurrentPageCanvas();
+          };
+          document.addEventListener('mousemove', onMouseMove);
+          document.addEventListener('mouseup', onMouseUp);
+        });
+        block.appendChild(resizeHandle);
+      } else {
+        const label = document.createElement('span');
+        label.className = "file-label text-[10px] text-zinc-600 dark:text-zinc-300 truncate w-full px-2 mt-2 text-center font-mono";
+        label.textContent = fileName;
+        if (fileType === 'pdf') {
+          const icon = document.createElement('i');
+          icon.className = "fa-solid fa-file-pdf text-4xl text-red-500 py-3";
+          fileContainer.appendChild(icon);
+        } else {
+          const icon = document.createElement('i');
+          icon.className = "fa-solid fa-circle-question text-4xl text-zinc-400 py-3";
+          fileContainer.appendChild(icon);
+        }
+        fileContainer.appendChild(label);
+      }
+      block.appendChild(fileContainer);
+      canvasContainer.appendChild(block);
+    }
+
+    // === CAMBIO: LÓGICA DE CONTROL DEL KIT DE PINTURA (HTML5 CANVAS) ===
+    window.quantisTool = 'hand'; 
+    window.eraserActive = false;
+    window.brushColor = '#39FF14';
+    window.brushSize = 6;
+    window.brushShape = 'free';
+
+    window.setQuantisTool = function(tool) {
+      // Protección de herramienta Kit de Pintura (Premium)
+      if (tool === 'brush' && window.userPlan !== 'Premium') {
+        alert("Límite de páginas/proyectos alcanzado para tu plan actual. El Kit de Pintura está disponible solo para miembros Premium.");
+        return;
+      }
+
+      window.quantisTool = tool;
+      const toolHand = document.getElementById('tool-hand');
+      const toolBrush = document.getElementById('tool-brush');
+      const brushOptions = document.getElementById('brush-options');
+      const paintCanvas = document.getElementById('paint-canvas');
+
+      if (tool === 'hand') {
+        toolHand.classList.add('bg-zinc-200', 'text-zinc-900');
+        toolHand.classList.remove('bg-zinc-800', 'text-white');
+        toolBrush.classList.remove('bg-zinc-200', 'text-zinc-900');
+        toolBrush.classList.add('bg-zinc-800', 'text-zinc-400');
+        brushOptions.classList.add('hidden');
+        if (paintCanvas) paintCanvas.style.pointerEvents = 'none';
+      } else {
+        toolBrush.classList.add('bg-zinc-200', 'text-zinc-900');
+        toolBrush.classList.remove('bg-zinc-800', 'text-zinc-400');
+        toolHand.classList.remove('bg-zinc-200', 'text-zinc-900');
+        toolHand.classList.add('bg-zinc-800', 'text-white');
+        brushOptions.classList.remove('hidden');
+        if (paintCanvas) paintCanvas.style.pointerEvents = 'auto';
+      }
+    };
+
+    window.toggleEraser = function() {
+      window.eraserActive = !window.eraserActive;
+      const eraserBtn = document.getElementById('tool-eraser');
+      if (window.eraserActive) {
+        eraserBtn.classList.add('bg-red-500', 'text-white');
+      } else {
+        eraserBtn.classList.remove('bg-red-500', 'text-white');
+      }
+    };
+
+    window.updateBrushSettings = function() {
+      window.brushColor = document.getElementById('brush-color').value;
+      window.brushSize = parseInt(document.getElementById('brush-size').value);
+      window.brushShape = document.getElementById('brush-shape').value;
+    };
+
+    let isDrawing = false;
+    let strokeStartX = 0;
+    let strokeStartY = 0;
+    let canvasBackup = null;
+
+    function initPaintCanvas() {
+      const paintCanvas = document.getElementById('paint-canvas');
+      if (!paintCanvas) return;
+      const ctx = paintCanvas.getContext('2d');
+
+      paintCanvas.addEventListener('mousedown', (e) => {
+        if (window.quantisTool !== 'brush') return;
+        isDrawing = true;
+        const rect = paintCanvas.getBoundingClientRect();
+        strokeStartX = (e.clientX - rect.left) / state.zoom;
+        strokeStartY = (e.clientY - rect.top) / state.zoom;
+
+        ctx.beginPath();
+        ctx.moveTo(strokeStartX, strokeStartY);
+        canvasBackup = ctx.getImageData(0, 0, paintCanvas.width, paintCanvas.height);
+      });
+
+      paintCanvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing || window.quantisTool !== 'brush') return;
+        const rect = paintCanvas.getBoundingClientRect();
+        const currentX = (e.clientX - rect.left) / state.zoom;
+        const currentY = (e.clientY - rect.top) / state.zoom;
+
+        ctx.lineWidth = window.brushSize;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = window.eraserActive ? '#111318' : window.brushColor;
+
+        if (window.brushShape === 'free') {
+          ctx.lineTo(currentX, currentY);
+          ctx.stroke();
+        } else {
+          // Restauración para renderizado interactivo click-and-drag (MS Paint style)
+          ctx.putImageData(canvasBackup, 0, 0);
+          ctx.beginPath();
+          ctx.moveTo(strokeStartX, strokeStartY);
+          ctx.lineTo(currentX, currentY);
+          ctx.stroke();
+
+          if (window.brushShape === 'arrow') {
+            const angle = Math.atan2(currentY - strokeStartY, currentX - strokeStartX);
+            ctx.beginPath();
+            ctx.moveTo(currentX, currentY);
+            ctx.lineTo(currentX - 15 * Math.cos(angle - Math.PI / 6), currentY - 15 * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(currentX, currentY);
+            ctx.lineTo(currentX - 15 * Math.cos(angle + Math.PI / 6), currentY - 15 * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+          }
+        }
+      });
+
+      const finishDrawing = () => {
+        if (isDrawing) {
+          isDrawing = false;
+          // Dispara persistencia tras el dibujo
+          if (typeof window.saveQuantisToFirestore === 'function') {
+            window.saveQuantisToFirestore();
+          }
+        }
+      };
+
+      paintCanvas.addEventListener('mouseup', finishDrawing);
+      paintCanvas.addEventListener('mouseleave', finishDrawing);
+    }
+    // === FIN DE CAMBIO ===
+
+// === CAMBIO: Lógica para alternar Modales de Ventas, Soporte e Inicializaciones ===
+    window.openSalesModal = function() {
+      const modal = document.getElementById('sales-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (typeof playClickSound === 'function') playClickSound();
+    };
+
+    window.closeSalesModal = function() {
+      const modal = document.getElementById('sales-modal');
+      if (modal) modal.classList.add('hidden');
+      if (typeof playClickSound === 'function') playClickSound();
+    };
+
+    window.openContactModal = function() {
+      // Cierra el modal de ventas primero para evitar solapamiento
+      window.closeSalesModal();
+      const modal = document.getElementById('contact-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (typeof playClickSound === 'function') playClickSound();
+    };
+
+    window.closeContactModal = function() {
+      const modal = document.getElementById('contact-modal');
+      if (modal) modal.classList.add('hidden');
+      if (typeof playClickSound === 'function') playClickSound();
+    };
+
+    // Unificación de la inicialización de Quantis
+    function initAllQuantis() {
+      initQuantisClock();
+      setupCanvasEventListeners();
+      setupGlobalEventListeners();
+      updateTransform();
+      updateDOMTranslations();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllQuantis);
+    } else {
+      initAllQuantis();
+    }
+    // === FIN DE CAMBIO ===
   </script>
 </body>
 </html>
