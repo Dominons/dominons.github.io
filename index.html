@@ -514,7 +514,7 @@
     #main-dashboard-view .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     #main-dashboard-view .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
 
-    /* ========== CORRECCIÓN DE MAQUETACIÓN: CONTROL DEL SIDEBAR DEEPFLOW ========== */
+    /* ========== ENCAPSULACIÓN TOTAL DE ELEMENTOS DE BARRA LATERAL (EVITA COLISIONES) ========== */
     #deep-flow-view #sidebar {
       width: 230px;
       min-width: 230px;
@@ -528,7 +528,6 @@
       flex-shrink: 0;
     }
 
-    /* ========== CORRECCIÓN: SELECTOR DE COLOR COMPACTO Y FLOTANTE ========== */
     #deep-flow-view .flow-color-widget {
       position: fixed;
       bottom: 12px;
@@ -1327,6 +1326,16 @@
           <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis')" title="Abrir Lienzo QUANTIS" style="background: var(--color-input-bg); color: #39FF14; border: 1px solid #39FF14;">
             <i class="fa-solid fa-compass"></i> QUANTIS
           </button>
+
+          <!-- === CORRECCIÓN: Recuperación del reproductor de música y visor en la barra superior izquierda === -->
+          <div class="music-container">
+            <div class="song-display">
+              <span id="songTitle" class="song-marquee">Listo para Play</span>
+            </div>
+            <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
+              <i class="fa-solid fa-music"></i>
+            </button>
+          </div>
         </div>
         <div class="top-right">
           <button class="music-btn" onclick="window.openSalesModal()" title="Adquirir Rango" style="border-color: #39FF14; color: #39FF14; padding: 4px 10px;">
@@ -1344,14 +1353,6 @@
             <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
             <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
             <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Morado"></button>
-          </div>
-          <div class="music-container">
-            <div class="song-display">
-              <span id="songTitle" class="song-marquee">Listo para Play</span>
-            </div>
-            <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
-              <i class="fa-solid fa-music"></i>
-            </button>
           </div>
         </div>
       </div>
@@ -1456,9 +1457,8 @@
       <div class="ticker-chip eth-chip"><span class="ticker-label">ETH</span><span class="ticker-price" id="eth-price">---</span><span class="ticker-change" id="eth-change"></span></div>
       <div class="ticker-chip gas-chip"><span class="ticker-label">GAS</span><span class="ticker-price" id="gas-value">--</span><span class="gas-unit">Gwei</span></div>
     </header>
-    <main id="dashboard">
+<main id="dashboard">
       <aside id="sidebar">
-        <!-- El panel de selección de colores original fue retirado de aquí para eliminar la barra intrusa -->
         <div id="sidebar-onchain" class="sidebar-layer active">
           <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
           <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
@@ -2408,14 +2408,13 @@
       setInterval(updateClock,1000);
       setInterval(updateDate,60000);
       
-      // Ciclo de alimentación de datos en tiempo real al ledger
       setInterval(() => {
         const gen = STATE.dataStream === 'binance' ? generateLiveBinanceTx : generateLiveOnchainTx;
         const cnt = 1 + Math.floor(Math.random() * 2);
         const nT = [];
         for (let i = 0; i < cnt; i++) nT.push(gen());
         prependLiveTxs(nT);
-      }, 3000); // Alimentación de red fluida cada 3 segundos
+      }, 3000);
 
       setInterval(async()=>{
         const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);
