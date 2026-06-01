@@ -1304,8 +1304,8 @@
           <button id="toggle-view-to-flow" class="music-btn" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
             <i class="fa-solid fa-chart-line"></i> DEEP FLOW
           </button>
-          <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas" style="background: var(--color-input-bg); color: #39FF14; border: 1px solid #39FF14;">
-            <i class="fa-solid fa-vector-square"></i> QUANTIS
+          <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas" style="background: var(--color-input-bg); color: #A855F7; border: 1px solid #A855F7;">
+            <i class="fa-solid fa-infinity"></i> QUANTIS
           </button>
         </div>
         <div class="top-right">
@@ -1415,7 +1415,7 @@
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
       <button class="ctrl-btn" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
-      <button class="ctrl-btn" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')" style="border-color:#39FF14; color:#39FF14; font-weight:bold; text-shadow:0 0 4px rgba(57,255,20,0.4);">QUANTIS</button>
+      <button class="ctrl-btn" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">QUANTIS</button>
       <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
       <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
       <span id="hdr-date"></span><span id="hdr-clock"></span>
@@ -1460,179 +1460,351 @@
   <!-- VISTA SPA 3: QUANTIS CANVAS -->
   <div id="quantis-view" class="hidden-view">
     <style>
-      /* ========== QUANTIS VIEW - SCOPED STYLES ========== */
+      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
       #quantis-view {
         width: 100%;
         height: 100vh;
         display: flex;
         flex-direction: column;
         background: #0b0c10;
-        font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+        color: #e4e4e7;
+        font-family: 'JetBrains Mono', monospace;
         overflow: hidden;
       }
-      #quantis-view .quantis-header {
+      #quantis-view.hidden-view { display: none !important; }
+
+      #quantis-header {
+        height: 48px;
+        background: #111318;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.25);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 16px;
-        height: 52px;
-        min-height: 52px;
-        background: #111318;
-        border-bottom: 2px solid #39FF14;
-        box-shadow: 0 2px 12px rgba(57, 255, 20, 0.08);
-        z-index: 10;
+        padding: 0 18px;
         flex-shrink: 0;
+        z-index: 30;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.5);
       }
-      #quantis-view .quantis-header-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      #quantis-view .quantis-brand {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 1.1em;
-        font-weight: 900;
-        color: #39FF14;
-        letter-spacing: 3px;
-        text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
-      }
-      #quantis-view .quantis-nav-btn {
-        background: transparent;
-        color: #888;
-        border: 1px solid #333;
-        padding: 4px 12px;
-        border-radius: 4px;
-        font-size: 0.75em;
-        font-family: 'JetBrains Mono', monospace;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      #quantis-view .quantis-nav-btn:hover {
-        border-color: #A855F7;
-        color: #A855F7;
-        box-shadow: 0 0 6px rgba(168, 85, 247, 0.2);
-      }
-      #quantis-view .quantis-nav-btn.flow-btn:hover {
-        border-color: #00F0FF;
-        color: #00F0FF;
-        box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
-      }
-      #quantis-view .quantis-header-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      #quantis-view .quantis-music-btn {
-        background: transparent;
-        color: #39FF14;
-        border: 1px solid #39FF14;
-        padding: 4px 12px;
-        border-radius: 4px;
-        font-size: 0.8em;
-        cursor: pointer;
-        transition: all 0.2s ease;
+      #quantis-nav-left {
         display: flex;
         align-items: center;
         gap: 6px;
-        font-family: 'JetBrains Mono', monospace;
       }
-      #quantis-view .quantis-music-btn:hover {
-        background: rgba(57, 255, 20, 0.08);
-        box-shadow: 0 0 8px rgba(57, 255, 20, 0.15);
+      #quantis-brand {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 3px;
+        color: #A855F7;
+        text-shadow: 0 0 8px rgba(168,85,247,0.5);
+        margin-right: 14px;
+        user-select: none;
       }
-      #quantis-view .quantis-clock {
-        font-size: 0.75em;
+      .q-nav-btn {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.3);
+        color: #a1a1aa;
         font-family: 'JetBrains Mono', monospace;
-        color: #555;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        padding: 4px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .q-nav-btn:hover {
+        border-color: #A855F7;
+        color: #A855F7;
+        background: rgba(168,85,247,0.08);
+        text-shadow: 0 0 4px rgba(168,85,247,0.4);
+      }
+      .q-nav-btn.active-view {
+        background: rgba(168,85,247,0.15);
+        border-color: #A855F7;
+        color: #A855F7;
+      }
+      #quantis-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #quantis-clock {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        color: #52525b;
+        user-select: none;
+      }
+      #toggleMusicPanelQuantis {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.35);
+        color: #A855F7;
+        font-size: 13px;
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      #toggleMusicPanelQuantis:hover {
+        background: rgba(168,85,247,0.15);
+        box-shadow: 0 0 6px rgba(168,85,247,0.3);
+      }
+
+      /* ===== QUANTIS BODY LAYOUT ===== */
+      #quantis-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* Sidebar */
+      #quantis-sidebar {
+        width: 220px;
+        min-width: 220px;
+        background: #0e0f14;
+        border-right: 1px solid rgba(168,85,247,0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      #quantis-sidebar-header {
+        padding: 12px 14px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(168,85,247,0.08);
+      }
+      #quantis-sidebar-header span {
+        font-size: 9px;
+        font-weight: 700;
         letter-spacing: 2px;
+        color: #52525b;
+        text-transform: uppercase;
       }
-      #quantis-view .quantis-workspace {
+      #q-add-project-btn {
+        background: none;
+        border: none;
+        color: #52525b;
+        cursor: pointer;
+        font-size: 12px;
+        padding: 2px 4px;
+        border-radius: 3px;
+        transition: color 0.15s;
+      }
+      #q-add-project-btn:hover { color: #A855F7; }
+      #q-projects-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 10px;
+      }
+      #q-projects-list::-webkit-scrollbar { width: 4px; }
+      #q-projects-list::-webkit-scrollbar-track { background: transparent; }
+      #q-projects-list::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.25); border-radius: 2px; }
+      .q-proj-item { margin-bottom: 12px; }
+      .q-proj-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #71717a;
+        text-transform: uppercase;
+        padding: 2px 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+      .q-proj-label:hover { color: #e4e4e7; }
+      .q-proj-label i { color: #d97706; margin-right: 5px; }
+      .q-page-list { padding-left: 10px; border-left: 1px solid rgba(168,85,247,0.12); }
+      .q-page-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 10px;
+        color: #52525b;
+        padding: 4px 6px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background 0.12s;
+      }
+      .q-page-item:hover { background: rgba(168,85,247,0.08); color: #a1a1aa; }
+      .q-page-item.active { background: rgba(168,85,247,0.14); color: #A855F7; border-left: 2px solid #A855F7; }
+      .q-page-item i { color: #3f3f46; margin-right: 5px; font-size: 9px; }
+      .q-page-del {
+        background: none; border: none; color: #3f3f46; cursor: pointer; font-size: 9px; padding: 0 2px;
+        transition: color 0.12s;
+      }
+      .q-page-del:hover { color: #ef4444; }
+
+      /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
+      #quantis-viewport {
         flex: 1;
         position: relative;
         overflow: hidden;
-        cursor: grab;
         background: #0b0c10;
-        background-size: 30px 30px;
-        background-image: radial-gradient(circle, rgba(57, 255, 20, 0.04) 1px, transparent 1px);
+        cursor: grab;
       }
-      #quantis-view .quantis-workspace:active {
-        cursor: grabbing;
-      }
-      #quantis-view .quantis-canvas {
+      #quantis-viewport.grabbing { cursor: grabbing; }
+      #quantis-canvas-container {
         position: absolute;
         width: 8000px;
         height: 8000px;
         top: -4000px;
         left: -4000px;
+        background-size: 30px 30px;
+        background-image: radial-gradient(circle, rgba(168,85,247,0.07) 1px, transparent 1px);
         transform-origin: center;
       }
-      #quantis-view .quantis-welcome {
+      /* Canvas blocks */
+      .q-canvas-el {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        pointer-events: none;
-        opacity: 0.35;
+        background: #111318;
+        border: 1px solid rgba(168,85,247,0.2);
+        border-radius: 4px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        min-width: 160px;
+        user-select: none;
+        will-change: transform;
+        backface-visibility: hidden;
+        transform: translateZ(0);
       }
-      #quantis-view .quantis-welcome h2 {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 1.8em;
+      .q-canvas-el:hover { border-color: rgba(168,85,247,0.5); }
+      .q-block-desc {
+        font-size: 9px;
         font-weight: 700;
-        color: #39FF14;
-        letter-spacing: 6px;
-        margin-bottom: 8px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: #52525b;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid transparent;
+        width: 100%;
+        margin-bottom: 6px;
+        outline: none;
+        font-family: 'JetBrains Mono', monospace;
       }
-      #quantis-view .quantis-welcome p {
-        font-size: 0.8em;
-        color: #555;
-        letter-spacing: 2px;
+      .q-block-desc:focus { border-bottom-color: rgba(168,85,247,0.3); color: #a1a1aa; }
+      .q-block-desc::placeholder { color: #3f3f46; }
+      .q-block-text {
+        font-size: 11px;
+        color: #a1a1aa;
+        line-height: 1.6;
+        outline: none;
+        min-height: 24px;
+        word-break: break-word;
+        white-space: pre-wrap;
+        font-family: 'JetBrains Mono', monospace;
       }
-      @media (max-width: 600px) {
-        #quantis-view .quantis-header {
-          padding: 0 10px;
-          gap: 6px;
-          flex-wrap: wrap;
-          height: auto;
-          min-height: 44px;
-          padding-top: 6px;
-          padding-bottom: 6px;
-        }
-        #quantis-view .quantis-brand {
-          font-size: 0.9em;
-          letter-spacing: 2px;
-        }
-        #quantis-view .quantis-clock {
-          display: none;
-        }
+      .q-block-text a { color: #818cf8; text-decoration: underline; }
+      .q-block-del {
+        position: absolute;
+        top: -8px; right: -8px;
+        background: #7f1d1d;
+        color: white;
+        border: none;
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        font-size: 9px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .q-canvas-el:hover .q-block-del { display: flex; }
+      /* Context menu */
+      #q-context-menu {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        background: #111318;
+        border: 1px solid rgba(168,85,247,0.3);
+        border-radius: 4px;
+        padding: 4px 0;
+        min-width: 160px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      }
+      #q-context-menu button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        padding: 7px 14px;
+        cursor: pointer;
+        text-align: left;
+      }
+      #q-context-menu button:hover { background: rgba(168,85,247,0.1); color: #e4e4e7; }
+      #q-context-menu button i { color: #52525b; font-size: 10px; }
+      #q-file-input { display: none; }
+
+      /* Zoom hint */
+      #q-zoom-hint {
+        position: absolute;
+        bottom: 12px;
+        right: 14px;
+        font-size: 9px;
+        letter-spacing: 1px;
+        color: #3f3f46;
+        pointer-events: none;
+        user-select: none;
       }
     </style>
 
-    <header class="quantis-header">
-      <div class="quantis-header-left">
-        <span class="quantis-brand">QUANTIS</span>
-        <button class="quantis-nav-btn" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
-        <button class="quantis-nav-btn flow-btn" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
+    <!-- QUANTIS HEADER -->
+    <header id="quantis-header">
+      <div id="quantis-nav-left">
+        <span id="quantis-brand">QUANTIS</span>
+        <button class="q-nav-btn" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
+        <button class="q-nav-btn" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
       </div>
-      <div class="quantis-header-right">
-        <span class="quantis-clock" id="quantis-clock"></span>
-        <button class="quantis-music-btn" id="toggleMusicPanelQuantis" title="Reproductor">
-          <i class="fa-solid fa-music"></i> REPROD
+      <div id="quantis-nav-right">
+        <span id="quantis-clock">00:00:00</span>
+        <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
+          <i class="fa-solid fa-music"></i>
         </button>
       </div>
     </header>
 
-    <main class="quantis-workspace" id="quantis-viewport">
-      <div class="quantis-canvas" id="quantis-canvas-container">
-        <div class="quantis-welcome">
-          <h2>QUANTIS</h2>
-          <p>INFINITE CANVAS WORKSPACE</p>
+    <!-- QUANTIS BODY -->
+    <div id="quantis-body">
+
+      <!-- SIDEBAR: Proyectos / Páginas -->
+      <aside id="quantis-sidebar">
+        <div id="quantis-sidebar-header">
+          <span>Proyectos</span>
+          <button id="q-add-project-btn" title="Nuevo Proyecto" onclick="qAddProject()"><i class="fa-solid fa-plus"></i></button>
         </div>
-      </div>
-    </main>
+        <div id="q-projects-list"></div>
+      </aside>
+
+      <!-- INFINITE CANVAS VIEWPORT -->
+      <main id="quantis-viewport">
+        <div id="quantis-canvas-container"></div>
+        <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
+      </main>
+
+    </div>
+
+    <!-- CONTEXT MENU -->
+    <div id="q-context-menu">
+      <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
+    </div>
+    <input type="file" id="q-file-input" onchange="qHandleFile(event)">
+
   </div>
+  <!-- FIN VISTA SPA 3: QUANTIS -->
 
   <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
   <div id="youtube-player"></div>
@@ -2048,7 +2220,6 @@
       if (_masterTick % 2 === 0) {
         var d = new Date();
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-        var qc=document.getElementById('quantis-clock');if(qc){const pad=x=>String(x).padStart(2,'0');qc.textContent=`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
       }
 
       if (window.player && window.player.getCurrentTime) {
@@ -2138,6 +2309,12 @@
           musicPanel.classList.toggle('hidden');
         };
       }
+      var toggleBtnQuantis = document.getElementById('toggleMusicPanelQuantis');
+      if (toggleBtnQuantis) {
+        toggleBtnQuantis.onclick = function() {
+          musicPanel.classList.toggle('hidden');
+        };
+      }
 
       if (playPauseBtn) {
         playPauseBtn.addEventListener('click', window.playPauseVideo);
@@ -2172,31 +2349,29 @@
     });
   </script>
 
-  <!-- CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS) -->
+  <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
   <script>
-    window.switchAppView = function(viewId) {
-      var views = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
-      views.forEach(function(id) {
+    // Legacy alias so any remaining internal calls don't break
+    window.toggleAppView = function() {
+      var deepFlow = document.getElementById('deep-flow-view');
+      var isFlowHidden = deepFlow ? deepFlow.classList.contains('hidden-view') : true;
+      window.switchAppView(isFlowHidden ? 'deep-flow-view' : 'main-dashboard-view');
+    };
+
+    // New 3-view router — add/remove .hidden-view cleanly across all views
+    window.switchAppView = function(targetViewId) {
+      var ALL_VIEWS = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
+      ALL_VIEWS.forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) {
-          if (id === viewId) {
-            el.classList.remove('hidden-view');
-          } else {
-            el.classList.add('hidden-view');
-          }
+        if (!el) return;
+        if (id === targetViewId) {
+          el.classList.remove('hidden-view');
+        } else {
+          el.classList.add('hidden-view');
         }
       });
       if (typeof playClickSound === 'function') {
         try { playClickSound(); } catch(e) {}
-      }
-    };
-    // Backward compatibility stub
-    window.toggleAppView = function() {
-      var deepFlow = document.getElementById('deep-flow-view');
-      if (deepFlow && deepFlow.classList.contains('hidden-view')) {
-        window.switchAppView('deep-flow-view');
-      } else {
-        window.switchAppView('main-dashboard-view');
       }
     };
   </script>
@@ -2398,7 +2573,7 @@
     function applyLanguage(){const L=LANG[STATE.lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(L[k])el.textContent=L[k]});DOM.filterBar.placeholder=L.filterPlaceholder;DOM.soundToggle.textContent=STATE.soundEnabled?L.sndOn:L.sndOff;DOM.streamToggle.textContent=STATE.dataStream==='binance'?L.binanceStream:L.onChainStream;const isB=STATE.dataStream==='binance';DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream];DOM.macroFilters.querySelectorAll('.mf-btn').forEach((b,i)=>{b.textContent=t(cfg[i].i18n)});if(!isB)updateOnchainSidebar();else updateBinanceSidebar();DOM.ledgerBody.querySelectorAll('.sub-analysis-text').forEach(el=>{el.textContent=STATE.lang==='es'?el.getAttribute('data-analysis-es'):el.getAttribute('data-analysis-en')});DOM.ledgerBody.querySelectorAll('.sub-analysis-label').forEach(al=>{al.textContent=L.terminalAnalysis});const lk=[isB?t('orderId'):t('txHash'),isB?t('executedPrice'):t('gasFee'),isB?t('location'):t('onChain')];let li=0;DOM.ledgerBody.querySelectorAll('.sub-row .sub-label').forEach(sl=>{if(li<lk.length){sl.textContent=lk[li];li++}})}
     function applyFontScale(){document.getElementById('deep-flow-view').style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
 
-    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');const qc=document.getElementById('quantis-clock');if(qc){const pad=x=>String(x).padStart(2,'0');qc.textContent=`${pad(n.getDate())}/${pad(n.getMonth()+1)}/${n.getFullYear()} ${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`}}
+    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0')}
     function updateDate(){const n=new Date(),mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];DOM.hdrDate.textContent=n.getDate()+' '+mo[n.getMonth()]+' '+n.getFullYear()}
     function updateTickers(pd){if(!pd){DOM.btcPrice.textContent='---';DOM.ethPrice.textContent='---';DOM.btcChange.textContent='';DOM.ethChange.textContent='';return}const btc=pd.bitcoin||FALLBACK.bitcoin,eth=pd.ethereum||FALLBACK.ethereum;DOM.btcPrice.textContent='$'+btc.usd.toLocaleString('en-US',{maximumFractionDigits:0});DOM.ethPrice.textContent='$'+eth.usd.toLocaleString('en-US',{maximumFractionDigits:0});const bc=btc.usd_24h_change;DOM.btcChange.textContent=(bc>=0?'+':'')+bc.toFixed(2)+'%';DOM.btcChange.className='ticker-change '+(bc>=0?'pos':'neg');const ec=eth.usd_24h_change;DOM.ethChange.textContent=(ec>=0?'+':'')+ec.toFixed(2)+'%';DOM.ethChange.className='ticker-change '+(ec>=0?'pos':'neg');STATE.btcPrice=btc.usd;STATE.ethPrice=eth.usd;STATE.lastKnownBtc=btc.usd;STATE.lastKnownEth=eth.usd;STATE.btcChange=bc;STATE.ethChange=ec;STATE.priceHistory.push({price:btc.usd,ts:Date.now()});if(STATE.priceHistory.length>20)STATE.priceHistory.shift()}
     function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;const dynamicDom=dom + (Math.random()-0.5)*2;DOM.btcDomValue.textContent=dynamicDom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dynamicDom.toFixed(1)+'%';STATE.btcDom=dynamicDom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;const dynamicMcap = mcap * (1 + (Math.random()-0.5)*0.02);DOM.mcapValue.textContent=formatMcap(dynamicMcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=dynamicMcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){const dynamicMc = mc + (Math.random()-0.5)*1.5;DOM.mcapChange.textContent=(dynamicMc>=0?'+':'')+dynamicMc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(dynamicMc>=0?'pos':'neg');STATE.mcapChange=dynamicMc}}
@@ -2488,5 +2663,417 @@
       initAll();
     }
   </script>
+  <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
+  <script>
+  (function() {
+    // ---- QUANTIS STATE ----
+    var QS = {
+      lang: 'es',
+      zoom: 1.0,
+      panX: 0,
+      panY: 0,
+      isPanning: false,
+      startX: 0,
+      startY: 0,
+      ctxCoords: { x: 0, y: 0 },
+      activeProj: 0,
+      activePage: 0,
+      projects: [
+        { id: 'qp-1', name: 'Proyecto Alpha', pages: ['Página Inicial', 'Investigación'] },
+        { id: 'qp-2', name: 'Proyecto Beta',  pages: ['Resumen'] }
+      ],
+      canvasData: {
+        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
+        '0-1': [],
+        '1-0': []
+      }
+    };
+
+    // ---- DOM REFS (lazy — resolved after DOMContentLoaded) ----
+    var QD = {};
+
+    function qInit() {
+      QD.viewport   = document.getElementById('quantis-viewport');
+      QD.canvas     = document.getElementById('quantis-canvas-container');
+      QD.projList   = document.getElementById('q-projects-list');
+      QD.ctxMenu    = document.getElementById('q-context-menu');
+      QD.fileInput  = document.getElementById('q-file-input');
+      QD.clock      = document.getElementById('quantis-clock');
+
+      if (!QD.viewport) return; // view not present
+
+      qRenderProjects();
+      qLoadPage(0, 0);
+      qSetupCanvas();
+      qSetupClock();
+    }
+
+    // ---- CLOCK ----
+    function qSetupClock() {
+      function tick() {
+        if (!QD.clock) return;
+        var n = new Date();
+        var pad = function(v){ return String(v).padStart(2,'0'); };
+        QD.clock.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    // ---- CANVAS TRANSFORM ----
+    function qUpdateTransform() {
+      QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
+    }
+
+    // ---- SAVE / LOAD ----
+    function qSavePage() {
+      var key = QS.activeProj+'-'+QS.activePage;
+      var els = [];
+      QD.canvas.querySelectorAll('.q-canvas-el').forEach(function(blk) {
+        var x = parseFloat(blk.style.left);
+        var y = parseFloat(blk.style.top);
+        var w = blk.style.width ? parseFloat(blk.style.width) : null;
+        var h = blk.style.height ? parseFloat(blk.style.height) : null;
+        var desc = blk.querySelector('.q-block-desc').value;
+        var textNode = blk.querySelector('.q-block-text');
+        if (textNode) {
+          els.push({ type:'text', x:x, y:y, desc:desc, content:textNode.innerText,
+                     isLink: textNode.getAttribute('data-is-link')==='true' });
+        } else {
+          var imgEl = blk.querySelector('.q-file-img');
+          var lbl   = blk.querySelector('.q-file-label');
+          els.push({ type:'file', x:x, y:y, w:w, h:h, desc:desc,
+                     fileName: lbl ? lbl.textContent : '',
+                     fileType: blk.getAttribute('data-ftype') || 'unknown',
+                     fileData: imgEl ? imgEl.src : null });
+        }
+      });
+      QS.canvasData[key] = els;
+    }
+
+    function qLoadPage(projIdx, pageIdx) {
+      qSavePage();
+      QS.activeProj  = projIdx;
+      QS.activePage  = pageIdx;
+      QD.canvas.innerHTML = '';
+      var key  = projIdx+'-'+pageIdx;
+      var data = QS.canvasData[key] || [];
+      data.forEach(function(el) {
+        if (el.type === 'text') qRecreateText(el.x, el.y, el.desc, el.content, el.isLink);
+        else                    qRecreateFile(el.x, el.y, el.desc, el.fileName, el.fileType, el.fileData, el.w, el.h);
+      });
+      qRenderProjects();
+    }
+
+    // ---- PROJECTS SIDEBAR ----
+    function qRenderProjects() {
+      if (!QD.projList) return;
+      QD.projList.innerHTML = '';
+      QS.projects.forEach(function(proj, pi) {
+        var wrap = document.createElement('div');
+        wrap.className = 'q-proj-item';
+        var lbl = document.createElement('div');
+        lbl.className = 'q-proj-label';
+        lbl.innerHTML = '<span><i class="fa-solid fa-folder"></i>'+proj.name+'</span>';
+        var addPageBtn = document.createElement('button');
+        addPageBtn.style.cssText = 'background:none;border:none;color:#52525b;cursor:pointer;font-size:10px;';
+        addPageBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        addPageBtn.title = 'Nueva Página';
+        addPageBtn.onclick = function(e){ e.stopPropagation(); qAddPage(pi); };
+        lbl.appendChild(addPageBtn);
+        lbl.querySelector('span').onclick = function(){ var n=prompt('Renombrar proyecto:',proj.name); if(n&&n.trim()){proj.name=n.trim();qRenderProjects();} };
+        wrap.appendChild(lbl);
+        var ul = document.createElement('div');
+        ul.className = 'q-page-list';
+        proj.pages.forEach(function(page, gi) {
+          var li = document.createElement('div');
+          li.className = 'q-page-item' + (QS.activeProj===pi && QS.activePage===gi ? ' active' : '');
+          li.innerHTML = '<span><i class="fa-solid fa-file-lines"></i>'+page+'</span>';
+          li.onclick = function(){ qLoadPage(pi, gi); };
+          var del = document.createElement('button');
+          del.className = 'q-page-del';
+          del.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+          del.onclick = function(e){ e.stopPropagation(); if(confirm('¿Eliminar esta página?')){ proj.pages.splice(gi,1); delete QS.canvasData[pi+'-'+gi]; if(QS.activeProj===pi&&QS.activePage===gi) qLoadPage(0,0); else qRenderProjects(); } };
+          li.appendChild(del);
+          ul.appendChild(li);
+        });
+        wrap.appendChild(ul);
+        QD.projList.appendChild(wrap);
+      });
+    }
+
+    window.qAddProject = function() {
+      var n = prompt('Nombre del nuevo proyecto:');
+      if (n && n.trim()) {
+        QS.projects.push({ id:'qp-'+Date.now(), name:n.trim(), pages:[] });
+        qRenderProjects();
+      }
+    };
+
+    function qAddPage(projIdx) {
+      var n = prompt('Nombre de la nueva página:');
+      if (n && n.trim()) {
+        QS.projects[projIdx].pages.push(n.trim());
+        var newIdx = QS.projects[projIdx].pages.length - 1;
+        QS.canvasData[projIdx+'-'+newIdx] = [];
+        qLoadPage(projIdx, newIdx);
+      }
+    }
+
+    // ---- CANVAS EVENTS ----
+    function qSetupCanvas() {
+      // Zoom
+      QD.viewport.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        var intensity = 0.05;
+        QS.zoom = e.deltaY < 0
+          ? Math.min(QS.zoom + intensity, 3)
+          : Math.max(QS.zoom - intensity, 0.35);
+        qUpdateTransform();
+      }, { passive: false });
+
+      var clickT = 0, clickX = 0, clickY = 0;
+      // Pan start + click tracking
+      QD.viewport.addEventListener('mousedown', function(e) {
+        if (e.target === QD.viewport || e.target === QD.canvas) {
+          if (e.button === 0) {
+            QS.isPanning = true;
+            QS.startX = e.clientX - QS.panX;
+            QS.startY = e.clientY - QS.panY;
+            QD.viewport.classList.add('grabbing');
+            QD.ctxMenu.style.display = 'none';
+            clickT = Date.now(); clickX = e.clientX; clickY = e.clientY;
+          }
+        }
+      });
+      window.addEventListener('mousemove', function(e) {
+        if (QS.isPanning) {
+          QS.panX = e.clientX - QS.startX;
+          QS.panY = e.clientY - QS.startY;
+          qUpdateTransform();
+        }
+      });
+      window.addEventListener('mouseup', function() {
+        if (QS.isPanning) { QS.isPanning = false; QD.viewport.classList.remove('grabbing'); }
+      });
+      // Click to create text
+      QD.viewport.addEventListener('mouseup', function(e) {
+        if (e.target === QD.viewport || e.target === QD.canvas) {
+          if (e.button === 0) {
+            var diff = Date.now() - clickT;
+            var dist = Math.hypot(e.clientX - clickX, e.clientY - clickY);
+            if (diff < 250 && dist < 5) {
+              var rect = QD.canvas.getBoundingClientRect();
+              var x = (e.clientX - rect.left) / QS.zoom;
+              var y = (e.clientY - rect.top)  / QS.zoom;
+              qCreateText(x, y);
+            }
+          }
+        }
+      });
+      // Right-click context menu
+      QD.viewport.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        var rect = QD.canvas.getBoundingClientRect();
+        QS.ctxCoords.x = (e.clientX - rect.left) / QS.zoom;
+        QS.ctxCoords.y = (e.clientY - rect.top)  / QS.zoom;
+        QD.ctxMenu.style.display = 'block';
+        QD.ctxMenu.style.left = e.clientX + 'px';
+        QD.ctxMenu.style.top  = e.clientY + 'px';
+      });
+      document.addEventListener('click', function(e) {
+        if (!QD.ctxMenu.contains(e.target)) QD.ctxMenu.style.display = 'none';
+      });
+    }
+
+    // ---- BLOCK FACTORY ----
+    function qMakeBlock(x, y, descVal) {
+      var blk = document.createElement('div');
+      blk.className = 'q-canvas-el';
+      blk.style.left = x + 'px';
+      blk.style.top  = y + 'px';
+
+      var desc = document.createElement('input');
+      desc.type = 'text';
+      desc.className = 'q-block-desc';
+      desc.value = descVal || '';
+      desc.placeholder = 'Añadir descripción...';
+      desc.addEventListener('blur', qSavePage);
+      blk.appendChild(desc);
+
+      var del = document.createElement('button');
+      del.className = 'q-block-del';
+      del.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      del.onclick = function(){ blk.remove(); qSavePage(); };
+      blk.appendChild(del);
+
+      // Drag
+      blk.addEventListener('mousedown', function(e) {
+        if (e.target.closest('input') || e.target.closest('a') || e.target.isContentEditable || e.target.closest('.q-block-del')) return;
+        e.stopPropagation();
+        var prevZ = blk.style.zIndex;
+        blk.style.zIndex = '40';
+        var sx = e.clientX, sy = e.clientY;
+        var onMove = function(me) {
+          var dx = (me.clientX - sx) / QS.zoom;
+          var dy = (me.clientY - sy) / QS.zoom;
+          blk.style.left = (parseFloat(blk.style.left) + dx) + 'px';
+          blk.style.top  = (parseFloat(blk.style.top)  + dy) + 'px';
+          sx = me.clientX; sy = me.clientY;
+        };
+        var onUp = function() {
+          blk.style.zIndex = prevZ;
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          qSavePage();
+        };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      return blk;
+    }
+
+    function qCreateText(x, y) {
+      qRecreateText(x, y, '', 'Escribe algo aquí...', false);
+      qSavePage();
+    }
+
+    function qRecreateText(x, y, desc, content, isLink) {
+      var blk = qMakeBlock(x, y, desc);
+      blk.style.width = '240px';
+      var textNode = document.createElement('div');
+      textNode.className = 'q-block-text';
+
+      if (isLink) {
+        qMakeLink(textNode, content);
+      } else {
+        textNode.setAttribute('data-is-link', 'false');
+        textNode.contentEditable = 'true';
+        textNode.innerText = content;
+        textNode.addEventListener('blur', function() {
+          var t = textNode.innerText.trim();
+          if (qIsURL(t)) qMakeLink(textNode, t);
+          qSavePage();
+        }, { once: true });
+      }
+      blk.appendChild(textNode);
+      QD.canvas.appendChild(blk);
+      if (content === 'Escribe algo aquí...') { textNode.focus(); document.execCommand('selectAll',false,null); }
+    }
+
+    function qMakeLink(textNode, url) {
+      textNode.contentEditable = 'false';
+      textNode.setAttribute('data-is-link', 'true');
+      textNode.className = 'q-block-text';
+      textNode.innerHTML = '';
+      var a = document.createElement('a');
+      a.href = qFmtURL(url); a.target = '_blank'; a.textContent = url;
+      a.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+      textNode.appendChild(a);
+      textNode.addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+        textNode.contentEditable = 'true';
+        textNode.setAttribute('data-is-link','false');
+        textNode.className = 'q-block-text';
+        textNode.innerText = url;
+        textNode.focus();
+        textNode.addEventListener('blur', function() {
+          var t = textNode.innerText.trim();
+          if (qIsURL(t)) qMakeLink(textNode, t);
+          qSavePage();
+        }, { once: true });
+      });
+    }
+
+    function qRecreateFile(x, y, desc, fileName, fileType, fileData, w, h) {
+      var blk = qMakeBlock(x, y, desc);
+      blk.setAttribute('data-ftype', fileType || 'unknown');
+      if (w) blk.style.width  = w + 'px';
+      if (h) blk.style.height = h + 'px';
+
+      var box = document.createElement('div');
+      box.style.cssText = 'flex:1;width:100%;min-height:80px;border:1px solid rgba(168,85,247,0.15);border-radius:3px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b0c10;position:relative;';
+
+      if (fileType === 'image' && fileData) {
+        if (!w) blk.style.width = '240px';
+        if (!h) blk.style.height = '200px';
+        var img = document.createElement('img');
+        img.className = 'q-file-img';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;';
+        img.src = fileData;
+        box.appendChild(img);
+        // resize handle
+        var rh = document.createElement('div');
+        rh.style.cssText = 'position:absolute;bottom:3px;right:3px;width:14px;height:14px;cursor:se-resize;color:#52525b;display:flex;align-items:center;justify-content:center;font-size:10px;';
+        rh.innerHTML = '<i class="fa-solid fa-maximize" style="transform:rotate(90deg)"></i>';
+        rh.addEventListener('mousedown', function(re) {
+          re.stopPropagation(); re.preventDefault();
+          var sw = blk.offsetWidth, sh = blk.offsetHeight, sx2 = re.clientX, sy2 = re.clientY;
+          var mm = function(me) {
+            blk.style.width  = Math.max(140, sw + (me.clientX-sx2)/QS.zoom) + 'px';
+            blk.style.height = Math.max(100, sh + (me.clientY-sy2)/QS.zoom) + 'px';
+          };
+          var mu = function() { document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); qSavePage(); };
+          document.addEventListener('mousemove', mm);
+          document.addEventListener('mouseup', mu);
+        });
+        blk.appendChild(rh);
+      } else {
+        var ico = document.createElement('i');
+        ico.className = fileType==='pdf' ? 'fa-solid fa-file-pdf' : 'fa-solid fa-circle-question';
+        ico.style.cssText = 'font-size:2rem;color:'+(fileType==='pdf'?'#ef4444':'#52525b')+';margin-bottom:6px;';
+        box.appendChild(ico);
+        var lbl = document.createElement('span');
+        lbl.className = 'q-file-label';
+        lbl.style.cssText = 'font-size:9px;color:#71717a;text-align:center;padding:0 6px;word-break:break-all;font-family:"JetBrains Mono",monospace;';
+        lbl.textContent = fileName || '';
+        box.appendChild(lbl);
+      }
+      blk.appendChild(box);
+      QD.canvas.appendChild(blk);
+    }
+
+    // ---- FILE HANDLING ----
+    window.qTriggerFile = function() {
+      QD.ctxMenu.style.display = 'none';
+      setTimeout(function(){ QD.fileInput.click(); }, 50);
+    };
+    window.qHandleFile = function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var x = QS.ctxCoords.x, y = QS.ctxCoords.y;
+      if (file.type.startsWith('image/')) {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          qRecreateFile(x, y, '', file.name, 'image', ev.target.result, 240, 200);
+          qSavePage();
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        qRecreateFile(x, y, '', file.name, 'pdf', null);
+        qSavePage();
+      } else {
+        qRecreateFile(x, y, '', file.name, 'unknown', null);
+        qSavePage();
+      }
+      QD.fileInput.value = '';
+    };
+
+    // ---- HELPERS ----
+    function qIsURL(s) {
+      return /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/i.test(s);
+    }
+    function qFmtURL(u) { return /^https?:\/\//i.test(u) ? u : 'https://'+u; }
+
+    // ---- BOOT ----
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', qInit);
+    } else {
+      qInit();
+    }
+  })();
+  </script>
+
 </body>
 </html>
