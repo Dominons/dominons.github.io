@@ -1301,8 +1301,11 @@
       <div class="top-bar">
         <div class="top-left">
           <div class="box" id="fecha-hora">Cargando...</div>
-          <button id="toggle-view-to-flow" class="music-btn" onclick="window.toggleAppView()" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
+          <button id="toggle-view-to-flow" class="music-btn" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
             <i class="fa-solid fa-chart-line"></i> DEEP FLOW
+          </button>
+          <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas" style="background: var(--color-input-bg); color: #39FF14; border: 1px solid #39FF14;">
+            <i class="fa-solid fa-vector-square"></i> QUANTIS
           </button>
         </div>
         <div class="top-right">
@@ -1411,7 +1414,8 @@
       <button class="ctrl-btn" id="sound-toggle">SND ON</button>
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
-      <button class="ctrl-btn" id="view-toggle" onclick="window.toggleAppView()" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
+      <button class="ctrl-btn" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
+      <button class="ctrl-btn" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')" style="border-color:#39FF14; color:#39FF14; font-weight:bold; text-shadow:0 0 4px rgba(57,255,20,0.4);">QUANTIS</button>
       <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
       <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
       <span id="hdr-date"></span><span id="hdr-clock"></span>
@@ -1450,6 +1454,183 @@
         <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
         <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
       </section>
+    </main>
+  </div>
+
+  <!-- VISTA SPA 3: QUANTIS CANVAS -->
+  <div id="quantis-view" class="hidden-view">
+    <style>
+      /* ========== QUANTIS VIEW - SCOPED STYLES ========== */
+      #quantis-view {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #0b0c10;
+        font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+        overflow: hidden;
+      }
+      #quantis-view .quantis-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 52px;
+        min-height: 52px;
+        background: #111318;
+        border-bottom: 2px solid #39FF14;
+        box-shadow: 0 2px 12px rgba(57, 255, 20, 0.08);
+        z-index: 10;
+        flex-shrink: 0;
+      }
+      #quantis-view .quantis-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      #quantis-view .quantis-brand {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.1em;
+        font-weight: 900;
+        color: #39FF14;
+        letter-spacing: 3px;
+        text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+      }
+      #quantis-view .quantis-nav-btn {
+        background: transparent;
+        color: #888;
+        border: 1px solid #333;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.75em;
+        font-family: 'JetBrains Mono', monospace;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      #quantis-view .quantis-nav-btn:hover {
+        border-color: #A855F7;
+        color: #A855F7;
+        box-shadow: 0 0 6px rgba(168, 85, 247, 0.2);
+      }
+      #quantis-view .quantis-nav-btn.flow-btn:hover {
+        border-color: #00F0FF;
+        color: #00F0FF;
+        box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+      }
+      #quantis-view .quantis-header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      #quantis-view .quantis-music-btn {
+        background: transparent;
+        color: #39FF14;
+        border: 1px solid #39FF14;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      #quantis-view .quantis-music-btn:hover {
+        background: rgba(57, 255, 20, 0.08);
+        box-shadow: 0 0 8px rgba(57, 255, 20, 0.15);
+      }
+      #quantis-view .quantis-clock {
+        font-size: 0.75em;
+        font-family: 'JetBrains Mono', monospace;
+        color: #555;
+        letter-spacing: 2px;
+      }
+      #quantis-view .quantis-workspace {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        cursor: grab;
+        background: #0b0c10;
+        background-size: 30px 30px;
+        background-image: radial-gradient(circle, rgba(57, 255, 20, 0.04) 1px, transparent 1px);
+      }
+      #quantis-view .quantis-workspace:active {
+        cursor: grabbing;
+      }
+      #quantis-view .quantis-canvas {
+        position: absolute;
+        width: 8000px;
+        height: 8000px;
+        top: -4000px;
+        left: -4000px;
+        transform-origin: center;
+      }
+      #quantis-view .quantis-welcome {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        pointer-events: none;
+        opacity: 0.35;
+      }
+      #quantis-view .quantis-welcome h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8em;
+        font-weight: 700;
+        color: #39FF14;
+        letter-spacing: 6px;
+        margin-bottom: 8px;
+      }
+      #quantis-view .quantis-welcome p {
+        font-size: 0.8em;
+        color: #555;
+        letter-spacing: 2px;
+      }
+      @media (max-width: 600px) {
+        #quantis-view .quantis-header {
+          padding: 0 10px;
+          gap: 6px;
+          flex-wrap: wrap;
+          height: auto;
+          min-height: 44px;
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+        #quantis-view .quantis-brand {
+          font-size: 0.9em;
+          letter-spacing: 2px;
+        }
+        #quantis-view .quantis-clock {
+          display: none;
+        }
+      }
+    </style>
+
+    <header class="quantis-header">
+      <div class="quantis-header-left">
+        <span class="quantis-brand">QUANTIS</span>
+        <button class="quantis-nav-btn" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
+        <button class="quantis-nav-btn flow-btn" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
+      </div>
+      <div class="quantis-header-right">
+        <span class="quantis-clock" id="quantis-clock"></span>
+        <button class="quantis-music-btn" id="toggleMusicPanelQuantis" title="Reproductor">
+          <i class="fa-solid fa-music"></i> REPROD
+        </button>
+      </div>
+    </header>
+
+    <main class="quantis-workspace" id="quantis-viewport">
+      <div class="quantis-canvas" id="quantis-canvas-container">
+        <div class="quantis-welcome">
+          <h2>QUANTIS</h2>
+          <p>INFINITE CANVAS WORKSPACE</p>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -1514,12 +1695,12 @@
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // === CAMBIO: Variables de estado globales para el control de planes y límites del bloc de notas ===
+    // === CAMBIO: Variables de estado globales para el control de planes y l�mites del bloc de notas ===
     window.userPlan = 'normal';
     window.maxPages = 3;
     window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count')) || 3;
 
-    // Listener del estado de autenticacin (Se añade async para permitir el flujo asíncrono con Firestore)
+    // Listener del estado de autenticacin (Se a�ade async para permitir el flujo as�ncrono con Firestore)
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -1527,7 +1708,7 @@
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // === CAMBIO: Lectura asíncrona del plan del usuario desde Firestore ===
+        // === CAMBIO: Lectura as�ncrona del plan del usuario desde Firestore ===
         try {
           const userDocRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(userDocRef);
@@ -1544,7 +1725,7 @@
           window.maxPages = 3;
         }
 
-        // Validación estricta de coherencia de límites tras detectar el plan
+        // Validaci�n estricta de coherencia de l�mites tras detectar el plan
         if (window.createdPagesCount > window.maxPages) {
           window.createdPagesCount = window.maxPages;
           localStorage.setItem('danifu_pages_count', window.createdPagesCount);
@@ -1554,7 +1735,7 @@
           localStorage.setItem('danifu_active_tab', window.activeTab);
         }
 
-        // Renderizado dinámico de pestañas conforme al estado del plan detectado
+        // Renderizado din�mico de pesta�as conforme al estado del plan detectado
         if (typeof window.renderTabs === 'function') {
           window.renderTabs();
         }
@@ -1653,7 +1834,7 @@
     // Bloc de notas Firestore (Lgica compartida)
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
 
-    // === CAMBIO: Lógica de inicialización de límites del Bloc de Notas ===
+    // === CAMBIO: L�gica de inicializaci�n de l�mites del Bloc de Notas ===
     if (parseInt(window.activeTab) > window.maxPages) {
         window.activeTab = "1";
         localStorage.setItem('danifu_active_tab', window.activeTab);
@@ -1695,14 +1876,14 @@
         });
     }
 
-    // === CAMBIO: Renderizador de pestañas dinámicas con soporte para botón "+" de creación y limitación estricta por Plan ===
+    // === CAMBIO: Renderizador de pesta�as din�micas con soporte para bot�n "+" de creaci�n y limitaci�n estricta por Plan ===
     window.renderTabs = function() {
       const tabsContainer = document.getElementById('notepad-tabs');
       if (!tabsContainer) return;
       
       tabsContainer.innerHTML = '';
 
-      // Se generan dinámicamente los botones de las páginas creadas
+      // Se generan din�micamente los botones de las p�ginas creadas
       for (let i = 1; i <= window.createdPagesCount; i++) {
         const btn = document.createElement('button');
         btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
@@ -1712,7 +1893,7 @@
         tabsContainer.appendChild(btn);
       }
 
-      // Se añade el botón "+" sólo si la cantidad creada es menor al límite máximo absoluto de la plataforma (4)
+      // Se a�ade el bot�n "+" s�lo si la cantidad creada es menor al l�mite m�ximo absoluto de la plataforma (4)
       if (window.createdPagesCount < 4) {
         const plusBtn = document.createElement('button');
         plusBtn.className = 'tab-btn';
@@ -1724,9 +1905,9 @@
         plusBtn.style.padding = '4px 12px';
 
         plusBtn.onclick = function() {
-          // Bloqueo estricto basado en la evaluación del plan actual en tiempo de ejecución
+          // Bloqueo estricto basado en la evaluaci�n del plan actual en tiempo de ejecuci�n
           if (window.createdPagesCount >= window.maxPages) {
-            alert('Límite de páginas alcanzado para tu plan actual.');
+            alert('L�mite de p�ginas alcanzado para tu plan actual.');
           } else {
             window.createdPagesCount++;
             localStorage.setItem('danifu_pages_count', window.createdPagesCount);
@@ -1738,7 +1919,7 @@
       }
     };
 
-    // Renderizado por primera vez de la interfaz de pestañas
+    // Renderizado por primera vez de la interfaz de pesta�as
     window.renderTabs();
     // === FIN DE CAMBIO ===
 
@@ -1867,6 +2048,7 @@
       if (_masterTick % 2 === 0) {
         var d = new Date();
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+        var qc=document.getElementById('quantis-clock');if(qc){const pad=x=>String(x).padStart(2,'0');qc.textContent=`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
       }
 
       if (window.player && window.player.getCurrentTime) {
@@ -2208,7 +2390,7 @@
     function applyLanguage(){const L=LANG[STATE.lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(L[k])el.textContent=L[k]});DOM.filterBar.placeholder=L.filterPlaceholder;DOM.soundToggle.textContent=STATE.soundEnabled?L.sndOn:L.sndOff;DOM.streamToggle.textContent=STATE.dataStream==='binance'?L.binanceStream:L.onChainStream;const isB=STATE.dataStream==='binance';DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream];DOM.macroFilters.querySelectorAll('.mf-btn').forEach((b,i)=>{b.textContent=t(cfg[i].i18n)});if(!isB)updateOnchainSidebar();else updateBinanceSidebar();DOM.ledgerBody.querySelectorAll('.sub-analysis-text').forEach(el=>{el.textContent=STATE.lang==='es'?el.getAttribute('data-analysis-es'):el.getAttribute('data-analysis-en')});DOM.ledgerBody.querySelectorAll('.sub-analysis-label').forEach(al=>{al.textContent=L.terminalAnalysis});const lk=[isB?t('orderId'):t('txHash'),isB?t('executedPrice'):t('gasFee'),isB?t('location'):t('onChain')];let li=0;DOM.ledgerBody.querySelectorAll('.sub-row .sub-label').forEach(sl=>{if(li<lk.length){sl.textContent=lk[li];li++}})}
     function applyFontScale(){document.getElementById('deep-flow-view').style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
 
-    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0')}
+    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');const qc=document.getElementById('quantis-clock');if(qc){const pad=x=>String(x).padStart(2,'0');qc.textContent=`${pad(n.getDate())}/${pad(n.getMonth()+1)}/${n.getFullYear()} ${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`}}
     function updateDate(){const n=new Date(),mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];DOM.hdrDate.textContent=n.getDate()+' '+mo[n.getMonth()]+' '+n.getFullYear()}
     function updateTickers(pd){if(!pd){DOM.btcPrice.textContent='---';DOM.ethPrice.textContent='---';DOM.btcChange.textContent='';DOM.ethChange.textContent='';return}const btc=pd.bitcoin||FALLBACK.bitcoin,eth=pd.ethereum||FALLBACK.ethereum;DOM.btcPrice.textContent='$'+btc.usd.toLocaleString('en-US',{maximumFractionDigits:0});DOM.ethPrice.textContent='$'+eth.usd.toLocaleString('en-US',{maximumFractionDigits:0});const bc=btc.usd_24h_change;DOM.btcChange.textContent=(bc>=0?'+':'')+bc.toFixed(2)+'%';DOM.btcChange.className='ticker-change '+(bc>=0?'pos':'neg');const ec=eth.usd_24h_change;DOM.ethChange.textContent=(ec>=0?'+':'')+ec.toFixed(2)+'%';DOM.ethChange.className='ticker-change '+(ec>=0?'pos':'neg');STATE.btcPrice=btc.usd;STATE.ethPrice=eth.usd;STATE.lastKnownBtc=btc.usd;STATE.lastKnownEth=eth.usd;STATE.btcChange=bc;STATE.ethChange=ec;STATE.priceHistory.push({price:btc.usd,ts:Date.now()});if(STATE.priceHistory.length>20)STATE.priceHistory.shift()}
     function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;const dynamicDom=dom + (Math.random()-0.5)*2;DOM.btcDomValue.textContent=dynamicDom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dynamicDom.toFixed(1)+'%';STATE.btcDom=dynamicDom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;const dynamicMcap = mcap * (1 + (Math.random()-0.5)*0.02);DOM.mcapValue.textContent=formatMcap(dynamicMcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=dynamicMcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){const dynamicMc = mc + (Math.random()-0.5)*1.5;DOM.mcapChange.textContent=(dynamicMc>=0?'+':'')+dynamicMc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(dynamicMc>=0?'pos':'neg');STATE.mcapChange=dynamicMc}}
