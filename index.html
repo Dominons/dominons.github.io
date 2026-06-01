@@ -2174,21 +2174,29 @@
 
   <!-- CONTROL DE LA INTERFAZ SPA (ALTERNANCIA DE VISTAS) -->
   <script>
+    window.switchAppView = function(viewId) {
+      var views = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
+      views.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          if (id === viewId) {
+            el.classList.remove('hidden-view');
+          } else {
+            el.classList.add('hidden-view');
+          }
+        }
+      });
+      if (typeof playClickSound === 'function') {
+        try { playClickSound(); } catch(e) {}
+      }
+    };
+    // Backward compatibility stub
     window.toggleAppView = function() {
-      var mainDash = document.getElementById('main-dashboard-view');
       var deepFlow = document.getElementById('deep-flow-view');
-      if (mainDash && deepFlow) {
-        var isFlowHidden = deepFlow.classList.contains('hidden-view');
-        if (isFlowHidden) {
-          mainDash.classList.add('hidden-view');
-          deepFlow.classList.remove('hidden-view');
-        } else {
-          deepFlow.classList.add('hidden-view');
-          mainDash.classList.remove('hidden-view');
-        }
-        if (typeof playClickSound === 'function') {
-          try { playClickSound(); } catch(e) {}
-        }
+      if (deepFlow && deepFlow.classList.contains('hidden-view')) {
+        window.switchAppView('deep-flow-view');
+      } else {
+        window.switchAppView('main-dashboard-view');
       }
     };
   </script>
