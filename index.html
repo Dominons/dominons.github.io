@@ -494,6 +494,208 @@
     #main-dashboard-view .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     #main-dashboard-view .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
 
+    /* ========== PLANES, CONFIGURACION GLOBAL Y CONTROLES COMPARTIDOS ========== */
+    #plansModal,
+    #config-dropdown,
+    #miniPlanPopup {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .icon-square-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid var(--color-highlight);
+      background: var(--color-input-bg);
+      color: var(--color-highlight);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .icon-square-btn:hover {
+      background: rgba(168,85,247,0.14);
+      transform: translateY(-1px);
+    }
+    #plansModal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      background: rgba(0,0,0,0.58);
+      padding: 18px;
+    }
+    #plansModal.open { display: flex; }
+    .plans-card {
+      width: min(940px, 96vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: #111318;
+      border: 1px solid rgba(168,85,247,0.38);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+      color: #f4f4f5;
+      padding: 20px;
+    }
+    .plans-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .plans-header h2 {
+      margin: 0;
+      color: #A855F7;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+    .plans-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: #e4e4e7;
+      cursor: pointer;
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .plan-option {
+      background: #181a20;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+      min-height: 230px;
+    }
+    .plan-option:hover {
+      border-color: #A855F7;
+      transform: translateY(-2px);
+    }
+    .plan-option h3 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    .plan-price {
+      color: #A855F7;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .plan-option ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #c4c4cc;
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+    .plan-contact-card {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(168,85,247,0.08);
+      border: 1px solid rgba(168,85,247,0.25);
+      color: #e4e4e7;
+    }
+    .plan-contact-card.open { display: block; }
+    .plan-contact-card p { margin: 6px 0; }
+    #config-dropdown {
+      position: fixed;
+      top: 58px;
+      right: 18px;
+      width: 186px;
+      display: none;
+      z-index: 99990;
+      background: #111318;
+      border: 1px solid rgba(168,85,247,0.34);
+      border-radius: 8px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+      padding: 12px;
+      color: #e4e4e7;
+    }
+    #config-dropdown.open { display: block; }
+    .config-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: #71717a;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+    }
+    .config-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    #config-dropdown .theme-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+    }
+    #config-dropdown .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #config-dropdown .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    #config-dropdown .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+    .language-toggle {
+      border: 1px solid rgba(168,85,247,0.45);
+      background: #1f1f26;
+      color: #e4e4e7;
+      border-radius: 999px;
+      padding: 5px 10px;
+      min-width: 64px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .notepad-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .notepad-file-btn,
+    .q-tool-btn {
+      background: #22242c;
+      color: #d4d4d8;
+      border: 1px solid rgba(168,85,247,0.3);
+      border-radius: 4px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 0.78rem;
+    }
+    .notepad-file-btn:hover,
+    .q-tool-btn:hover {
+      border-color: #A855F7;
+      color: #fff;
+    }
+    #miniPlanPopup {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: none;
+      z-index: 100001;
+      background: #111318;
+      border: 1px solid rgba(168,85,247,0.42);
+      color: #f4f4f5;
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+      font-size: 0.86rem;
+    }
+    #miniPlanPopup.open { display: block; }
+    @media (max-width: 760px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      #config-dropdown { right: 10px; top: 96px; }
+    }
+
     @media (max-width: 1024px) {
       #main-dashboard-view .top-right { gap: 6px; }
       #main-dashboard-view .theme-btn { width: 20px; height: 20px; }
@@ -1307,6 +1509,9 @@
           <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas" style="background: var(--color-input-bg); color: #A855F7; border: 1px solid #A855F7;">
             <i class="fa-solid fa-infinity"></i> QUANTIS
           </button>
+          <button id="openPlansBtn" class="music-btn" title="Planes">
+            <i class="fa-solid fa-gem"></i> PLANES
+          </button>
         </div>
         <div class="top-right">
           <div class="user-info" id="userInfo">
@@ -1316,11 +1521,9 @@
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </div>
-          <div class="theme-buttons">
-            <button class="theme-btn black" onclick="setTheme('#000000')" title="Negro"></button>
-            <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="Blanco"></button>
-            <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Morado"></button>
-          </div>
+          <button class="icon-square-btn" id="dominonConfigBtn" title="Configuracion">
+            <i class="fa-solid fa-gear"></i>
+          </button>
           <div class="music-container">
             <div class="song-display">
               <span id="songTitle" class="song-marquee">Listo para Play</span>
@@ -1357,7 +1560,14 @@
 
         <div class="notepad-panel">
           <div class="notepad-header-row">
-            <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;flex-wrap:wrap;">
+              <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
+              <div class="notepad-actions" id="notepadActions">
+                <button class="notepad-file-btn" id="exportNoteBtn" type="button"><i class="fa-solid fa-file-export"></i> Export</button>
+                <button class="notepad-file-btn" id="importNoteBtn" type="button"><i class="fa-solid fa-file-import"></i> Import</button>
+                <input type="file" id="importNoteInput" accept=".txt,text/plain" style="display:none;">
+              </div>
+            </div>
             <div class="notepad-tabs" id="notepad-tabs">
               <!-- Pestaas dinmicas -->
             </div>
@@ -1553,6 +1763,37 @@
         background: rgba(168,85,247,0.15);
         box-shadow: 0 0 6px rgba(168,85,247,0.3);
       }
+      #quantis-tools {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #quantis-tools .q-tool-btn,
+      #quantis-tools .icon-square-btn {
+        height: 30px;
+        min-width: 30px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+      }
+      #q-brush-size {
+        width: 62px;
+        accent-color: #A855F7;
+      }
+      .q-color-toggle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #52525b;
+        cursor: pointer;
+      }
+      .q-color-toggle.active { border-color: #A855F7; box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+      .q-color-toggle.black { background:#000; }
+      .q-color-toggle.white { background:#fff; }
+      #quantis-tools .q-tool-btn.active {
+        border-color: #A855F7;
+        color: #fff;
+        background: rgba(168,85,247,0.18);
+      }
 
       /* ===== QUANTIS BODY LAYOUT ===== */
       #quantis-body {
@@ -1661,6 +1902,14 @@
         background-image: radial-gradient(circle, rgba(168,85,247,0.07) 1px, transparent 1px);
         transform-origin: center;
       }
+      #quantis-drawing-canvas {
+        position: absolute;
+        inset: 0;
+        width: 8000px;
+        height: 8000px;
+        pointer-events: none;
+        z-index: 1;
+      }
       /* Canvas blocks */
       .q-canvas-el {
         position: absolute;
@@ -1675,6 +1924,7 @@
         will-change: transform;
         backface-visibility: hidden;
         transform: translateZ(0);
+        z-index: 5;
       }
       .q-canvas-el:hover { border-color: rgba(168,85,247,0.5); }
       .q-block-desc {
@@ -1771,6 +2021,19 @@
       </div>
       <div id="quantis-nav-right">
         <span id="quantis-clock">00:00:00</span>
+        <div id="quantis-tools">
+          <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
+          <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
+          <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
+          <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Pincel"><i class="fa-solid fa-pencil"></i></button>
+          <button class="q-tool-btn q-draw-tool" id="q-eraser-btn" type="button" title="Borrador"><i class="fa-solid fa-eraser"></i></button>
+          <input class="q-draw-tool" id="q-brush-size" type="range" min="2" max="40" value="8" title="Grosor">
+          <button class="q-color-toggle black q-draw-tool active" id="q-color-black" type="button" title="Negro"></button>
+          <button class="q-color-toggle white q-draw-tool" id="q-color-white" type="button" title="Blanco"></button>
+        </div>
+        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
+          <i class="fa-solid fa-gear"></i>
+        </button>
         <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
           <i class="fa-solid fa-music"></i>
         </button>
@@ -1791,7 +2054,9 @@
 
       <!-- INFINITE CANVAS VIEWPORT -->
       <main id="quantis-viewport">
-        <div id="quantis-canvas-container"></div>
+        <div id="quantis-canvas-container">
+          <canvas id="quantis-drawing-canvas" width="8000" height="8000"></canvas>
+        </div>
         <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
       </main>
 
@@ -1805,6 +2070,66 @@
 
   </div>
   <!-- FIN VISTA SPA 3: QUANTIS -->
+
+  <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
+  <div id="plansModal" aria-hidden="true">
+    <div class="plans-card" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+      <div class="plans-header">
+        <h2 id="plansTitle">Planes de membresia</h2>
+        <button class="plans-close" id="closePlansBtn" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="plans-grid">
+        <button class="plan-option" type="button" data-plan-choice="normal">
+          <h3>Normal</h3>
+          <div class="plan-price">$0</div>
+          <ul>
+            <li>3 paginas de Notepad, local only</li>
+            <li>Quantis: 2 proyectos, 3 paginas/proyecto</li>
+            <li>Sin herramientas de dibujo</li>
+          </ul>
+        </button>
+        <button class="plan-option" type="button" data-plan-choice="Extended">
+          <h3>Extended</h3>
+          <div class="plan-price">$5/mo</div>
+          <ul>
+            <li>5 paginas de Notepad, local + export</li>
+            <li>Quantis: 4 proyectos, 7 paginas/proyecto</li>
+            <li>Export/Import de workspace</li>
+          </ul>
+        </button>
+        <button class="plan-option" type="button" data-plan-choice="Premium">
+          <h3>Premium</h3>
+          <div class="plan-price">$10/mo</div>
+          <ul>
+            <li>8 paginas de Notepad en cloud</li>
+            <li>Quantis: 10 proyectos, 20 paginas/proyecto</li>
+            <li>Drawing Tools y Priority Support</li>
+          </ul>
+        </button>
+      </div>
+      <div class="plan-contact-card" id="planContactCard">
+        <strong>Contacto para activar plan</strong>
+        <p>Discord: @DANIFU777</p>
+        <p>Email: danielprooooogamer41@gmail.com</p>
+        <p>GitHub: @daniFU777</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="config-dropdown" aria-hidden="true">
+    <p class="config-label">Theme</p>
+    <div class="config-row">
+      <button class="theme-btn black" onclick="setTheme('#000000')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="White"></button>
+      <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Purple"></button>
+    </div>
+    <p class="config-label">Language</p>
+    <div class="config-row">
+      <button class="language-toggle" id="globalLangToggle" type="button">ES / EN</button>
+    </div>
+  </div>
+
+  <div id="miniPlanPopup"></div>
 
   <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
   <div id="youtube-player"></div>
@@ -1867,12 +2192,57 @@
     window.auth = auth;
     window.rtdb = rtdb;
 
-    // === CAMBIO: Variables de estado globales para el control de planes y l�mites del bloc de notas ===
+    // =========================================================
+    // --- MEMBERSHIP PLAN CONFIGURATION ---
+    // =========================================================
+    const PLAN_LIMITS = {
+      normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local' },
+      Extended: { maxNotepadPages: 5, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local' },
+      Premium: { maxNotepadPages: 8, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud' }
+    };
+    window.PLAN_LIMITS = PLAN_LIMITS;
     window.userPlan = 'normal';
-    window.maxPages = 3;
-    window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count')) || 3;
+    window.getPlanLimits = function() {
+      return PLAN_LIMITS[window.userPlan] || PLAN_LIMITS.normal;
+    };
+    window.maxPages = window.getPlanLimits().maxNotepadPages;
+    window.createdPagesCount = Math.min(
+      parseInt(localStorage.getItem('danifu_pages_count'), 10) || 3,
+      window.maxPages
+    );
 
-    // Listener del estado de autenticacin (Se a�ade async para permitir el flujo as�ncrono con Firestore)
+    async function detectUserPlan(user) {
+      if (!user) return 'normal';
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userDocRef);
+        const plan = docSnap.exists() ? docSnap.data().plan : '';
+        return PLAN_LIMITS[plan] ? plan : 'normal';
+      } catch (error) {
+        console.error("Error al obtener el plan del usuario de Firestore:", error);
+        return 'normal';
+      }
+    }
+
+    window.applyMembershipPlan = function(plan) {
+      window.userPlan = PLAN_LIMITS[plan] ? plan : 'normal';
+      window.maxPages = window.getPlanLimits().maxNotepadPages;
+      window.createdPagesCount = Math.min(window.createdPagesCount || 3, window.maxPages);
+      localStorage.setItem('danifu_pages_count', window.createdPagesCount);
+      if (parseInt(window.activeTab, 10) > window.maxPages) {
+        window.activeTab = "1";
+        localStorage.setItem('danifu_active_tab', window.activeTab);
+      }
+      const actions = document.getElementById('notepadActions');
+      if (actions) actions.style.display = window.userPlan === 'Extended' ? 'flex' : 'none';
+      if (typeof window.renderTabs === 'function') window.renderTabs();
+      if (typeof window.qApplyPlanLimits === 'function') window.qApplyPlanLimits();
+      if (typeof window.qUpdateDrawingControls === 'function') window.qUpdateDrawingControls();
+    };
+
+    // =========================================================
+    // --- FIREBASE AUTH & PLAN DETECTION ---
+    // =========================================================
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -1880,43 +2250,12 @@
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
 
-        // === CAMBIO: Lectura as�ncrona del plan del usuario desde Firestore ===
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists() && docSnap.data().plan === 'Premium') {
-            window.userPlan = 'Premium';
-            window.maxPages = 4;
-          } else {
-            window.userPlan = 'normal';
-            window.maxPages = 3;
-          }
-        } catch (error) {
-          console.error("Error al obtener el plan del usuario de Firestore:", error);
-          window.userPlan = 'normal';
-          window.maxPages = 3;
-        }
+        window.applyMembershipPlan(await detectUserPlan(user));
+        window.loadNote(window.activeTab);
 
-        // Validaci�n estricta de coherencia de l�mites tras detectar el plan
-        if (window.createdPagesCount > window.maxPages) {
-          window.createdPagesCount = window.maxPages;
-          localStorage.setItem('danifu_pages_count', window.createdPagesCount);
-        }
-        if (parseInt(window.activeTab) > window.maxPages) {
-          window.activeTab = "1";
-          localStorage.setItem('danifu_active_tab', window.activeTab);
-        }
-
-        // Renderizado din�mico de pesta�as conforme al estado del plan detectado
-        if (typeof window.renderTabs === 'function') {
-          window.renderTabs();
-        }
-        // === FIN DE CAMBIO ===
-
-        // Carga de la nota activa en Firestore
-        window.loadNoteFromFirestore(window.activeTab);
-
-        // Carga del estado y progreso del reproductor
+        // =========================================================
+        // --- MUSIC PLAYER SAVED PROGRESS LOADER ---
+        // =========================================================
         window.loadSavedMusic = function() {
           if (!auth.currentUser) return;
           var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
@@ -1952,11 +2291,13 @@
                       var idx = plist.indexOf(videoIdToLoad);
                       if (idx >= 0) {
                         window.player.playVideoAt(idx);
-                        setTimeout(function() {
+                        window.waitForPlayerPlaying(function() {
                           window.player.seekTo(data.time || 0, true);
-                          window.player.pauseVideo();
-                          updateSongDisplay();
-                        }, 1000);
+                          setTimeout(function() {
+                            window.player.pauseVideo();
+                            updateSongDisplay();
+                          }, 150);
+                        });
                       } else {
                         window.player.playVideoAt(0);
                         setTimeout(function() { window.player.pauseVideo(); }, 800);
@@ -1976,6 +2317,7 @@
         };
 
       } else {
+        window.applyMembershipPlan('normal');
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
       }
@@ -1984,7 +2326,26 @@
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-    // Auto-guardado de progreso de msica
+    // =========================================================
+    // --- MUSIC PLAYER AUTOSAVE ENGINE ---
+    // =========================================================
+    window.waitForPlayerPlaying = function(callback) {
+      var attempts = 0;
+      var timer = setInterval(function() {
+        attempts++;
+        try {
+          if (window.player && window.player.getPlayerState && window.player.getPlayerState() === 1) {
+            clearInterval(timer);
+            callback();
+          } else if (attempts >= 30) {
+            clearInterval(timer);
+          }
+        } catch (error) {
+          clearInterval(timer);
+        }
+      }, 200);
+    };
+
     setInterval(() => {
        if (auth.currentUser && window.player) {
           try {
@@ -2001,61 +2362,71 @@
              console.log("Error guardando msica:", error);
           }
        }
-    }, 30000);
+    }, 10000);
 
-    // Bloc de notas Firestore (Lgica compartida)
+    // =========================================================
+    // --- NOTEPAD CONTROLLER (LOCAL & CLOUD) ---
+    // =========================================================
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
 
-    // === CAMBIO: L�gica de inicializaci�n de l�mites del Bloc de Notas ===
-    if (parseInt(window.activeTab) > window.maxPages) {
+    if (parseInt(window.activeTab, 10) > window.maxPages) {
         window.activeTab = "1";
         localStorage.setItem('danifu_active_tab', window.activeTab);
     }
     
     let saveTimeout;
     
-    window.loadNoteFromFirestore = async function(tabNum) {
-       if (!window.auth || !window.auth.currentUser) return;
+    window.loadNote = async function(tabNum) {
+       const notepadEl = document.getElementById('notepad');
+       if (!notepadEl) return;
+       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
+          notepadEl.value = localStorage.getItem('notepad_page_' + tabNum) || "";
+          return;
+       }
        try {
-          const notepadEl = document.getElementById('notepad');
           const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
           const docSnap = await getDoc(userDocRef);
           if (docSnap.exists()) {
-             if (notepadEl) notepadEl.value = docSnap.data().content || "";
+             notepadEl.value = docSnap.data().content || "";
           } else {
-             if (notepadEl) notepadEl.value = "";
+             notepadEl.value = "";
           }
        } catch (error) {
           console.error("Error cargando nota:", error);
-          const notepadEl = document.getElementById('notepad');
-          if (notepadEl) notepadEl.value = "";
+          notepadEl.value = "";
        }
-    }
+    };
+    window.loadNoteFromFirestore = window.loadNote;
+
+    window.saveCurrentNote = async function() {
+       const notepadEl = document.getElementById('notepad');
+       if (!notepadEl) return;
+       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
+          localStorage.setItem('notepad_page_' + window.activeTab, notepadEl.value);
+          return;
+       }
+       try {
+          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
+          await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
+       } catch (error) {
+          console.error("Error guardando nota:", error);
+       }
+    };
 
     const notepadEl = document.getElementById('notepad');
     if (notepadEl) {
         notepadEl.addEventListener('input', function() {
-           if (!window.auth || !window.auth.currentUser) return;
            clearTimeout(saveTimeout);
-           saveTimeout = setTimeout(async function() {
-              try {
-                 const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
-                 await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
-              } catch (error) {
-                 console.error("Error guardando nota:", error);
-              }
-           }, 2000);
+           saveTimeout = setTimeout(window.saveCurrentNote, 800);
         });
     }
 
-    // === CAMBIO: Renderizador de pesta�as din�micas con soporte para bot�n "+" de creaci�n y limitaci�n estricta por Plan ===
     window.renderTabs = function() {
       const tabsContainer = document.getElementById('notepad-tabs');
       if (!tabsContainer) return;
       
       tabsContainer.innerHTML = '';
 
-      // Se generan din�micamente los botones de las p�ginas creadas
       for (let i = 1; i <= window.createdPagesCount; i++) {
         const btn = document.createElement('button');
         btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
@@ -2065,8 +2436,7 @@
         tabsContainer.appendChild(btn);
       }
 
-      // Se a�ade el bot�n "+" s�lo si la cantidad creada es menor al l�mite m�ximo absoluto de la plataforma (4)
-      if (window.createdPagesCount < 4) {
+      if (window.createdPagesCount < window.maxPages) {
         const plusBtn = document.createElement('button');
         plusBtn.className = 'tab-btn';
         plusBtn.id = 'btn-add-tab';
@@ -2077,9 +2447,8 @@
         plusBtn.style.padding = '4px 12px';
 
         plusBtn.onclick = function() {
-          // Bloqueo estricto basado en la evaluaci�n del plan actual en tiempo de ejecuci�n
           if (window.createdPagesCount >= window.maxPages) {
-            alert('L�mite de p�ginas alcanzado para tu plan actual.');
+            alert('Limite de paginas alcanzado para tu plan actual.');
           } else {
             window.createdPagesCount++;
             localStorage.setItem('danifu_pages_count', window.createdPagesCount);
@@ -2091,28 +2460,63 @@
       }
     };
 
-    // Renderizado por primera vez de la interfaz de pesta�as
     window.renderTabs();
-    // === FIN DE CAMBIO ===
+
+    window.exportCurrentNote = function() {
+      if (window.userPlan !== 'Extended') {
+        window.showPlanPopup('Export Note esta disponible en Extended.');
+        return;
+      }
+      const note = document.getElementById('notepad');
+      const blob = new Blob([note ? note.value : ''], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'notepad_page_' + window.activeTab + '.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    window.importCurrentNote = function(file) {
+      if (window.userPlan !== 'Extended') {
+        window.showPlanPopup('Import Note esta disponible en Extended.');
+        return;
+      }
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const note = document.getElementById('notepad');
+        if (note) {
+          note.value = event.target.result || '';
+          window.saveCurrentNote();
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    document.getElementById('exportNoteBtn')?.addEventListener('click', window.exportCurrentNote);
+    document.getElementById('importNoteBtn')?.addEventListener('click', function() {
+      if (window.userPlan !== 'Extended') return window.showPlanPopup('Import Note esta disponible en Extended.');
+      document.getElementById('importNoteInput')?.click();
+    });
+    document.getElementById('importNoteInput')?.addEventListener('change', function(e) {
+      window.importCurrentNote(e.target.files[0]);
+      e.target.value = '';
+    });
 
     window.switchTab = function(tabNum) {
       window.activeTab = String(tabNum);
       localStorage.setItem('danifu_active_tab', window.activeTab);
       
       var notepadTitle = document.getElementById('notepad-title');
-      if (notepadTitle) notepadTitle.innerText = "Bloc de Notas - Nota " + window.activeTab;
+      if (notepadTitle) notepadTitle.innerText = (window.currentLang === 'en' ? "Notepad - Note " : "Bloc de Notas - Nota ") + window.activeTab;
       
       document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
       var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
       if (activeBtn) activeBtn.classList.add('active');
       
-      if (window.auth && window.auth.currentUser) {
-        window.loadNoteFromFirestore(window.activeTab);
-      } else {
-        var notepadEl = document.getElementById('notepad');
-        if (notepadEl) notepadEl.value = "";
-      }
+      window.loadNote(window.activeTab);
     };
+    window.applyMembershipPlan(window.userPlan);
   </script>
 
   <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
@@ -2376,6 +2780,118 @@
     };
   </script>
 
+  <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
+  <script>
+    // =========================================================
+    // --- CONFIGURATION, PLAN MODAL & GLOBAL LANGUAGE ---
+    // =========================================================
+    (function() {
+      window.currentLang = localStorage.getItem('danifu_lang') || 'es';
+      const I18N = {
+        es: {
+          plans: 'PLANES',
+          plansTitle: 'Planes de membresia',
+          notepad: 'Bloc de Notas - Nota ',
+          chart: 'Mini-Grafico',
+          calculator: 'Calculadora',
+          pomodoro: 'Pomodoro',
+          start: 'INICIAR',
+          projects: 'Proyectos',
+          qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NUEVO BLOQUE | CLIC DERECHO: ARCHIVO',
+          exportNote: 'Export',
+          importNote: 'Import'
+        },
+        en: {
+          plans: 'PLANS',
+          plansTitle: 'Membership plans',
+          notepad: 'Notepad - Note ',
+          chart: 'Mini-Chart',
+          calculator: 'Calculator',
+          pomodoro: 'Pomodoro',
+          start: 'START',
+          projects: 'Projects',
+          qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NEW BLOCK | RIGHT-CLICK: FILE',
+          exportNote: 'Export',
+          importNote: 'Import'
+        }
+      };
+
+      function qs(sel) { return document.querySelector(sel); }
+      function setText(sel, text) { const el = qs(sel); if (el) el.textContent = text; }
+
+      window.showPlanPopup = function(message) {
+        const popup = document.getElementById('miniPlanPopup');
+        if (!popup) return alert(message);
+        popup.textContent = message;
+        popup.classList.add('open');
+        clearTimeout(window._planPopupTimer);
+        window._planPopupTimer = setTimeout(function() { popup.classList.remove('open'); }, 2600);
+      };
+
+      window.applyGlobalStaticLanguage = function() {
+        const L = I18N[window.currentLang] || I18N.es;
+        const planBtn = document.getElementById('openPlansBtn');
+        if (planBtn) planBtn.innerHTML = '<i class="fa-solid fa-gem"></i> ' + L.plans;
+        setText('#plansTitle', L.plansTitle);
+        setText('#main-dashboard-view .chart-header h2', L.chart);
+        const title = document.getElementById('notepad-title');
+        if (title) title.textContent = L.notepad + (window.activeTab || '1');
+        setText('#main-dashboard-view .calculator-panel h2', L.calculator);
+        setText('#main-dashboard-view .pomodoro-panel h2', L.pomodoro);
+        setText('#start-btn', L.start);
+        setText('#quantis-sidebar-header span', L.projects);
+        setText('#q-zoom-hint', L.qHint);
+        const exportNote = document.getElementById('exportNoteBtn');
+        const importNote = document.getElementById('importNoteBtn');
+        if (exportNote) exportNote.innerHTML = '<i class="fa-solid fa-file-export"></i> ' + L.exportNote;
+        if (importNote) importNote.innerHTML = '<i class="fa-solid fa-file-import"></i> ' + L.importNote;
+        const globalToggle = document.getElementById('globalLangToggle');
+        if (globalToggle) globalToggle.textContent = window.currentLang.toUpperCase();
+      };
+
+      window.setGlobalLanguage = function(lang, source) {
+        window.currentLang = lang === 'en' ? 'en' : 'es';
+        localStorage.setItem('danifu_lang', window.currentLang);
+        window.applyGlobalStaticLanguage();
+        if (source !== 'deep-flow' && typeof window.deepFlowSetLanguage === 'function') {
+          window.deepFlowSetLanguage(window.currentLang);
+        }
+      };
+
+      function toggleConfig(e) {
+        e.stopPropagation();
+        document.getElementById('config-dropdown')?.classList.toggle('open');
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('dominonConfigBtn')?.addEventListener('click', toggleConfig);
+        document.getElementById('quantisConfigBtn')?.addEventListener('click', toggleConfig);
+        document.getElementById('globalLangToggle')?.addEventListener('click', function() {
+          window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
+        });
+        document.getElementById('openPlansBtn')?.addEventListener('click', function() {
+          document.getElementById('plansModal')?.classList.add('open');
+        });
+        document.getElementById('closePlansBtn')?.addEventListener('click', function() {
+          document.getElementById('plansModal')?.classList.remove('open');
+        });
+        document.getElementById('plansModal')?.addEventListener('click', function(e) {
+          if (e.target.id === 'plansModal') e.currentTarget.classList.remove('open');
+        });
+        document.querySelectorAll('.plan-option').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            document.getElementById('planContactCard')?.classList.add('open');
+          });
+        });
+        document.addEventListener('click', function(e) {
+          const cfg = document.getElementById('config-dropdown');
+          if (cfg && !cfg.contains(e.target) && !e.target.closest('#dominonConfigBtn,#quantisConfigBtn')) cfg.classList.remove('open');
+        });
+        window.applyGlobalStaticLanguage();
+      });
+    })();
+  </script>
+
   <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
   <script>
     // Calculadora
@@ -2585,7 +3101,7 @@
     function handleSortClick(e){const h=e.target.closest('.sort-header');if(!h)return;const f=h.getAttribute('data-sort');if(STATE.sortField===f)STATE.sortDir=STATE.sortDir==='desc'?'asc':'desc';else{STATE.sortField=f;STATE.sortDir='desc'}playClickSound();updateSortArrows();rebuildVisible();fullRender()}
     function handleMacroFilter(e){const b=e.target.closest('.mf-btn');if(!b)return;let mf=b.getAttribute('data-mf');if(mf===STATE.macroFilter)mf='all';STATE.macroFilter=mf;playClickSound();DOM.macroFilters.querySelectorAll('.mf-btn').forEach(x=>x.classList.toggle('active',x.getAttribute('data-mf')===mf));rebuildVisible();fullRender()}
     let _ft=null;function handleFilterInput(){clearTimeout(_ft);_ft=setTimeout(()=>{STATE.filterText=DOM.filterBar.value.trim().toUpperCase();rebuildVisible();fullRender()},150)}
-    function handleLangToggle(){STATE.lang=STATE.lang==='en'?'es':'en';playClickSound();applyLanguage()}
+    function handleLangToggle(){const next=STATE.lang==='en'?'es':'en';playClickSound();if(typeof window.setGlobalLanguage==='function')window.setGlobalLanguage(next,'deep-flow');window.deepFlowSetLanguage(next)}
     function handleFontDec(){if(STATE.fontStepIndex<=0)return;STATE.fontStepIndex--;playClickSound();applyFontScale()}
     function handleFontInc(){if(STATE.fontStepIndex>=FONT_STEPS.length-1)return;STATE.fontStepIndex++;playClickSound();applyFontScale()}
     function handleSoundToggle(){STATE.soundEnabled=!STATE.soundEnabled;if(STATE.soundEnabled)getAudioCtx();playClickSound();DOM.soundToggle.textContent=STATE.soundEnabled?t('sndOn'):t('sndOff');DOM.soundToggle.classList.toggle('muted',!STATE.soundEnabled)}
@@ -2595,6 +3111,8 @@
     function startTimerEngine(){setInterval(updateClock,1000);setInterval(updateDate,60000);setInterval(async()=>{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();if(STATE.apiAlive){const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT)}},POLL_INTERVAL)}
 
     function initDeepFlow(){
+      window.deepFlowSetLanguage=function(lang){STATE.lang=lang==='en'?'en':'es';applyLanguage();if(typeof window.applyGlobalStaticLanguage==='function')window.applyGlobalStaticLanguage()};
+      STATE.lang=(window.currentLang==='en')?'en':'es';
       STATE.poolOnchain=generateHistoricalOnchain(INITIAL_POOL);
       STATE.poolBinance=generateHistoricalBinance(INITIAL_POOL);
       STATE.pool=STATE.poolOnchain;
@@ -2603,6 +3121,7 @@
       updateDate();
       updateClock();
       updateSortArrows();
+      applyLanguage();
       applyFontScale();
       document.getElementById('ledger-header').addEventListener('click',handleSortClick);
       DOM.macroFilters.addEventListener('click',handleMacroFilter);
@@ -2666,7 +3185,9 @@
   <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
   <script>
   (function() {
-    // ---- QUANTIS STATE ----
+    // =========================================================
+    // --- QUANTIS INFINITE CANVAS ENGINE ---
+    // =========================================================
     var QS = {
       lang: 'es',
       zoom: 1.0,
@@ -2675,6 +3196,10 @@
       isPanning: false,
       startX: 0,
       startY: 0,
+      isDrawing: false,
+      drawMode: null,
+      drawColor: '#000000',
+      drawSize: 8,
       ctxCoords: { x: 0, y: 0 },
       activeProj: 0,
       activePage: 0,
@@ -2686,15 +3211,20 @@
         '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
         '0-1': [],
         '1-0': []
-      }
+      },
+      drawings: {}
     };
 
-    // ---- DOM REFS (lazy — resolved after DOMContentLoaded) ----
+    // =========================================================
+    // --- QUANTIS DOM REFERENCES ---
+    // =========================================================
     var QD = {};
 
     function qInit() {
       QD.viewport   = document.getElementById('quantis-viewport');
       QD.canvas     = document.getElementById('quantis-canvas-container');
+      QD.drawCanvas = document.getElementById('quantis-drawing-canvas');
+      QD.drawCtx    = QD.drawCanvas ? QD.drawCanvas.getContext('2d') : null;
       QD.projList   = document.getElementById('q-projects-list');
       QD.ctxMenu    = document.getElementById('q-context-menu');
       QD.fileInput  = document.getElementById('q-file-input');
@@ -2702,10 +3232,14 @@
 
       if (!QD.viewport) return; // view not present
 
+      qLoadWorkspace();
       qRenderProjects();
-      qLoadPage(0, 0);
+      qLoadPage(QS.activeProj, QS.activePage, true);
       qSetupCanvas();
+      qSetupWorkspaceButtons();
+      qSetupDrawingControls();
       qSetupClock();
+      window.qUpdateDrawingControls();
     }
 
     // ---- CLOCK ----
@@ -2725,8 +3259,71 @@
       QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
     }
 
-    // ---- SAVE / LOAD ----
+    // =========================================================
+    // --- QUANTIS LOCAL STORAGE ENGINE ---
+    // =========================================================
+    function qWorkspaceKey() {
+      return QS.activeProj + '-' + QS.activePage;
+    }
+
+    function qSaveDrawing() {
+      if (!QD.drawCanvas) return;
+      try {
+        QS.drawings[qWorkspaceKey()] = QD.drawCanvas.toDataURL('image/png');
+      } catch (error) {
+        console.warn('No se pudo guardar el dibujo:', error);
+      }
+    }
+
+    function qLoadDrawing() {
+      if (!QD.drawCtx || !QD.drawCanvas) return;
+      QD.drawCtx.clearRect(0, 0, QD.drawCanvas.width, QD.drawCanvas.height);
+      var src = QS.drawings[qWorkspaceKey()];
+      if (!src) return;
+      var img = new Image();
+      img.onload = function() {
+        QD.drawCtx.clearRect(0, 0, QD.drawCanvas.width, QD.drawCanvas.height);
+        QD.drawCtx.drawImage(img, 0, 0);
+      };
+      img.src = src;
+    }
+
+    function qSaveWorkspace() {
+      qSavePage(false);
+      qPersistWorkspace();
+    }
+
+    function qPersistWorkspace() {
+      try {
+        localStorage.setItem('quantis_local_data', JSON.stringify({
+          projects: QS.projects,
+          canvasData: QS.canvasData,
+          drawings: QS.drawings,
+          activeProj: QS.activeProj,
+          activePage: QS.activePage
+        }));
+      } catch (error) {
+        console.warn('No se pudo guardar Quantis localmente:', error);
+      }
+    }
+
+    function qLoadWorkspace() {
+      try {
+        var raw = localStorage.getItem('quantis_local_data');
+        if (!raw) return;
+        var data = JSON.parse(raw);
+        if (Array.isArray(data.projects)) QS.projects = data.projects;
+        if (data.canvasData && typeof data.canvasData === 'object') QS.canvasData = data.canvasData;
+        if (data.drawings && typeof data.drawings === 'object') QS.drawings = data.drawings;
+        QS.activeProj = Number.isInteger(data.activeProj) ? data.activeProj : 0;
+        QS.activePage = Number.isInteger(data.activePage) ? data.activePage : 0;
+      } catch (error) {
+        console.warn('No se pudo cargar Quantis local:', error);
+      }
+    }
+
     function qSavePage() {
+      if (!QD.canvas) return;
       var key = QS.activeProj+'-'+QS.activePage;
       var els = [];
       QD.canvas.querySelectorAll('.q-canvas-el').forEach(function(blk) {
@@ -2749,20 +3346,32 @@
         }
       });
       QS.canvasData[key] = els;
+      qSaveDrawing();
+      try {
+        localStorage.setItem('quantis_local_data', JSON.stringify({
+          projects: QS.projects,
+          canvasData: QS.canvasData,
+          drawings: QS.drawings,
+          activeProj: QS.activeProj,
+          activePage: QS.activePage
+        }));
+      } catch (error) {}
     }
 
-    function qLoadPage(projIdx, pageIdx) {
-      qSavePage();
+    function qLoadPage(projIdx, pageIdx, skipCurrentSave) {
+      if (!skipCurrentSave) qSavePage();
       QS.activeProj  = projIdx;
       QS.activePage  = pageIdx;
-      QD.canvas.innerHTML = '';
+      QD.canvas.querySelectorAll('.q-canvas-el').forEach(function(el) { el.remove(); });
       var key  = projIdx+'-'+pageIdx;
       var data = QS.canvasData[key] || [];
       data.forEach(function(el) {
         if (el.type === 'text') qRecreateText(el.x, el.y, el.desc, el.content, el.isLink);
         else                    qRecreateFile(el.x, el.y, el.desc, el.fileName, el.fileType, el.fileData, el.w, el.h);
       });
+      qLoadDrawing();
       qRenderProjects();
+      qPersistWorkspace();
     }
 
     // ---- PROJECTS SIDEBAR ----
@@ -2781,7 +3390,7 @@
         addPageBtn.title = 'Nueva Página';
         addPageBtn.onclick = function(e){ e.stopPropagation(); qAddPage(pi); };
         lbl.appendChild(addPageBtn);
-        lbl.querySelector('span').onclick = function(){ var n=prompt('Renombrar proyecto:',proj.name); if(n&&n.trim()){proj.name=n.trim();qRenderProjects();} };
+        lbl.querySelector('span').onclick = function(){ var n=prompt('Renombrar proyecto:',proj.name); if(n&&n.trim()){proj.name=n.trim();qRenderProjects();qSaveWorkspace();} };
         wrap.appendChild(lbl);
         var ul = document.createElement('div');
         ul.className = 'q-page-list';
@@ -2793,7 +3402,7 @@
           var del = document.createElement('button');
           del.className = 'q-page-del';
           del.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-          del.onclick = function(e){ e.stopPropagation(); if(confirm('¿Eliminar esta página?')){ proj.pages.splice(gi,1); delete QS.canvasData[pi+'-'+gi]; if(QS.activeProj===pi&&QS.activePage===gi) qLoadPage(0,0); else qRenderProjects(); } };
+          del.onclick = function(e){ e.stopPropagation(); if(confirm('¿Eliminar esta página?')){ proj.pages.splice(gi,1); delete QS.canvasData[pi+'-'+gi]; delete QS.drawings[pi+'-'+gi]; if(QS.activeProj===pi&&QS.activePage===gi) qLoadPage(0,0); else { qRenderProjects(); qSaveWorkspace(); } } };
           li.appendChild(del);
           ul.appendChild(li);
         });
@@ -2803,14 +3412,26 @@
     }
 
     window.qAddProject = function() {
+      var limits = window.getPlanLimits ? window.getPlanLimits() : { maxQuantisProjects: 2 };
+      if (QS.projects.length >= limits.maxQuantisProjects) {
+        window.showPlanPopup('Limite de proyectos alcanzado para tu plan.');
+        return;
+      }
       var n = prompt('Nombre del nuevo proyecto:');
       if (n && n.trim()) {
-        QS.projects.push({ id:'qp-'+Date.now(), name:n.trim(), pages:[] });
+        QS.projects.push({ id:'qp-'+Date.now(), name:n.trim(), pages:['Pagina 1'] });
+        QS.canvasData[(QS.projects.length - 1)+'-0'] = [];
         qRenderProjects();
+        qSaveWorkspace();
       }
     };
 
     function qAddPage(projIdx) {
+      var limits = window.getPlanLimits ? window.getPlanLimits() : { maxQuantisPagesPerProj: 3 };
+      if (QS.projects[projIdx].pages.length >= limits.maxQuantisPagesPerProj) {
+        window.showPlanPopup('Limite de paginas por proyecto alcanzado para tu plan.');
+        return;
+      }
       var n = prompt('Nombre de la nueva página:');
       if (n && n.trim()) {
         QS.projects[projIdx].pages.push(n.trim());
@@ -2818,6 +3439,72 @@
         QS.canvasData[projIdx+'-'+newIdx] = [];
         qLoadPage(projIdx, newIdx);
       }
+    }
+
+    window.qApplyPlanLimits = function() {
+      var limits = window.getPlanLimits ? window.getPlanLimits() : { maxQuantisProjects: 2, maxQuantisPagesPerProj: 3 };
+      var prevProj = QS.activeProj;
+      var prevPage = QS.activePage;
+      if (!QS.projects.length) {
+        QS.projects = [{ id: 'qp-' + Date.now(), name: 'Proyecto 1', pages: ['Pagina 1'] }];
+        QS.canvasData['0-0'] = QS.canvasData['0-0'] || [];
+      }
+      if (QS.projects.length > limits.maxQuantisProjects) {
+        QS.projects = QS.projects.slice(0, limits.maxQuantisProjects);
+      }
+      QS.projects.forEach(function(project) {
+        if (!project.pages.length) project.pages.push('Pagina 1');
+        if (project.pages.length > limits.maxQuantisPagesPerProj) {
+          project.pages = project.pages.slice(0, limits.maxQuantisPagesPerProj);
+        }
+      });
+      QS.activeProj = Math.min(QS.activeProj, Math.max(0, QS.projects.length - 1));
+      QS.activePage = Math.min(QS.activePage, Math.max(0, (QS.projects[QS.activeProj]?.pages.length || 1) - 1));
+      if (prevProj !== QS.activeProj || prevPage !== QS.activePage) {
+        qLoadPage(QS.activeProj, QS.activePage, true);
+      } else {
+        qRenderProjects();
+        qPersistWorkspace();
+      }
+    };
+
+    function qSetupWorkspaceButtons() {
+      document.getElementById('q-export-project-btn')?.addEventListener('click', function() {
+        if (window.userPlan === 'normal') return window.showPlanPopup('Export Project requiere Extended o Premium.');
+        qSaveWorkspace();
+        var blob = new Blob([localStorage.getItem('quantis_local_data') || '{}'], { type: 'application/json;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'quantis_workspace.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+      document.getElementById('q-import-project-btn')?.addEventListener('click', function() {
+        if (window.userPlan === 'normal') return window.showPlanPopup('Import Project requiere Extended o Premium.');
+        document.getElementById('q-import-project-input')?.click();
+      });
+      document.getElementById('q-import-project-input')?.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          try {
+            var data = JSON.parse(ev.target.result);
+            if (!Array.isArray(data.projects) || !data.canvasData) throw new Error('Formato invalido');
+            QS.projects = data.projects;
+            QS.canvasData = data.canvasData || {};
+            QS.drawings = data.drawings || {};
+            QS.activeProj = 0;
+            QS.activePage = 0;
+            window.qApplyPlanLimits();
+            qLoadPage(0, 0, true);
+          } catch (error) {
+            window.showPlanPopup('Archivo Quantis invalido.');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
     }
 
     // ---- CANVAS EVENTS ----
@@ -2835,6 +3522,7 @@
       var clickT = 0, clickX = 0, clickY = 0;
       // Pan start + click tracking
       QD.viewport.addEventListener('mousedown', function(e) {
+        if (QS.drawMode) return;
         if (e.target === QD.viewport || e.target === QD.canvas) {
           if (e.button === 0) {
             QS.isPanning = true;
@@ -2858,6 +3546,7 @@
       });
       // Click to create text
       QD.viewport.addEventListener('mouseup', function(e) {
+        if (QS.drawMode) return;
         if (e.target === QD.viewport || e.target === QD.canvas) {
           if (e.button === 0) {
             var diff = Date.now() - clickT;
@@ -2886,7 +3575,108 @@
       });
     }
 
-    // ---- BLOCK FACTORY ----
+    // =========================================================
+    // --- QUANTIS DRAWING CONTROLS ---
+    // =========================================================
+    function qIsPremiumBrush() {
+      return !!(window.getPlanLimits && window.getPlanLimits().hasBrush);
+    }
+
+    function qCanvasPoint(e) {
+      var rect = QD.canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) / QS.zoom,
+        y: (e.clientY - rect.top) / QS.zoom
+      };
+    }
+
+    function qBeginDraw(e) {
+      if (!QS.drawMode) return;
+      if (!qIsPremiumBrush()) {
+        QS.drawMode = null;
+        window.qUpdateDrawingControls();
+        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        return;
+      }
+      if (!(e.target === QD.viewport || e.target === QD.canvas || e.target === QD.drawCanvas)) return;
+      e.preventDefault();
+      QS.isDrawing = true;
+      var p = qCanvasPoint(e);
+      QD.drawCtx.lineCap = 'round';
+      QD.drawCtx.lineJoin = 'round';
+      QD.drawCtx.lineWidth = QS.drawSize;
+      QD.drawCtx.strokeStyle = QS.drawColor;
+      QD.drawCtx.globalCompositeOperation = QS.drawMode === 'eraser' ? 'destination-out' : 'source-over';
+      QD.drawCtx.beginPath();
+      QD.drawCtx.moveTo(p.x, p.y);
+    }
+
+    function qMoveDraw(e) {
+      if (!QS.isDrawing || !QS.drawMode || !QD.drawCtx) return;
+      e.preventDefault();
+      var p = qCanvasPoint(e);
+      QD.drawCtx.lineTo(p.x, p.y);
+      QD.drawCtx.stroke();
+    }
+
+    function qEndDraw() {
+      if (!QS.isDrawing) return;
+      QS.isDrawing = false;
+      if (QD.drawCtx) {
+        QD.drawCtx.closePath();
+        QD.drawCtx.globalCompositeOperation = 'source-over';
+      }
+      qSaveWorkspace();
+    }
+
+    function qSetDrawMode(mode) {
+      if (!qIsPremiumBrush()) {
+        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        return;
+      }
+      QS.drawMode = QS.drawMode === mode ? null : mode;
+      window.qUpdateDrawingControls();
+    }
+
+    function qSetupDrawingControls() {
+      if (!QD.viewport || !QD.drawCtx) return;
+      QD.viewport.addEventListener('mousedown', qBeginDraw);
+      window.addEventListener('mousemove', qMoveDraw);
+      window.addEventListener('mouseup', qEndDraw);
+      document.getElementById('q-pencil-btn')?.addEventListener('click', function(){ qSetDrawMode('pencil'); });
+      document.getElementById('q-eraser-btn')?.addEventListener('click', function(){ qSetDrawMode('eraser'); });
+      document.getElementById('q-brush-size')?.addEventListener('input', function(e) {
+        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        QS.drawSize = parseInt(e.target.value, 10) || 8;
+      });
+      document.getElementById('q-color-black')?.addEventListener('click', function() {
+        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        QS.drawColor = '#000000';
+        document.getElementById('q-color-black')?.classList.add('active');
+        document.getElementById('q-color-white')?.classList.remove('active');
+      });
+      document.getElementById('q-color-white')?.addEventListener('click', function() {
+        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        QS.drawColor = '#ffffff';
+        document.getElementById('q-color-white')?.classList.add('active');
+        document.getElementById('q-color-black')?.classList.remove('active');
+      });
+    }
+
+    window.qUpdateDrawingControls = function() {
+      var hasBrush = qIsPremiumBrush();
+      document.querySelectorAll('.q-draw-tool').forEach(function(el) {
+        el.style.opacity = hasBrush ? '1' : '0.58';
+        el.title = hasBrush ? (el.title || '') : 'Premium only';
+      });
+      document.getElementById('q-pencil-btn')?.classList.toggle('active', QS.drawMode === 'pencil');
+      document.getElementById('q-eraser-btn')?.classList.toggle('active', QS.drawMode === 'eraser');
+      if (!hasBrush) QS.drawMode = null;
+    };
+
+    // =========================================================
+    // --- QUANTIS BLOCK FACTORY ---
+    // =========================================================
     function qMakeBlock(x, y, descVal) {
       var blk = document.createElement('div');
       blk.className = 'q-canvas-el';
