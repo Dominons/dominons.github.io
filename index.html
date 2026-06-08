@@ -998,603 +998,547 @@
       opacity: 0.7;
     }
     #deep-flow-view .ticker-chip {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 2px 7px;
-      background: rgba(255, 255, 255, 0.03);
-      border-left: 2px solid #00F0FF;
-      border-radius: 0 3px 3px 0;
+      gap: 6px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: calc(9px * var(--fs));
+      margin-right: 10px;
       white-space: nowrap;
-      flex-shrink: 0;
     }
-    #deep-flow-view .ticker-chip.eth-chip {
-      border-left-color: #627EEA;
-    }
-    #deep-flow-view .ticker-chip.gas-chip {
-      border-left-color: #FF8C00;
-    }
-    #deep-flow-view .ticker-label {
-      font-size: 9px;
+    #deep-flow-view .ticker-symbol {
+      color: #00F0FF;
       font-weight: 700;
-      color: #888;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
     #deep-flow-view .ticker-price {
-      font-size: calc(11px * var(--fs));
-      font-weight: 500;
-      color: #e0e0e8;
+      color: #39FF14;
+      font-weight: 600;
+      font-family: monospace;
     }
-    #deep-flow-view .ticker-change {
-      font-size: 9px;
-      font-weight: 400;
-    }
-    #deep-flow-view .ticker-change.pos {
+    #deep-flow-view .ticker-change.up {
       color: #39FF14;
     }
-    #deep-flow-view .ticker-change.neg {
+    #deep-flow-view .ticker-change.down {
       color: #FF3131;
-    }
-    #deep-flow-view .gas-unit {
-      font-size: 8px;
-      color: #FF8C00;
-      opacity: 0.7;
-    }
-    #deep-flow-view #dashboard {
-      display: flex;
-      height: calc(100vh - 36px);
-    }
-    #deep-flow-view #sidebar {
-      width: 230px;
-      min-width: 230px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 4px;
-      background: #06000e;
-      border-right: 1px solid rgba(0, 240, 255, 0.08);
-      overflow-y: auto;
-      flex-shrink: 0;
-    }
-    #deep-flow-view .sidebar-layer {
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-    #deep-flow-view .sidebar-layer.active {
-      display: flex;
-    }
-    #deep-flow-view .corner-block {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 5px 8px;
-      background: #090112;
-      border: 1px solid rgba(0, 240, 255, 0.06);
-      border-radius: 3px;
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.02), inset 0 0 8px rgba(0, 240, 255, 0.01);
-    }
-    #deep-flow-view .block-label {
-      font-size: 7px;
-      font-weight: 700;
-      color: #00F0FF;
-      letter-spacing: 1.2px;
-      opacity: 0.65;
-      margin-bottom: 3px;
-    }
-    #deep-flow-view .block-value {
-      font-size: calc(15px * var(--fs));
-      font-weight: 700;
-      color: #f0f0f5;
-      line-height: 1.2;
-      margin-bottom: 2px;
-    }
-    #deep-flow-view .block-sub {
-      font-size: 8px;
-      color: #6a6a7a;
-      margin-bottom: 3px;
-    }
-    #deep-flow-view .block-sub.pos {
-      color: #39FF14;
-    }
-    #deep-flow-view .block-sub.neg {
-      color: #FF3131;
-    }
-    #deep-flow-view .block-bar {
-      height: 3px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    #deep-flow-view .block-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.4s ease, background-color 0.4s ease;
-    }
-    #deep-flow-view .ratio-bar {
-      display: flex;
-      height: 4px;
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 2px;
-    }
-    #deep-flow-view .ratio-buy {
-      background: #39FF14;
-      transition: width 0.4s ease;
-    }
-    #deep-flow-view .ratio-sell {
-      background: #FF3131;
-      transition: width 0.4s ease;
-    }
-    #deep-flow-view .ratio-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 7px;
-      font-weight: 500;
-    }
-    #deep-flow-view .ratio-buy-label {
-      color: #39FF14;
-    }
-    #deep-flow-view .ratio-sell-label {
-      color: #FF3131;
-    }
-    #deep-flow-view .hot-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-    #deep-flow-view .hot-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 8px;
-    }
-    #deep-flow-view .hot-rank {
-      color: #555;
-      width: 12px;
-      flex-shrink: 0;
-      text-align: right;
-    }
-    #deep-flow-view .hot-name {
-      color: #a0a0b0;
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    #deep-flow-view .hot-gas {
-      color: #FF8C00;
-      flex-shrink: 0;
-    }
-    #deep-flow-view .bn-vivid-block {
-      border: 1px solid rgba(240, 185, 11, 0.3);
-      background: linear-gradient(135deg, #090112 0%, #10081a 100%);
-    }
-    #deep-flow-view .bn-vivid-block .block-label {
-      color: #00F0FF;
-      opacity: 1;
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 4px rgba(0, 240, 255, 0.4);
-    }
-    #deep-flow-view .bn-vivid-block .block-value {
-      color: #F0B90B;
-      font-weight: 900;
-      text-shadow: 0 0 10px rgba(240, 185, 11, 0.6);
-      font-size: calc(16px * var(--fs));
-    }
-    #deep-flow-view #ledger-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      background: #000;
     }
     #deep-flow-view #ledger-header {
       display: flex;
       align-items: center;
-      height: 24px;
-      padding: 0 8px;
-      background: #0a0014;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.12);
-      flex-shrink: 0;
-    }
-    #deep-flow-view #ledger-header > span {
-      font-size: 8px;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #050008;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+      font-size: calc(10px * var(--fs));
       font-weight: 700;
-      color: #00F0FF;
-      letter-spacing: 1.2px;
-      opacity: 0.6;
-    }
-    #deep-flow-view .sort-header {
+      letter-spacing: 0.5px;
       cursor: pointer;
       user-select: none;
+    }
+    #deep-flow-view #ledger-header > div {
       display: flex;
       align-items: center;
-      gap: 3px;
-    }
-    #deep-flow-view .sort-header:hover {
-      opacity: 1 !important;
+      gap: 6px;
+      color: #00F0FF;
     }
     #deep-flow-view .sort-arrow {
-      font-size: 7px;
-      color: #00F0FF;
-      opacity: 0.9;
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-left: 4px;
+      opacity: 0.3;
+      transition: opacity 0.2s;
     }
-    #deep-flow-view .col-value {
-      width: 100px;
-      text-align: right;
-      transition: width 0.2s;
-    }
-    #deep-flow-view .col-asset {
-      width: 65px;
-      text-align: center;
-      transition: width 0.2s;
-    }
-    #deep-flow-view .col-action {
-      width: 100px;
-      text-align: center;
-      transition: width 0.2s;
-    }
-    #deep-flow-view .col-flow {
-      flex: 1;
-      padding-left: 8px;
-      transition: width 0.2s;
-    }
-    #deep-flow-view .col-time {
-      width: 60px;
-      text-align: right;
-    }
-    #deep-flow-view .binance-mode .col-value {
-      width: auto;
-      flex: 1;
-    }
-    #deep-flow-view .binance-mode .col-asset {
-      width: 85px;
-    }
-    #deep-flow-view .binance-mode .col-action {
-      width: 115px;
-    }
-    #deep-flow-view .binance-mode .col-flow {
-      width: 95px;
-      flex: none;
-      padding-left: 8px;
-    }
-    #deep-flow-view #macro-filters {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      height: 22px;
-      padding: 0 8px;
-      background: #030008;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.04);
-      flex-shrink: 0;
-    }
-    #deep-flow-view .mf-btn {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: #444;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 7px;
-      font-weight: 700;
-      padding: 2px 7px;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      border-radius: 2px;
-      transition: all 0.15s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    #deep-flow-view .mf-btn:hover {
-      color: #777;
-      border-color: rgba(0, 240, 255, 0.2);
-    }
-    #deep-flow-view .mf-btn.active {
-      color: #00F0FF;
-      border-color: rgba(0, 240, 255, 0.4);
-      background: rgba(0, 240, 255, 0.06);
-    }
-    #deep-flow-view #filter-bar {
-      width: 100%;
-      height: 22px;
-      background: #030008;
-      border: none;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.06);
-      color: #c0c0cc;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: calc(10px * var(--fs));
-      padding: 0 8px;
-      outline: none;
-      flex-shrink: 0;
-      transition: border-bottom-color 0.2s;
-    }
-    #deep-flow-view #filter-bar:focus {
-      border-bottom-color: rgba(0, 240, 255, 0.3);
-    }
-    #deep-flow-view #filter-bar::placeholder {
-      color: #2a2a3a;
-      letter-spacing: 1.5px;
-      font-size: 9px;
+    #deep-flow-view .sort-arrow.active {
+      opacity: 1;
+      color: #39FF14;
     }
     #deep-flow-view #ledger-body {
       flex: 1;
       overflow-y: auto;
-      overflow-x: hidden;
-      contain: strict;
-    }
-    #deep-flow-view .scroll-sentinel {
-      height: 1px;
-      width: 100%;
-      flex-shrink: 0;
-    }
-    #deep-flow-view .no-results {
-      padding: 30px 10px;
-      color: #333;
-      text-align: center;
       font-size: calc(10px * var(--fs));
-      letter-spacing: 1px;
-    }
-    #deep-flow-view #ledger-body .row {
-      display: flex;
-      align-items: center;
-      height: 26px;
-      padding: 0 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-      border-left: 2px solid transparent;
-      cursor: pointer;
-    }
-    #deep-flow-view #ledger-body .row:hover {
-      background: rgba(0, 240, 255, 0.05);
-    }
-    #deep-flow-view #ledger-body .row.active {
-      background: rgba(0, 240, 255, 0.08);
-      border-left-color: #00F0FF;
-    }
-    #deep-flow-view #ledger-body .row.live-new {
-      border-left-color: #39FF14;
-    }
-    #deep-flow-view #ledger-body .row.live-new.anomaly {
-      border-left-color: #FF007F;
-    }
-    #deep-flow-view .rv {
-      text-align: right;
-      width: 100px;
-      font-weight: 500;
-      color: #e0e0e8;
-      flex-shrink: 0;
-      transition: width 0.2s, flex 0.2s;
-    }
-    #deep-flow-view .rv.anomaly {
-      color: #FF007F;
-      text-shadow: 0 0 6px rgba(255, 0, 127, 0.3);
-    }
-    #deep-flow-view .binance-mode .rv {
-      width: auto;
-      flex: 1;
-    }
-    #deep-flow-view .token-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 1px 4px;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.04);
-      white-space: nowrap;
-    }
-    #deep-flow-view .token-icon {
-      width: 13px;
-      height: 13px;
-      border-radius: 2px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 8px;
-      font-weight: 700;
-      color: #000;
-      flex-shrink: 0;
-    }
-    #deep-flow-view .token-ticker {
-      font-size: calc(9px * var(--fs));
-      font-weight: 500;
-      color: #d0d0d8;
-    }
-    #deep-flow-view .action-tag {
-      display: inline-block;
-      padding: 0 4px;
-      border-left: 2px solid;
-      font-size: 8px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 94px;
       line-height: 1.6;
     }
-    #deep-flow-view #ledger-body .rf {
-      flex: 1;
-      padding-left: 8px;
-      color: #5a5a6e;
-      font-size: calc(10px * var(--fs));
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      transition: width 0.2s, flex 0.2s;
-    }
-    #deep-flow-view .binance-mode .rf {
-      width: 95px;
-      flex: none;
-    }
-    #deep-flow-view #ledger-body .rt {
-      text-align: right;
-      width: 60px;
-      color: #7a7a8e;
-      font-size: calc(10px * var(--fs));
-      flex-shrink: 0;
-    }
-    #deep-flow-view .submenu {
-      display: none;
-      margin-left: 14px;
-      padding: 6px 10px;
-      background: rgba(9, 1, 18, 0.9);
-      border-left: 2px solid rgba(0, 240, 255, 0.2);
+    #deep-flow-view .ledger-row {
+      padding: 8px 10px;
       border-bottom: 1px solid rgba(0, 240, 255, 0.06);
-    }
-    #deep-flow-view .submenu.open {
-      display: block;
-    }
-    #deep-flow-view .sub-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 2px 0;
-      font-size: calc(10px * var(--fs));
-    }
-    #deep-flow-view .sub-label {
-      color: #5a5a6e;
-      min-width: 72px;
-      flex-shrink: 0;
-      padding-top: 1px;
-    }
-    #deep-flow-view .sub-val {
-      color: #c0c0cc;
-      word-break: break-word;
-      line-height: 1.5;
-    }
-    #deep-flow-view .sub-val.deep-meta {
-      color: #d0d0dd;
-      font-size: calc(9.5px * var(--fs));
-    }
-    #deep-flow-view .hash-clickable {
-      color: #00F0FF;
-      cursor: pointer;
-      text-decoration: none;
-      user-select: none;
-    }
-    #deep-flow-view .hash-clickable:hover {
-      text-decoration: underline;
-    }
-    #deep-flow-view .sub-analysis {
-      margin-top: 5px;
-      padding: 5px 8px;
-      border-left: 2px solid rgba(255, 215, 0, 0.5);
-      background: rgba(255, 215, 0, 0.025);
-      border-radius: 0 2px 2px 0;
-    }
-    #deep-flow-view .sub-analysis-label {
-      font-size: 8px;
-      font-weight: 700;
-      color: #FFD700;
-      letter-spacing: 0.8px;
-      margin-bottom: 3px;
-      opacity: 0.85;
-    }
-    #deep-flow-view .sub-analysis-text {
-      font-size: calc(9.5px * var(--fs));
-      line-height: 1.55;
-      color: #9a9aaa;
-      font-weight: 300;
-    }
-    #deep-flow-view .loading {
-      opacity: 0.3;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3 }
-      50% { opacity: 0.6 }
-    }
-    @media(max-width: 700px) {
-      #deep-flow-view #sidebar { display: none; }
-    }
-
-    /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAZ ========== */
-    #musicPanel {
-      position: fixed;
-      top: 60px;
-      right: 20px;
-      background: #1F1F1F;
-      border: 2px solid var(--color-highlight);
-      padding: 15px;
-      border-radius: 8px;
-      z-index: 10000;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      min-width: 280px;
-    }
-    #musicPanel.hidden {
-      display: none !important;
-    }
-    .music-player-panel {
-      position: relative !important;
-      top: 0 !important;
-      right: 0 !important;
-      background: transparent !important;
-      border: none !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      min-width: auto !important;
-    }
-    .player-header {
-      text-align: center;
-      margin-bottom: 12px;
-      font-size: 0.8em;
-      color: var(--color-highlight);
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-    .player-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .progress-time {
       display: flex;
       justify-content: space-between;
-      font-size: 0.7em;
-      color: #AAA;
-      margin-bottom: 6px;
-    }
-    .progress-bar-container {
-      margin-bottom: 12px;
-    }
-    .progress-bar {
-      width: 100%;
-      height: 5px;
-      accent-color: var(--color-highlight);
+      align-items: center;
       cursor: pointer;
-      border-radius: 2px;
+      transition: background 0.15s;
+      color: #c8c8d0;
     }
-    .volume-control {
+    #deep-flow-view .ledger-row:hover {
+      background: rgba(0, 240, 255, 0.04);
+    }
+    #deep-flow-view .ledger-row.selected {
+      background: rgba(0, 240, 255, 0.08);
+      border-left: 3px solid #00F0FF;
+    }
+    #deep-flow-view .ledger-symbol {
+      font-weight: 700;
+      color: #00F0FF;
+      min-width: 80px;
+      letter-spacing: 0.5px;
+    }
+    #deep-flow-view .ledger-price {
+      font-family: monospace;
+      color: #39FF14;
+      text-align: right;
+      min-width: 100px;
+    }
+    #deep-flow-view .ledger-change {
+      text-align: right;
+      min-width: 80px;
+      font-weight: 600;
+    }
+    #deep-flow-view .ledger-change.up {
+      color: #39FF14;
+    }
+    #deep-flow-view .ledger-change.down {
+      color: #FF3131;
+    }
+    #deep-flow-view .ledger-volume {
+      text-align: right;
+      min-width: 120px;
+      font-family: monospace;
+      color: #d4d4d8;
+    }
+    #deep-flow-view #filter-bar {
+      padding: 6px 10px;
+      background: #050008;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 10px;
     }
-    .volume-control i {
-      color: var(--color-highlight);
+    #deep-flow-view #filter-bar input {
+      flex: 1;
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      color: #00F0FF;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: calc(9px * var(--fs));
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #deep-flow-view #filter-bar input::placeholder {
+      color: rgba(0, 240, 255, 0.4);
+    }
+    #deep-flow-view #filter-bar input:focus {
+      outline: none;
+      border-color: rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 4px rgba(0, 240, 255, 0.2);
+    }
+    #deep-flow-view #macro-filters {
+      display: flex;
+      gap: 4px;
+    }
+    #deep-flow-view .macro-btn {
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: #00F0FF;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+    #deep-flow-view .macro-btn:hover {
+      border-color: rgba(0, 240, 255, 0.5);
+      background: rgba(0, 240, 255, 0.06);
+    }
+    #deep-flow-view .macro-btn.active {
+      border-color: #39FF14;
+      color: #39FF14;
+      box-shadow: 0 0 4px rgba(57, 255, 20, 0.3);
+    }
+    #deep-flow-view #ssr-info {
+      padding: 8px 10px;
+      background: rgba(0, 240, 255, 0.04);
+      border-top: 1px solid rgba(0, 240, 255, 0.1);
+      font-size: calc(9px * var(--fs));
+      color: #6a6a7a;
+      line-height: 1.5;
+      text-align: center;
+    }
+    #deep-flow-view .onchain-sidebar {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 36px;
+      width: 280px;
+      height: calc(100vh - 36px);
+      background: #050008;
+      border-left: 1px solid rgba(0, 240, 255, 0.1);
+      box-shadow: inset 2px 0 8px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+      z-index: 8;
+      padding: 10px 0;
+    }
+    #deep-flow-view .onchain-sidebar.open {
+      display: block;
+    }
+    #deep-flow-view .onchain-section {
+      padding: 10px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.08);
+    }
+    #deep-flow-view .onchain-title {
+      color: #00F0FF;
+      font-weight: 700;
+      font-size: calc(9px * var(--fs));
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      text-shadow: 0 0 4px rgba(0, 240, 255, 0.2);
+    }
+    #deep-flow-view .onchain-metric {
+      display: flex;
+      justify-content: space-between;
+      font-size: calc(8px * var(--fs));
+      color: #c8c8d0;
+      margin-bottom: 4px;
+    }
+    #deep-flow-view .onchain-metric .label {
+      color: #6a6a7a;
+    }
+    #deep-flow-view .onchain-metric .value {
+      font-weight: 600;
+      color: #39FF14;
+      font-family: monospace;
+    }
+    #deep-flow-view .onchain-detail {
+      background: rgba(0, 240, 255, 0.04);
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      border-radius: 3px;
+      padding: 6px;
+      margin-bottom: 6px;
+      font-size: calc(8px * var(--fs));
+      color: #c8c8d0;
+    }
+    @media (max-width: 1400px) {
+      #deep-flow-view .onchain-sidebar {
+        width: 250px;
+      }
+    }
+    @media (max-width: 1024px) {
+      #deep-flow-view {
+        --fs: 0.9;
+      }
+      #deep-flow-view .onchain-sidebar {
+        display: none !important;
+      }
+    }
+    @media (max-width: 768px) {
+      #deep-flow-view {
+        --fs: 0.8;
+      }
+      #deep-flow-view #ledger-header > div:nth-child(3),
+      #deep-flow-view #ledger-header > div:nth-child(4) {
+        display: none;
+      }
+      #deep-flow-view .ledger-volume {
+        display: none;
+      }
+    }
+    @media (max-width: 480px) {
+      #deep-flow-view {
+        --fs: 0.7;
+      }
+      #deep-flow-view #ledger-header > div:nth-child(2),
+      #deep-flow-view #ledger-header > div:nth-child(3),
+      #deep-flow-view #ledger-header > div:nth-child(4) {
+        display: none;
+      }
+      #deep-flow-view .ledger-change,
+      #deep-flow-view .ledger-volume {
+        display: none;
+      }
+    }
+    #quantis-view {
+      position: absolute;
+      inset: 0;
+      display: none;
+      z-index: 1;
+      background: #1a1a2e;
+      color: #eaeaea;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    #quantis-view.light-theme {
+      background: #f4f4f5;
+      color: #18181b;
+    }
+    #quantis-view.purple-theme {
+      --color-highlight: #A855F7;
+    }
+    #quantis-view.green-theme {
+      --color-highlight: #39FF14;
+    }
+    #quantis-view.green-theme .q-tab-btn.active,
+    #quantis-view.red-theme .q-tab-btn.active,
+    #quantis-view.blue-theme .q-tab-btn.active {
+      color: #000000;
+    }
+    #quantis-view.red-theme {
+      --color-highlight: #FF3131;
+    }
+    #quantis-view.blue-theme {
+      --color-highlight: #00AEEF;
+    }
+    #quantis-view .q-container {
+      width: 100%;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: inherit;
+      color: inherit;
+    }
+    #quantis-view .q-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background: var(--color-header-bg, #282828);
+      border-bottom: 2px solid var(--color-highlight, #A855F7);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    #quantis-view .q-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #quantis-view .q-logo {
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--color-highlight, #A855F7);
+    }
+    #quantis-view .q-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    #quantis-view .q-user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background: var(--color-input-bg, #333);
+      border: 1px solid var(--color-border, #444);
+      border-radius: 20px;
       font-size: 0.85em;
     }
-    .volume-slider {
-      flex: 1;
-      height: 4px;
-      accent-color: var(--color-highlight);
-      cursor: pointer;
-      border-radius: 2px;
+    #quantis-view .q-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--color-highlight, #A855F7);
+      object-fit: cover;
     }
-    #youtube-player {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
+    #quantis-view .q-user-name {
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #quantis-view .q-logout-btn {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #quantis-view .q-logout-btn:hover {
+      background: #b91c1c;
+    }
+    #quantis-view .q-box {
+      border: 1px solid var(--color-border, #444);
+      padding: 4px 10px;
+      background: var(--color-input-bg, #333);
+      border-radius: 4px;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+    #quantis-view .q-main {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 15px;
+      gap: 15px;
+    }
+    #quantis-view .q-canvas-panel {
+      border: 2px solid var(--color-highlight, #A855F7);
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--color-input-bg, #333);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+      flex-shrink: 0;
+    }
+    #quantis-view .q-canvas-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border, #444);
+    }
+    #quantis-view .q-canvas-header h2 {
+      color: var(--color-highlight, #A855F7);
+      margin: 0;
+      font-size: 1.1em;
+    }
+    #quantis-view .q-canvas-tools {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #quantis-view .q-tool-btn {
+      background: var(--color-input-bg, #333);
+      border: 1px solid var(--color-border, #444);
+      color: var(--color-text, #eaeaea);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+      transition: all 0.2s;
+    }
+    #quantis-view .q-tool-btn:hover {
+      background: #444;
+      border-color: var(--color-highlight, #A855F7);
+    }
+    #quantis-view .q-tool-btn.active {
+      background: var(--color-highlight, #A855F7);
+      color: var(--color-dark-bg, #1A1A1A);
+      font-weight: bold;
+    }
+    #quantis-view #quantis-canvas {
+      flex: 1;
+      border: 1px solid var(--color-border, #444);
+      border-radius: 4px;
+      background: #0D0D0D;
+      cursor: crosshair;
+    }
+    #quantis-view .q-sidebar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    #quantis-view .q-sidebar-panel {
+      flex: 1;
+      min-width: 300px;
+      border: 2px solid var(--color-highlight, #A855F7);
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--color-input-bg, #333);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+    }
+    #quantis-view .q-sidebar-panel h3 {
+      color: var(--color-highlight, #A855F7);
+      margin: 0 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border, #444);
+      font-size: 1em;
+    }
+    #quantis-view .q-sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.85em;
+      line-height: 1.6;
+    }
+    #quantis-view .q-sidebar-content p {
+      margin: 0 0 8px;
+      color: var(--color-text, #eaeaea);
+    }
+    #quantis-view .q-sidebar-content code {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border, #444);
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-family: 'Segoe UI', monospace;
+      color: var(--color-highlight, #A855F7);
+    }
+    #quantis-view .q-undo-btn,
+    #quantis-view .q-redo-btn {
+      background: var(--color-input-bg, #333);
+      border: 1px solid var(--color-border, #444);
+      color: var(--color-text, #eaeaea);
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    #quantis-view .q-undo-btn:hover,
+    #quantis-view .q-redo-btn:hover {
+      background: #444;
+      border-color: var(--color-highlight, #A855F7);
+    }
+    @media (max-width: 1024px) {
+      #quantis-view .q-header-right {
+        gap: 6px;
+      }
+      #quantis-view .q-canvas-panel {
+        height: 350px;
+      }
+      #quantis-view .q-sidebar {
+        flex-direction: column;
+      }
+      #quantis-view .q-sidebar-panel {
+        min-width: auto;
+      }
+    }
+    @media (max-width: 768px) {
+      #quantis-view .q-main {
+        padding: 10px;
+        gap: 10px;
+      }
+      #quantis-view .q-canvas-panel {
+        height: 280px;
+      }
+    }
+    @media (max-width: 480px) {
+      #quantis-view .q-header {
+        padding: 8px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #quantis-view .q-header-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      #quantis-view .q-user-name {
+        display: none;
+      }
+      #quantis-view .q-canvas-panel {
+        height: 200px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- PANTALLA DE AUTENTICACIN (FIREBASE) -->
+  <!-- LOGIN SCREEN -->
   <div id="loginScreen">
     <div class="login-container">
       <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
@@ -1606,44 +1550,46 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesin con Google
+        Iniciar sesión con Google
       </button>
     </div>
   </div>
 
-  <!-- VISTA SPA 1: DOMINON DASHBOARD -->
+  <!-- MAIN DASHBOARD VIEW -->
   <div id="main-dashboard-view">
-    <div class="container hidden" id="mainApp">
+    <div class="container">
       <div class="top-bar">
         <div class="top-left">
           <div class="box" id="fecha-hora">Cargando...</div>
-          <button id="toggle-view-to-flow" class="music-btn" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW" style="background: var(--color-input-bg); color: #00F0FF; border: 1px solid #00F0FF;">
-            <i class="fa-solid fa-chart-line"></i> DEEP FLOW
-          </button>
-          <button id="toggle-view-to-quantis" class="music-btn" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas" style="background: var(--color-input-bg); color: #A855F7; border: 1px solid #A855F7;">
-            <i class="fa-solid fa-infinity"></i> QUANTIS
-          </button>
-          <button id="openPlansBtn" class="music-btn" title="Planes">
-            <i class="fa-solid fa-gem"></i> PLANES
-          </button>
         </div>
         <div class="top-right">
           <div class="user-info" id="userInfo">
             <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
             <span class="user-name" id="userName"></span>
-            <button class="logout-btn" id="logoutBtn" title="Cerrar sesin">
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </div>
-          <button class="icon-square-btn" id="dominonConfigBtn" title="Configuracion">
-            <i class="fa-solid fa-gear"></i>
+          <div class="theme-buttons">
+            <button class="theme-btn black" onclick="setTheme('#000000', 'main-dashboard-view')" title="Negro"></button>
+            <button class="theme-btn white" onclick="setTheme('#FFFFFF', 'main-dashboard-view')" title="Blanco"></button>
+            <button class="theme-btn purple" onclick="setTheme('#A855F7', 'main-dashboard-view')" title="Morado"></button>
+            <button class="theme-btn green" onclick="setTheme('#39FF14', 'main-dashboard-view')" title="Verde"></button>
+            <button class="theme-btn red" onclick="setTheme('#FF3131', 'main-dashboard-view')" title="Rojo"></button>
+            <button class="theme-btn blue" onclick="setTheme('#00AEEF', 'main-dashboard-view')" title="Azul"></button>
+          </div>
+          <button class="icon-square-btn" id="dominonConfigBtn" title="Config">
+            <i class="fas fa-cog"></i>
+          </button>
+          <button class="icon-square-btn" id="dominonPlansBtn" title="Planes">
+            <i class="fas fa-star"></i>
           </button>
           <div class="music-container">
-            <div class="song-display">
-              <span id="songTitle" class="song-marquee">Listo para Play</span>
-            </div>
             <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
               <i class="fa-solid fa-music"></i>
+            </button>
+            <button class="music-btn" id="geminiPanelToggle" title="Gemini AI">
+              <i class="fa-solid fa-sparkles"></i>
             </button>
           </div>
         </div>
@@ -1652,7 +1598,7 @@
       <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
-            <h2>Mini-Grfico</h2>
+            <h2>Mini-Gráfico</h2>
             <select class="symbol-selector" id="symbolSelect" onchange="changeSymbol()">
               <option value="BINANCE:USDTARS">USDT/ARS</option>
               <option value="FOREXCOM:XAUUSD">Oro (XAU/USD)</option>
@@ -1662,31 +1608,23 @@
               <option value="BITSTAMP:BTCUSD">Bitcoin (BTC/USD)</option>
               <option value="BITSTAMP:ETHUSD">Ethereum (ETH/USD)</option>
               <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-              <option value="FOREXCOM:XAGUSD">Plata (XAG/USD)</option>
-              <option value="FOREXCOM:WTIUSD">Petrleo (WTI/USD)</option>
+              <option value="FOREXCOM:WTIUSD">Petróleo (WTI/USD)</option>
               <option value="FOREXCOM:NGAS">Gas Natural</option>
             </select>
           </div>
           <iframe class="chart-iframe" id="tradingViewChart"
-            src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
+            src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=1&hide_legend=1&range=1M"
             frameborder="0" allowfullscreen></iframe>
         </div>
 
         <div class="notepad-panel">
           <div class="notepad-header-row">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;flex-wrap:wrap;">
-              <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
-              <div class="notepad-actions" id="notepadActions">
-                <button class="notepad-file-btn" id="exportNoteBtn" type="button"><i class="fa-solid fa-file-export"></i> Export</button>
-                <button class="notepad-file-btn" id="importNoteBtn" type="button"><i class="fa-solid fa-file-import"></i> Import</button>
-                <input type="file" id="importNoteInput" accept=".txt,text/plain" style="display:none;">
-              </div>
-            </div>
+            <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
             <div class="notepad-tabs" id="notepad-tabs">
-              <!-- Pestaas dinmicas -->
+              <!-- Se generan dinámicamente con JavaScript -->
             </div>
           </div>
-          <textarea id="notepad" placeholder="Escribe tus notas aqu..."></textarea>
+          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
         </div>
 
         <div class="bottom-container">
@@ -1695,33 +1633,13 @@
             <div id="display" class="calc-display">0</div>
             <div class="calculator-grid">
               <button class="calc-button clear" onclick="clearDisplay()">C</button>
-              <button class="calc-button" onclick="backspace()">⌫</button>
-              <button class="calc-button operator" onclick="percentage()">%</button>
-              <button class="calc-button operator" onclick="appendOperator('/')">÷</button>
-              <button class="calc-button" onclick="appendNumber('7')">7</button>
-              <button class="calc-button" onclick="appendNumber('8')">8</button>
-              <button class="calc-button" onclick="appendNumber('9')">9</button>
-              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
-              <button class="calc-button" onclick="appendNumber('4')">4</button>
-              <button class="calc-button" onclick="appendNumber('5')">5</button>
-              <button class="calc-button" onclick="appendNumber('6')">6</button>
-              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
-              <button class="calc-button" onclick="appendNumber('1')">1</button>
-              <button class="calc-button" onclick="appendNumber('2')">2</button>
-              <button class="calc-button" onclick="appendNumber('3')">3</button>
-              <button class="calc-button operator" onclick="appendOperator('+')">+</button>
-              <button class="calc-button zero" onclick="appendNumber('0')">0</button>
-              <button class="calc-button" onclick="appendNumber('.')">.</button>
-              <button class="calc-button equals" onclick="calculate()">=</button>
-              <!-- Legacy calculator layout removed by membership refactor. -->
-              <template>
-              <button class="calc-button" onclick="backspace()">?</button>
+              <button class="calc-button" onclick="backspace()">←</button>
               <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-              <button class="calc-button operator" onclick="appendOperator('*')"></button>
+              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
               <button class="calc-button" onclick="appendNumber('7')">7</button>
               <button class="calc-button" onclick="appendNumber('8')">8</button>
               <button class="calc-button" onclick="appendNumber('9')">9</button>
-              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+              <button class="calc-button operator" onclick="appendOperator('-')">−</button>
               <button class="calc-button" onclick="appendNumber('4')">4</button>
               <button class="calc-button" onclick="appendNumber('5')">5</button>
               <button class="calc-button" onclick="appendNumber('6')">6</button>
@@ -1732,7 +1650,6 @@
               <button class="calc-button equals" onclick="calculate()">=</button>
               <button class="calc-button zero" onclick="appendNumber('0')">0</button>
               <button class="calc-button" onclick="appendNumber('.')">.</button>
-              </template>
             </div>
           </div>
 
@@ -1748,943 +1665,86 @@
           </div>
         </div>
 
-        <section class="gemini-panel" id="geminiAssistantPanel">
-          <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant</h2>
-          <div class="gemini-history" id="geminiChatHistory"></div>
+        <!-- GEMINI PANEL -->
+        <div class="gemini-panel">
+          <h2>Gemini AI Assistant</h2>
           <div class="gemini-settings">
-            <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
-            <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-            <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+            <input type="password" id="geminiApiKeyInput" placeholder="Pega tu Google AI Studio API Key...">
+            <button class="gemini-btn" id="saveGeminiKeyBtn">Guardar</button>
+            <button class="gemini-btn" id="deleteGeminiKeyBtn" style="background: #DC2626;">Eliminar</button>
           </div>
+          <div id="geminiChatHistory" class="gemini-history"></div>
           <div class="gemini-input-row">
-            <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
-            <button class="gemini-btn" id="sendGeminiBtn" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+            <textarea id="geminiPromptInput" placeholder="Escribe tu pregunta para Gemini..."></textarea>
+            <button class="gemini-btn" id="sendGeminiBtn">Enviar</button>
           </div>
-        </section>
+        </div>
       </main>
     </div>
   </div>
 
-  <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
+  <!-- DEEP FLOW VIEW (Hidden by default) -->
   <div id="deep-flow-view" class="hidden-view">
-    <header id="hdr">
-      <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span>
-      <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
-      <button class="ctrl-btn" id="sound-toggle">SND ON</button>
-      <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
-      <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
-      <button class="ctrl-btn" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">DOMINON</button>
-      <button class="ctrl-btn" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')" style="border-color:#A855F7; color:#A855F7; font-weight:bold; text-shadow:0 0 4px rgba(168,85,247,0.4);">QUANTIS</button>
-      <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
-      <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
-      <span id="hdr-date"></span><span id="hdr-clock"></span>
-      <div class="ticker-chip"><span class="ticker-label">BTC</span><span class="ticker-price" id="btc-price">---</span><span class="ticker-change" id="btc-change"></span></div>
-      <div class="ticker-chip eth-chip"><span class="ticker-label">ETH</span><span class="ticker-price" id="eth-price">---</span><span class="ticker-change" id="eth-change"></span></div>
-      <div class="ticker-chip gas-chip"><span class="ticker-label">GAS</span><span class="ticker-price" id="gas-value">--</span><span class="gas-unit">Gwei</span></div>
-    </header>
-    <main id="dashboard">
-      <aside id="sidebar">
-        <div id="sidebar-onchain" class="sidebar-layer active">
-          <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div><div class="block-value" id="vol-value">0</div><div class="block-bar"><div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div><div class="block-value" id="ssr-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div><div class="ratio-bar"><div class="ratio-buy" id="ratio-buy" style="width:50%;"></div><div class="ratio-sell" id="ratio-sell" style="width:50%;"></div></div><div class="ratio-labels"><span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span><span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div><div class="hot-list" id="hot-list"></div></div>
-        </div>
-        <div id="sidebar-binance" class="sidebar-layer">
-          <div class="corner-block"><div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div><div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div><div class="block-sub" id="bn-volume-change"></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div><div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div><div class="block-bar" style="margin-top:4px;"><div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div></div><div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div><div class="hot-list" id="bn-pairs-list"></div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">FUTURES OPEN INT.</div><div class="block-value" id="bn-oi-value">$18.4B</div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">TOP FUTURES PAIR</div><div class="block-value">BTC/USDT</div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">BTC DOMINANCE</div><div class="block-value" id="btc-dom-value-2">52.4%</div></div>
-        </div>
-      </aside>
-      <section id="ledger-section">
-        <div id="ledger-header">
-          <span class="col-value sort-header" id="sort-value" data-sort="value"><span data-i18n="value">VALUE (USD)</span><span class="sort-arrow" id="arrow-value">&#9660;</span></span>
-          <span class="col-asset" data-i18n="asset">ASSET</span><span class="col-action" data-i18n="action">ACTION</span><span class="col-flow" data-i18n="fromTo">FROM / TO</span>
-          <span class="col-time sort-header" id="sort-time" data-sort="timestamp"><span data-i18n="time">TIME</span><span class="sort-arrow" id="arrow-time"></span></span>
-        </div>
-        <div id="macro-filters">
-          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="swaps" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="yield" data-i18n="yieldOnly">YIELD ONLY</button>
-        </div>
-        <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
-        <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
-      </section>
-    </main>
+    <!-- Deep Flow content will be rendered here by JavaScript -->
   </div>
 
-  <!-- VISTA SPA 3: QUANTIS CANVAS -->
+  <!-- QUANTIS VIEW (Hidden by default) -->
   <div id="quantis-view" class="hidden-view">
-    <style>
-      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
-      #quantis-view {
-        --quantis-bg: #0b0c10;
-        --quantis-header-bg: #111318;
-        --quantis-sidebar-bg: #0e0f14;
-        --quantis-surface-bg: #111318;
-        --quantis-text: #e4e4e7;
-        --quantis-muted: #71717a;
-        --quantis-faint: #52525b;
-        --quantis-border: rgba(168,85,247,0.2);
-        --quantis-grid-dot: rgba(168,85,247,0.07);
-        --quantis-shadow: rgba(0,0,0,0.5);
-        --quantis-accent: #A855F7;
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background: var(--quantis-bg);
-        color: var(--quantis-text);
-        font-family: 'JetBrains Mono', monospace;
-        overflow: hidden;
-      }
-      #quantis-view.light-theme {
-        --quantis-bg: #f4f4f5;
-        --quantis-header-bg: #ffffff;
-        --quantis-sidebar-bg: #fafafa;
-        --quantis-surface-bg: #ffffff;
-        --quantis-text: #18181b;
-        --quantis-muted: #52525b;
-        --quantis-faint: #71717a;
-        --quantis-border: rgba(168,85,247,0.22);
-        --quantis-grid-dot: rgba(168,85,247,0.14);
-        --quantis-shadow: rgba(15,23,42,0.12);
-      }
-      #quantis-view.hidden-view { display: none !important; }
-
-      #quantis-header {
-        height: 48px;
-        background: var(--quantis-header-bg);
-        border-bottom: 1px solid rgba(168, 85, 247, 0.25);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 18px;
-        flex-shrink: 0;
-        z-index: 30;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.5);
-      }
-      #quantis-nav-left {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      #quantis-brand {
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 900;
-        font-size: 13px;
-        letter-spacing: 3px;
-        color: var(--quantis-accent);
-        text-shadow: 0 0 8px rgba(168,85,247,0.5);
-        margin-right: 14px;
-        user-select: none;
-      }
-      .q-nav-btn {
-        background: transparent;
-        border: 1px solid rgba(168,85,247,0.3);
-        color: var(--quantis-muted);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 1.2px;
-        padding: 4px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-      }
-      .q-nav-btn:hover {
-        border-color: var(--quantis-accent);
-        color: var(--quantis-accent);
-        background: rgba(168,85,247,0.08);
-        text-shadow: 0 0 4px rgba(168,85,247,0.4);
-      }
-      .q-nav-btn.active-view {
-        background: rgba(168,85,247,0.15);
-        border-color: var(--quantis-accent);
-        color: var(--quantis-accent);
-      }
-      #quantis-nav-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      #quantis-clock {
-        font-size: 11px;
-        letter-spacing: 1.5px;
-        color: var(--quantis-faint);
-        user-select: none;
-      }
-      #toggleMusicPanelQuantis {
-        background: transparent;
-        border: 1px solid rgba(168,85,247,0.35);
-        color: var(--quantis-accent);
-        font-size: 13px;
-        width: 30px;
-        height: 30px;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.15s;
-      }
-      #toggleMusicPanelQuantis:hover {
-        background: rgba(168,85,247,0.15);
-        box-shadow: 0 0 6px rgba(168,85,247,0.3);
-      }
-      #quantis-tools {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      #quantis-tools .q-tool-btn,
-      #quantis-tools .icon-square-btn {
-        height: 30px;
-        min-width: 30px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-      }
-      #q-brush-size {
-        width: 62px;
-        accent-color: var(--quantis-accent);
-      }
-      .q-color-toggle {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: 2px solid var(--quantis-faint);
-        cursor: pointer;
-      }
-      .q-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
-      .q-color-toggle.black { background:#000; }
-      .q-color-toggle.white { background:#fff; }
-      #quantis-tools .q-tool-btn.active {
-        border-color: var(--quantis-accent);
-        color: #fff;
-        background: rgba(168,85,247,0.18);
-      }
-
-      /* ===== QUANTIS BODY LAYOUT ===== */
-      #quantis-body {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-      }
-
-      /* Sidebar */
-      #quantis-sidebar {
-        width: 220px;
-        min-width: 220px;
-        background: var(--quantis-sidebar-bg);
-        border-right: 1px solid rgba(168,85,247,0.1);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        flex-shrink: 0;
-      }
-      #quantis-sidebar-header {
-        padding: 12px 14px 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid rgba(168,85,247,0.08);
-      }
-      #quantis-sidebar-header span {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        color: var(--quantis-faint);
-        text-transform: uppercase;
-      }
-      #q-add-project-btn {
-        background: none;
-        border: none;
-        color: var(--quantis-faint);
-        cursor: pointer;
-        font-size: 12px;
-        padding: 2px 4px;
-        border-radius: 3px;
-        transition: color 0.15s;
-      }
-      #q-add-project-btn:hover { color: var(--quantis-accent); }
-      #q-projects-list {
-        flex: 1;
-        overflow-y: auto;
-        padding: 8px 10px;
-      }
-      #q-projects-list::-webkit-scrollbar { width: 4px; }
-      #q-projects-list::-webkit-scrollbar-track { background: transparent; }
-      #q-projects-list::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.25); border-radius: 2px; }
-      .q-proj-item { margin-bottom: 12px; }
-      .q-proj-label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        color: var(--quantis-muted);
-        text-transform: uppercase;
-        padding: 2px 4px;
-        margin-bottom: 4px;
-        cursor: pointer;
-      }
-      .q-proj-label:hover { color: var(--quantis-text); }
-      .q-proj-label i { color: #d97706; margin-right: 5px; }
-      .q-page-list { padding-left: 10px; border-left: 1px solid rgba(168,85,247,0.12); }
-      .q-page-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 10px;
-        color: var(--quantis-faint);
-        padding: 4px 6px;
-        border-radius: 3px;
-        cursor: pointer;
-        transition: background 0.12s;
-      }
-      .q-page-item:hover { background: rgba(168,85,247,0.08); color: var(--quantis-muted); }
-      .q-page-item.active { background: rgba(168,85,247,0.14); color: var(--quantis-accent); border-left: 2px solid var(--quantis-accent); }
-      .q-page-item i { color: var(--quantis-faint); margin-right: 5px; font-size: 9px; }
-      .q-page-del {
-        background: none; border: none; color: var(--quantis-faint); cursor: pointer; font-size: 9px; padding: 0 2px;
-        transition: color 0.12s;
-      }
-      .q-page-del:hover { color: #ef4444; }
-
-      /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
-      #quantis-viewport {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
-        background: var(--quantis-bg);
-        cursor: grab;
-      }
-      #quantis-viewport.grabbing { cursor: grabbing; }
-      #quantis-canvas-container {
-        position: absolute;
-        width: 8000px;
-        height: 8000px;
-        top: -4000px;
-        left: -4000px;
-        background-size: 30px 30px;
-        background-image: radial-gradient(circle, var(--quantis-grid-dot) 1px, transparent 1px);
-        transform-origin: center;
-      }
-      #quantis-drawing-canvas {
-        position: absolute;
-        inset: 0;
-        width: 8000px;
-        height: 8000px;
-        pointer-events: none;
-        z-index: 1;
-      }
-      /* Canvas blocks */
-      .q-canvas-el {
-        position: absolute;
-        background: var(--quantis-surface-bg);
-        border: 1px solid var(--quantis-border);
-        border-radius: 4px;
-        padding: 10px 12px;
-        display: flex;
-        flex-direction: column;
-        min-width: 160px;
-        user-select: none;
-        will-change: transform;
-        backface-visibility: hidden;
-        transform: translateZ(0);
-        z-index: 5;
-      }
-      .q-canvas-el:hover { border-color: rgba(168,85,247,0.5); }
-      .q-block-desc {
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        color: var(--quantis-faint);
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid transparent;
-        width: 100%;
-        margin-bottom: 6px;
-        outline: none;
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .q-block-desc:focus { border-bottom-color: rgba(168,85,247,0.3); color: var(--quantis-muted); }
-      .q-block-desc::placeholder { color: var(--quantis-faint); }
-      .q-block-text {
-        font-size: 11px;
-        color: var(--quantis-muted);
-        line-height: 1.6;
-        outline: none;
-        min-height: 24px;
-        word-break: break-word;
-        white-space: pre-wrap;
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .q-block-text a { color: #818cf8; text-decoration: underline; }
-      .q-block-del {
-        position: absolute;
-        top: -8px; right: -8px;
-        background: #7f1d1d;
-        color: white;
-        border: none;
-        width: 18px; height: 18px;
-        border-radius: 50%;
-        font-size: 9px;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-      }
-      .q-canvas-el:hover .q-block-del { display: flex; }
-      /* Context menu */
-      #q-context-menu {
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        background: var(--quantis-surface-bg);
-        border: 1px solid rgba(168,85,247,0.3);
-        border-radius: 4px;
-        padding: 4px 0;
-        min-width: 160px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-      }
-      #q-context-menu button {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: 100%;
-        background: none;
-        border: none;
-        color: var(--quantis-muted);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 11px;
-        padding: 7px 14px;
-        cursor: pointer;
-        text-align: left;
-      }
-      #q-context-menu button:hover { background: rgba(168,85,247,0.1); color: var(--quantis-text); }
-      #q-context-menu button i { color: var(--quantis-faint); font-size: 10px; }
-      #q-file-input { display: none; }
-
-      /* Zoom hint */
-      #q-zoom-hint {
-        position: absolute;
-        bottom: 12px;
-        right: 14px;
-        font-size: 9px;
-        letter-spacing: 1px;
-        color: var(--quantis-faint);
-        pointer-events: none;
-        user-select: none;
-      }
-    </style>
-
-    <!-- QUANTIS HEADER -->
-    <header id="quantis-header">
-      <div id="quantis-nav-left">
-        <span id="quantis-brand">QUANTIS</span>
-        <button class="q-nav-btn" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
-        <button class="q-nav-btn" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
-      </div>
-      <div id="quantis-nav-right">
-        <span id="quantis-clock">00:00:00</span>
-        <div id="quantis-tools">
-          <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
-          <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
-          <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
-          <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Pincel"><i class="fa-solid fa-pencil"></i></button>
-          <button class="q-tool-btn q-draw-tool" id="q-eraser-btn" type="button" title="Borrador"><i class="fa-solid fa-eraser"></i></button>
-          <input class="q-draw-tool" id="q-brush-size" type="range" min="2" max="40" value="8" title="Grosor">
-          <button class="q-color-toggle black q-draw-tool active" id="q-color-black" type="button" title="Negro"></button>
-          <button class="q-color-toggle white q-draw-tool" id="q-color-white" type="button" title="Blanco"></button>
-        </div>
-        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
-          <i class="fa-solid fa-gear"></i>
-        </button>
-        <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
-          <i class="fa-solid fa-music"></i>
-        </button>
-      </div>
-    </header>
-
-    <!-- QUANTIS BODY -->
-    <div id="quantis-body">
-
-      <!-- SIDEBAR: Proyectos / Páginas -->
-      <aside id="quantis-sidebar">
-        <div id="quantis-sidebar-header">
-          <span>Proyectos</span>
-          <button id="q-add-project-btn" title="Nuevo Proyecto" onclick="qAddProject()"><i class="fa-solid fa-plus"></i></button>
-        </div>
-        <div id="q-projects-list"></div>
-      </aside>
-
-      <!-- INFINITE CANVAS VIEWPORT -->
-      <main id="quantis-viewport">
-        <div id="quantis-canvas-container">
-          <canvas id="quantis-drawing-canvas" width="8000" height="8000"></canvas>
-        </div>
-        <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
-      </main>
-
-    </div>
-
-    <!-- CONTEXT MENU -->
-    <div id="q-context-menu">
-      <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
-    </div>
-    <input type="file" id="q-file-input" onchange="qHandleFile(event)">
-
+    <!-- Quantis content will be rendered here by JavaScript -->
   </div>
-  <!-- FIN VISTA SPA 3: QUANTIS -->
 
-  <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
-  <div id="plansModal" aria-hidden="true">
-    <div class="plans-card" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+  <!-- MODALS AND DROPDOWNS -->
+  <div id="plansModal">
+    <div class="plans-card">
       <div class="plans-header">
-        <h2 id="plansTitle">Planes de membresia</h2>
-        <button class="plans-close" id="closePlansBtn" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Planes Disponibles</h2>
+        <button class="plans-close" onclick="closePlansModal()">✕</button>
       </div>
-      <div class="plans-grid">
-        <button class="plan-option" type="button" data-plan-choice="normal">
-          <h3>Normal</h3>
-          <div class="plan-price">$0</div>
-          <ul>
-            <li>3 paginas de Notepad, local only</li>
-            <li>Quantis: 2 proyectos, 3 paginas/proyecto, canvas 2000x2000px</li>
-            <li>Sin herramientas de dibujo</li>
-          </ul>
-        </button>
-        <button class="plan-option" type="button" data-plan-choice="Extended">
-          <h3>Extended</h3>
-          <div class="plan-price">$5/mo</div>
-          <ul>
-            <li>5 paginas de Notepad, local + export</li>
-            <li>Quantis: 4 proyectos, 7 paginas/proyecto, canvas 4000x4000px</li>
-            <li>Export/Import de workspace</li>
-          </ul>
-        </button>
-        <button class="plan-option" type="button" data-plan-choice="Premium">
-          <h3>Premium</h3>
-          <div class="plan-price">$10/mo</div>
-          <ul>
-            <li>10 paginas de Notepad en cloud</li>
-            <li>Quantis: 10 proyectos, 20 paginas/proyecto, canvas 8000x8000px</li>
-            <li>Drawing Tools y Priority Support</li>
-          </ul>
-        </button>
-      </div>
-      <div class="plan-contact-card" id="planContactCard">
-        <strong>Contacto para activar plan</strong>
-        <p>Discord: @DANIFU777</p>
-        <p>Email: danielprooooogamer41@gmail.com</p>
-        <p>GitHub: @daniFU777</p>
+      <div class="plans-grid" id="plansGrid">
+        <!-- Planes cargados dinámicamente -->
       </div>
     </div>
   </div>
 
-  <div id="dominon-config-dropdown" aria-hidden="true">
-    <p class="config-label">Dominon Theme</p>
+  <div id="dominon-config-dropdown">
+    <div class="config-label">Tema</div>
     <div class="config-row">
-      <button class="theme-btn black" onclick="setTheme('black', 'dominon')" title="Black"></button>
-      <button class="theme-btn white" onclick="setTheme('white', 'dominon')" title="White"></button>
-      <button class="theme-btn purple" onclick="setTheme('purple', 'dominon')" title="Purple"></button>
-      <button class="theme-btn green" onclick="setTheme('green', 'dominon')" title="Green"></button>
-      <button class="theme-btn red" onclick="setTheme('red', 'dominon')" title="Red"></button>
-      <button class="theme-btn blue" onclick="setTheme('blue', 'dominon')" title="Blue"></button>
+      <button class="theme-btn black" onclick="setTheme('#000000', 'main-dashboard-view')" title="Negro"></button>
+      <button class="theme-btn white" onclick="setTheme('#FFFFFF', 'main-dashboard-view')" title="Blanco"></button>
+      <button class="theme-btn purple" onclick="setTheme('#A855F7', 'main-dashboard-view')" title="Morado"></button>
+      <button class="theme-btn green" onclick="setTheme('#39FF14', 'main-dashboard-view')" title="Verde"></button>
+      <button class="theme-btn red" onclick="setTheme('#FF3131', 'main-dashboard-view')" title="Rojo"></button>
+      <button class="theme-btn blue" onclick="setTheme('#00AEEF', 'main-dashboard-view')" title="Azul"></button>
     </div>
-    <p class="config-label">Language</p>
-    <div class="config-row">
-      <button class="language-toggle" id="dominonLangToggle" type="button">ES / EN</button>
-    </div>
+    <div class="config-label" style="margin-top: 12px;">Idioma</div>
+    <button class="language-toggle" onclick="toggleLanguage()">ES / EN</button>
   </div>
 
-  <div id="quantis-config-dropdown" aria-hidden="true">
-    <p class="config-label">Quantis Theme</p>
+  <div id="quantis-config-dropdown">
+    <div class="config-label">Tema</div>
     <div class="config-row">
-      <button class="theme-btn black" onclick="setTheme('black', 'quantis')" title="Black"></button>
-      <button class="theme-btn white" onclick="setTheme('white', 'quantis')" title="White"></button>
-    </div>
-    <p class="config-label">Language</p>
-    <div class="config-row">
-      <button class="language-toggle" id="quantisLangToggle" type="button">ES / EN</button>
+      <button class="theme-btn black" onclick="setTheme('#000000', 'quantis-view')" title="Negro"></button>
+      <button class="theme-btn white" onclick="setTheme('#FFFFFF', 'quantis-view')" title="Blanco"></button>
+      <button class="theme-btn purple" onclick="setTheme('#A855F7', 'quantis-view')" title="Morado"></button>
+      <button class="theme-btn green" onclick="setTheme('#39FF14', 'quantis-view')" title="Verde"></button>
+      <button class="theme-btn red" onclick="setTheme('#FF3131', 'quantis-view')" title="Rojo"></button>
+      <button class="theme-btn blue" onclick="setTheme('#00AEEF', 'quantis-view')" title="Azul"></button>
     </div>
   </div>
 
   <div id="miniPlanPopup"></div>
 
-  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
-  <div id="youtube-player"></div>
-
-  <div id="musicPanel" class="hidden">
-    <div class="music-player-panel">
-      <div class="player-header">REPRODUCTOR</div>
-      
-      <div class="player-controls">
-        <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
-        <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
-        <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
-      </div>
-      
-      <div class="progress-time">
-        <span id="current-time">0:00</span>
-        <span id="duration-time">0:00</span>
-      </div>
-      
-      <div class="progress-bar-container">
-        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
-      </div>
-      
-      <div class="volume-control">
-        <i class="fa-solid fa-volume-low"></i>
-        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
-        <i class="fa-solid fa-volume-high"></i>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCRIPTS DE INICIALIZACIN DE FIREBASE (V10 MODULAR) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
-      authDomain: "danifu777-4732c.firebaseapp.com",
-      projectId: "danifu777-4732c",
-      databaseURL: "https://danifu777-4732c-default-rtdb.firebaseio.com",
-      storageBucket: "danifu777-4732c.firebasestorage.app",
-      messagingSenderId: "171480985650",
-      appId: "1:171480985650:web:4873bc5cc38d67d6c10c2b",
-      measurementId: "G-SL032V9XGM"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const rtdb = getDatabase(app);
-    const provider = new GoogleAuthProvider();
-
-    // Exportar instancias de bases de datos y auth al contexto de window
-    window.db = db;
-    window.auth = auth;
-    window.rtdb = rtdb;
-
-    // =========================================================
-    // --- MEMBERSHIP PLAN CONFIGURATION ---
-    // =========================================================
-    const PLAN_LIMITS = {
-      normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
-      Extended: { maxNotepadPages: 5, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
-      Premium: { maxNotepadPages: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
-    };
-    window.PLAN_LIMITS = PLAN_LIMITS;
-    window.userPlan = 'normal';
-    window.isMembershipPlanReady = false;
-    window.getPlanLimits = function() {
-      return PLAN_LIMITS[window.userPlan] || PLAN_LIMITS.normal;
-    };
-    window.maxPages = window.getPlanLimits().maxNotepadPages;
-    window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count'), 10) || 3;
-
-    async function detectUserPlan(user) {
-      if (!user) return 'normal';
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userDocRef);
-        const plan = docSnap.exists() ? docSnap.data().plan : '';
-        return PLAN_LIMITS[plan] ? plan : 'normal';
-      } catch (error) {
-        console.error("Error al obtener el plan del usuario de Firestore:", error);
-        return 'normal';
-      }
-    }
-
-    window.applyMembershipPlan = function(plan) {
-      window.userPlan = PLAN_LIMITS[plan] ? plan : 'normal';
-      window.isMembershipPlanReady = true;
-      window.maxPages = window.getPlanLimits().maxNotepadPages;
-      window.createdPagesCount = Math.max(1, window.createdPagesCount || 3);
-      localStorage.setItem('danifu_pages_count', window.createdPagesCount);
-      if (parseInt(window.activeTab, 10) > window.maxPages) {
-        window.activeTab = "1";
-        localStorage.setItem('danifu_active_tab', window.activeTab);
-      }
-      const actions = document.getElementById('notepadActions');
-      if (actions) actions.style.display = window.userPlan === 'Extended' ? 'flex' : 'none';
-      if (typeof window.initGeminiAssistant === 'function') window.initGeminiAssistant();
-      if (typeof window.renderTabs === 'function') window.renderTabs();
-      if (typeof window.qApplyPlanLimits === 'function') window.qApplyPlanLimits();
-      if (typeof window.qUpdateDrawingControls === 'function') window.qUpdateDrawingControls();
-    };
-
-    // =========================================================
-    // --- FIREBASE AUTH & PLAN DETECTION ---
-    // =========================================================
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('mainApp').classList.remove('hidden');
-        document.getElementById('userName').textContent = user.displayName;
-        document.getElementById('userAvatar').src = user.photoURL;
-
-        window.applyMembershipPlan(await detectUserPlan(user));
-        window.loadNote(window.activeTab);
-
-        // =========================================================
-        // --- MUSIC PLAYER SAVED PROGRESS LOADER ---
-        // =========================================================
-        window.loadSavedMusic = function() {
-          if (!auth.currentUser) return;
-          var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
-          onValue(musicRef, function(snapshot) {
-            var data = snapshot.val();
-            if (data && window.player) {
-              setTimeout(function() {
-                try {
-                  window.player.cuePlaylist({
-                    listType: 'playlist',
-                    list: playlistId,
-                    index: data.index || 0,
-                    startSeconds: data.time || 0
-                  });
-                  setTimeout(updateSongDisplay, 800);
-
-                } catch (e) {
-                  console.error('Error cargando msica guardada:', e);
-                }
-              }, 1500);
-            }
-          }, { onlyOnce: true });
-        };
-
-      } else {
-        window.applyMembershipPlan('normal');
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('mainApp').classList.add('hidden');
-      }
-    });
-
-    document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
-    document.getElementById('logoutBtn').onclick = () => signOut(auth);
-
-    // =========================================================
-    // --- MUSIC PLAYER AUTOSAVE ENGINE ---
-    // =========================================================
-    window.waitForPlayerPlaying = function(callback) {
-      var attempts = 0;
-      var timer = setInterval(function() {
-        attempts++;
-        try {
-          if (window.player && window.player.getPlayerState && window.player.getPlayerState() === 1) {
-            clearInterval(timer);
-            callback();
-          } else if (attempts >= 30) {
-            clearInterval(timer);
-          }
-        } catch (error) {
-          clearInterval(timer);
-        }
-      }, 200);
-    };
-
-    setInterval(() => {
-       if (auth.currentUser && window.player) {
-          try {
-              const currentTime = Math.floor(window.player.getCurrentTime());
-              const videoData = window.player.getVideoData();
-              const playlist = window.player.getPlaylist ? window.player.getPlaylist() : [];
-              const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
-              if (videoData && videoData.video_id) {
-                 set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
-                    videoId: videoData.video_id,
-                    index: playlistIndex >= 0 ? playlistIndex : Math.max(0, playlist.indexOf(videoData.video_id)),
-                    time: currentTime,
-                    timestamp: new Date().getTime()
-                 });
-             }
-          } catch (error) {
-             console.log("Error guardando msica:", error);
-          }
-       }
-    }, 10000);
-
-    // =========================================================
-    // --- NOTEPAD CONTROLLER (LOCAL & CLOUD) ---
-    // =========================================================
-    window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
-
-    if (parseInt(window.activeTab, 10) > window.maxPages) {
-        window.activeTab = "1";
-        localStorage.setItem('danifu_active_tab', window.activeTab);
-    }
-    
-    let saveTimeout;
-    
-    window.loadNote = async function(tabNum) {
-       const notepadEl = document.getElementById('notepad');
-       if (!notepadEl) return;
-       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
-          notepadEl.value = localStorage.getItem('notepad_page_' + tabNum) || "";
-          return;
-       }
-       try {
-          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
-          const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists()) {
-             notepadEl.value = docSnap.data().content || "";
-          } else {
-             notepadEl.value = "";
-          }
-       } catch (error) {
-          console.error("Error cargando nota:", error);
-          notepadEl.value = "";
-       }
-    };
-    window.loadNoteFromFirestore = window.loadNote;
-
-    window.saveCurrentNote = async function() {
-       const notepadEl = document.getElementById('notepad');
-       if (!notepadEl) return;
-       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
-          localStorage.setItem('notepad_page_' + window.activeTab, notepadEl.value);
-          return;
-       }
-       try {
-          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
-          await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
-       } catch (error) {
-          console.error("Error guardando nota:", error);
-       }
-    };
-
-    const notepadEl = document.getElementById('notepad');
-    if (notepadEl) {
-        notepadEl.addEventListener('input', function() {
-           clearTimeout(saveTimeout);
-           saveTimeout = setTimeout(window.saveCurrentNote, 800);
-        });
-    }
-
-    window.renderTabs = function() {
-      const tabsContainer = document.getElementById('notepad-tabs');
-      if (!tabsContainer) return;
-      
-      tabsContainer.innerHTML = '';
-
-      for (let i = 1; i <= window.createdPagesCount; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'tab-btn' + (String(i) === window.activeTab ? ' active' : '');
-        btn.id = 'btn-tab-' + i;
-        btn.textContent = 'Nota ' + i;
-        btn.onclick = function() { window.switchTab(i); };
-        tabsContainer.appendChild(btn);
-      }
-
-      if (window.createdPagesCount < window.maxPages) {
-        const plusBtn = document.createElement('button');
-        plusBtn.className = 'tab-btn';
-        plusBtn.id = 'btn-add-tab';
-        plusBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-        plusBtn.style.background = '#1F1F1F';
-        plusBtn.style.borderColor = 'var(--color-highlight)';
-        plusBtn.style.color = 'var(--color-highlight)';
-        plusBtn.style.padding = '4px 12px';
-
-        plusBtn.onclick = function() {
-          if (window.createdPagesCount >= window.maxPages) {
-            alert('Limite de paginas alcanzado para tu plan actual.');
-          } else {
-            window.createdPagesCount++;
-            localStorage.setItem('danifu_pages_count', window.createdPagesCount);
-            window.switchTab(window.createdPagesCount);
-            window.renderTabs();
-          }
-        };
-        tabsContainer.appendChild(plusBtn);
-      }
-    };
-
-    window.renderTabs();
-
-    window.exportCurrentNote = function() {
-      if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Export Note esta disponible en Extended.');
-        return;
-      }
-      const note = document.getElementById('notepad');
-      const blob = new Blob([note ? note.value : ''], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'notepad_page_' + window.activeTab + '.txt';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    };
-
-    window.importCurrentNote = function(file) {
-      if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Import Note esta disponible en Extended.');
-        return;
-      }
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const note = document.getElementById('notepad');
-        if (note) {
-          note.value = event.target.result || '';
-          window.saveCurrentNote();
-        }
-      };
-      reader.readAsText(file);
-    };
-
-    document.getElementById('exportNoteBtn')?.addEventListener('click', window.exportCurrentNote);
-    document.getElementById('importNoteBtn')?.addEventListener('click', function() {
-      if (window.userPlan !== 'Extended') return window.showPlanPopup('Import Note esta disponible en Extended.');
-      document.getElementById('importNoteInput')?.click();
-    });
-    document.getElementById('importNoteInput')?.addEventListener('change', function(e) {
-      window.importCurrentNote(e.target.files[0]);
-      e.target.value = '';
-    });
-
-    window.switchTab = function(tabNum) {
-      window.activeTab = String(tabNum);
-      localStorage.setItem('danifu_active_tab', window.activeTab);
-      
-      var notepadTitle = document.getElementById('notepad-title');
-      if (notepadTitle) notepadTitle.innerText = (window.currentLang === 'en' ? "Notepad - Note " : "Bloc de Notas - Nota ") + window.activeTab;
-      
-      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-      var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
-      if (activeBtn) activeBtn.classList.add('active');
-      
-      window.loadNote(window.activeTab);
-    };
-    window.maxPages = window.getPlanLimits ? window.getPlanLimits().maxNotepadPages : 3;
-
-    // =========================================================
-    // --- GEMINI AI ASSISTANT PANEL ---
-    // =========================================================
+  <!-- JAVASCRIPT SECTION -->
+  <script>
+    // Gemini AI Assistant - Gestión de claves por usuario
     function getGeminiUserScope() {
-      return window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest';
+      var userId = (window.auth && window.auth.currentUser) ? window.auth.currentUser.uid : 'anonymous';
+      return userId;
     }
 
     function readGeminiKeyStore() {
-      try {
-        return JSON.parse(localStorage.getItem('danifu_gemini_api_key') || '{}');
-      } catch (error) {
-        return {};
-      }
+      var store = localStorage.getItem('danifu_gemini_api_key');
+      return (store && typeof store === 'string') ? JSON.parse(store) : {};
     }
 
     function writeGeminiKeyForUser(apiKey) {
@@ -2738,8 +1798,7 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       if (promptInput) promptInput.value = '';
       
       try {
-        // Cambiado a canal estable "v1" para mayor compatibilidad
-       var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+        var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey);
         
         var response = await fetch(url, {
           method: 'POST',
@@ -2766,1483 +1825,5 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
 
     window.initGeminiAssistant();
   </script>
-
-  <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    // =========================================================
-    // --- MUSIC PLAYER CONTROLLER ---
-    // =========================================================
-    window.youtubePlayerReady = false;
-    window.player = null;
-    window.playerCommands = [];
-    var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-
-    window.executeWhenPlayerReady = function(command) {
-      if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
-        window.player[command.fn].apply(window.player, command.args);
-      } else {
-        window.playerCommands.push(command);
-      }
-    };
-
-    function onYouTubeIframeAPIReady() {
-      var savedVolume = localStorage.getItem('danifu_volume') || 50;
-      window.player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        playerVars: {
-          'listType': 'playlist',
-          'list': playlistId,
-          'autoplay': 0,
-          'controls': 0,
-          'fs': 0,
-          'index': 0
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange,
-          'onError': function(e) {
-             console.error('Error del player:', e.data);
-          }
-        }
-      });
-    }
-    // Exponer la inicializacin globalmente para YouTube iframe API
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-
-    function onPlayerReady(event) {
-      var savedVolume = localStorage.getItem('danifu_volume') || 50;
-      event.target.setVolume(parseInt(savedVolume));
-      var volSlider = document.getElementById('volumeSlider');
-      if (volSlider) volSlider.value = savedVolume;
-
-      window.youtubePlayerReady = true;
-
-      var plist = window.player.getPlaylist();
-      if (!plist || plist.length === 0) {
-        window.player.cuePlaylist({
-          listType: 'playlist',
-          list: playlistId,
-          index: 0,
-          startSeconds: 0
-        });
-      }
-
-      setTimeout(updateSongDisplay, 1000);
-
-      while (window.playerCommands.length > 0) {
-        var cmd = window.playerCommands.shift();
-        if (window.player && window.player[cmd.fn]) {
-          window.player[cmd.fn].apply(window.player, cmd.args);
-        }
-      }
-
-      if (window.loadSavedMusic) {
-        window.loadSavedMusic();
-      }
-    }
-
-    function onPlayerStateChange(event) {
-      var playBtn = document.getElementById('playPauseBtn');
-      if (event.data === YT.PlayerState.PLAYING) {
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-        updateSongDisplay();
-      } else {
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-      }
-    }
-
-    function updateSongDisplay() {
-      if (!window.player || !window.player.getVideoData) return;
-      try {
-        var videoData = window.player.getVideoData();
-        var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
-        if (_elSongTitle) _elSongTitle.textContent = title;
-      } catch (error) {}
-    }
-
-    var _elFechaHora  = document.getElementById('fecha-hora');
-    var _elCurrentTime = document.getElementById('current-time');
-    var _elDuration    = document.getElementById('duration-time');
-    var _elProgress    = document.getElementById('progressBar');
-    var _elSongTitle   = document.getElementById('songTitle');
-    var _masterTick    = 0;
-
-    setInterval(function() {
-      _masterTick++;
-
-      if (_masterTick % 2 === 0) {
-        var d = new Date();
-        if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-      }
-
-      if (window.player && window.player.getCurrentTime) {
-        try {
-          var cur = Math.floor(window.player.getCurrentTime());
-          var dur = Math.floor(window.player.getDuration());
-          if (_elCurrentTime) _elCurrentTime.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
-          if (dur > 0) {
-            if (_elDuration) _elDuration.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
-            if (_elProgress) _elProgress.value = (cur / dur) * 100;
-          }
-        } catch(e) {}
-      }
-
-      if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
-        try {
-          var videoData = window.player.getVideoData();
-          var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
-          if (_elSongTitle) _elSongTitle.textContent = title;
-        } catch(e) {}
-      }
-
-      if (_masterTick >= 600) _masterTick = 0;
-
-    }, 500);
-
-    window.playPauseVideo = function() {
-      if (window.youtubePlayerReady && window.player) {
-        var state = window.player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-          window.player.pauseVideo();
-        } else {
-          window.player.playVideo();
-        }
-      }
-    };
-
-    window.nextVideo = function() {
-      if (!window.youtubePlayerReady || !window.player) return;
-      try {
-        window.player.nextVideo();
-        setTimeout(updateSongDisplay, 1000);
-      } catch(err) {
-        console.error('Error en nextVideo:', err);
-      }
-    };
-
-    window.prevVideo = function() {
-      if (!window.youtubePlayerReady || !window.player) return;
-      try {
-        window.player.previousVideo();
-        setTimeout(updateSongDisplay, 1000);
-      } catch(err) {
-        console.error('Error en prevVideo:', err);
-      }
-    };
-
-    window.seekVideo = function(time) {
-      if (window.youtubePlayerReady && window.player) {
-        window.player.seekTo(time, true);
-      }
-    };
-
-    window.setVideoVolume = function(volume) {
-      if (window.youtubePlayerReady && window.player) {
-        window.player.setVolume(volume);
-      }
-    };
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var playPauseBtn = document.getElementById('playPauseBtn');
-      var nextBtn = document.getElementById('nextBtn');
-      var prevBtn = document.getElementById('prevBtn');
-      var volumeSlider = document.getElementById('volumeSlider');
-      var progressBar = document.getElementById('progressBar');
-      var toggleBtn = document.getElementById('toggleMusicPanel');
-      var toggleBtnFlow = document.getElementById('toggleMusicPanelFlow');
-      var musicPanel = document.getElementById('musicPanel');
-
-      if (toggleBtn) {
-        toggleBtn.onclick = function() {
-          musicPanel.classList.toggle('hidden');
-        };
-      }
-      if (toggleBtnFlow) {
-        toggleBtnFlow.onclick = function() {
-          musicPanel.classList.toggle('hidden');
-        };
-      }
-      var toggleBtnQuantis = document.getElementById('toggleMusicPanelQuantis');
-      if (toggleBtnQuantis) {
-        toggleBtnQuantis.onclick = function() {
-          musicPanel.classList.toggle('hidden');
-        };
-      }
-
-      if (playPauseBtn) {
-        playPauseBtn.addEventListener('click', window.playPauseVideo);
-      }
-
-      if (nextBtn) {
-        nextBtn.addEventListener('click', window.nextVideo);
-      }
-
-      if (prevBtn) {
-        prevBtn.addEventListener('click', window.prevVideo);
-      }
-
-      if (volumeSlider) {
-        volumeSlider.addEventListener('input', function(e) {
-          var volume = parseInt(e.target.value);
-          window.setVideoVolume(volume);
-          localStorage.setItem('danifu_volume', volume);
-        });
-      }
-
-      if (progressBar) {
-        progressBar.addEventListener('input', function(e) {
-          if (!window.player || !window.player.getDuration) return;
-          var duration = window.player.getDuration();
-          if (duration) {
-            var newTime = (parseInt(e.target.value) / 100) * duration;
-            window.seekVideo(newTime);
-          }
-        });
-      }
-    });
-  </script>
-
-  <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
-  <script>
-    // Legacy alias so any remaining internal calls don't break
-    window.toggleAppView = function() {
-      var deepFlow = document.getElementById('deep-flow-view');
-      var isFlowHidden = deepFlow ? deepFlow.classList.contains('hidden-view') : true;
-      window.switchAppView(isFlowHidden ? 'deep-flow-view' : 'main-dashboard-view');
-    };
-
-    // New 3-view router — add/remove .hidden-view cleanly across all views
-    window.switchAppView = function(targetViewId) {
-      var ALL_VIEWS = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
-      ALL_VIEWS.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (!el) return;
-        if (id === targetViewId) {
-          el.classList.remove('hidden-view');
-        } else {
-          el.classList.add('hidden-view');
-        }
-      });
-      if (typeof playClickSound === 'function') {
-        try { playClickSound(); } catch(e) {}
-      }
-    };
-  </script>
-
-  <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
-  <script>
-    // =========================================================
-    // --- CONFIGURATION & VIEW ROUTER ---
-    // =========================================================
-    (function() {
-      window.currentLang = localStorage.getItem('danifu_lang') || 'es';
-      const I18N = {
-        es: {
-          plans: 'PLANES',
-          plansTitle: 'Planes de membresia',
-          notepad: 'Bloc de Notas - Nota ',
-          chart: 'Mini-Grafico',
-          calculator: 'Calculadora',
-          pomodoro: 'Pomodoro',
-          start: 'INICIAR',
-          projects: 'Proyectos',
-          qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NUEVO BLOQUE | CLIC DERECHO: ARCHIVO',
-          exportNote: 'Export',
-          importNote: 'Import'
-        },
-        en: {
-          plans: 'PLANS',
-          plansTitle: 'Membership plans',
-          notepad: 'Notepad - Note ',
-          chart: 'Mini-Chart',
-          calculator: 'Calculator',
-          pomodoro: 'Pomodoro',
-          start: 'START',
-          projects: 'Projects',
-          qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NEW BLOCK | RIGHT-CLICK: FILE',
-          exportNote: 'Export',
-          importNote: 'Import'
-        }
-      };
-
-      function qs(sel) { return document.querySelector(sel); }
-      function setText(sel, text) { const el = qs(sel); if (el) el.textContent = text; }
-
-      window.showPlanPopup = function(message) {
-        const popup = document.getElementById('miniPlanPopup');
-        if (!popup) return alert(message);
-        popup.textContent = message;
-        popup.classList.add('open');
-        clearTimeout(window._planPopupTimer);
-        window._planPopupTimer = setTimeout(function() { popup.classList.remove('open'); }, 2600);
-      };
-
-      window.applyGlobalStaticLanguage = function() {
-        const L = I18N[window.currentLang] || I18N.es;
-        const planBtn = document.getElementById('openPlansBtn');
-        if (planBtn) planBtn.innerHTML = '<i class="fa-solid fa-gem"></i> ' + L.plans;
-        setText('#plansTitle', L.plansTitle);
-        setText('#main-dashboard-view .chart-header h2', L.chart);
-        const title = document.getElementById('notepad-title');
-        if (title) title.textContent = L.notepad + (window.activeTab || '1');
-        setText('#main-dashboard-view .calculator-panel h2', L.calculator);
-        setText('#main-dashboard-view .pomodoro-panel h2', L.pomodoro);
-        setText('#start-btn', L.start);
-        setText('#quantis-sidebar-header span', L.projects);
-        setText('#q-zoom-hint', L.qHint);
-        const exportNote = document.getElementById('exportNoteBtn');
-        const importNote = document.getElementById('importNoteBtn');
-        if (exportNote) exportNote.innerHTML = '<i class="fa-solid fa-file-export"></i> ' + L.exportNote;
-        if (importNote) importNote.innerHTML = '<i class="fa-solid fa-file-import"></i> ' + L.importNote;
-        document.querySelectorAll('#dominonLangToggle,#quantisLangToggle').forEach(function(toggle) {
-          toggle.textContent = window.currentLang.toUpperCase();
-        });
-      };
-
-      window.setGlobalLanguage = function(lang, source) {
-        window.currentLang = lang === 'en' ? 'en' : 'es';
-        localStorage.setItem('danifu_lang', window.currentLang);
-        window.applyGlobalStaticLanguage();
-        if (source !== 'deep-flow' && typeof window.deepFlowSetLanguage === 'function') {
-          window.deepFlowSetLanguage(window.currentLang);
-        }
-      };
-
-      function closeConfigDropdowns(exceptId) {
-        ['dominon-config-dropdown', 'quantis-config-dropdown'].forEach(function(id) {
-          if (id !== exceptId) document.getElementById(id)?.classList.remove('open');
-        });
-      }
-
-      function toggleConfig(dropdownId, e) {
-        e.stopPropagation();
-        closeConfigDropdowns(dropdownId);
-        document.getElementById(dropdownId)?.classList.toggle('open');
-      }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('dominonConfigBtn')?.addEventListener('click', function(e) {
-          toggleConfig('dominon-config-dropdown', e);
-        });
-        document.getElementById('quantisConfigBtn')?.addEventListener('click', function(e) {
-          toggleConfig('quantis-config-dropdown', e);
-        });
-        document.getElementById('dominonLangToggle')?.addEventListener('click', function() {
-          window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
-        });
-        document.getElementById('quantisLangToggle')?.addEventListener('click', function() {
-          window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
-        });
-        document.getElementById('openPlansBtn')?.addEventListener('click', function() {
-          document.getElementById('plansModal')?.classList.add('open');
-        });
-        document.getElementById('closePlansBtn')?.addEventListener('click', function() {
-          document.getElementById('plansModal')?.classList.remove('open');
-        });
-        document.getElementById('plansModal')?.addEventListener('click', function(e) {
-          if (e.target.id === 'plansModal') e.currentTarget.classList.remove('open');
-        });
-        document.querySelectorAll('.plan-option').forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            document.getElementById('planContactCard')?.classList.add('open');
-          });
-        });
-        document.addEventListener('click', function(e) {
-          if (!e.target.closest('#dominon-config-dropdown,#quantis-config-dropdown,#dominonConfigBtn,#quantisConfigBtn')) {
-            closeConfigDropdowns();
-          }
-        });
-        window.applyGlobalStaticLanguage();
-      });
-    })();
-  </script>
-
-  <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
-  <script>
-    // Calculadora
-    const display = document.getElementById('display');
-    let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
-    window.updateDisplay = function () { if (display) display.textContent = currentInput.length > 15 ? currentInput.slice(0, 15) : currentInput; };
-    window.appendNumber = function (number) {
-      if (waitingForSecondOperand) { currentInput = number; waitingForSecondOperand = false; }
-      else { currentInput = currentInput === '0' && number !== '.' ? number : currentInput + number; }
-      updateDisplay();
-    };
-    window.appendOperator = function (nextOperation) {
-      const inputValue = parseFloat(currentInput);
-      if (operation && waitingForSecondOperand) { operation = nextOperation; return; }
-      if (previousInput === '') { previousInput = inputValue; }
-      else if (operation) {
-        const result = performCalculation[operation](previousInput, inputValue);
-        currentInput = String(result); previousInput = result;
-      }
-      waitingForSecondOperand = true; operation = nextOperation; updateDisplay();
-    };
-    const performCalculation = { '/': (a, b) => a / b, '*': (a, b) => a * b, '+': (a, b) => a + b, '-': (a, b) => a - b };
-    window.calculate = function () {
-      if (!operation || waitingForSecondOperand) return;
-      const result = performCalculation[operation](previousInput, parseFloat(currentInput));
-      currentInput = String(result); operation = null; previousInput = ''; waitingForSecondOperand = false;
-      updateDisplay();
-    };
-    window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
-    window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
-    window.percentage = function () { currentInput = String(parseFloat(currentInput || '0') / 100); updateDisplay(); };
-
-    // Tema visual aislado por vista
-    function getThemeName(color) {
-      var normalized = String(color || '').toLowerCase();
-      if (normalized === '#ffffff' || normalized === 'white' || normalized === 'light') return 'light';
-      if (normalized === '#a855f7' || normalized === 'purple') return 'purple';
-      if (normalized === '#39ff14' || normalized === 'green') return 'green';
-      if (normalized === '#ff3131' || normalized === 'red') return 'red';
-      if (normalized === '#00aeef' || normalized === 'blue') return 'blue';
-      return 'black';
-    }
-
-    function getActiveThemeView(explicitView) {
-      if (explicitView === 'quantis' || explicitView === 'quantis-view') return 'quantis';
-      if (explicitView === 'dominion' || explicitView === 'dominon' || explicitView === 'main-dashboard-view') return 'dominon';
-      var quantis = document.getElementById('quantis-view');
-      return quantis && !quantis.classList.contains('hidden-view') ? 'quantis' : 'dominon';
-    }
-
-    function applyDominonTheme(themeName) {
-      var view = document.getElementById('main-dashboard-view');
-      if (!view) return;
-      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#111827', black: '#A855F7' };
-      view.classList.remove('black-theme', 'light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
-      view.classList.add(themeName + '-theme');
-      view.style.setProperty('--color-highlight', colors[themeName] || colors.black);
-    }
-
-    function applyQuantisTheme(themeName) {
-      var view = document.getElementById('quantis-view');
-      if (!view) return;
-      view.classList.remove('black-theme', 'light-theme', 'purple-theme');
-      view.classList.add((themeName === 'light' ? 'light' : 'black') + '-theme');
-    }
-
-    window.setTheme = function (color, targetView) {
-      var themeName = getThemeName(color);
-      var viewName = getActiveThemeView(targetView);
-      if (viewName === 'quantis') {
-        applyQuantisTheme(themeName);
-        localStorage.setItem('danifu_quantis_theme', themeName);
-        return;
-      }
-      applyDominonTheme(themeName);
-      localStorage.setItem('danifu_dominon_theme', themeName);
-    };
-
-    // Grfico TradingView
-    window.changeSymbol = function () {
-      const select = document.getElementById('symbolSelect');
-      const symbol = select.value;
-      const iframe = document.getElementById('tradingViewChart');
-      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
-      iframe.src = newSrc;
-      localStorage.setItem('danifu_chart_symbol', symbol);
-    };
-
-    // Pomodoro
-    let pomoInterval;
-    let pomoSeconds = 25 * 60;
-    let isRunning = false;
-    window.updatePomoUI = function () {
-      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      const s = (pomoSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('pomo-display').innerText = `${m}:${s}`;
-    };
-    window.togglePomodoro = function () {
-      const btn = document.getElementById('start-btn');
-      if (isRunning) {
-        clearInterval(pomoInterval);
-        isRunning = false;
-        btn.innerText = "INICIAR";
-        btn.classList.remove('active');
-      } else {
-        isRunning = true;
-        btn.innerText = "PAUSAR";
-        btn.classList.add('active');
-        pomoInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            updatePomoUI();
-          } else {
-            clearInterval(pomoInterval);
-            isRunning = false;
-            btn.innerText = "INICIAR";
-            btn.classList.remove('active');
-            alert("Tiempo terminado!");
-          }
-        }, 1000);
-      }
-    };
-    window.resetPomodoro = function () {
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = 25 * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-    window.setCustomTime = function () {
-      const input = document.getElementById('custom-min');
-      const mins = parseInt(input.value);
-      if (!mins || mins <= 0) {
-        alert("Por favor ingresa un nmero de minutos vlido.");
-        return;
-      }
-      clearInterval(pomoInterval);
-      isRunning = false;
-      pomoSeconds = mins * 60;
-      updatePomoUI();
-      document.getElementById('start-btn').innerText = "INICIAR";
-      document.getElementById('start-btn').classList.remove('active');
-    };
-  </script>
-
-  <!-- LGICA DE OPERACIN DE TERMINAL CRYPTO: DEEP FLOW -->
-  <script>
-    const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
-    const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
-    const IT=[{name:'DeFi Liquidation',short:'LIQUIDATION',color:'#FF3131',anomalous:true},{name:'Staking Lock',short:'STAKE LOCK',color:'#00F0FF',anomalous:false},{name:'Whale Outflow',short:'OUTFLOW',color:'#FF007F',anomalous:true},{name:'Whale Inflow',short:'INFLOW',color:'#39FF14',anomalous:false},{name:'DEX Swap',short:'DEX SWAP',color:'#FFD700',anomalous:false},{name:'Bridge Transfer',short:'BRIDGE',color:'#8A2BE2',anomalous:false},{name:'OTC Settlement',short:'OTC DEAL',color:'#FF8C00',anomalous:false},{name:'Treasury Movement',short:'TREASURY',color:'#00CED1',anomalous:false},{name:'Yield Deposit',short:'YIELD DEP',color:'#7FFF00',anomalous:false},{name:'Margin Repayment',short:'MARGIN REP',color:'#DC143C',anomalous:false}];
-    const BP=[{sym:'BTC/USDT',base:'BTC',price:104500},{sym:'ETH/USDT',base:'ETH',price:3850},{sym:'SOL/USDT',base:'SOL',price:178},{sym:'BNB/USDT',base:'BNB',price:615},{sym:'XRP/USDT',base:'XRP',price:2.45}];
-    const BA=[{name:'LARGE SPOT BUY',short:'SPOT BUY',color:'#39FF14',isBuy:true,isFutures:false},{name:'LARGE SPOT SELL',short:'SPOT SELL',color:'#FF3131',isBuy:false,isFutures:false},{name:'FUTURES LONG OPEN',short:'FUT LONG',color:'#00F0FF',isBuy:true,isFutures:true},{name:'FUTURES SHORT OPEN',short:'FUT SHORT',color:'#FF007F',isBuy:false,isFutures:true}];
-    const AP={BTC:104500,ETH:3800,USDT:1,USDC:1,DAI:1,STETH:3800,WBTC:104000,LINK:18,UNI:14,AAVE:260,CRV:0.55,MKR:1800,COMP:55,SNX:3.2,LDO:2.1};
-    const DV=['Uniswap V3','Curve Finance','1inch','SushiSwap','Balancer V2'],YV=['Aave V3','Compound V3','Curve 3pool','Lido Staking','MakerDAO DSR'],VL=['Coinbase Custody','Binance Cold Wallet','Gemini Deep Cold','Kraken Reserve','BitGo Vault'];
-    const _cw=[];(function(){let s=0;for(const t of TOKENS){s+=t.weight;_cw.push(s);}_cw._t=s;})();
-    const BATCH_SIZE=50,MAX_VISIBLE=150,INITIAL_POOL=300,POLL_INTERVAL=45000,SONAR_THRESHOLD=500000000,FONT_STEPS=[0.85,0.95,1.0,1.15,1.3];
-    const MACRO_CONFIGS={onchain:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'swaps',i18n:'swapsOnly'},{key:'yield',i18n:'yieldOnly'}],binance:[{key:'all',i18n:'showAll'},{key:'massive',i18n:'massiveOnly'},{key:'spotbuy',i18n:'spotBuyOnly'},{key:'futures',i18n:'futuresOnly'}]};
-    const FALLBACK={bitcoin:{usd:104500,usd_24h_change:1.52},ethereum:{usd:3850,usd_24h_change:-0.83},data:{total_market_cap:{usd:3620000000000},market_cap_change_percentage_24h_usd:1.24,market_cap_percentage:{btc:52.4}}};
-
-    const STATE={lang:'en',sortField:'value',sortDir:'desc',filterText:'',macroFilter:'all',dataStream:'onchain',poolOnchain:[],poolBinance:[],pool:[],visible:[],renderedCount:0,nextIdOnchain:0,nextIdBinance:0,openSubmenuRow:null,openSubmenuEl:null,apiAlive:false,btcPrice:104500,ethPrice:3850,lastKnownBtc:104500,lastKnownEth:3850,btcChange:1.52,ethChange:-0.83,btcDom:52.4,totalMcap:3620000000000,mcapChange:1.24,gasPrice:32,volScore:45,priceHistory:[{price:104500,ts:Date.now()}],ssr:4.5,observer:null,fontStepIndex:2,soundEnabled:true,bnVolume:32e9,bnPor:540000};
-
-    let _audioCtx=null;
-    function getAudioCtx(){if(!_audioCtx){try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(_audioCtx.state==='suspended')try{_audioCtx.resume()}catch(e){}return _audioCtx}
-    function playClickSound(){if(!STATE.soundEnabled)return;const ctx=getAudioCtx();if(!ctx)return;try{const t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.setValueAtTime(1400,t);o.frequency.exponentialRampToValueAtTime(900,t+0.04);g.gain.setValueAtTime(0.06,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.06);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+0.06)}catch(e){}}
-    function playRadarPulse(){if(!STATE.soundEnabled)return;const ctx=getAudioCtx();if(!ctx)return;try{const t=ctx.currentTime,o1=ctx.createOscillator(),g1=ctx.createGain();o1.type='sine';o1.frequency.setValueAtTime(180,t);o1.frequency.exponentialRampToValueAtTime(70,t+0.5);g1.gain.setValueAtTime(0.12,t);g1.gain.exponentialRampToValueAtTime(0.001,t+0.55);o1.connect(g1);g1.connect(ctx.destination);o1.start(t);o1.stop(t+0.55);const o2=ctx.createOscillator(),g2=ctx.createGain();o2.type='sine';o2.frequency.setValueAtTime(480,t);o2.frequency.exponentialRampToValueAtTime(220,t+0.25);g2.gain.setValueAtTime(0.04,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.3);o2.connect(g2);g2.connect(ctx.destination);o2.start(t);o2.stop(t+0.3)}catch(e){}}
-
-    function createRNG(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return function(){s=(s*16807)%2147483647;return(s-1)/2147483646}}
-    function pickToken(rng){const r=rng()*_cw._t;let l=0,h=_cw.length-1;while(l<h){const m=(l+h)>>1;_cw[m]<r?l=m+1:h=m}return TOKENS[l]}
-    function pickNonStable(rng){const ns=TOKENS.filter(t=>!isStable(t.sym));return ns[Math.floor(rng()*ns.length)]}
-    function isStable(s){return s==='USDT'||s==='USDC'||s==='DAI'}
-    function formatUSD(v){return v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+(v/1e3).toFixed(1)+'K':'$'+v.toFixed(0)}
-    function formatMcap(v){return v>=1e12?'$'+(v/1e12).toFixed(2)+'T':v>=1e9?'$'+(v/1e9).toFixed(2)+'B':'$'+(v/1e6).toFixed(1)+'M'}
-    function formatTokenAmt(a){return a>=1000?Math.round(a).toLocaleString('en-US'):a>=1?a.toFixed(2):a>=0.01?a.toFixed(4):a.toFixed(6)}
-    function formatTime(ts){const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(d/3600000),dy=Math.floor(d/86400000);if(m<60)return m+'m ago';if(h<24)return h+'h ago';if(dy<7)return dy+'d ago';const dt=new Date(ts),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return mo[dt.getMonth()]+' '+dt.getDate()}
-    function abbrevHash(h){return h.slice(0,8)+'...'+h.slice(-4)}
-    function randomHash(rng){const x='0123456789abcdef';let h='0x';for(let i=0;i<40;i++)h+=x[Math.floor(rng()*16)];return h}
-    function randomTxHash(rng){const x='0123456789abcdef';let h='0x';for(let i=0;i<64;i++)h+=x[Math.floor(rng()*16)];return h}
-    function randomOrderId(rng){const x='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';let h='';for(let i=0;i<24;i++)h+=x[Math.floor(rng()*x.length)];return h}
-    async function copyToClipboard(txt){if(navigator.clipboard&&window.isSecureContext){try{return await navigator.clipboard.writeText(txt)}catch(e){}}const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta)}
-    function t(key){return LANG[STATE.lang][key]||key}
-
-    function generateAnalysis(tx){
-    const sw=tx.value>=200e6?'an extraordinary ':tx.value>=100e6?'a massive ':tx.value>=50e6?'a significant ':'',swEs=tx.value>=200e6?'de escala extraordinaria ':tx.value>=100e6?'de escala masiva ':tx.value>=50e6?'de escala significativa ':'';
-    if(tx.stream==='binance'){const p=tx.pair;if(tx.actionType==='LARGE SPOT BUY')return{en:`This represents ${sw}aggressive spot accumulation of ${p}. Executing a market buy of this size implies extreme urgency and strong conviction of an imminent price breakout.`,es:`Esto representa ${swEs}acumulaci\u00f3n spot agresiva de ${p}.`};if(tx.actionType==='LARGE SPOT SELL')return{en:`Deliberate spot dumping of ${p} at ${sw}scale. This whale is liquidating a massive position, signaling a potential shift to stablecoins.`,es:`Descarga spot deliberada de ${p} a ${swEs}escala.`};if(tx.actionType==='FUTURES LONG OPEN')return{en:`High-leverage long exposure initiated on ${p} at ${sw}scale. Signals speculative conviction that this asset will outperform.`,es:`Exposici\u00f3n larga de alta palanca iniciada en ${p} a ${swEs}escala.`};return{en:`Short position opened on ${p} at ${sw}scale. Indicates the whale is actively betting against this asset.`,es:`Posici\u00f3n corta abierta en ${p} a ${swEs}escala.`}}
-    const st=isStable(tx.token.sym),bt=tx.token.sym==='BTC'||tx.token.sym==='WBTC';
-    switch(tx.interaction.name){
-    case'DEX Swap':if(st){if(bt)return{en:`Direct buying pressure on Bitcoin at ${sw}scale. Converting stablecoins to BTC implies strong conviction.`,es:`Presi\u00f3n compradora directa sobre Bitcoin a ${swEs}escala.`};return{en:`${sw}capital deployment into a volatile asset via DEX.`,es:`${swEs}despliegue de capital hacia un activo vol\u00e1til.`}}return{en:`Deliberate de-risking at ${sw}scale. Swapping volatile assets for stablecoins.`,es:`Desapalancamiento deliberado a ${swEs}escala.`};
-    case'Yield Deposit':return{en:`Classic risk-off positioning at ${sw}scale. Earning yield suggests expecting sideways/downward action.`,es:`Posicionamiento risk-off a ${swEs}escala.`};
-    case'Staking Lock':return{en:`Supply constriction signal at ${sw}scale. Locking tokens removes them from circulating supply.`,es:`Se\u00f1al de restricci\u00f3n de oferta a ${swEs}escala.`};
-    case'DeFi Liquidation':return{en:`Forced closure at ${sw}scale. Leveraged position failed to meet margin requirements.`,es:`Cierre forzado a ${swEs}escala.`};
-    case'Whale Outflow':return{en:`Exchange withdrawal at ${sw}scale. Moving assets off-exchange typically signals accumulation intent.`,es:`Retiro de exchange a ${swEs}escala.`};
-    case'Whale Inflow':return{en:`Exchange deposit at ${sw}scale. Moving assets to a trading platform suggests an impending sell order.`,es:`Dep\u00f3sito en exchange a ${swEs}escala.`};
-    default:return{en:formatUSD(tx.value)+' '+tx.token.name+' transaction.',es:'Transacci\u00f3n de '+formatUSD(tx.value)+' '+tx.token.name+'.'}}}
-
-    function enrichTx(tx,rng){
-    tx.direction='neutral';if(tx.stream==='binance'){tx.deepMeta='Via Binance Matching Engine';tx.venue=tx.location;const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es;return}
-    switch(tx.interaction.name){
-    case'DEX Swap':{const v=DV[Math.floor(rng()*DV.length)];tx.venue=v;if(isStable(tx.token.sym)){const tgt=pickNonStable(rng);tx.deepMeta='Swapped '+formatUSD(tx.value)+' '+tx.token.sym+' for '+formatTokenAmt(tx.value/(AP[tgt.sym]||100))+' '+tgt.sym+' on '+v;tx.direction='buy'}else{tx.deepMeta='Swapped '+formatTokenAmt(tx.value/(AP[tx.token.sym]||1000))+' '+tx.token.sym+' for '+formatUSD(tx.value)+' USDT on '+v;tx.direction='sell'}break}
-    case'Yield Deposit':{const v=YV[Math.floor(rng()*YV.length)];tx.venue=v;tx.deepMeta='Deposited '+formatUSD(tx.value)+' '+tx.token.sym+' into '+v;tx.direction='buy';break}
-    case'Staking Lock':{const v=YV[Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Locked '+formatUSD(tx.value)+' '+tx.token.sym+' in '+v;tx.direction='buy';break}
-    case'Whale Outflow':{const v=VL[Math.floor(rng()*VL.length)];tx.venue=v;tx.deepMeta='Moved '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='sell';break}
-    case'Whale Inflow':{const v=['Binance','Coinbase','Kraken','OKX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Transferred '+formatUSD(tx.value)+' '+tx.token.sym+' to '+v;tx.direction='buy';break}
-    case'DeFi Liquidation':{const v=['Aave V3','Compound V3','MakerDAO','dYdX'][Math.floor(rng()*4)];tx.venue=v;tx.deepMeta='Liquidated on '+v;tx.direction='sell';break}
-    default:tx.venue='Unknown';tx.deepMeta=formatUSD(tx.value)+' '+tx.token.sym}
-    const a=generateAnalysis(tx);tx.analysisEn=a.en;tx.analysisEs=a.es}
-
-    function generateHistoricalOnchain(count){const rng=createRNG(7919),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const token=pickToken(rng),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(rng(),2.5),interaction=IT[Math.floor(rng()*IT.length)],gp=12+rng()*53,gu=21000*3*(1+rng()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:i,value:Math.round(val),token,interaction,fromHash:randomHash(rng),toHash:randomHash(rng),txHash:randomTxHash(rng),gasFeeUSD:gUSD,timestamp:now-td+td*Math.pow(rng(),0.7),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdOnchain=count;return txs}
-    function generateHistoricalBinance(count){const rng=createRNG(8147),txs=[],now=Date.now(),td=30*864e5;for(let i=0;i<count;i++){const pair=BP[Math.floor(rng()*BP.length)],action=BA[Math.floor(rng()*BA.length)],baseUsdVal=500000+(Math.pow(rng(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:i,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(rng),timestamp:now-td+td*Math.pow(rng(),0.7),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,rng);txs.push(tx)}txs.sort((a,b)=>b.value-a.value);STATE.nextIdBinance=count;return txs}
-    function generateLiveOnchainTx(){const token=pickToken(Math.random),val=token.minVal+(token.maxVal-token.minVal)*Math.pow(Math.random(),2.5),interaction=IT[Math.floor(Math.random()*IT.length)],gp=12+Math.random()*53,gu=21000*3*(1+Math.random()*0.5),gUSD=Math.round((gp*gu)/1e9*3500*100)/100;const tx={id:STATE.nextIdOnchain++,value:Math.round(val),token,interaction,fromHash:randomHash(Math.random),toHash:randomHash(Math.random),txHash:randomTxHash(Math.random),gasFeeUSD:gUSD,timestamp:Date.now(),stream:'onchain',deepMeta:'',analysisEn:'',analysisEs:'',direction:'neutral',venue:''};enrichTx(tx,Math.random);return tx}
-    function generateLiveBinanceTx(){const pair=BP[Math.floor(Math.random()*BP.length)],action=BA[Math.floor(Math.random()*BA.length)],baseUsdVal=500000+(Math.pow(Math.random(),2.5))*900000000,baseAmt=baseUsdVal/pair.price;const tx={id:STATE.nextIdBinance++,value:Math.round(baseUsdVal),pair:pair.sym,actionType:action.name,actionShort:action.short,actionColor:action.color,isBuy:action.isBuy,isFutures:action.isFutures,baseAmt,baseToken:pair.base,execPrice:pair.price,fee:Math.round(baseUsdVal*0.001*100)/100,orderId:randomOrderId(Math.random),timestamp:Date.now(),location:action.isFutures?t('binanceFutures'):t('binanceSpot'),stream:'binance',deepMeta:'',analysisEn:'',analysisEs:'',direction:action.isBuy?'buy':'sell',venue:''};enrichTx(tx,Math.random);return tx}
-
-    function rebuildVisible(){let arr=STATE.pool;if(STATE.dataStream==='onchain'){if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='swaps')arr=arr.filter(tx=>tx.interaction.name==='DEX Swap');else if(STATE.macroFilter==='yield')arr=arr.filter(tx=>tx.interaction.name==='Yield Deposit'||tx.interaction.name==='Staking Lock')}else{if(STATE.macroFilter==='massive')arr=arr.filter(tx=>tx.value>=SONAR_THRESHOLD);else if(STATE.macroFilter==='spotbuy')arr=arr.filter(tx=>tx.actionType==='LARGE SPOT BUY');else if(STATE.macroFilter==='futures')arr=arr.filter(tx=>tx.isFutures)}if(STATE.filterText){const ft=STATE.filterText;arr=arr.filter(tx=>(tx.token?tx.token.sym:tx.pair).toUpperCase().includes(ft))}arr=arr.slice();const sf=STATE.sortField,sd=STATE.sortDir;arr.sort((a,b)=>{const av=sf==='value'?a.value:a.timestamp,bv=sf==='value'?b.value:b.timestamp;return sd==='desc'?bv-av:av-bv});STATE.visible=arr}
-
-    const DOM={statusDot:document.getElementById('status-dot'),hdrDate:document.getElementById('hdr-date'),hdrClock:document.getElementById('hdr-clock'),hdrConnStatus:document.getElementById('hdr-conn-status'),btcPrice:document.getElementById('btc-price'),btcChange:document.getElementById('btc-change'),focus:null,ethPrice:document.getElementById('eth-price'),ethChange:document.getElementById('eth-change'),gasValue:document.getElementById('gas-value'),btcDomValue:document.getElementById('btc-dom-value'),btcDomBar:document.getElementById('btc-dom-bar'),mcapValue:document.getElementById('mcap-value'),mcapChange:document.getElementById('mcap-change'),volValue:document.getElementById('vol-value'),volBar:document.getElementById('vol-bar'),ssrValue:document.getElementById('ssr-value'),ssrBar:document.getElementById('ssr-bar'),ratioBuy:document.getElementById('ratio-buy'),ratioSell:document.getElementById('ratio-sell'),ratioBuyLabel:document.getElementById('ratio-buy-label'),ratioSellLabel:document.getElementById('ratio-sell-label'),hotList:document.getElementById('hot-list'),ledgerBody:document.getElementById('ledger-body'),filterBar:document.getElementById('filter-bar'),scrollSentinel:document.getElementById('scroll-sentinel'),sortValue:document.getElementById('sort-value'),sortTime:document.getElementById('sort-time'),arrowValue:document.getElementById('arrow-value'),arrowTime:document.getElementById('arrow-time'),langToggle:document.getElementById('lang-toggle'),fontDec:document.getElementById('font-dec'),fontInc:document.getElementById('font-inc'),soundToggle:document.getElementById('sound-toggle'),macroFilters:document.getElementById('macro-filters'),streamToggle:document.getElementById('stream-toggle'),sidebarOnchain:document.getElementById('sidebar-onchain'),sidebarBinance:document.getElementById('sidebar-binance'),bnVolumeValue:document.getElementById('bn-volume-value'),bnVolumeChange:document.getElementById('bn-volume-change'),bnPorValue:document.getElementById('bn-por-value'),bnPorBar:document.getElementById('bn-por-bar'),bnPorLabel:document.getElementById('bn-por-label'),bnPairsList:document.getElementById('bn-pairs-list'),ledgerHeader:document.getElementById('ledger-header'),btcDomValue2:document.getElementById('btc-dom-value-2')};
-
-    async function apiFetch(url){try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),8000),r=await fetch(url,{signal:c.signal});clearTimeout(tm);return(r.status===429||!r.ok)?null:await r.json()}catch(e){return null}}
-    const fetchPrices=()=>apiFetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
-    const fetchGlobal=()=>apiFetch('https://api.coingecko.com/api/v3/global');
-
-    function createRowEl(tx,isNew){const row=document.createElement('div');row.className='row'+(tx.interaction&&tx.interaction.anomalous?' anomaly-row':'')+(isNew?' live-new':'');row.setAttribute('data-id',tx.id);if(tx.stream==='binance'){const rv=document.createElement('span');rv.className='rv';rv.textContent=formatTokenAmt(tx.baseAmt)+' '+tx.baseToken+' ('+formatUSD(tx.value)+')';row.appendChild(rv);const ra=document.createElement('span');ra.style.cssText='width:85px;text-align:center;flex-shrink:0;';const badge=document.createElement('span');badge.className='token-badge';badge.style.cssText='background:rgba(240,185,11,0.1);border-left:2px solid #F0B90B';const tick=document.createElement('span');tick.className='token-ticker';tick.style.color='#F0B90B';tick.textContent=tx.pair;badge.appendChild(tick);ra.appendChild(badge);row.appendChild(ra);const rac=document.createElement('span');rac.style.cssText='width:115px;text-align:center;flex-shrink:0;';const at=document.createElement('span');at.className='action-tag';at.style.borderLeftColor=tx.actionColor;at.style.color=tx.actionColor;at.textContent=tx.actionShort;rac.appendChild(at);row.appendChild(rac);const rf=document.createElement('span');rf.className='rf';rf.textContent=tx.location;row.appendChild(rf)}else{const rv=document.createElement('span');rv.className='rv'+(tx.interaction.anomalous?' anomaly':'');rv.textContent=formatUSD(tx.value);row.appendChild(rv);const ra=document.createElement('span');ra.style.cssText='width:65px;text-align:center;flex-shrink:0;';const badge=document.createElement('span');badge.className='token-badge';const icon=document.createElement('span');icon.className='token-icon';icon.style.background=tx.token.color;icon.textContent=tx.token.icon;badge.appendChild(icon);const tick=document.createElement('span');tick.className='token-ticker';tick.textContent=tx.token.sym;badge.appendChild(tick);ra.appendChild(badge);row.appendChild(ra);const rac=document.createElement('span');rac.style.cssText='width:100px;text-align:center;flex-shrink:0;';const at=document.createElement('span');at.className='action-tag';at.style.borderLeftColor=tx.interaction.color;at.style.color=tx.interaction.color;at.textContent=tx.interaction.short;rac.appendChild(at);row.appendChild(rac);const rf=document.createElement('span');rf.className='rf';rf.textContent=abbrevHash(tx.fromHash)+' \u2192 '+abbrevHash(tx.toHash);row.appendChild(rf)}const rt=document.createElement('span');rt.className='rt';rt.textContent=formatTime(tx.timestamp);row.appendChild(rt);return row}
-    function addSubRow(p,l,v){const sr=document.createElement('div');sr.className='sub-row';const sl=document.createElement('span');sl.className='sub-label';sl.textContent=l;const sv=document.createElement('span');sv.className='sub-val';sv.innerHTML=v;sr.appendChild(sl);sr.appendChild(sv);p.appendChild(sr)}
-    function createSubEl(tx){const sub=document.createElement('div');sub.className='submenu';sub.setAttribute('data-sub-id',tx.id);if(tx.stream==='binance'){addSubRow(sub,t('orderId'),'<span class="hash-clickable" data-copy-hash="'+tx.orderId+'">'+tx.orderId+'</span>');addSubRow(sub,t('executedPrice'),'$'+tx.execPrice.toLocaleString('en-US')+' USD');addSubRow(sub,t('location'),tx.location);addSubRow(sub,'FEE','$'+tx.fee.toFixed(2)+' USD')}else{addSubRow(sub,t('txHash'),'<span class="hash-clickable" data-copy-hash="'+tx.txHash+'">'+tx.txHash+'</span>');addSubRow(sub,t('gasFee'),'$'+tx.gasFeeUSD.toFixed(2)+' USD');addSubRow(sub,t('onChain'),tx.deepMeta)}const ad=document.createElement('div');ad.className='sub-analysis';const al=document.createElement('div');al.className='sub-analysis-label';al.textContent=t('terminalAnalysis');ad.appendChild(al);const atx=document.createElement('div');atx.className='sub-analysis-text';atx.textContent=STATE.lang==='es'?tx.analysisEs:tx.analysisEn;atx.setAttribute('data-analysis-en',tx.analysisEn);atx.setAttribute('data-analysis-es',tx.analysisEs);ad.appendChild(atx);sub.appendChild(ad);return sub}
-
-    function clearLedger(){if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}const b=DOM.ledgerBody;while(b.firstChild&&b.firstChild!==DOM.scrollSentinel)b.removeChild(b.firstChild);STATE.renderedCount=0}
-    function renderBatch(){const s=STATE.renderedCount,e=Math.min(s+BATCH_SIZE,STATE.visible.length);if(s>=e)return;const f=document.createDocumentFragment();for(let i=s;i<e;i++){f.appendChild(createRowEl(STATE.visible[i],false));f.appendChild(createSubEl(STATE.visible[i]))}DOM.ledgerBody.insertBefore(f,DOM.scrollSentinel);STATE.renderedCount=e}
-    function fullRender(){clearLedger();if(STATE.visible.length===0){const nr=document.createElement('div');nr.className='no-results';nr.textContent=t('noResults');DOM.ledgerBody.insertBefore(nr,DOM.scrollSentinel);STATE.renderedCount=0;return}const c=Math.min(BATCH_SIZE,STATE.visible.length,MAX_VISIBLE),f=document.createDocumentFragment();for(let i=0;i<c;i++){f.appendChild(createRowEl(STATE.visible[i],false));f.appendChild(createSubEl(STATE.visible[i]))}DOM.ledgerBody.insertBefore(f,DOM.scrollSentinel);STATE.renderedCount=c;connectObserver()}
-
-    function prependLiveTxs(newTxs){const targetPool=STATE.dataStream==='binance'?STATE.poolBinance:STATE.poolOnchain;for(const tx of newTxs)targetPool.unshift(tx);STATE.pool=targetPool;if(newTxs.some(tx=>tx.value>=SONAR_THRESHOLD))playRadarPulse();rebuildVisible();if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}const nIds=new Set(newTxs.map(tx=>tx.id)),topNew=[];for(const tx of STATE.visible){if(nIds.has(tx.id))topNew.push(tx);else break}if(topNew.length===0)return;const f=document.createDocumentFragment();for(const tx of topNew){f.appendChild(createRowEl(tx,true));f.appendChild(createSubEl(tx))}DOM.ledgerBody.insertBefore(f,DOM.ledgerBody.firstChild);STATE.renderedCount+=topNew.length;while(STATE.renderedCount>MAX_VISIBLE){const b=DOM.ledgerBody,se=DOM.scrollSentinel,ls=se.previousElementSibling;if(!ls||ls===se)break;const lr=ls.previousElementSibling;if(!lr)break;b.removeChild(ls);b.removeChild(lr);STATE.renderedCount--}setTimeout(()=>{DOM.ledgerBody.querySelectorAll('.live-new').forEach(el=>el.classList.remove('live-new'))},3000)}
-
-    function updateOnchainSidebar(){let buy=0,sell=0;for(const tx of STATE.poolOnchain){if(tx.direction==='buy')buy+=tx.value;else if(tx.direction==='sell')sell+=tx.value}const total=buy+sell;if(total===0){DOM.ratioBuy.style.width='50%';DOM.ratioSell.style.width='50%'}else{DOM.ratioBuy.style.width=(buy/total*100).toFixed(1)+'%';DOM.ratioSell.style.width=(sell/total*100).toFixed(1)+'%'}DOM.ratioBuyLabel.textContent=t('buy')+' '+((buy/total*100)||50).toFixed(0)+'%';DOM.ratioSellLabel.textContent=t('sell')+' '+((sell/total*100)||50).toFixed(0)+'%';const map=new Map();for(const tx of STATE.poolOnchain){if(!tx.venue||tx.venue==='Unknown')continue;map.set(tx.venue,(map.get(tx.venue)||0)+tx.gasFeeUSD)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.hotList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">$${(e[1]>=1000?(e[1]/1000).toFixed(1)+'K':e[1].toFixed(0))}</span>`;DOM.hotList.appendChild(item)})}
-    function updateBinanceSidebar(){STATE.bnVolume+=(Math.random()-0.5)*4.5e9;STATE.bnVolume=Math.max(12e9,Math.min(55e9,STATE.bnVolume));DOM.bnVolumeValue.textContent=formatMcap(STATE.bnVolume);DOM.bnVolumeChange.textContent=(Math.random()>0.5?'+':'-')+(Math.random()*6).toFixed(2)+'%';DOM.bnVolumeChange.className='block-sub '+(Math.random()>0.5?'pos':'neg');STATE.bnPor+=Math.floor((Math.random()-0.5)*1200);STATE.bnPor=Math.max(530000,Math.min(550000,STATE.bnPor));DOM.bnPorValue.textContent=STATE.bnPor.toLocaleString('en-US')+' BTC';DOM.bnPorBar.style.width='100%';DOM.bnPorLabel.textContent=t('backed');DOM.btcDomValue2.textContent=(STATE.btcDom||52.4).toFixed(1)+'%';const map=new Map();for(const tx of STATE.poolBinance){map.set(tx.pair,(map.get(tx.pair)||0)+tx.value)}const sorted=[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);DOM.bnPairsList.innerHTML='';sorted.forEach((e,i)=>{const item=document.createElement('div');item.className='hot-item';item.innerHTML=`<span class="hot-rank">${i+1}.</span><span class="hot-name">${e[0]}</span><span class="hot-gas">${formatUSD(e[1])}</span>`;DOM.bnPairsList.appendChild(item)})}
-
-    function switchStream(){playClickSound();STATE.dataStream=STATE.dataStream==='onchain'?'binance':'onchain';const isB=STATE.dataStream==='binance';DOM.ledgerHeader.classList.toggle('binance-mode',isB);DOM.ledgerBody.classList.toggle('binance-mode',isB);DOM.sidebarOnchain.classList.toggle('active',!isB);DOM.sidebarBinance.classList.toggle('active',isB);DOM.streamToggle.textContent=isB?t('binanceStream'):t('onChainStream');DOM.streamToggle.classList.toggle('binance-active',isB);DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream],btns=DOM.macroFilters.querySelectorAll('.mf-btn');btns.forEach((b,i)=>{b.setAttribute('data-mf',cfg[i].key);b.textContent=t(cfg[i].i18n);b.classList.toggle('active',i===0)});STATE.macroFilter='all';STATE.pool=isB?STATE.poolBinance:STATE.poolOnchain;rebuildVisible();fullRender()}
-
-    function applyLanguage(){const L=LANG[STATE.lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(L[k])el.textContent=L[k]});DOM.filterBar.placeholder=L.filterPlaceholder;DOM.soundToggle.textContent=STATE.soundEnabled?L.sndOn:L.sndOff;DOM.streamToggle.textContent=STATE.dataStream==='binance'?L.binanceStream:L.onChainStream;const isB=STATE.dataStream==='binance';DOM.ledgerHeader.querySelector('[data-i18n="value"]').textContent=isB?t('amountValue'):t('value');DOM.ledgerHeader.querySelector('[data-i18n="asset"]').textContent=isB?t('pair'):t('asset');DOM.ledgerHeader.querySelector('[data-i18n="action"]').textContent=isB?t('actionType'):t('action');DOM.ledgerHeader.querySelector('[data-i18n="fromTo"]').textContent=isB?t('location'):t('fromTo');const cfg=MACRO_CONFIGS[STATE.dataStream];DOM.macroFilters.querySelectorAll('.mf-btn').forEach((b,i)=>{b.textContent=t(cfg[i].i18n)});if(!isB)updateOnchainSidebar();else updateBinanceSidebar();DOM.ledgerBody.querySelectorAll('.sub-analysis-text').forEach(el=>{el.textContent=STATE.lang==='es'?el.getAttribute('data-analysis-es'):el.getAttribute('data-analysis-en')});DOM.ledgerBody.querySelectorAll('.sub-analysis-label').forEach(al=>{al.textContent=L.terminalAnalysis});const lk=[isB?t('orderId'):t('txHash'),isB?t('executedPrice'):t('gasFee'),isB?t('location'):t('onChain')];let li=0;DOM.ledgerBody.querySelectorAll('.sub-row .sub-label').forEach(sl=>{if(li<lk.length){sl.textContent=lk[li];li++}})}
-    function applyFontScale(){document.getElementById('deep-flow-view').style.setProperty('--fs',FONT_STEPS[STATE.fontStepIndex]);DOM.fontDec.style.opacity=STATE.fontStepIndex<=0?'0.3':'1';DOM.fontInc.style.opacity=STATE.fontStepIndex>=FONT_STEPS.length-1?'0.3':'1'}
-
-    function updateClock(){const n=new Date();DOM.hdrClock.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0')}
-    function updateDate(){const n=new Date(),mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];DOM.hdrDate.textContent=n.getDate()+' '+mo[n.getMonth()]+' '+n.getFullYear()}
-    function updateTickers(pd){if(!pd){DOM.btcPrice.textContent='---';DOM.ethPrice.textContent='---';DOM.btcChange.textContent='';DOM.ethChange.textContent='';return}const btc=pd.bitcoin||FALLBACK.bitcoin,eth=pd.ethereum||FALLBACK.ethereum;DOM.btcPrice.textContent='$'+btc.usd.toLocaleString('en-US',{maximumFractionDigits:0});DOM.ethPrice.textContent='$'+eth.usd.toLocaleString('en-US',{maximumFractionDigits:0});const bc=btc.usd_24h_change;DOM.btcChange.textContent=(bc>=0?'+':'')+bc.toFixed(2)+'%';DOM.btcChange.className='ticker-change '+(bc>=0?'pos':'neg');const ec=eth.usd_24h_change;DOM.ethChange.textContent=(ec>=0?'+':'')+ec.toFixed(2)+'%';DOM.ethChange.className='ticker-change '+(ec>=0?'pos':'neg');STATE.btcPrice=btc.usd;STATE.ethPrice=eth.usd;STATE.lastKnownBtc=btc.usd;STATE.lastKnownEth=eth.usd;STATE.btcChange=bc;STATE.ethChange=ec;STATE.priceHistory.push({price:btc.usd,ts:Date.now()});if(STATE.priceHistory.length>20)STATE.priceHistory.shift()}
-    function updateGlobalData(gd){if(!gd)return;const data=(gd&&gd.data)?gd.data:FALLBACK.data;const dom=data.market_cap_percentage?(data.market_cap_percentage.btc||0):0;const dynamicDom=dom + (Math.random()-0.5)*2;DOM.btcDomValue.textContent=dynamicDom.toFixed(1)+'%';DOM.btcDomValue.classList.remove('loading');DOM.btcDomBar.style.width=dynamicDom.toFixed(1)+'%';STATE.btcDom=dynamicDom;let mcap=null;if(data.total_market_cap&&typeof data.total_market_cap.usd==='number'){const raw=data.total_market_cap.usd;if(isFinite(raw)&&raw>0)mcap=raw}if(mcap===null)mcap=FALLBACK.data.total_market_cap.usd;const dynamicMcap = mcap * (1 + (Math.random()-0.5)*0.02);DOM.mcapValue.textContent=formatMcap(dynamicMcap);DOM.mcapValue.classList.remove('loading');STATE.totalMcap=dynamicMcap;const mc=(typeof data.market_cap_change_percentage_24h_usd==='number'&&isFinite(data.market_cap_change_percentage_24h_usd))?data.market_cap_change_percentage_24h_usd:null;if(mc!==null){const dynamicMc = mc + (Math.random()-0.5)*1.5;DOM.mcapChange.textContent=(dynamicMc>=0?'+':'')+dynamicMc.toFixed(2)+'% ('+t('hours24')+')';DOM.mcapChange.className='block-sub '+(dynamicMc>=0?'pos':'neg');STATE.mcapChange=dynamicMc}}
-    function updateVolatility(){let next=STATE.volScore+((Math.random()-0.5)*12);if(next<15)next=15+Math.random()*8;if(next>85)next=85-Math.random()*8;STATE.volScore=Math.round(next);DOM.volValue.textContent=STATE.volScore;const c=STATE.volScore<34?'#39FF14':STATE.volScore<67?'#FFD700':'#FF3131';DOM.volBar.style.width=STATE.volScore+'%';DOM.volBar.style.background=c;DOM.volValue.style.color=c}
-    function updateGas(){STATE.gasPrice+=(Math.random()-0.5)*15;STATE.gasPrice+=(35-STATE.gasPrice)*0.15;STATE.gasPrice=Math.max(5,Math.min(120,STATE.gasPrice));DOM.gasValue.textContent=Math.max(1,Math.round(STATE.gasPrice+(Math.random()-0.5)*5))}
-    function updateSSR(){STATE.ssr+=(Math.random()-0.5)*1.4;STATE.ssr+=(4.5-STATE.ssr)*0.12;STATE.ssr=Math.max(1.5,Math.min(9.5,STATE.ssr));const v=STATE.ssr;DOM.ssrValue.textContent=v.toFixed(1)+'%';DOM.ssrBar.style.width=((v-1.5)/8*100).toFixed(1)+'%';DOM.ssrBar.style.background=v<4?'#39FF14':v<6?'#FFD700':'#FF3131'}
-    function updateSortArrows(){if(STATE.sortField==='value'){DOM.arrowValue.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowTime.textContent=''}else{DOM.arrowTime.textContent=STATE.sortDir==='desc'?'\u25BC':'\u25B2';DOM.arrowValue.textContent=''}}
-
-    function handleSortClick(e){const h=e.target.closest('.sort-header');if(!h)return;const f=h.getAttribute('data-sort');if(STATE.sortField===f)STATE.sortDir=STATE.sortDir==='desc'?'asc':'desc';else{STATE.sortField=f;STATE.sortDir='desc'}playClickSound();updateSortArrows();rebuildVisible();fullRender()}
-    function handleMacroFilter(e){const b=e.target.closest('.mf-btn');if(!b)return;let mf=b.getAttribute('data-mf');if(mf===STATE.macroFilter)mf='all';STATE.macroFilter=mf;playClickSound();DOM.macroFilters.querySelectorAll('.mf-btn').forEach(x=>x.classList.toggle('active',x.getAttribute('data-mf')===mf));rebuildVisible();fullRender()}
-    let _ft=null;function handleFilterInput(){clearTimeout(_ft);_ft=setTimeout(()=>{STATE.filterText=DOM.filterBar.value.trim().toUpperCase();rebuildVisible();fullRender()},150)}
-    function handleLangToggle(){const next=STATE.lang==='en'?'es':'en';playClickSound();if(typeof window.setGlobalLanguage==='function')window.setGlobalLanguage(next,'deep-flow');window.deepFlowSetLanguage(next)}
-    function handleFontDec(){if(STATE.fontStepIndex<=0)return;STATE.fontStepIndex--;playClickSound();applyFontScale()}
-    function handleFontInc(){if(STATE.fontStepIndex>=FONT_STEPS.length-1)return;STATE.fontStepIndex++;playClickSound();applyFontScale()}
-    function handleSoundToggle(){STATE.soundEnabled=!STATE.soundEnabled;if(STATE.soundEnabled)getAudioCtx();playClickSound();DOM.soundToggle.textContent=STATE.soundEnabled?t('sndOn'):t('sndOff');DOM.soundToggle.classList.toggle('muted',!STATE.soundEnabled)}
-    function handleLedgerClick(e){const h=e.target.closest('.hash-clickable');if(h){e.stopPropagation();const hash=h.getAttribute('data-copy-hash');if(!hash)return;copyToClipboard(hash).then(()=>{const o=h.textContent,oc=h.style.color;h.textContent=t('copied');h.style.color='#39FF14';setTimeout(()=>{h.textContent=o;h.style.color=oc},1000)});return}const r=e.target.closest('.row');if(!r)return;const tid=r.getAttribute('data-id'),sub=DOM.ledgerBody.querySelector('.submenu[data-sub-id="'+tid+'"]');if(!sub)return;playClickSound();if(STATE.openSubmenuEl===sub){sub.classList.remove('open');r.classList.remove('active');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}else{if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');if(STATE.openSubmenuRow)STATE.openSubmenuRow.classList.remove('active')}sub.classList.add('open');r.classList.add('active');STATE.openSubmenuRow=r;STATE.openSubmenuEl=sub;setTimeout(()=>sub.scrollIntoView({block:'nearest',behavior:'instant'}),0)}}
-    function connectObserver(){if(STATE.observer)STATE.observer.disconnect();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)return;STATE.observer=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){renderBatch();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)STATE.observer.disconnect()}},{root:DOM.ledgerBody,rootMargin:'0px 0px 100px 0px',threshold:0});STATE.observer.observe(DOM.scrollSentinel)}
-
-    function startTimerEngine(){setInterval(updateClock,1000);setInterval(updateDate,60000);setInterval(async()=>{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();if(STATE.apiAlive){const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT)}},POLL_INTERVAL)}
-
-    function initDeepFlow(){
-      window.deepFlowSetLanguage=function(lang){STATE.lang=lang==='en'?'en':'es';applyLanguage();if(typeof window.applyGlobalStaticLanguage==='function')window.applyGlobalStaticLanguage()};
-      STATE.lang=(window.currentLang==='en')?'en':'es';
-      STATE.poolOnchain=generateHistoricalOnchain(INITIAL_POOL);
-      STATE.poolBinance=generateHistoricalBinance(INITIAL_POOL);
-      STATE.pool=STATE.poolOnchain;
-      rebuildVisible();
-      fullRender();
-      updateDate();
-      updateClock();
-      updateSortArrows();
-      applyLanguage();
-      applyFontScale();
-      document.getElementById('ledger-header').addEventListener('click',handleSortClick);
-      DOM.macroFilters.addEventListener('click',handleMacroFilter);
-      DOM.filterBar.addEventListener('input',handleFilterInput);
-      DOM.langToggle.addEventListener('click',handleLangToggle);
-      DOM.fontDec.addEventListener('click',handleFontDec);
-      DOM.fontInc.addEventListener('click',handleFontInc);
-      DOM.soundToggle.addEventListener('click',handleSoundToggle);
-      DOM.streamToggle.addEventListener('click',switchStream);
-      DOM.ledgerBody.addEventListener('click',handleLedgerClick);
-      updateVolatility();
-      
-      // Llamada asncrona inicial de APIs de Coingecko
-      Promise.all([fetchPrices(),fetchGlobal()]).then(([pd,gd])=>{
-        if(pd||gd){
-          STATE.apiAlive=true;
-          DOM.statusDot.classList.add('live');
-          DOM.hdrConnStatus.style.display='none';
-          updateTickers(pd);
-          updateGlobalData(gd);
-        }else{
-          STATE.apiAlive=false;
-          DOM.statusDot.classList.remove('live');
-          DOM.hdrConnStatus.style.display='inline';
-          updateTickers(null);
-        }
-        updateSSR();
-        updateOnchainSidebar();
-        startTimerEngine();
-      });
-    }
-
-    // Unificacin de la ejecucin de carga inicial para ambas plataformas
-    function initAll() {
-      initDeepFlow();
-      if (typeof window.switchTab === 'function') {
-        window.switchTab(window.activeTab);
-      }
-      const savedDominonTheme = localStorage.getItem('danifu_dominon_theme') || 'black';
-      const savedQuantisTheme = localStorage.getItem('danifu_quantis_theme') || 'black';
-      if (typeof window.setTheme === 'function') {
-        window.setTheme(savedDominonTheme, 'main-dashboard-view');
-        window.setTheme(savedQuantisTheme, 'quantis-view');
-      }
-      const savedSymbol = localStorage.getItem('danifu_chart_symbol');
-      if (savedSymbol && document.getElementById('symbolSelect')) {
-        document.getElementById('symbolSelect').value = savedSymbol;
-      }
-      if (typeof window.updatePomoUI === 'function') {
-        window.updatePomoUI();
-      }
-      if (typeof window.updateDisplay === 'function') {
-        window.updateDisplay();
-      }
-    }
-
-    if(document.readyState==='loading') {
-      document.addEventListener('DOMContentLoaded', initAll);
-    } else {
-      initAll();
-    }
-  </script>
-  <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
-  <script>
-  (function() {
-    // =========================================================
-    // --- QUANTIS INFINITE CANVAS ENGINE ---
-    // =========================================================
-    var QS = {
-      lang: 'es',
-      zoom: 1.0,
-      panX: 0,
-      panY: 0,
-      isPanning: false,
-      startX: 0,
-      startY: 0,
-      isDrawing: false,
-      drawMode: null,
-      drawColor: '#000000',
-      drawSize: 8,
-      activePath: null,
-      ctxCoords: { x: 0, y: 0 },
-      activeProj: 0,
-      activePage: 0,
-      projects: [
-        { id: 'qp-1', name: 'Proyecto Alpha', pages: ['Página Inicial', 'Investigación'] },
-        { id: 'qp-2', name: 'Proyecto Beta',  pages: ['Resumen'] }
-      ],
-      canvasData: {
-        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
-        '0-1': [],
-        '1-0': []
-      },
-      drawings: {}
-    };
-
-    // =========================================================
-    // --- QUANTIS DOM REFERENCES ---
-    // =========================================================
-    var QD = {};
-
-    function qInit() {
-      QD.viewport   = document.getElementById('quantis-viewport');
-      QD.canvas     = document.getElementById('quantis-canvas-container');
-      QD.drawCanvas = document.getElementById('quantis-drawing-canvas');
-      QD.drawCtx    = QD.drawCanvas ? QD.drawCanvas.getContext('2d') : null;
-      QD.projList   = document.getElementById('q-projects-list');
-      QD.ctxMenu    = document.getElementById('q-context-menu');
-      QD.fileInput  = document.getElementById('q-file-input');
-      QD.clock      = document.getElementById('quantis-clock');
-
-      if (!QD.viewport) return; // view not present
-
-      qLoadWorkspace();
-      qApplyCanvasSize();
-      qRenderProjects();
-      qLoadPage(QS.activeProj, QS.activePage, true);
-      qSetupCanvas();
-      qSetupWorkspaceButtons();
-      qSetupDrawingControls();
-      qSetupClock();
-      window.qUpdateDrawingControls();
-    }
-
-    // ---- CLOCK ----
-    function qSetupClock() {
-      function tick() {
-        if (!QD.clock) return;
-        var n = new Date();
-        var pad = function(v){ return String(v).padStart(2,'0'); };
-        QD.clock.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
-      }
-      tick();
-      setInterval(tick, 1000);
-    }
-
-    // ---- CANVAS TRANSFORM ----
-    function qApplyCanvasSize() {
-      if (!QD.canvas || !QD.drawCanvas) return;
-      var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
-      var size = limits.quantisSize || 2000;
-      QD.canvas.style.width = size + 'px';
-      QD.canvas.style.height = size + 'px';
-      QD.canvas.style.left = (-size / 2) + 'px';
-      QD.canvas.style.top = (-size / 2) + 'px';
-      QD.drawCanvas.width = size;
-      QD.drawCanvas.height = size;
-      QD.drawCanvas.style.width = size + 'px';
-      QD.drawCanvas.style.height = size + 'px';
-      qRedrawCanvas();
-    }
-
-    function qUpdateTransform() {
-      QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
-    }
-
-    // =========================================================
-    // --- QUANTIS LOCAL STORAGE ENGINE ---
-    // =========================================================
-    function qWorkspaceKey() {
-      return QS.activeProj + '-' + QS.activePage;
-    }
-
-    function qNormalizeDrawingPaths(key) {
-      if (!Array.isArray(QS.drawings[key])) QS.drawings[key] = [];
-      QS.drawings[key] = QS.drawings[key].filter(function(path) {
-        return path && Array.isArray(path.points) && path.points.length > 0;
-      });
-      return QS.drawings[key];
-    }
-
-    function qStrokeVectorPath(path) {
-      if (!QD.drawCtx || !path || !Array.isArray(path.points) || !path.points.length) return;
-      QD.drawCtx.save();
-      QD.drawCtx.lineCap = 'round';
-      QD.drawCtx.lineJoin = 'round';
-      QD.drawCtx.lineWidth = path.size || 8;
-      QD.drawCtx.strokeStyle = path.color || '#000000';
-      QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
-      QD.drawCtx.beginPath();
-      QD.drawCtx.moveTo(path.points[0].x, path.points[0].y);
-      if (path.points.length === 1) {
-        QD.drawCtx.lineTo(path.points[0].x + 0.01, path.points[0].y + 0.01);
-      } else {
-        path.points.forEach(function(point, index) {
-          if (index > 0) QD.drawCtx.lineTo(point.x, point.y);
-        });
-      }
-      QD.drawCtx.stroke();
-      QD.drawCtx.restore();
-    }
-
-    function qRedrawCanvas() {
-      if (!QD.drawCtx || !QD.drawCanvas) return;
-      QD.drawCtx.clearRect(0, 0, QD.drawCanvas.width, QD.drawCanvas.height);
-      qNormalizeDrawingPaths(qWorkspaceKey()).forEach(qStrokeVectorPath);
-    }
-
-    function qStrokeLiveSegment(path, fromPoint, toPoint) {
-      if (!QD.drawCtx || !path || !fromPoint || !toPoint) return;
-      QD.drawCtx.save();
-      QD.drawCtx.lineCap = 'round';
-      QD.drawCtx.lineJoin = 'round';
-      QD.drawCtx.lineWidth = path.size || 8;
-      QD.drawCtx.strokeStyle = path.color || '#000000';
-      QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
-      QD.drawCtx.beginPath();
-      QD.drawCtx.moveTo(fromPoint.x, fromPoint.y);
-      QD.drawCtx.lineTo(toPoint.x, toPoint.y);
-      QD.drawCtx.stroke();
-      QD.drawCtx.restore();
-    }
-
-    function qSaveDrawing() {
-      qNormalizeDrawingPaths(qWorkspaceKey());
-    }
-
-    function qLoadDrawing() {
-      qRedrawCanvas();
-    }
-
-    function qSaveWorkspace() {
-      qSavePage(false);
-      qPersistWorkspace();
-    }
-
-    function qPersistWorkspace() {
-      try {
-        localStorage.setItem('quantis_local_data', JSON.stringify({
-          projects: QS.projects,
-          canvasData: QS.canvasData,
-          drawings: QS.drawings,
-          activeProj: QS.activeProj,
-          activePage: QS.activePage
-        }));
-      } catch (error) {
-        console.warn('No se pudo guardar Quantis localmente:', error);
-      }
-    }
-
-    function qLoadWorkspace() {
-      try {
-        var raw = localStorage.getItem('quantis_local_data');
-        if (!raw) return;
-        var data = JSON.parse(raw);
-        if (Array.isArray(data.projects)) QS.projects = data.projects;
-        if (data.canvasData && typeof data.canvasData === 'object') QS.canvasData = data.canvasData;
-        if (data.drawings && typeof data.drawings === 'object') QS.drawings = data.drawings;
-        QS.activeProj = Number.isInteger(data.activeProj) ? data.activeProj : 0;
-        QS.activePage = Number.isInteger(data.activePage) ? data.activePage : 0;
-      } catch (error) {
-        console.warn('No se pudo cargar Quantis local:', error);
-      }
-    }
-
-    function qSavePage() {
-      if (!QD.canvas) return;
-      var key = QS.activeProj+'-'+QS.activePage;
-      var els = [];
-      QD.canvas.querySelectorAll('.q-canvas-el').forEach(function(blk) {
-        var x = parseFloat(blk.style.left);
-        var y = parseFloat(blk.style.top);
-        var w = blk.style.width ? parseFloat(blk.style.width) : null;
-        var h = blk.style.height ? parseFloat(blk.style.height) : null;
-        var desc = blk.querySelector('.q-block-desc').value;
-        var textNode = blk.querySelector('.q-block-text');
-        if (textNode) {
-          els.push({ type:'text', x:x, y:y, desc:desc, content:textNode.innerText,
-                     isLink: textNode.getAttribute('data-is-link')==='true' });
-        } else {
-          var imgEl = blk.querySelector('.q-file-img');
-          var lbl   = blk.querySelector('.q-file-label');
-          els.push({ type:'file', x:x, y:y, w:w, h:h, desc:desc,
-                     fileName: lbl ? lbl.textContent : '',
-                     fileType: blk.getAttribute('data-ftype') || 'unknown',
-                     fileData: imgEl ? imgEl.src : null });
-        }
-      });
-      QS.canvasData[key] = els;
-      qSaveDrawing();
-      try {
-        localStorage.setItem('quantis_local_data', JSON.stringify({
-          projects: QS.projects,
-          canvasData: QS.canvasData,
-          drawings: QS.drawings,
-          activeProj: QS.activeProj,
-          activePage: QS.activePage
-        }));
-      } catch (error) {}
-    }
-
-    function qLoadPage(projIdx, pageIdx, skipCurrentSave) {
-      if (!skipCurrentSave) qSavePage();
-      QS.activeProj  = projIdx;
-      QS.activePage  = pageIdx;
-      QD.canvas.querySelectorAll('.q-canvas-el').forEach(function(el) { el.remove(); });
-      var key  = projIdx+'-'+pageIdx;
-      var data = QS.canvasData[key] || [];
-      data.forEach(function(el) {
-        if (el.type === 'text') qRecreateText(el.x, el.y, el.desc, el.content, el.isLink);
-        else                    qRecreateFile(el.x, el.y, el.desc, el.fileName, el.fileType, el.fileData, el.w, el.h);
-      });
-      qLoadDrawing();
-      qRenderProjects();
-      qPersistWorkspace();
-    }
-
-    // ---- PROJECTS SIDEBAR ----
-    function qRenderProjects() {
-      if (!QD.projList) return;
-      QD.projList.innerHTML = '';
-      QS.projects.forEach(function(proj, pi) {
-        var wrap = document.createElement('div');
-        wrap.className = 'q-proj-item';
-        var lbl = document.createElement('div');
-        lbl.className = 'q-proj-label';
-        lbl.innerHTML = '<span><i class="fa-solid fa-folder"></i>'+proj.name+'</span>';
-        var addPageBtn = document.createElement('button');
-        addPageBtn.style.cssText = 'background:none;border:none;color:var(--quantis-faint);cursor:pointer;font-size:10px;';
-        addPageBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-        addPageBtn.title = 'Nueva Página';
-        addPageBtn.onclick = function(e){ e.stopPropagation(); qAddPage(pi); };
-        lbl.appendChild(addPageBtn);
-        lbl.querySelector('span').onclick = function(){ var n=prompt('Renombrar proyecto:',proj.name); if(n&&n.trim()){proj.name=n.trim();qRenderProjects();qSaveWorkspace();} };
-        wrap.appendChild(lbl);
-        var ul = document.createElement('div');
-        ul.className = 'q-page-list';
-        proj.pages.forEach(function(page, gi) {
-          var li = document.createElement('div');
-          li.className = 'q-page-item' + (QS.activeProj===pi && QS.activePage===gi ? ' active' : '');
-          li.innerHTML = '<span><i class="fa-solid fa-file-lines"></i>'+page+'</span>';
-          li.onclick = function(){ qLoadPage(pi, gi); };
-          var del = document.createElement('button');
-          del.className = 'q-page-del';
-          del.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-          del.onclick = function(e){ e.stopPropagation(); if(confirm('¿Eliminar esta página?')){ proj.pages.splice(gi,1); delete QS.canvasData[pi+'-'+gi]; delete QS.drawings[pi+'-'+gi]; if(QS.activeProj===pi&&QS.activePage===gi) qLoadPage(0,0); else { qRenderProjects(); qSaveWorkspace(); } } };
-          li.appendChild(del);
-          ul.appendChild(li);
-        });
-        wrap.appendChild(ul);
-        QD.projList.appendChild(wrap);
-      });
-    }
-
-    window.qAddProject = function() {
-      if (!window.isMembershipPlanReady) {
-        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        return;
-      }
-      var limits = window.getPlanLimits ? window.getPlanLimits() : { maxQuantisProjects: 2 };
-      if (QS.projects.length >= limits.maxQuantisProjects) {
-        window.showPlanPopup('Limite de proyectos alcanzado para tu plan.');
-        return;
-      }
-      var n = prompt('Nombre del nuevo proyecto:');
-      if (n && n.trim()) {
-        QS.projects.push({ id:'qp-'+Date.now(), name:n.trim(), pages:['Pagina 1'] });
-        QS.canvasData[(QS.projects.length - 1)+'-0'] = [];
-        qRenderProjects();
-        qSaveWorkspace();
-      }
-    };
-
-    function qAddPage(projIdx) {
-      if (!window.isMembershipPlanReady) {
-        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        return;
-      }
-      var limits = window.getPlanLimits ? window.getPlanLimits() : { maxQuantisPagesPerProj: 3 };
-      if (QS.projects[projIdx].pages.length >= limits.maxQuantisPagesPerProj) {
-        window.showPlanPopup('Limite de paginas por proyecto alcanzado para tu plan.');
-        return;
-      }
-      var n = prompt('Nombre de la nueva página:');
-      if (n && n.trim()) {
-        QS.projects[projIdx].pages.push(n.trim());
-        var newIdx = QS.projects[projIdx].pages.length - 1;
-        QS.canvasData[projIdx+'-'+newIdx] = [];
-        qLoadPage(projIdx, newIdx);
-      }
-    }
-
-    window.qApplyPlanLimits = function() {
-      qApplyCanvasSize();
-      var prevProj = QS.activeProj;
-      var prevPage = QS.activePage;
-      if (!QS.projects.length) {
-        QS.projects = [{ id: 'qp-' + Date.now(), name: 'Proyecto 1', pages: ['Pagina 1'] }];
-        QS.canvasData['0-0'] = QS.canvasData['0-0'] || [];
-      }
-      QS.projects.forEach(function(project) {
-        if (!project.pages.length) project.pages.push('Pagina 1');
-      });
-      QS.activeProj = Math.min(QS.activeProj, Math.max(0, QS.projects.length - 1));
-      QS.activePage = Math.min(QS.activePage, Math.max(0, (QS.projects[QS.activeProj]?.pages.length || 1) - 1));
-      if (prevProj !== QS.activeProj || prevPage !== QS.activePage) {
-        qLoadPage(QS.activeProj, QS.activePage, true);
-      } else {
-        qRenderProjects();
-      }
-    };
-
-    function qSetupWorkspaceButtons() {
-      document.getElementById('q-export-project-btn')?.addEventListener('click', function() {
-        if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        if (window.userPlan === 'normal') return window.showPlanPopup('Export Project requiere Extended o Premium.');
-        qSaveWorkspace();
-        var blob = new Blob([localStorage.getItem('quantis_local_data') || '{}'], { type: 'application/json;charset=utf-8' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'quantis_workspace.json';
-        a.click();
-        URL.revokeObjectURL(a.href);
-      });
-      document.getElementById('q-import-project-btn')?.addEventListener('click', function() {
-        if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        if (window.userPlan === 'normal') return window.showPlanPopup('Import Project requiere Extended o Premium.');
-        document.getElementById('q-import-project-input')?.click();
-      });
-      document.getElementById('q-import-project-input')?.addEventListener('change', function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-          try {
-            var data = JSON.parse(ev.target.result);
-            if (!Array.isArray(data.projects) || !data.canvasData) throw new Error('Formato invalido');
-            QS.projects = data.projects;
-            QS.canvasData = data.canvasData || {};
-            QS.drawings = data.drawings || {};
-            QS.activeProj = 0;
-            QS.activePage = 0;
-            qLoadPage(0, 0, true);
-          } catch (error) {
-            window.showPlanPopup('Archivo Quantis invalido.');
-          }
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-      });
-    }
-
-    // ---- CANVAS EVENTS ----
-    function qSetupCanvas() {
-      // Zoom
-      QD.viewport.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        var intensity = 0.05;
-        QS.zoom = e.deltaY < 0
-          ? Math.min(QS.zoom + intensity, 3)
-          : Math.max(QS.zoom - intensity, 0.35);
-        qUpdateTransform();
-      }, { passive: false });
-
-      var clickT = 0, clickX = 0, clickY = 0;
-      // Pan start + click tracking
-      QD.viewport.addEventListener('mousedown', function(e) {
-        if (QS.drawMode) return;
-        if (e.target === QD.viewport || e.target === QD.canvas) {
-          if (e.button === 0) {
-            QS.isPanning = true;
-            QS.startX = e.clientX - QS.panX;
-            QS.startY = e.clientY - QS.panY;
-            QD.viewport.classList.add('grabbing');
-            QD.ctxMenu.style.display = 'none';
-            clickT = Date.now(); clickX = e.clientX; clickY = e.clientY;
-          }
-        }
-      });
-      window.addEventListener('mousemove', function(e) {
-        if (QS.isPanning) {
-          QS.panX = e.clientX - QS.startX;
-          QS.panY = e.clientY - QS.startY;
-          qUpdateTransform();
-        }
-      });
-      window.addEventListener('mouseup', function() {
-        if (QS.isPanning) { QS.isPanning = false; QD.viewport.classList.remove('grabbing'); }
-      });
-      // Click to create text
-      QD.viewport.addEventListener('mouseup', function(e) {
-        if (QS.drawMode) return;
-        if (e.target === QD.viewport || e.target === QD.canvas) {
-          if (e.button === 0) {
-            var diff = Date.now() - clickT;
-            var dist = Math.hypot(e.clientX - clickX, e.clientY - clickY);
-            if (diff < 250 && dist < 5) {
-              var rect = QD.canvas.getBoundingClientRect();
-              var x = (e.clientX - rect.left) / QS.zoom;
-              var y = (e.clientY - rect.top)  / QS.zoom;
-              qCreateText(x, y);
-            }
-          }
-        }
-      });
-      // Right-click context menu
-      QD.viewport.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        var rect = QD.canvas.getBoundingClientRect();
-        QS.ctxCoords.x = (e.clientX - rect.left) / QS.zoom;
-        QS.ctxCoords.y = (e.clientY - rect.top)  / QS.zoom;
-        QD.ctxMenu.style.display = 'block';
-        QD.ctxMenu.style.left = e.clientX + 'px';
-        QD.ctxMenu.style.top  = e.clientY + 'px';
-      });
-      document.addEventListener('click', function(e) {
-        if (!QD.ctxMenu.contains(e.target)) QD.ctxMenu.style.display = 'none';
-      });
-    }
-
-    // =========================================================
-    // --- QUANTIS DRAWING CONTROLS ---
-    // =========================================================
-    function qIsPremiumBrush() {
-      return !!(window.isMembershipPlanReady && window.getPlanLimits && window.getPlanLimits().hasBrush);
-    }
-
-    function qCanvasPoint(e) {
-      var rect = QD.canvas.getBoundingClientRect();
-      return {
-        x: (e.clientX - rect.left) / QS.zoom,
-        y: (e.clientY - rect.top) / QS.zoom
-      };
-    }
-
-    function qBeginDraw(e) {
-      if (!QS.drawMode) return;
-      if (!window.isMembershipPlanReady) {
-        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        return;
-      }
-      if (!qIsPremiumBrush()) {
-        QS.drawMode = null;
-        window.qUpdateDrawingControls();
-        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
-        return;
-      }
-      if (!(e.target === QD.viewport || e.target === QD.canvas || e.target === QD.drawCanvas)) return;
-      e.preventDefault();
-      QS.isDrawing = true;
-      var p = qCanvasPoint(e);
-      QS.activePath = {
-        mode: QS.drawMode,
-        color: QS.drawColor,
-        size: QS.drawSize,
-        points: [{ x: p.x, y: p.y }]
-      };
-      qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
-      qStrokeVectorPath(QS.activePath);
-    }
-
-    function qMoveDraw(e) {
-      if (!QS.isDrawing || !QS.drawMode || !QD.drawCtx || !QS.activePath) return;
-      e.preventDefault();
-      var p = qCanvasPoint(e);
-      var points = QS.activePath.points;
-      var lastPoint = points[points.length - 1];
-      if (lastPoint && Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y) < 0.75) return;
-      points.push({ x: p.x, y: p.y });
-      qStrokeLiveSegment(QS.activePath, lastPoint, p);
-    }
-
-    function qEndDraw() {
-      if (!QS.isDrawing) return;
-      QS.isDrawing = false;
-      QS.activePath = null;
-      qRedrawCanvas();
-      qSaveWorkspace();
-    }
-
-    function qSetDrawMode(mode) {
-      if (!window.isMembershipPlanReady) {
-        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        return;
-      }
-      if (!qIsPremiumBrush()) {
-        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
-        return;
-      }
-      QS.drawMode = QS.drawMode === mode ? null : mode;
-      window.qUpdateDrawingControls();
-    }
-
-    function qSetupDrawingControls() {
-      if (!QD.viewport || !QD.drawCtx) return;
-      QD.viewport.addEventListener('mousedown', qBeginDraw);
-      window.addEventListener('mousemove', qMoveDraw);
-      window.addEventListener('mouseup', qEndDraw);
-      document.getElementById('q-pencil-btn')?.addEventListener('click', function(){ qSetDrawMode('pencil'); });
-      document.getElementById('q-eraser-btn')?.addEventListener('click', function(){ qSetDrawMode('eraser'); });
-      document.getElementById('q-brush-size')?.addEventListener('input', function(e) {
-        if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
-        QS.drawSize = parseInt(e.target.value, 10) || 8;
-      });
-      document.getElementById('q-color-black')?.addEventListener('click', function() {
-        if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
-        QS.drawColor = '#000000';
-        document.getElementById('q-color-black')?.classList.add('active');
-        document.getElementById('q-color-white')?.classList.remove('active');
-      });
-      document.getElementById('q-color-white')?.addEventListener('click', function() {
-        if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
-        if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
-        QS.drawColor = '#ffffff';
-        document.getElementById('q-color-white')?.classList.add('active');
-        document.getElementById('q-color-black')?.classList.remove('active');
-      });
-    }
-
-    window.qUpdateDrawingControls = function() {
-      if (!window.isMembershipPlanReady) return;
-      var hasBrush = qIsPremiumBrush();
-      document.querySelectorAll('.q-draw-tool').forEach(function(el) {
-        el.style.opacity = hasBrush ? '1' : '0.58';
-        el.title = hasBrush ? (el.title || '') : 'Premium only';
-      });
-      document.getElementById('q-pencil-btn')?.classList.toggle('active', QS.drawMode === 'pencil');
-      document.getElementById('q-eraser-btn')?.classList.toggle('active', QS.drawMode === 'eraser');
-      if (!hasBrush) QS.drawMode = null;
-    };
-
-    // =========================================================
-    // --- QUANTIS BLOCK FACTORY ---
-    // =========================================================
-    function qMakeBlock(x, y, descVal) {
-      var blk = document.createElement('div');
-      blk.className = 'q-canvas-el';
-      blk.style.left = x + 'px';
-      blk.style.top  = y + 'px';
-
-      var desc = document.createElement('input');
-      desc.type = 'text';
-      desc.className = 'q-block-desc';
-      desc.value = descVal || '';
-      desc.placeholder = 'Añadir descripción...';
-      desc.addEventListener('blur', qSavePage);
-      blk.appendChild(desc);
-
-      var del = document.createElement('button');
-      del.className = 'q-block-del';
-      del.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-      del.onclick = function(){ blk.remove(); qSavePage(); };
-      blk.appendChild(del);
-
-      // Drag
-      blk.addEventListener('mousedown', function(e) {
-        if (e.target.closest('input') || e.target.closest('a') || e.target.isContentEditable || e.target.closest('.q-block-del')) return;
-        e.stopPropagation();
-        var prevZ = blk.style.zIndex;
-        blk.style.zIndex = '40';
-        var sx = e.clientX, sy = e.clientY;
-        var onMove = function(me) {
-          var dx = (me.clientX - sx) / QS.zoom;
-          var dy = (me.clientY - sy) / QS.zoom;
-          blk.style.left = (parseFloat(blk.style.left) + dx) + 'px';
-          blk.style.top  = (parseFloat(blk.style.top)  + dy) + 'px';
-          sx = me.clientX; sy = me.clientY;
-        };
-        var onUp = function() {
-          blk.style.zIndex = prevZ;
-          document.removeEventListener('mousemove', onMove);
-          document.removeEventListener('mouseup', onUp);
-          qSavePage();
-        };
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onUp);
-      });
-
-      return blk;
-    }
-
-    function qCreateText(x, y) {
-      qRecreateText(x, y, '', 'Escribe algo aquí...', false);
-      qSavePage();
-    }
-
-    function qRecreateText(x, y, desc, content, isLink) {
-      var blk = qMakeBlock(x, y, desc);
-      blk.style.width = '240px';
-      var textNode = document.createElement('div');
-      textNode.className = 'q-block-text';
-
-      if (isLink) {
-        qMakeLink(textNode, content);
-      } else {
-        textNode.setAttribute('data-is-link', 'false');
-        textNode.contentEditable = 'true';
-        textNode.innerText = content;
-        textNode.addEventListener('blur', function() {
-          var t = textNode.innerText.trim();
-          if (qIsURL(t)) qMakeLink(textNode, t);
-          qSavePage();
-        }, { once: true });
-      }
-      blk.appendChild(textNode);
-      QD.canvas.appendChild(blk);
-      if (content === 'Escribe algo aquí...') { textNode.focus(); document.execCommand('selectAll',false,null); }
-    }
-
-    function qMakeLink(textNode, url) {
-      textNode.contentEditable = 'false';
-      textNode.setAttribute('data-is-link', 'true');
-      textNode.className = 'q-block-text';
-      textNode.innerHTML = '';
-      var a = document.createElement('a');
-      a.href = qFmtURL(url); a.target = '_blank'; a.textContent = url;
-      a.addEventListener('mousedown', function(e){ e.stopPropagation(); });
-      textNode.appendChild(a);
-      textNode.addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-        textNode.contentEditable = 'true';
-        textNode.setAttribute('data-is-link','false');
-        textNode.className = 'q-block-text';
-        textNode.innerText = url;
-        textNode.focus();
-        textNode.addEventListener('blur', function() {
-          var t = textNode.innerText.trim();
-          if (qIsURL(t)) qMakeLink(textNode, t);
-          qSavePage();
-        }, { once: true });
-      });
-    }
-
-    function qRecreateFile(x, y, desc, fileName, fileType, fileData, w, h) {
-      var blk = qMakeBlock(x, y, desc);
-      blk.setAttribute('data-ftype', fileType || 'unknown');
-      if (w) blk.style.width  = w + 'px';
-      if (h) blk.style.height = h + 'px';
-
-      var box = document.createElement('div');
-      box.style.cssText = 'flex:1;width:100%;min-height:80px;border:1px solid rgba(168,85,247,0.15);border-radius:3px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--quantis-bg);position:relative;';
-
-      if (fileType === 'image' && fileData) {
-        if (!w) blk.style.width = '240px';
-        if (!h) blk.style.height = '200px';
-        var img = document.createElement('img');
-        img.className = 'q-file-img';
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;';
-        img.src = fileData;
-        box.appendChild(img);
-        // resize handle
-        var rh = document.createElement('div');
-        rh.style.cssText = 'position:absolute;bottom:3px;right:3px;width:14px;height:14px;cursor:se-resize;color:var(--quantis-faint);display:flex;align-items:center;justify-content:center;font-size:10px;';
-        rh.innerHTML = '<i class="fa-solid fa-maximize" style="transform:rotate(90deg)"></i>';
-        rh.addEventListener('mousedown', function(re) {
-          re.stopPropagation(); re.preventDefault();
-          var sw = blk.offsetWidth, sh = blk.offsetHeight, sx2 = re.clientX, sy2 = re.clientY;
-          var mm = function(me) {
-            blk.style.width  = Math.max(140, sw + (me.clientX-sx2)/QS.zoom) + 'px';
-            blk.style.height = Math.max(100, sh + (me.clientY-sy2)/QS.zoom) + 'px';
-          };
-          var mu = function() { document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); qSavePage(); };
-          document.addEventListener('mousemove', mm);
-          document.addEventListener('mouseup', mu);
-        });
-        blk.appendChild(rh);
-      } else {
-        var ico = document.createElement('i');
-        ico.className = fileType==='pdf' ? 'fa-solid fa-file-pdf' : 'fa-solid fa-circle-question';
-        ico.style.cssText = 'font-size:2rem;color:'+(fileType==='pdf'?'#ef4444':'var(--quantis-faint)')+';margin-bottom:6px;';
-        box.appendChild(ico);
-        var lbl = document.createElement('span');
-        lbl.className = 'q-file-label';
-        lbl.style.cssText = 'font-size:9px;color:var(--quantis-muted);text-align:center;padding:0 6px;word-break:break-all;font-family:"JetBrains Mono",monospace;';
-        lbl.textContent = fileName || '';
-        box.appendChild(lbl);
-      }
-      blk.appendChild(box);
-      QD.canvas.appendChild(blk);
-    }
-
-    // ---- FILE HANDLING ----
-    window.qTriggerFile = function() {
-      QD.ctxMenu.style.display = 'none';
-      setTimeout(function(){ QD.fileInput.click(); }, 50);
-    };
-    window.qHandleFile = function(e) {
-      var file = e.target.files[0];
-      if (!file) return;
-      var x = QS.ctxCoords.x, y = QS.ctxCoords.y;
-      if (file.type.startsWith('image/')) {
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-          qRecreateFile(x, y, '', file.name, 'image', ev.target.result, 240, 200);
-          qSavePage();
-        };
-        reader.readAsDataURL(file);
-      } else if (file.type === 'application/pdf') {
-        qRecreateFile(x, y, '', file.name, 'pdf', null);
-        qSavePage();
-      } else {
-        qRecreateFile(x, y, '', file.name, 'unknown', null);
-        qSavePage();
-      }
-      QD.fileInput.value = '';
-    };
-
-    // ---- HELPERS ----
-    function qIsURL(s) {
-      return /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/i.test(s);
-    }
-    function qFmtURL(u) { return /^https?:\/\//i.test(u) ? u : 'https://'+u; }
-
-    // ---- BOOT ----
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', qInit);
-    } else {
-      qInit();
-    }
-  })();
-  </script>
-
 </body>
 </html>
