@@ -108,6 +108,26 @@
     #main-dashboard-view.purple-theme {
       --color-highlight: #A855F7;
     }
+    #main-dashboard-view.green-theme {
+      --color-highlight: #39FF14;
+    }
+    #main-dashboard-view.red-theme {
+      --color-highlight: #FF3131;
+    }
+    #main-dashboard-view.blue-theme {
+      --color-highlight: #00AEEF;
+    }
+    #main-dashboard-view.green-theme .tab-btn.active,
+    #main-dashboard-view.green-theme .calc-button.equals,
+    #main-dashboard-view.green-theme .pomo-btn.active,
+    #main-dashboard-view.red-theme .tab-btn.active,
+    #main-dashboard-view.red-theme .calc-button.equals,
+    #main-dashboard-view.red-theme .pomo-btn.active,
+    #main-dashboard-view.blue-theme .tab-btn.active,
+    #main-dashboard-view.blue-theme .calc-button.equals,
+    #main-dashboard-view.blue-theme .pomo-btn.active {
+      color: #000000;
+    }
     #main-dashboard-view .container {
       display: grid;
       grid-template-columns: 1fr;
@@ -144,7 +164,7 @@
       align-items: center;
       gap: 8px;
       padding: 4px 10px;
-      background: #333;
+      background: var(--color-input-bg);
       border: 1px solid var(--color-border);
       border-radius: 20px;
       font-size: 0.85em;
@@ -179,7 +199,7 @@
     #main-dashboard-view .box {
       border: 1px solid var(--color-border);
       padding: 4px 10px;
-      background: #333;
+      background: var(--color-input-bg);
       border-radius: 4px;
       box-shadow: var(--shadow-light);
       transition: background 0.3s ease;
@@ -238,7 +258,7 @@
       flex: 1;
     }
     #main-dashboard-view .symbol-selector {
-      background: #333;
+      background: var(--color-input-bg);
       color: var(--color-text);
       border: 1px solid var(--color-border);
       padding: 5px 10px;
@@ -295,7 +315,7 @@
       padding-bottom: 2px;
     }
     #main-dashboard-view .tab-btn {
-      background: #333;
+      background: var(--color-input-bg);
       color: var(--color-text);
       border: 1px solid var(--color-border);
       padding: 4px 8px;
@@ -363,7 +383,7 @@
     }
     #main-dashboard-view .calc-display {
       grid-column: 1 / -1;
-      background: #0D0D0D;
+      background: var(--color-input-bg);
       color: var(--color-highlight);
       border: 2px solid var(--color-highlight);
       text-align: right;
@@ -378,7 +398,7 @@
       word-break: break-all;
     }
     #main-dashboard-view .calc-button {
-      background: #333;
+      background: var(--color-input-bg);
       color: var(--color-text);
       border: 1px solid var(--color-border);
       padding: 10px 0;
@@ -389,11 +409,11 @@
       transition: all 0.1s;
     }
     #main-dashboard-view .calc-button:active {
-      background: #555;
+      background: var(--color-border);
       transform: scale(0.95);
     }
     #main-dashboard-view .calc-button:hover {
-      background: #444;
+      border-color: var(--color-highlight);
     }
     #main-dashboard-view .calc-button.equals {
       grid-column: 4 / span 1;
@@ -416,7 +436,7 @@
       font-size: 1.1em;
     }
     #main-dashboard-view .calc-button.operator:hover {
-      background: #8b3ed9;
+      filter: brightness(0.95);
     }
     #main-dashboard-view .calc-button.clear {
       background: #DC2626;
@@ -424,7 +444,7 @@
       font-weight: bold;
     }
     #main-dashboard-view .calc-button.clear:hover {
-      background: #b91c1c;
+      filter: brightness(0.9);
     }
     #main-dashboard-view .pomodoro-panel {
       background: var(--color-input-bg);
@@ -460,7 +480,7 @@
       flex-wrap: wrap;
     }
     #main-dashboard-view .pomo-btn {
-      background: #333;
+      background: var(--color-input-bg);
       color: #ddd;
       border: 1px solid #555;
       padding: 6px 10px;
@@ -520,7 +540,8 @@
 
     /* ========== PLANES, CONFIGURACION GLOBAL Y CONTROLES COMPARTIDOS ========== */
     #plansModal,
-    #config-dropdown,
+    #dominon-config-dropdown,
+    #quantis-config-dropdown,
     #miniPlanPopup {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -631,7 +652,8 @@
     }
     .plan-contact-card.open { display: block; }
     .plan-contact-card p { margin: 6px 0; }
-    #config-dropdown {
+    #dominon-config-dropdown,
+    #quantis-config-dropdown {
       position: fixed;
       top: 58px;
       right: 18px;
@@ -645,7 +667,8 @@
       padding: 12px;
       color: #e4e4e7;
     }
-    #config-dropdown.open { display: block; }
+    #dominon-config-dropdown.open,
+    #quantis-config-dropdown.open { display: block; }
     .config-label {
       font-size: 10px;
       font-weight: 800;
@@ -660,19 +683,25 @@
       gap: 8px;
       margin-bottom: 12px;
     }
-    #config-dropdown .theme-btn {
+    #dominon-config-dropdown .theme-btn,
+    #quantis-config-dropdown .theme-btn {
       width: 24px;
       height: 24px;
       border-radius: 50%;
       border: 2px solid #555;
       cursor: pointer;
     }
-    #config-dropdown .theme-btn.black { background: #000000; border-color: #FFFFFF; }
-    #config-dropdown .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
-    #config-dropdown .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+    #dominon-config-dropdown .theme-btn.black,
+    #quantis-config-dropdown .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #dominon-config-dropdown .theme-btn.white,
+    #quantis-config-dropdown .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    #dominon-config-dropdown .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+    #dominon-config-dropdown .theme-btn.green { background: #39FF14; border-color: #39FF14; }
+    #dominon-config-dropdown .theme-btn.red { background: #FF3131; border-color: #FF3131; }
+    #dominon-config-dropdown .theme-btn.blue { background: #00AEEF; border-color: #00AEEF; }
     .language-toggle {
       border: 1px solid rgba(168,85,247,0.45);
-      background: #1f1f26;
+      background: var(--color-input-bg, #1f1f26);
       color: #e4e4e7;
       border-radius: 999px;
       padding: 5px 10px;
@@ -687,8 +716,8 @@
     }
     .notepad-file-btn,
     .q-tool-btn {
-      background: #22242c;
-      color: #d4d4d8;
+      background: var(--color-input-bg, #22242c);
+      color: var(--color-text, #d4d4d8);
       border: 1px solid rgba(168,85,247,0.3);
       border-radius: 4px;
       padding: 6px 9px;
@@ -715,9 +744,70 @@
       font-size: 0.86rem;
     }
     #miniPlanPopup.open { display: block; }
+    .gemini-panel {
+      margin-top: var(--main-gap);
+      background: var(--color-main-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: var(--shadow-light);
+    }
+    .gemini-panel h2 {
+      margin: 0 0 12px;
+      color: var(--color-highlight);
+      font-size: 1.05rem;
+    }
+    .gemini-history {
+      min-height: 160px;
+      max-height: 260px;
+      overflow: auto;
+      background: var(--color-input-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .gemini-settings,
+    .gemini-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .gemini-settings input,
+    .gemini-input-row textarea {
+      flex: 1 1 240px;
+      background: var(--color-input-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 9px;
+    }
+    .gemini-input-row textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+    .gemini-btn {
+      background: var(--color-highlight);
+      color: #ffffff;
+      border: 1px solid var(--color-highlight);
+      border-radius: 4px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    #main-dashboard-view.green-theme .gemini-btn,
+    #main-dashboard-view.red-theme .gemini-btn,
+    #main-dashboard-view.blue-theme .gemini-btn {
+      color: #000000;
+    }
     @media (max-width: 760px) {
       .plans-grid { grid-template-columns: 1fr; }
-      #config-dropdown { right: 10px; top: 96px; }
+      #dominon-config-dropdown,
+      #quantis-config-dropdown { right: 10px; top: 96px; }
     }
 
     @media (max-width: 1024px) {
@@ -1605,6 +1695,26 @@
             <div id="display" class="calc-display">0</div>
             <div class="calculator-grid">
               <button class="calc-button clear" onclick="clearDisplay()">C</button>
+              <button class="calc-button" onclick="backspace()">⌫</button>
+              <button class="calc-button operator" onclick="percentage()">%</button>
+              <button class="calc-button operator" onclick="appendOperator('/')">÷</button>
+              <button class="calc-button" onclick="appendNumber('7')">7</button>
+              <button class="calc-button" onclick="appendNumber('8')">8</button>
+              <button class="calc-button" onclick="appendNumber('9')">9</button>
+              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
+              <button class="calc-button" onclick="appendNumber('4')">4</button>
+              <button class="calc-button" onclick="appendNumber('5')">5</button>
+              <button class="calc-button" onclick="appendNumber('6')">6</button>
+              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+              <button class="calc-button" onclick="appendNumber('1')">1</button>
+              <button class="calc-button" onclick="appendNumber('2')">2</button>
+              <button class="calc-button" onclick="appendNumber('3')">3</button>
+              <button class="calc-button operator" onclick="appendOperator('+')">+</button>
+              <button class="calc-button zero" onclick="appendNumber('0')">0</button>
+              <button class="calc-button" onclick="appendNumber('.')">.</button>
+              <button class="calc-button equals" onclick="calculate()">=</button>
+              <!-- Legacy calculator layout removed by membership refactor. -->
+              <template>
               <button class="calc-button" onclick="backspace()">?</button>
               <button class="calc-button operator" onclick="appendOperator('/')">/</button>
               <button class="calc-button operator" onclick="appendOperator('*')"></button>
@@ -1622,6 +1732,7 @@
               <button class="calc-button equals" onclick="calculate()">=</button>
               <button class="calc-button zero" onclick="appendNumber('0')">0</button>
               <button class="calc-button" onclick="appendNumber('.')">.</button>
+              </template>
             </div>
           </div>
 
@@ -1636,6 +1747,20 @@
             </div>
           </div>
         </div>
+
+        <section class="gemini-panel" id="geminiAssistantPanel">
+          <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant</h2>
+          <div class="gemini-history" id="geminiChatHistory"></div>
+          <div class="gemini-settings">
+            <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
+            <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+            <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+          </div>
+          <div class="gemini-input-row">
+            <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
+            <button class="gemini-btn" id="sendGeminiBtn" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          </div>
+        </section>
       </main>
     </div>
   </div>
@@ -2131,7 +2256,7 @@
           <div class="plan-price">$0</div>
           <ul>
             <li>3 paginas de Notepad, local only</li>
-            <li>Quantis: 2 proyectos, 3 paginas/proyecto</li>
+            <li>Quantis: 2 proyectos, 3 paginas/proyecto, canvas 2000x2000px</li>
             <li>Sin herramientas de dibujo</li>
           </ul>
         </button>
@@ -2140,7 +2265,7 @@
           <div class="plan-price">$5/mo</div>
           <ul>
             <li>5 paginas de Notepad, local + export</li>
-            <li>Quantis: 4 proyectos, 7 paginas/proyecto</li>
+            <li>Quantis: 4 proyectos, 7 paginas/proyecto, canvas 4000x4000px</li>
             <li>Export/Import de workspace</li>
           </ul>
         </button>
@@ -2148,8 +2273,8 @@
           <h3>Premium</h3>
           <div class="plan-price">$10/mo</div>
           <ul>
-            <li>8 paginas de Notepad en cloud</li>
-            <li>Quantis: 10 proyectos, 20 paginas/proyecto</li>
+            <li>10 paginas de Notepad en cloud</li>
+            <li>Quantis: 10 proyectos, 20 paginas/proyecto, canvas 8000x8000px</li>
             <li>Drawing Tools y Priority Support</li>
           </ul>
         </button>
@@ -2163,16 +2288,31 @@
     </div>
   </div>
 
-  <div id="config-dropdown" aria-hidden="true">
-    <p class="config-label">Theme</p>
+  <div id="dominon-config-dropdown" aria-hidden="true">
+    <p class="config-label">Dominon Theme</p>
     <div class="config-row">
-      <button class="theme-btn black" onclick="setTheme('#000000')" title="Black"></button>
-      <button class="theme-btn white" onclick="setTheme('#FFFFFF')" title="White"></button>
-      <button class="theme-btn purple" onclick="setTheme('#A855F7')" title="Purple"></button>
+      <button class="theme-btn black" onclick="setTheme('black', 'dominon')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('white', 'dominon')" title="White"></button>
+      <button class="theme-btn purple" onclick="setTheme('purple', 'dominon')" title="Purple"></button>
+      <button class="theme-btn green" onclick="setTheme('green', 'dominon')" title="Green"></button>
+      <button class="theme-btn red" onclick="setTheme('red', 'dominon')" title="Red"></button>
+      <button class="theme-btn blue" onclick="setTheme('blue', 'dominon')" title="Blue"></button>
     </div>
     <p class="config-label">Language</p>
     <div class="config-row">
-      <button class="language-toggle" id="globalLangToggle" type="button">ES / EN</button>
+      <button class="language-toggle" id="dominonLangToggle" type="button">ES / EN</button>
+    </div>
+  </div>
+
+  <div id="quantis-config-dropdown" aria-hidden="true">
+    <p class="config-label">Quantis Theme</p>
+    <div class="config-row">
+      <button class="theme-btn black" onclick="setTheme('black', 'quantis')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('white', 'quantis')" title="White"></button>
+    </div>
+    <p class="config-label">Language</p>
+    <div class="config-row">
+      <button class="language-toggle" id="quantisLangToggle" type="button">ES / EN</button>
     </div>
   </div>
 
@@ -2243,9 +2383,9 @@
     // --- MEMBERSHIP PLAN CONFIGURATION ---
     // =========================================================
     const PLAN_LIMITS = {
-      normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local' },
-      Extended: { maxNotepadPages: 5, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local' },
-      Premium: { maxNotepadPages: 8, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud' }
+      normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
+      Extended: { maxNotepadPages: 5, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
+      Premium: { maxNotepadPages: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
     };
     window.PLAN_LIMITS = PLAN_LIMITS;
     window.userPlan = 'normal';
@@ -2254,10 +2394,7 @@
       return PLAN_LIMITS[window.userPlan] || PLAN_LIMITS.normal;
     };
     window.maxPages = window.getPlanLimits().maxNotepadPages;
-    window.createdPagesCount = Math.min(
-      parseInt(localStorage.getItem('danifu_pages_count'), 10) || 3,
-      window.maxPages
-    );
+    window.createdPagesCount = parseInt(localStorage.getItem('danifu_pages_count'), 10) || 3;
 
     async function detectUserPlan(user) {
       if (!user) return 'normal';
@@ -2276,7 +2413,7 @@
       window.userPlan = PLAN_LIMITS[plan] ? plan : 'normal';
       window.isMembershipPlanReady = true;
       window.maxPages = window.getPlanLimits().maxNotepadPages;
-      window.createdPagesCount = Math.min(window.createdPagesCount || 3, window.maxPages);
+      window.createdPagesCount = Math.max(1, window.createdPagesCount || 3);
       localStorage.setItem('danifu_pages_count', window.createdPagesCount);
       if (parseInt(window.activeTab, 10) > window.maxPages) {
         window.activeTab = "1";
@@ -2284,6 +2421,7 @@
       }
       const actions = document.getElementById('notepadActions');
       if (actions) actions.style.display = window.userPlan === 'Extended' ? 'flex' : 'none';
+      if (typeof window.initGeminiAssistant === 'function') window.initGeminiAssistant();
       if (typeof window.renderTabs === 'function') window.renderTabs();
       if (typeof window.qApplyPlanLimits === 'function') window.qApplyPlanLimits();
       if (typeof window.qUpdateDrawingControls === 'function') window.qUpdateDrawingControls();
@@ -2310,52 +2448,16 @@
           var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
           onValue(musicRef, function(snapshot) {
             var data = snapshot.val();
-            if (data && data.videoId && window.player) {
+            if (data && window.player) {
               setTimeout(function() {
                 try {
-                  var videoIdToLoad = data.videoId;
-                  if (videoIdToLoad.indexOf('watch') !== -1 || videoIdToLoad.indexOf('v=') !== -1) {
-                    var urlParts = videoIdToLoad.split('?');
-                    if (urlParts.length > 1) {
-                      var params = urlParts[1].split('&');
-                      for (var i = 0; i < params.length; i++) {
-                        if (params[i].indexOf('v=') === 0) {
-                          videoIdToLoad = params[i].split('=')[1];
-                          break;
-                        }
-                      }
-                    }
-                  }
-
                   window.player.cuePlaylist({
                     listType: 'playlist',
                     list: playlistId,
-                    index: 0,
-                    startSeconds: 0
+                    index: data.index || 0,
+                    startSeconds: data.time || 0
                   });
-
-                  setTimeout(function() {
-                    var plist = window.player.getPlaylist();
-                    if (plist && plist.length > 0) {
-                      var idx = plist.indexOf(videoIdToLoad);
-                      if (idx >= 0) {
-                        window.player.playVideoAt(idx);
-                        window.waitForPlayerPlaying(function() {
-                          window.player.seekTo(data.time || 0, true);
-                          setTimeout(function() {
-                            window.player.pauseVideo();
-                            updateSongDisplay();
-                          }, 150);
-                        });
-                      } else {
-                        window.player.playVideoAt(0);
-                        setTimeout(function() { window.player.pauseVideo(); }, 800);
-                      }
-                    } else {
-                      window.player.playVideoAt(0);
-                      setTimeout(function() { window.player.pauseVideo(); }, 800);
-                    }
-                  }, 2000);
+                  setTimeout(updateSongDisplay, 800);
 
                 } catch (e) {
                   console.error('Error cargando msica guardada:', e);
@@ -2398,14 +2500,17 @@
     setInterval(() => {
        if (auth.currentUser && window.player) {
           try {
-             const currentTime = Math.floor(window.player.getCurrentTime());
-             const videoData = window.player.getVideoData();
-             if (videoData && videoData.video_id) {
-                set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
-                   videoId: videoData.video_id,
-                   time: currentTime,
-                   timestamp: new Date().getTime()
-                });
+              const currentTime = Math.floor(window.player.getCurrentTime());
+              const videoData = window.player.getVideoData();
+              const playlist = window.player.getPlaylist ? window.player.getPlaylist() : [];
+              const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
+              if (videoData && videoData.video_id) {
+                 set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+                    videoId: videoData.video_id,
+                    index: playlistIndex >= 0 ? playlistIndex : Math.max(0, playlist.indexOf(videoData.video_id)),
+                    time: currentTime,
+                    timestamp: new Date().getTime()
+                 });
              }
           } catch (error) {
              console.log("Error guardando msica:", error);
@@ -2565,7 +2670,86 @@
       
       window.loadNote(window.activeTab);
     };
-    window.maxPages = PLAN_LIMITS.normal.maxNotepadPages;
+    window.maxPages = window.getPlanLimits ? window.getPlanLimits().maxNotepadPages : 3;
+
+    // =========================================================
+    // --- GEMINI AI ASSISTANT PANEL ---
+    // =========================================================
+    function getGeminiUserScope() {
+      return window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest';
+    }
+
+    function readGeminiKeyStore() {
+      try {
+        return JSON.parse(localStorage.getItem('danifu_gemini_api_key') || '{}');
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function writeGeminiKeyForUser(apiKey) {
+      var store = readGeminiKeyStore();
+      var scope = getGeminiUserScope();
+      if (apiKey) store[scope] = apiKey;
+      else delete store[scope];
+      localStorage.setItem('danifu_gemini_api_key', JSON.stringify(store));
+    }
+
+    function getGeminiKeyForUser() {
+      return readGeminiKeyStore()[getGeminiUserScope()] || '';
+    }
+
+    function appendGeminiMessage(role, text) {
+      var history = document.getElementById('geminiChatHistory');
+      if (!history) return;
+      var line = document.createElement('div');
+      line.className = 'gemini-message gemini-' + role;
+      line.textContent = (role === 'user' ? 'You: ' : 'Gemini: ') + text;
+      history.appendChild(line);
+      history.scrollTop = history.scrollHeight;
+    }
+
+    window.initGeminiAssistant = function() {
+      var keyInput = document.getElementById('geminiApiKeyInput');
+      if (keyInput) keyInput.value = getGeminiKeyForUser();
+    };
+
+    document.getElementById('saveGeminiKeyBtn')?.addEventListener('click', function() {
+      var keyInput = document.getElementById('geminiApiKeyInput');
+      writeGeminiKeyForUser(keyInput ? keyInput.value.trim() : '');
+      window.showPlanPopup('Gemini API Key guardada para este usuario.');
+    });
+
+    document.getElementById('deleteGeminiKeyBtn')?.addEventListener('click', function() {
+      writeGeminiKeyForUser('');
+      var keyInput = document.getElementById('geminiApiKeyInput');
+      if (keyInput) keyInput.value = '';
+      window.showPlanPopup('Gemini API Key eliminada.');
+    });
+
+    document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
+      var promptInput = document.getElementById('geminiPromptInput');
+      var prompt = promptInput ? promptInput.value.trim() : '';
+      var apiKey = getGeminiKeyForUser();
+      if (!apiKey) return window.showPlanPopup('Guarda tu Google AI Studio API Key primero.');
+      if (!prompt) return;
+      appendGeminiMessage('user', prompt);
+      if (promptInput) promptInput.value = '';
+      try {
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        var data = await response.json();
+        var text = data?.candidates?.[0]?.content?.parts?.map(function(part) { return part.text || ''; }).join('\n').trim();
+        appendGeminiMessage('assistant', text || 'No response received.');
+      } catch (error) {
+        appendGeminiMessage('assistant', 'Error contacting Gemini. Check your API key and connection.');
+      }
+    });
+
+    window.initGeminiAssistant();
   </script>
 
   <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
@@ -2897,8 +3081,9 @@
         const importNote = document.getElementById('importNoteBtn');
         if (exportNote) exportNote.innerHTML = '<i class="fa-solid fa-file-export"></i> ' + L.exportNote;
         if (importNote) importNote.innerHTML = '<i class="fa-solid fa-file-import"></i> ' + L.importNote;
-        const globalToggle = document.getElementById('globalLangToggle');
-        if (globalToggle) globalToggle.textContent = window.currentLang.toUpperCase();
+        document.querySelectorAll('#dominonLangToggle,#quantisLangToggle').forEach(function(toggle) {
+          toggle.textContent = window.currentLang.toUpperCase();
+        });
       };
 
       window.setGlobalLanguage = function(lang, source) {
@@ -2910,15 +3095,29 @@
         }
       };
 
-      function toggleConfig(e) {
+      function closeConfigDropdowns(exceptId) {
+        ['dominon-config-dropdown', 'quantis-config-dropdown'].forEach(function(id) {
+          if (id !== exceptId) document.getElementById(id)?.classList.remove('open');
+        });
+      }
+
+      function toggleConfig(dropdownId, e) {
         e.stopPropagation();
-        document.getElementById('config-dropdown')?.classList.toggle('open');
+        closeConfigDropdowns(dropdownId);
+        document.getElementById(dropdownId)?.classList.toggle('open');
       }
 
       document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('dominonConfigBtn')?.addEventListener('click', toggleConfig);
-        document.getElementById('quantisConfigBtn')?.addEventListener('click', toggleConfig);
-        document.getElementById('globalLangToggle')?.addEventListener('click', function() {
+        document.getElementById('dominonConfigBtn')?.addEventListener('click', function(e) {
+          toggleConfig('dominon-config-dropdown', e);
+        });
+        document.getElementById('quantisConfigBtn')?.addEventListener('click', function(e) {
+          toggleConfig('quantis-config-dropdown', e);
+        });
+        document.getElementById('dominonLangToggle')?.addEventListener('click', function() {
+          window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
+        });
+        document.getElementById('quantisLangToggle')?.addEventListener('click', function() {
           window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
         });
         document.getElementById('openPlansBtn')?.addEventListener('click', function() {
@@ -2936,8 +3135,9 @@
           });
         });
         document.addEventListener('click', function(e) {
-          const cfg = document.getElementById('config-dropdown');
-          if (cfg && !cfg.contains(e.target) && !e.target.closest('#dominonConfigBtn,#quantisConfigBtn')) cfg.classList.remove('open');
+          if (!e.target.closest('#dominon-config-dropdown,#quantis-config-dropdown,#dominonConfigBtn,#quantisConfigBtn')) {
+            closeConfigDropdowns();
+          }
         });
         window.applyGlobalStaticLanguage();
       });
@@ -2974,12 +3174,16 @@
     };
     window.clearDisplay = function () { currentInput = '0'; previousInput = ''; operation = null; updateDisplay(); };
     window.backspace = function () { if (currentInput.length > 1) currentInput = currentInput.slice(0, -1); else currentInput = '0'; updateDisplay(); };
+    window.percentage = function () { currentInput = String(parseFloat(currentInput || '0') / 100); updateDisplay(); };
 
     // Tema visual aislado por vista
     function getThemeName(color) {
       var normalized = String(color || '').toLowerCase();
       if (normalized === '#ffffff' || normalized === 'white' || normalized === 'light') return 'light';
       if (normalized === '#a855f7' || normalized === 'purple') return 'purple';
+      if (normalized === '#39ff14' || normalized === 'green') return 'green';
+      if (normalized === '#ff3131' || normalized === 'red') return 'red';
+      if (normalized === '#00aeef' || normalized === 'blue') return 'blue';
       return 'black';
     }
 
@@ -2993,16 +3197,17 @@
     function applyDominonTheme(themeName) {
       var view = document.getElementById('main-dashboard-view');
       if (!view) return;
-      view.classList.remove('black-theme', 'light-theme', 'purple-theme');
+      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#111827', black: '#A855F7' };
+      view.classList.remove('black-theme', 'light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
       view.classList.add(themeName + '-theme');
-      view.style.setProperty('--color-highlight', themeName === 'purple' ? '#A855F7' : (themeName === 'light' ? '#111827' : '#A855F7'));
+      view.style.setProperty('--color-highlight', colors[themeName] || colors.black);
     }
 
     function applyQuantisTheme(themeName) {
       var view = document.getElementById('quantis-view');
       if (!view) return;
       view.classList.remove('black-theme', 'light-theme', 'purple-theme');
-      view.classList.add(themeName + '-theme');
+      view.classList.add((themeName === 'light' ? 'light' : 'black') + '-theme');
     }
 
     window.setTheme = function (color, targetView) {
@@ -3324,6 +3529,7 @@
       if (!QD.viewport) return; // view not present
 
       qLoadWorkspace();
+      qApplyCanvasSize();
       qRenderProjects();
       qLoadPage(QS.activeProj, QS.activePage, true);
       qSetupCanvas();
@@ -3346,6 +3552,21 @@
     }
 
     // ---- CANVAS TRANSFORM ----
+    function qApplyCanvasSize() {
+      if (!QD.canvas || !QD.drawCanvas) return;
+      var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
+      var size = limits.quantisSize || 2000;
+      QD.canvas.style.width = size + 'px';
+      QD.canvas.style.height = size + 'px';
+      QD.canvas.style.left = (-size / 2) + 'px';
+      QD.canvas.style.top = (-size / 2) + 'px';
+      QD.drawCanvas.width = size;
+      QD.drawCanvas.height = size;
+      QD.drawCanvas.style.width = size + 'px';
+      QD.drawCanvas.style.height = size + 'px';
+      qRedrawCanvas();
+    }
+
     function qUpdateTransform() {
       QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
     }
@@ -3390,6 +3611,21 @@
       if (!QD.drawCtx || !QD.drawCanvas) return;
       QD.drawCtx.clearRect(0, 0, QD.drawCanvas.width, QD.drawCanvas.height);
       qNormalizeDrawingPaths(qWorkspaceKey()).forEach(qStrokeVectorPath);
+    }
+
+    function qStrokeLiveSegment(path, fromPoint, toPoint) {
+      if (!QD.drawCtx || !path || !fromPoint || !toPoint) return;
+      QD.drawCtx.save();
+      QD.drawCtx.lineCap = 'round';
+      QD.drawCtx.lineJoin = 'round';
+      QD.drawCtx.lineWidth = path.size || 8;
+      QD.drawCtx.strokeStyle = path.color || '#000000';
+      QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
+      QD.drawCtx.beginPath();
+      QD.drawCtx.moveTo(fromPoint.x, fromPoint.y);
+      QD.drawCtx.lineTo(toPoint.x, toPoint.y);
+      QD.drawCtx.stroke();
+      QD.drawCtx.restore();
     }
 
     function qSaveDrawing() {
@@ -3562,6 +3798,7 @@
     }
 
     window.qApplyPlanLimits = function() {
+      qApplyCanvasSize();
       var prevProj = QS.activeProj;
       var prevPage = QS.activePage;
       if (!QS.projects.length) {
@@ -3737,7 +3974,7 @@
       var lastPoint = points[points.length - 1];
       if (lastPoint && Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y) < 0.75) return;
       points.push({ x: p.x, y: p.y });
-      qRedrawCanvas();
+      qStrokeLiveSegment(QS.activePath, lastPoint, p);
     }
 
     function qEndDraw() {
