@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANIFU777 - Dominon & DEEP FLOW</title>
+  <title>DANIFU777 - Dominon </title>
   <link rel="icon" type="image/ico" href="Favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -2727,25 +2727,40 @@
       window.showPlanPopup('Gemini API Key eliminada.');
     });
 
-    document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
+document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
       var promptInput = document.getElementById('geminiPromptInput');
       var prompt = promptInput ? promptInput.value.trim() : '';
       var apiKey = getGeminiKeyForUser();
       if (!apiKey) return window.showPlanPopup('Guarda tu Google AI Studio API Key primero.');
       if (!prompt) return;
+      
       appendGeminiMessage('user', prompt);
       if (promptInput) promptInput.value = '';
+      
       try {
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+        // Cambiado a canal estable "v1" para mayor compatibilidad
+        var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+        
+        var response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
         });
+
         var data = await response.json();
+
+        // Si la respuesta no es correcta, leemos el mensaje de error real de Google
+        if (!response.ok) {
+          var googleError = data?.error?.message || 'Error ' + response.status;
+          appendGeminiMessage('assistant', 'Google API Error: ' + googleError);
+          return;
+        }
+
         var text = data?.candidates?.[0]?.content?.parts?.map(function(part) { return part.text || ''; }).join('\n').trim();
         appendGeminiMessage('assistant', text || 'No response received.');
       } catch (error) {
-        appendGeminiMessage('assistant', 'Error contacting Gemini. Check your API key and connection.');
+        console.error("Error de conexión:", error);
+        appendGeminiMessage('assistant', 'Error de conexión. Revisa tu consola de desarrollador.');
       }
     });
 
