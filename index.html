@@ -2739,7 +2739,7 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       
       try {
         // Cambiado a canal estable "v1" para mayor compatibilidad
-       var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey);
+       var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
         
         var response = await fetch(url, {
           method: 'POST',
