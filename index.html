@@ -96,14 +96,24 @@
       color: var(--color-text);
     }
     #main-dashboard-view.light-theme {
-      --color-dark-bg: #f4f4f5;
+      --color-dark-bg: #f3f4f6;
       --color-header-bg: #ffffff;
-      --color-border: #d4d4d8;
-      --color-highlight: #111827;
-      --color-main-bg: #f9fafb;
-      --color-text: #18181b;
+      --color-border: #e5e7eb;
+      --color-highlight: #1f2937;
+      --color-main-bg: #ffffff;
+      --color-text: #1f2937;
       --color-input-bg: #ffffff;
       --shadow-light: 0 0 8px rgba(15, 23, 42, 0.12);
+    }
+    #main-dashboard-view.black-theme {
+      --color-dark-bg: #1A1A1A;
+      --color-header-bg: #282828;
+      --color-border: #444444;
+      --color-highlight: #9CA3AF;
+      --color-main-bg: #282828;
+      --color-text: #EAEAEA;
+      --color-input-bg: #1F1F1F;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
     }
     #main-dashboard-view.purple-theme {
       --color-highlight: #A855F7;
@@ -1590,6 +1600,169 @@
       height: 1px;
       opacity: 0;
     }
+
+    /* ===== Floating Drawing Tools Panel ===== */
+    #quantis-drawing-tools-panel {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      background: var(--quantis-surface-bg, #111318);
+      border: 2px solid var(--quantis-accent, #A855F7);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(168,85,247,0.3);
+      padding: 12px;
+      min-width: 200px;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #quantis-drawing-tools-panel.open { display: block; }
+    #quantis-drawing-tools-panel .q-draw-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--quantis-accent, #A855F7);
+      margin-bottom: 10px;
+      cursor: move;
+      user-select: none;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(168,85,247,0.15);
+    }
+    #quantis-drawing-tools-panel .q-draw-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    #quantis-drawing-tools-panel .q-draw-row label {
+      font-size: 9px;
+      color: var(--quantis-muted, #71717a);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn {
+      background: transparent;
+      border: 1px solid rgba(168,85,247,0.3);
+      color: var(--quantis-muted, #71717a);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn:hover {
+      border-color: var(--quantis-accent, #A855F7);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn.active {
+      border-color: var(--quantis-accent, #A855F7);
+      background: rgba(168,85,247,0.18);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-size {
+      width: 100%;
+      accent-color: var(--quantis-accent, #A855F7);
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--quantis-faint, #52525b);
+      cursor: pointer;
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+    #quantis-drawing-tools-panel .q-draw-color-toggle.c-black { background: #000; }
+    #quantis-drawing-tools-panel .q-draw-color-toggle.c-white { background: #fff; }
+
+    /* ===== Neon Borders ===== */
+    #dominon-config-dropdown.open,
+    #quantis-config-dropdown.open {
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5), 0 0 15px color-mix(in srgb, var(--color-highlight) 25%, transparent), 0 0 30px color-mix(in srgb, var(--color-highlight) 10%, transparent);
+    }
+    #musicPanel {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px color-mix(in srgb, var(--color-highlight) 25%, transparent), 0 0 30px color-mix(in srgb, var(--color-highlight) 10%, transparent);
+    }
+
+    /* ===== Notepad Scrollbar ===== */
+    #notepad::-webkit-scrollbar {
+      width: 8px;
+    }
+    #notepad::-webkit-scrollbar-track {
+      background: #0D0D0D;
+    }
+    #notepad::-webkit-scrollbar-thumb {
+      background: var(--color-highlight);
+      border-radius: 4px;
+    }
+
+    /* ===== Gemini Key Toggle ===== */
+    #geminiKeyIcon {
+      cursor: pointer;
+      font-size: 0.85em;
+      background: none;
+      border: none;
+      color: var(--color-highlight);
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    #geminiKeyIcon:hover {
+      background: rgba(168,85,247,0.12);
+    }
+    #geminiKeyRow {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #geminiKeyRow.hidden {
+      display: none !important;
+    }
+
+    /* ===== Gemini Tab Bar ===== */
+    .gemini-tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .gemini-tab-bar .g-tab {
+      background: var(--color-input-bg, #1F1F1F);
+      color: var(--color-text, #EAEAEA);
+      border: 1px solid var(--color-border, #444);
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.75em;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .gemini-tab-bar .g-tab:hover {
+      background: #444;
+    }
+    .gemini-tab-bar .g-tab.active {
+      background: var(--color-highlight, #A855F7);
+      color: var(--color-dark-bg, #1A1A1A);
+      font-weight: bold;
+    }
+    .gemini-tab-bar .g-tab.add-tab {
+      background: #1F1F1F;
+      border-color: var(--color-highlight);
+      color: var(--color-highlight);
+    }
+
+    /* ===== Music Panel Drag Handle ===== */
+    #musicPanel .music-drag-handle {
+      cursor: move;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -1749,12 +1922,18 @@
         </div>
 
         <section class="gemini-panel" id="geminiAssistantPanel">
-          <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant</h2>
+          <h2 style="display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant
+            <button id="geminiKeyIcon" title="Toggle API Key"><i class="fa-solid fa-key"></i></button>
+          </h2>
+          <div class="gemini-tab-bar" id="geminiTabBar"></div>
           <div class="gemini-history" id="geminiChatHistory"></div>
           <div class="gemini-settings">
-            <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
-            <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-            <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+            <div id="geminiKeyRow" class="hidden">
+              <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
+              <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+              <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+            </div>
           </div>
           <div class="gemini-input-row">
             <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
@@ -1976,8 +2155,8 @@
 
       /* Sidebar */
       #quantis-sidebar {
-        width: 220px;
-        min-width: 220px;
+        width: 180px;
+        min-width: 180px;
         background: var(--quantis-sidebar-bg);
         border-right: 1px solid rgba(168,85,247,0.1);
         display: flex;
@@ -2061,6 +2240,8 @@
         position: relative;
         overflow: hidden;
         background: var(--quantis-bg);
+        background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px), linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
+        background-size: 30px 30px;
         cursor: grab;
       }
       #quantis-viewport.grabbing { cursor: grabbing; }
@@ -2070,8 +2251,6 @@
         height: 8000px;
         top: -4000px;
         left: -4000px;
-        background-size: 30px 30px;
-        background-image: radial-gradient(circle, var(--quantis-grid-dot) 1px, transparent 1px);
         transform-origin: center;
       }
       #quantis-drawing-canvas {
@@ -2197,11 +2376,7 @@
           <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
           <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
           <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
-          <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Pincel"><i class="fa-solid fa-pencil"></i></button>
-          <button class="q-tool-btn q-draw-tool" id="q-eraser-btn" type="button" title="Borrador"><i class="fa-solid fa-eraser"></i></button>
-          <input class="q-draw-tool" id="q-brush-size" type="range" min="2" max="40" value="8" title="Grosor">
-          <button class="q-color-toggle black q-draw-tool active" id="q-color-black" type="button" title="Negro"></button>
-          <button class="q-color-toggle white q-draw-tool" id="q-color-white" type="button" title="Blanco"></button>
+          <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Drawing Tools"><i class="fa-solid fa-pencil"></i></button>
         </div>
         <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
           <i class="fa-solid fa-gear"></i>
@@ -2242,6 +2417,31 @@
 
   </div>
   <!-- FIN VISTA SPA 3: QUANTIS -->
+
+  <!-- FLOATING DRAWING TOOLS PANEL -->
+  <div id="quantis-drawing-tools-panel">
+    <div class="q-draw-header" id="q-draw-drag-handle">
+      <span>DRAWING TOOLS</span>
+      <button id="q-draw-close" style="background:none;border:none;color:var(--quantis-faint,#71717a);cursor:pointer;font-size:12px;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn" id="q-draw-pencil" title="Pencil"><i class="fa-solid fa-pencil"></i> Pencil</button>
+      <button class="q-draw-btn" id="q-draw-eraser" title="Eraser"><i class="fa-solid fa-eraser"></i> Eraser</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn" id="q-draw-line" title="Line"><i class="fa-solid fa-grip-lines"></i> Line</button>
+      <button class="q-draw-btn" id="q-draw-circle" title="Circle"><i class="fa-regular fa-circle"></i> Circle</button>
+    </div>
+    <div class="q-draw-row">
+      <label>Color</label>
+      <button class="q-draw-color-toggle c-black active" id="q-draw-cblack" title="Black"></button>
+      <button class="q-draw-color-toggle c-white" id="q-draw-cwhite" title="White"></button>
+    </div>
+    <div class="q-draw-row">
+      <label>Thickness</label>
+      <input type="range" class="q-draw-size" id="q-draw-thickness" min="2" max="40" value="8">
+    </div>
+  </div>
 
   <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
   <div id="plansModal" aria-hidden="true">
@@ -2323,7 +2523,7 @@
 
   <div id="musicPanel" class="hidden">
     <div class="music-player-panel">
-      <div class="player-header">REPRODUCTOR</div>
+      <div class="player-header music-drag-handle">REPRODUCTOR</div>
       
       <div class="player-controls">
         <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
@@ -2699,6 +2899,86 @@
       return readGeminiKeyStore()[getGeminiUserScope()] || '';
     }
 
+    // =========================================================
+    // --- GEMINI TAB SYSTEM ---
+    // =========================================================
+    var geminiActiveTab = 1;
+    var geminiMaxTabs = 5;
+    var geminiChatCount = 3;
+
+    function geminiChatStorageKey() {
+      var scope = getGeminiUserScope();
+      return 'gemini_chats_history_' + scope;
+    }
+
+    function geminiLoadChats() {
+      try {
+        return JSON.parse(localStorage.getItem(geminiChatStorageKey()) || '{}');
+      } catch (e) { return {}; }
+    }
+
+    function geminiSaveChats(chats) {
+      localStorage.setItem(geminiChatStorageKey(), JSON.stringify(chats));
+    }
+
+    function geminiGetChat(tab) {
+      var chats = geminiLoadChats();
+      return chats['chat_' + tab] || [];
+    }
+
+    function geminiSetChat(tab, messages) {
+      var chats = geminiLoadChats();
+      chats['chat_' + tab] = messages;
+      geminiSaveChats(chats);
+    }
+
+    function geminiRenderTabs() {
+      var bar = document.getElementById('geminiTabBar');
+      if (!bar) return;
+      bar.innerHTML = '';
+      for (var i = 1; i <= geminiChatCount; i++) {
+        var btn = document.createElement('button');
+        btn.className = 'tab-btn' + (i === geminiActiveTab ? ' active' : '');
+        btn.textContent = 'Chat ' + i;
+        btn.onclick = function(n) { return function() { geminiSwitchTab(n); }; }(i);
+        bar.appendChild(btn);
+      }
+      if (geminiChatCount < geminiMaxTabs) {
+        var plus = document.createElement('button');
+        plus.className = 'tab-btn';
+        plus.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        plus.onclick = function() {
+          if (geminiChatCount >= geminiMaxTabs) return;
+          geminiChatCount++;
+          geminiActiveTab = geminiChatCount;
+          geminiSetChat(geminiActiveTab, []);
+          geminiRenderTabs();
+          geminiLoadChat(geminiActiveTab);
+        };
+        bar.appendChild(plus);
+      }
+    }
+
+    function geminiSwitchTab(tab) {
+      geminiActiveTab = tab;
+      geminiRenderTabs();
+      geminiLoadChat(tab);
+    }
+
+    function geminiLoadChat(tab) {
+      var history = document.getElementById('geminiChatHistory');
+      if (!history) return;
+      history.innerHTML = '';
+      var msgs = geminiGetChat(tab);
+      msgs.forEach(function(msg) {
+        var line = document.createElement('div');
+        line.className = 'gemini-message gemini-' + msg.role;
+        line.textContent = (msg.role === 'user' ? 'You: ' : 'Gemini: ') + msg.text;
+        history.appendChild(line);
+      });
+      history.scrollTop = history.scrollHeight;
+    }
+
     function appendGeminiMessage(role, text) {
       var history = document.getElementById('geminiChatHistory');
       if (!history) return;
@@ -2707,16 +2987,45 @@
       line.textContent = (role === 'user' ? 'You: ' : 'Gemini: ') + text;
       history.appendChild(line);
       history.scrollTop = history.scrollHeight;
+      var msgs = geminiGetChat(geminiActiveTab);
+      msgs.push({ role: role, text: text });
+      geminiSetChat(geminiActiveTab, msgs);
+    }
+
+    function geminiBuildContext() {
+      var parts = [];
+      var notepad = document.getElementById('notepad');
+      if (notepad && notepad.value.trim()) {
+        parts.push('The user\'s active notes are:\n' + notepad.value.trim());
+      }
+      try {
+        var qData = JSON.parse(localStorage.getItem('quantis_local_data') || '{}');
+        if (qData.projects && qData.projects.length) {
+          var summary = qData.projects.map(function(p) {
+            return p.name + ' (' + (p.pages || []).length + ' pages)';
+          }).join('; ');
+          parts.push('Current Quantis projects: ' + summary);
+        }
+      } catch (e) {}
+      return parts.length ? parts.join('\n') : '';
     }
 
     window.initGeminiAssistant = function() {
       var keyInput = document.getElementById('geminiApiKeyInput');
       if (keyInput) keyInput.value = getGeminiKeyForUser();
+      geminiRenderTabs();
+      geminiLoadChat(geminiActiveTab);
     };
+
+    document.getElementById('geminiKeyIcon')?.addEventListener('click', function() {
+      var row = document.getElementById('geminiKeyRow');
+      if (row) row.classList.toggle('hidden');
+    });
 
     document.getElementById('saveGeminiKeyBtn')?.addEventListener('click', function() {
       var keyInput = document.getElementById('geminiApiKeyInput');
       writeGeminiKeyForUser(keyInput ? keyInput.value.trim() : '');
+      document.getElementById('geminiKeyRow')?.classList.add('hidden');
       window.showPlanPopup('Gemini API Key guardada para este usuario.');
     });
 
@@ -2724,32 +3033,34 @@
       writeGeminiKeyForUser('');
       var keyInput = document.getElementById('geminiApiKeyInput');
       if (keyInput) keyInput.value = '';
+      document.getElementById('geminiKeyRow')?.classList.add('hidden');
       window.showPlanPopup('Gemini API Key eliminada.');
     });
 
-document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
+    document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
       var promptInput = document.getElementById('geminiPromptInput');
       var prompt = promptInput ? promptInput.value.trim() : '';
       var apiKey = getGeminiKeyForUser();
       if (!apiKey) return window.showPlanPopup('Guarda tu Google AI Studio API Key primero.');
       if (!prompt) return;
-      
+
+      var context = geminiBuildContext();
+      var fullPrompt = context ? context + '\n\nUser question: ' + prompt : prompt;
+
       appendGeminiMessage('user', prompt);
       if (promptInput) promptInput.value = '';
-      
+
       try {
-        // Cambiado a canal estable "v1" para mayor compatibilidad
-       var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
-        
+        var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+
         var response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
         });
 
         var data = await response.json();
 
-        // Si la respuesta no es correcta, leemos el mensaje de error real de Google
         if (!response.ok) {
           var googleError = data?.error?.message || 'Error ' + response.status;
           appendGeminiMessage('assistant', 'Google API Error: ' + googleError);
@@ -3001,6 +3312,34 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
           }
         });
       }
+
+      // Music panel drag
+      var musicPanel = document.getElementById('musicPanel');
+      var dragHandle = musicPanel ? musicPanel.querySelector('.music-drag-handle') : null;
+      if (musicPanel && dragHandle) {
+        var isDragging = false, dragStartX, dragStartY, panelStartX, panelStartY;
+        dragHandle.addEventListener('mousedown', function(e) {
+          isDragging = true;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          panelStartX = musicPanel.offsetLeft;
+          panelStartY = musicPanel.offsetTop;
+          musicPanel.style.cursor = 'move';
+          e.preventDefault();
+        });
+        document.addEventListener('mousemove', function(e) {
+          if (!isDragging) return;
+          musicPanel.style.left = (panelStartX + e.clientX - dragStartX) + 'px';
+          musicPanel.style.top = (panelStartY + e.clientY - dragStartY) + 'px';
+          musicPanel.style.right = 'auto';
+        });
+        document.addEventListener('mouseup', function() {
+          if (isDragging) {
+            isDragging = false;
+            if (musicPanel) musicPanel.style.cursor = '';
+          }
+        });
+      }
     });
   </script>
 
@@ -3212,7 +3551,7 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
     function applyDominonTheme(themeName) {
       var view = document.getElementById('main-dashboard-view');
       if (!view) return;
-      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#111827', black: '#A855F7' };
+      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#111827', black: '#6B7280' };
       view.classList.remove('black-theme', 'light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
       view.classList.add(themeName + '-theme');
       view.style.setProperty('--color-highlight', colors[themeName] || colors.black);
@@ -3235,6 +3574,12 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       }
       applyDominonTheme(themeName);
       localStorage.setItem('danifu_dominon_theme', themeName);
+      // Sync root --color-highlight for neon borders on root-level elements
+      var dominonView = document.getElementById('main-dashboard-view');
+      if (dominonView) {
+        var rootHighlight = dominonView.style.getPropertyValue('--color-highlight') || getComputedStyle(dominonView).getPropertyValue('--color-highlight').trim();
+        if (rootHighlight) document.documentElement.style.setProperty('--color-highlight', rootHighlight);
+      }
     };
 
     // Grfico TradingView
@@ -3609,6 +3954,16 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       QD.drawCtx.lineWidth = path.size || 8;
       QD.drawCtx.strokeStyle = path.color || '#000000';
       QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
+      if (path.mode === 'circle' && path.points.length >= 2) {
+        var cx = path.points[0].x, cy = path.points[0].y;
+        var px = path.points[1].x, py = path.points[1].y;
+        var r = Math.hypot(px - cx, py - cy);
+        QD.drawCtx.beginPath();
+        QD.drawCtx.arc(cx, cy, r, 0, Math.PI * 2);
+        QD.drawCtx.stroke();
+        QD.drawCtx.restore();
+        return;
+      }
       QD.drawCtx.beginPath();
       QD.drawCtx.moveTo(path.points[0].x, path.points[0].y);
       if (path.points.length === 1) {
@@ -3877,10 +4232,18 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       // Zoom
       QD.viewport.addEventListener('wheel', function(e) {
         e.preventDefault();
+        var rect = QD.viewport.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left - rect.width / 2;
+        var mouseY = e.clientY - rect.top - rect.height / 2;
+        var oldZoom = QS.zoom;
         var intensity = 0.05;
         QS.zoom = e.deltaY < 0
           ? Math.min(QS.zoom + intensity, 3)
           : Math.max(QS.zoom - intensity, 0.35);
+        var canvasX = (mouseX - QS.panX) / oldZoom;
+        var canvasY = (mouseY - QS.panY) / oldZoom;
+        QS.panX = mouseX - canvasX * QS.zoom;
+        QS.panY = mouseY - canvasY * QS.zoom;
         qUpdateTransform();
       }, { passive: false });
 
@@ -3971,20 +4334,42 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       e.preventDefault();
       QS.isDrawing = true;
       var p = qCanvasPoint(e);
-      QS.activePath = {
-        mode: QS.drawMode,
-        color: QS.drawColor,
-        size: QS.drawSize,
-        points: [{ x: p.x, y: p.y }]
-      };
-      qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
-      qStrokeVectorPath(QS.activePath);
+      if (QS.drawMode === 'line' || QS.drawMode === 'circle') {
+        QS.activePath = {
+          mode: QS.drawMode,
+          color: QS.drawColor,
+          size: QS.drawSize,
+          points: [{ x: p.x, y: p.y }, { x: p.x, y: p.y }],
+          origin: { x: p.x, y: p.y }
+        };
+      } else {
+        QS.activePath = {
+          mode: QS.drawMode,
+          color: QS.drawColor,
+          size: QS.drawSize,
+          points: [{ x: p.x, y: p.y }]
+        };
+        qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
+        qStrokeVectorPath(QS.activePath);
+      }
     }
 
     function qMoveDraw(e) {
       if (!QS.isDrawing || !QS.drawMode || !QD.drawCtx || !QS.activePath) return;
       e.preventDefault();
       var p = qCanvasPoint(e);
+      if (QS.drawMode === 'line') {
+        QS.activePath.points[1] = { x: p.x, y: p.y };
+        qRedrawCanvas();
+        qStrokeVectorPath(QS.activePath);
+        return;
+      }
+      if (QS.drawMode === 'circle') {
+        QS.activePath.points[1] = { x: p.x, y: p.y };
+        qRedrawCanvas();
+        qStrokeVectorPath(QS.activePath);
+        return;
+      }
       var points = QS.activePath.points;
       var lastPoint = points[points.length - 1];
       if (lastPoint && Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y) < 0.75) return;
@@ -3995,8 +4380,11 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
     function qEndDraw() {
       if (!QS.isDrawing) return;
       QS.isDrawing = false;
+      if (QS.activePath && (QS.activePath.mode === 'line' || QS.activePath.mode === 'circle')) {
+        qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
+        qRedrawCanvas();
+      }
       QS.activePath = null;
-      qRedrawCanvas();
       qSaveWorkspace();
     }
 
@@ -4013,31 +4401,95 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
       window.qUpdateDrawingControls();
     }
 
+    function qToggleDrawPanel() {
+      if (!window.isMembershipPlanReady) {
+        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
+        return;
+      }
+      if (!qIsPremiumBrush()) {
+        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        return;
+      }
+      var panel = document.getElementById('quantis-drawing-tools-panel');
+      if (panel) panel.classList.toggle('open');
+    }
+
+    function qCloseDrawPanel() {
+      var panel = document.getElementById('quantis-drawing-tools-panel');
+      if (panel) panel.classList.remove('open');
+    }
+
     function qSetupDrawingControls() {
       if (!QD.viewport || !QD.drawCtx) return;
       QD.viewport.addEventListener('mousedown', qBeginDraw);
       window.addEventListener('mousemove', qMoveDraw);
       window.addEventListener('mouseup', qEndDraw);
-      document.getElementById('q-pencil-btn')?.addEventListener('click', function(){ qSetDrawMode('pencil'); });
-      document.getElementById('q-eraser-btn')?.addEventListener('click', function(){ qSetDrawMode('eraser'); });
-      document.getElementById('q-brush-size')?.addEventListener('input', function(e) {
+
+      // Header pencil button toggles floating panel
+      document.getElementById('q-pencil-btn')?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        qToggleDrawPanel();
+      });
+
+      // Close button inside panel
+      document.getElementById('q-draw-close')?.addEventListener('click', qCloseDrawPanel);
+
+      // Panel tool buttons
+      document.getElementById('q-draw-pencil')?.addEventListener('click', function(){ qSetDrawMode('pencil'); });
+      document.getElementById('q-draw-eraser')?.addEventListener('click', function(){ qSetDrawMode('eraser'); });
+      document.getElementById('q-draw-line')?.addEventListener('click', function(){ qSetDrawMode('line'); });
+      document.getElementById('q-draw-circle')?.addEventListener('click', function(){ qSetDrawMode('circle'); });
+
+      // Panel brush size
+      document.getElementById('q-draw-thickness')?.addEventListener('input', function(e) {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
         QS.drawSize = parseInt(e.target.value, 10) || 8;
       });
-      document.getElementById('q-color-black')?.addEventListener('click', function() {
+
+      // Panel color toggles
+      document.getElementById('q-draw-cblack')?.addEventListener('click', function() {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
         QS.drawColor = '#000000';
-        document.getElementById('q-color-black')?.classList.add('active');
-        document.getElementById('q-color-white')?.classList.remove('active');
+        document.getElementById('q-draw-cblack')?.classList.add('active');
+        document.getElementById('q-draw-cwhite')?.classList.remove('active');
       });
-      document.getElementById('q-color-white')?.addEventListener('click', function() {
+      document.getElementById('q-draw-cwhite')?.addEventListener('click', function() {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
         QS.drawColor = '#ffffff';
-        document.getElementById('q-color-white')?.classList.add('active');
-        document.getElementById('q-color-black')?.classList.remove('active');
+        document.getElementById('q-draw-cwhite')?.classList.add('active');
+        document.getElementById('q-draw-cblack')?.classList.remove('active');
+      });
+
+      // Panel drag
+      var panel = document.getElementById('quantis-drawing-tools-panel');
+      var panelHeader = panel ? panel.querySelector('.q-draw-header') : null;
+      if (panel && panelHeader) {
+        var pDrag = false, pSX, pSY, pLX, pLY;
+        panelHeader.addEventListener('mousedown', function(e) {
+          if (e.target.closest('button')) return;
+          pDrag = true;
+          pSX = e.clientX; pSY = e.clientY;
+          pLX = panel.offsetLeft; pLY = panel.offsetTop;
+          e.preventDefault();
+        });
+        document.addEventListener('mousemove', function(e) {
+          if (!pDrag) return;
+          panel.style.left = (pLX + e.clientX - pSX) + 'px';
+          panel.style.top = (pLY + e.clientY - pSY) + 'px';
+        });
+        document.addEventListener('mouseup', function() { pDrag = false; });
+      }
+
+      // Close panel on click outside
+      document.addEventListener('click', function(e) {
+        var panel = document.getElementById('quantis-drawing-tools-panel');
+        if (!panel || !panel.classList.contains('open')) return;
+        if (!panel.contains(e.target) && e.target.id !== 'q-pencil-btn' && !e.target.closest('#q-pencil-btn')) {
+          panel.classList.remove('open');
+        }
       });
     }
 
@@ -4048,9 +4500,11 @@ document.getElementById('sendGeminiBtn')?.addEventListener('click', async functi
         el.style.opacity = hasBrush ? '1' : '0.58';
         el.title = hasBrush ? (el.title || '') : 'Premium only';
       });
-      document.getElementById('q-pencil-btn')?.classList.toggle('active', QS.drawMode === 'pencil');
-      document.getElementById('q-eraser-btn')?.classList.toggle('active', QS.drawMode === 'eraser');
-      if (!hasBrush) QS.drawMode = null;
+      document.getElementById('q-draw-pencil')?.classList.toggle('active', QS.drawMode === 'pencil');
+      document.getElementById('q-draw-eraser')?.classList.toggle('active', QS.drawMode === 'eraser');
+      document.getElementById('q-draw-line')?.classList.toggle('active', QS.drawMode === 'line');
+      document.getElementById('q-draw-circle')?.classList.toggle('active', QS.drawMode === 'circle');
+      if (!hasBrush) { QS.drawMode = null; qCloseDrawPanel(); }
     };
 
     // =========================================================
