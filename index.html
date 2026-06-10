@@ -2325,25 +2325,25 @@
       .q-page-del:hover { color: #ef4444; }
 
       /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
-      #quantis-viewport {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
-        background: var(--quantis-bg);
-        background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px),
-                          linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
-        background-size: 30px 30px;
-        cursor: grab;
-      }
-       #quantis-canvas-container {
-         position: absolute;
-         width: 8000px;
-         height: 8000px;
-         top: 0;
-         left: 0;
-         transform-origin: center;
-         background: transparent;
+#quantis-viewport {
+         flex: 1;
+         position: relative;
+         overflow: hidden;
+         background: var(--quantis-bg);
+         background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px),
+                           linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
+         background-size: 30px 30px;
+         cursor: grab;
        }
+#quantis-canvas-container {
+          position: absolute;
+          width: 8000px;
+          height: 8000px;
+          top: 0;
+          left: 0;
+          transform-origin: center;
+          background: transparent;
+        }
       #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-drawing-svg {
         position: absolute;
@@ -4089,7 +4089,7 @@
       QD.drawSvg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
       QD.drawSvg.style.width = size + 'px';
       QD.drawSvg.style.height = size + 'px';
-
+      // Grid is now handled by the static CSS background on #quantis-viewport
       qRedrawCanvas();
     }
 
