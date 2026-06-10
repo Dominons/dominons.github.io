@@ -2330,6 +2330,9 @@
         position: relative;
         overflow: hidden;
         background: var(--quantis-bg);
+        background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px),
+                          linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
+        background-size: 30px 30px;
         cursor: grab;
       }
        #quantis-canvas-container {
@@ -2339,6 +2342,7 @@
          top: 0;
          left: 0;
          transform-origin: center;
+         background: transparent;
        }
       #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-drawing-svg {
@@ -4085,10 +4089,7 @@
       QD.drawSvg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
       QD.drawSvg.style.width = size + 'px';
       QD.drawSvg.style.height = size + 'px';
-      // Full-length grid covering the entire canvas box
-      var gridColor = getComputedStyle(QD.canvas).getPropertyValue('--quantis-grid-dot').trim() || 'rgba(168,85,247,0.07)';
-      QD.canvas.style.backgroundImage = 'linear-gradient(' + gridColor + ' 1px, transparent 1px), linear-gradient(90deg, ' + gridColor + ' 1px, transparent 1px)';
-      QD.canvas.style.backgroundSize = '30px 30px';
+
       qRedrawCanvas();
     }
 
