@@ -2332,14 +2332,14 @@
         background: var(--quantis-bg);
         cursor: grab;
       }
-      #quantis-canvas-container {
-        position: absolute;
-        width: 8000px;
-        height: 8000px;
-        top: -4000px;
-        left: -4000px;
-        transform-origin: center;
-      }
+       #quantis-canvas-container {
+         position: absolute;
+         width: 8000px;
+         height: 8000px;
+         top: 0;
+         left: 0;
+         transform-origin: center;
+       }
       #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-drawing-svg {
         position: absolute;
@@ -2501,6 +2501,8 @@
     <!-- CONTEXT MENU -->
     <div id="q-context-menu">
       <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
+      <button onclick="qSetDrawMode('pencil')"><i class="fa-solid fa-pencil"></i> Pincel</button>
+      <button onclick="qSetDrawMode('eraser')"><i class="fa-solid fa-eraser"></i> Borrador</button>
     </div>
     <input type="file" id="q-file-input" onchange="qHandleFile(event)">
 
@@ -4106,6 +4108,13 @@
       QS.panY = Math.max(-maxPanY, Math.min(maxPanY, QS.panY));
     }
 
+    function qGetZoomConstraints() {
+      var bounds = qGetCanvasBounds();
+      var minZoom = Math.max(0.35, Math.max(QD.viewport.clientWidth / bounds.size, QD.viewport.clientHeight / bounds.size));
+      var maxZoom = Math.min(3.0, bounds.size / Math.min(QD.viewport.clientWidth, QD.viewport.clientHeight));
+      return { min: minZoom, max: maxZoom };
+    }
+
     function qIsWithinBounds(x, y) {
       var bounds = qGetCanvasBounds();
       return x >= 0 && x <= bounds.size && y >= 0 && y <= bounds.size;
@@ -4451,6 +4460,7 @@
         QS.zoom = e.deltaY < 0
           ? Math.min(QS.zoom + intensity, 3)
           : Math.max(QS.zoom - intensity, 0.35);
+        qClampZoom();
         var canvasX = (mouseX - QS.panX) / oldZoom;
         var canvasY = (mouseY - QS.panY) / oldZoom;
         QS.panX = mouseX - canvasX * QS.zoom;
@@ -4458,28 +4468,55 @@
         qUpdateTransform();
       }, { passive: false });
 
-      var clickT = 0, clickX = 0, clickY = 0;
+      var clickT = 0, clickX = 0, clickY = 0, isMouseDragging = false;
       // Pan start + click tracking
       QD.viewport.addEventListener('mousedown', function(e) {
-        if (QS.drawMode) return;
-        if (e.target === QD.viewport || e.target === QD.canvas) {
-          if (e.button === 0) {
+        if (e.button === 0) {
+          if (QS.drawMode) {
+            // Left-click with drawing mode - start drawing
+            qBeginDraw(e);
+          } else {
+            // Left-click without drawing mode - start panning
+            if (e.target === QD.viewport || e.target === QD.canvas) {
+              QS.isPanning = true;
+              QS.startX = e.clientX - QS.panX;
+              QS.startY = e.clientY - QS.panY;
+              QD.viewport.classList.add('grabbing');
+              QD.ctxMenu.style.display = 'none';
+              clickT = Date.now(); clickX = e.clientX; clickY = e.clientY;
+              isMouseDragging = false;
+            }
+          }
+        } else if (e.button === 2) {
+          // Right-click - always pan, never show context menu
+          if (e.target === QD.viewport || e.target === QD.canvas) {
             QS.isPanning = true;
             QS.startX = e.clientX - QS.panX;
             QS.startY = e.clientY - QS.panY;
             QD.viewport.classList.add('grabbing');
             QD.ctxMenu.style.display = 'none';
-            clickT = Date.now(); clickX = e.clientX; clickY = e.clientY;
+            isMouseDragging = false;
           }
         }
       });
-      window.addEventListener('mousemove', function(e) {
-        if (QS.isPanning) {
-          QS.panX = e.clientX - QS.startX;
-          QS.panY = e.clientY - QS.startY;
-          qUpdateTransform();
-        }
-      });
+       window.addEventListener('mousemove', function(e) {
+         if (QS.isPanning) {
+           var dist = Math.hypot(e.clientX - clickX, e.clientY - clickY);
+           if (dist > 5) {
+             isMouseDragging = true;
+           }
+           QS.panX = e.clientX - QS.startX;
+           QS.panY = e.clientY - QS.startY;
+           qUpdateTransform();
+         }
+       });
+       
+       window.addEventListener('mouseup', function() {
+         if (QS.isPanning) {
+           QS.isPanning = false;
+           QD.viewport.classList.remove('grabbing');
+         }
+       });
       window.addEventListener('mouseup', function() {
         if (QS.isPanning) { QS.isPanning = false; QD.viewport.classList.remove('grabbing'); }
       });
@@ -4503,25 +4540,29 @@
           }
         }
       });
-      // Right-click context menu
-      QD.viewport.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        var rect = QD.canvas.getBoundingClientRect();
-        var cx = (e.clientX - rect.left) / QS.zoom;
-        var cy = (e.clientY - rect.top)  / QS.zoom;
-        if (!qIsWithinBounds(cx, cy)) {
-          window.showPlanPopup('Fuera de los límites del canvas.');
-          return;
-        }
-        QS.ctxCoords.x = cx;
-        QS.ctxCoords.y = cy;
-        QD.ctxMenu.style.display = 'block';
-        QD.ctxMenu.style.left = e.clientX + 'px';
-        QD.ctxMenu.style.top  = e.clientY + 'px';
-      });
-      document.addEventListener('click', function(e) {
-        if (!QD.ctxMenu.contains(e.target)) QD.ctxMenu.style.display = 'none';
-      });
+       // Right-click context menu (only if not dragging)
+       QD.viewport.addEventListener('contextmenu', function(e) {
+         if (isMouseDragging) {
+           e.preventDefault();
+           return;
+         }
+         e.preventDefault();
+         var rect = QD.canvas.getBoundingClientRect();
+         var cx = (e.clientX - rect.left) / QS.zoom;
+         var cy = (e.clientY - rect.top)  / QS.zoom;
+         if (!qIsWithinBounds(cx, cy)) {
+           window.showPlanPopup('Fuera de los límites del canvas.');
+           return;
+         }
+         QS.ctxCoords.x = cx;
+         QS.ctxCoords.y = cy;
+         QD.ctxMenu.style.display = 'block';
+         QD.ctxMenu.style.left = e.clientX + 'px';
+         QD.ctxMenu.style.top  = e.clientY + 'px';
+       });
+       document.addEventListener('click', function(e) {
+         if (!QD.ctxMenu.contains(e.target) && !isMouseDragging) QD.ctxMenu.style.display = 'none';
+       });
     }
 
     // =========================================================
