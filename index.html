@@ -155,6 +155,16 @@
       background: #1f2937;
       color: #ffffff;
     }
+    #main-dashboard-view.light-theme .music-btn {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .song-display {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
     #main-dashboard-view.black-theme {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
@@ -2331,7 +2341,7 @@
         transform-origin: center;
       }
       #quantis-viewport.grabbing { cursor: grabbing; }
-      #quantis-drawing-canvas {
+      #quantis-drawing-svg {
         position: absolute;
         inset: 0;
         width: 8000px;
@@ -2479,12 +2489,12 @@
       </aside>
 
       <!-- INFINITE CANVAS VIEWPORT -->
-      <main id="quantis-viewport">
-        <div id="quantis-canvas-container">
-          <canvas id="quantis-drawing-canvas" width="8000" height="8000"></canvas>
-        </div>
-        <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
-      </main>
+       <main id="quantis-viewport">
+         <div id="quantis-canvas-container">
+           <svg id="quantis-drawing-svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+         </div>
+         <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
+       </main>
 
     </div>
 
@@ -3683,6 +3693,40 @@
       }
       applyDominonTheme(themeName);
       localStorage.setItem('danifu_dominon_theme', themeName);
+      
+      // DYNAMIC THEME SYNC FOR FLOATING ELEMENTS (shared across views)
+      const floatingElements = [
+        '#musicPanel',
+        '#plansModal',
+        '#dominon-config-dropdown',
+        '#quantis-config-dropdown',
+        '#miniPlanPopup'
+      ];
+      floatingElements.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        // Apply the same theme class used for the active view
+        if (themeName === 'light') {
+          el.classList.add('light-theme');
+          el.classList.remove('black-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
+        } else if (themeName === 'purple') {
+          el.classList.add('purple-theme');
+          el.classList.remove('light-theme', 'black-theme', 'green-theme', 'red-theme', 'blue-theme');
+        } else if (themeName === 'green') {
+          el.classList.add('green-theme');
+          el.classList.remove('light-theme', 'black-theme', 'purple-theme', 'red-theme', 'blue-theme');
+        } else if (themeName === 'red') {
+          el.classList.add('red-theme');
+          el.classList.remove('light-theme', 'black-theme', 'purple-theme', 'green-theme', 'blue-theme');
+        } else if (themeName === 'blue') {
+          el.classList.add('blue-theme');
+          el.classList.remove('light-theme', 'black-theme', 'purple-theme', 'green-theme', 'red-theme');
+        } else { // black (default)
+          el.classList.add('black-theme');
+          el.classList.remove('light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
+        }
+      });
+      
       // Sync root --color-highlight for neon borders on root-level elements
       var dominonView = document.getElementById('main-dashboard-view');
       if (dominonView) {
@@ -3994,8 +4038,8 @@
     function qInit() {
       QD.viewport   = document.getElementById('quantis-viewport');
       QD.canvas     = document.getElementById('quantis-canvas-container');
-      QD.drawCanvas = document.getElementById('quantis-drawing-canvas');
-      QD.drawCtx    = QD.drawCanvas ? QD.drawCanvas.getContext('2d') : null;
+      QD.drawSvg    = document.getElementById('quantis-drawing-svg');
+      // QD.drawCtx removed - SVG doesn't use canvas 2D context
       QD.projList   = document.getElementById('q-projects-list');
       QD.ctxMenu    = document.getElementById('q-context-menu');
       QD.fileInput  = document.getElementById('q-file-input');
@@ -4028,17 +4072,18 @@
 
     // ---- CANVAS TRANSFORM ----
     function qApplyCanvasSize() {
-      if (!QD.canvas || !QD.drawCanvas) return;
+      if (!QD.canvas) return;
       var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
       var size = limits.quantisSize || 2000;
       QD.canvas.style.width = size + 'px';
       QD.canvas.style.height = size + 'px';
       QD.canvas.style.left = (-size / 2) + 'px';
       QD.canvas.style.top = (-size / 2) + 'px';
-      QD.drawCanvas.width = size;
-      QD.drawCanvas.height = size;
-      QD.drawCanvas.style.width = size + 'px';
-      QD.drawCanvas.style.height = size + 'px';
+      // SVG doesn't need width/height properties in the same way as canvas
+      // The SVG element already inherits size from its parent container
+      QD.drawSvg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
+      QD.drawSvg.style.width = size + 'px';
+      QD.drawSvg.style.height = size + 'px';
       // Full-length grid covering the entire canvas box
       var gridColor = getComputedStyle(QD.canvas).getPropertyValue('--quantis-grid-dot').trim() || 'rgba(168,85,247,0.07)';
       QD.canvas.style.backgroundImage = 'linear-gradient(' + gridColor + ' 1px, transparent 1px), linear-gradient(90deg, ' + gridColor + ' 1px, transparent 1px)';
@@ -4055,14 +4100,15 @@
 
     function qClampPan() {
       var bounds = qGetCanvasBounds();
-      var maxPan = bounds.half * (QS.zoom - 1) + 100;
-      QS.panX = Math.max(-maxPan, Math.min(maxPan, QS.panX));
-      QS.panY = Math.max(-maxPan, Math.min(maxPan, QS.panY));
+      var maxPanX = (bounds.size * QS.zoom) / 2;
+      var maxPanY = (bounds.size * QS.zoom) / 2;
+      QS.panX = Math.max(-maxPanX, Math.min(maxPanX, QS.panX));
+      QS.panY = Math.max(-maxPanY, Math.min(maxPanY, QS.panY));
     }
 
     function qIsWithinBounds(x, y) {
       var bounds = qGetCanvasBounds();
-      return x >= -bounds.half && x <= bounds.half && y >= -bounds.half && y <= bounds.half;
+      return x >= 0 && x <= bounds.size && y >= 0 && y <= bounds.size;
     }
 
     function qUpdateTransform() {
@@ -4085,56 +4131,74 @@
       return QS.drawings[key];
     }
 
+    function qCreateSvgPath(points, size, color, mode) {
+      if (!points || points.length < 2) return null;
+      var d = 'M ' + points[0].x + ',' + points[0].y;
+      if (points.length === 1) {
+        d += ' L ' + (points[0].x + 0.01) + ',' + (points[0].y + 0.01);
+      } else {
+        for (var i = 1; i < points.length; i++) {
+          d += ' L ' + points[i].x + ',' + points[i].y;
+        }
+      }
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke-width', size || 8);
+      path.setAttribute('stroke', color || '#000000');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('stroke-linejoin', 'round');
+      if (mode === 'eraser') {
+        path.setAttribute('vector-effect', 'non-scaling-stroke');
+        path.style.mixBlendMode = 'difference';
+      }
+      return path;
+    }
+
+    function qCreateSvgCircle(cx, cy, r, size, color) {
+      var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+      circle.setAttribute('r', r);
+      circle.setAttribute('stroke-width', size || 8);
+      circle.setAttribute('stroke', color || '#000000');
+      circle.setAttribute('fill', 'none');
+      circle.setAttribute('stroke-linecap', 'round');
+      circle.setAttribute('stroke-linejoin', 'round');
+      return circle;
+    }
+
     function qStrokeVectorPath(path) {
-      if (!QD.drawCtx || !path || !Array.isArray(path.points) || !path.points.length) return;
-      QD.drawCtx.save();
-      QD.drawCtx.lineCap = 'round';
-      QD.drawCtx.lineJoin = 'round';
-      QD.drawCtx.lineWidth = path.size || 8;
-      QD.drawCtx.strokeStyle = path.color || '#000000';
-      QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
+      if (!QD.drawSvg || !path || !Array.isArray(path.points) || !path.points.length) return;
+      var svgElement;
       if (path.mode === 'circle' && path.points.length >= 2) {
         var cx = path.points[0].x, cy = path.points[0].y;
         var px = path.points[1].x, py = path.points[1].y;
         var r = Math.hypot(px - cx, py - cy);
-        QD.drawCtx.beginPath();
-        QD.drawCtx.arc(cx, cy, r, 0, Math.PI * 2);
-        QD.drawCtx.stroke();
-        QD.drawCtx.restore();
-        return;
-      }
-      QD.drawCtx.beginPath();
-      QD.drawCtx.moveTo(path.points[0].x, path.points[0].y);
-      if (path.points.length === 1) {
-        QD.drawCtx.lineTo(path.points[0].x + 0.01, path.points[0].y + 0.01);
+        svgElement = qCreateSvgCircle(cx, cy, r, path.size, path.color);
       } else {
-        path.points.forEach(function(point, index) {
-          if (index > 0) QD.drawCtx.lineTo(point.x, point.y);
-        });
+        svgElement = qCreateSvgPath(path.points, path.size, path.color, path.mode);
       }
-      QD.drawCtx.stroke();
-      QD.drawCtx.restore();
+      if (svgElement) {
+        QD.drawSvg.appendChild(svgElement);
+      }
     }
 
     function qRedrawCanvas() {
-      if (!QD.drawCtx || !QD.drawCanvas) return;
-      QD.drawCtx.clearRect(0, 0, QD.drawCanvas.width, QD.drawCanvas.height);
+      if (!QD.drawSvg) return;
+      // Remove existing SVG elements inside QD.drawSvg
+      while (QD.drawSvg.firstChild) {
+        QD.drawSvg.removeChild(QD.drawSvg.firstChild);
+      }
       qNormalizeDrawingPaths(qWorkspaceKey()).forEach(qStrokeVectorPath);
     }
 
     function qStrokeLiveSegment(path, fromPoint, toPoint) {
-      if (!QD.drawCtx || !path || !fromPoint || !toPoint) return;
-      QD.drawCtx.save();
-      QD.drawCtx.lineCap = 'round';
-      QD.drawCtx.lineJoin = 'round';
-      QD.drawCtx.lineWidth = path.size || 8;
-      QD.drawCtx.strokeStyle = path.color || '#000000';
-      QD.drawCtx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
-      QD.drawCtx.beginPath();
-      QD.drawCtx.moveTo(fromPoint.x, fromPoint.y);
-      QD.drawCtx.lineTo(toPoint.x, toPoint.y);
-      QD.drawCtx.stroke();
-      QD.drawCtx.restore();
+      if (!QD.drawSvg || !path || !fromPoint || !toPoint) return;
+      var svgElement = qCreateSvgPath([fromPoint, toPoint], path.size, path.color, path.mode);
+      if (svgElement) {
+        QD.drawSvg.appendChild(svgElement);
+      }
     }
 
     function qSaveDrawing() {
@@ -4328,8 +4392,10 @@
 
     function qSetupWorkspaceButtons() {
       document.getElementById('q-center-canvas-btn')?.addEventListener('click', function() {
-        QS.panX = 0;
-        QS.panY = 0;
+        var bounds = qGetCanvasBounds();
+        var rect = QD.viewport.getBoundingClientRect();
+        QS.panX = (rect.width - bounds.size * QS.zoom) / 2;
+        QS.panY = (rect.height - bounds.size * QS.zoom) / 2;
         QS.zoom = 1.0;
         qUpdateTransform();
       });
@@ -4485,7 +4551,7 @@
         window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
         return;
       }
-      if (!(e.target === QD.viewport || e.target === QD.canvas || e.target === QD.drawCanvas)) return;
+      if (!(e.target === QD.viewport || e.target === QD.canvas)) return;
       e.preventDefault();
       var p = qCanvasPoint(e);
       if (!qIsWithinBounds(p.x, p.y)) {
@@ -4514,7 +4580,7 @@
     }
 
     function qMoveDraw(e) {
-      if (!QS.isDrawing || !QS.drawMode || !QD.drawCtx || !QS.activePath) return;
+      if (!QS.isDrawing || !QS.drawMode || !QS.activePath) return;
       e.preventDefault();
       var p = qCanvasPoint(e);
       if (QS.drawMode === 'line') {
@@ -4579,7 +4645,7 @@
     }
 
     function qSetupDrawingControls() {
-      if (!QD.viewport || !QD.drawCtx) return;
+      if (!QD.viewport) return;
       QD.viewport.addEventListener('mousedown', qBeginDraw);
       window.addEventListener('mousemove', qMoveDraw);
       window.addEventListener('mouseup', qEndDraw);
