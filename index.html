@@ -105,6 +105,47 @@
       --color-input-bg: #ffffff;
       --shadow-light: 0 0 8px rgba(15, 23, 42, 0.12);
     }
+    #main-dashboard-view.light-theme #notepad {
+      background: #ffffff !important;
+      color: #1f2937 !important;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .calc-button {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .calc-button.operator {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+    #main-dashboard-view.light-theme .calc-button.equals {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .calc-button.clear {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .calc-display {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .pomo-btn {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .pomo-btn.active {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .custom-time-input {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
     #main-dashboard-view.black-theme {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
@@ -768,6 +809,9 @@
       font-size: 1.05rem;
     }
     .gemini-history {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       min-height: 160px;
       max-height: 260px;
       overflow: auto;
@@ -1725,6 +1769,32 @@
       display: none !important;
     }
 
+    /* ===== Gemini Chat Bubbles ===== */
+    .gemini-message {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.9em;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    .gemini-message.gemini-user {
+      align-self: flex-end;
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      border-bottom-right-radius: 2px;
+    }
+    .gemini-message.gemini-assistant {
+      align-self: flex-start;
+      background: #2a2a2a;
+      color: var(--color-text);
+      border-bottom-left-radius: 2px;
+    }
+    #main-dashboard-view.light-theme .gemini-message.gemini-assistant {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
     /* ===== Gemini Tab Bar ===== */
     .gemini-tab-bar {
       display: flex;
@@ -1924,7 +1994,8 @@
         <section class="gemini-panel" id="geminiAssistantPanel">
           <h2 style="display:flex;align-items:center;gap:8px;">
             <i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant
-            <button id="geminiKeyIcon" title="Toggle API Key"><i class="fa-solid fa-key"></i></button>
+            <button id="geminiKeyIcon" title="Toggle API Key" style="background:none;border:none;color:var(--color-highlight);cursor:pointer;font-size:14px;"><i class="fa-solid fa-key"></i></button>
+            <button id="geminiClearBtn" title="Clear History" style="background:none;border:none;color:var(--color-highlight);cursor:pointer;font-size:13px;margin-left:auto;"><i class="fa-solid fa-trash-can"></i></button>
           </h2>
           <div class="gemini-tab-bar" id="geminiTabBar"></div>
           <div class="gemini-history" id="geminiChatHistory"></div>
@@ -2376,6 +2447,7 @@
           <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
           <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
           <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
+          <button class="q-tool-btn" id="q-center-canvas-btn" type="button" title="Centrar Canvas"><i class="fa-solid fa-crosshairs"></i></button>
           <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Drawing Tools"><i class="fa-solid fa-pencil"></i></button>
         </div>
         <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
@@ -2580,7 +2652,7 @@
     window.rtdb = rtdb;
 
     // =========================================================
-    // --- MEMBERSHIP PLAN CONFIGURATION ---
+    // --- GLOBAL MEMBERSHIP PLANS & DATA PERSISTENCE ---
     // =========================================================
     const PLAN_LIMITS = {
       normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
@@ -2645,9 +2717,11 @@
         // =========================================================
         window.loadSavedMusic = function() {
           if (!auth.currentUser) return;
-          var musicRef = ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress');
-          onValue(musicRef, function(snapshot) {
-            var data = snapshot.val();
+          if (window.userPlan === 'normal') return; // Normal plan: no save
+          try {
+            var saved = localStorage.getItem('danifu_music_progress');
+            if (!saved) return;
+            var data = JSON.parse(saved);
             if (data && window.player) {
               setTimeout(function() {
                 try {
@@ -2658,13 +2732,14 @@
                     startSeconds: data.time || 0
                   });
                   setTimeout(updateSongDisplay, 800);
-
                 } catch (e) {
                   console.error('Error cargando msica guardada:', e);
                 }
               }, 1500);
             }
-          }, { onlyOnce: true });
+          } catch (e) {
+            console.error('Error cargando progreso de msica:', e);
+          }
         };
 
       } else {
@@ -2699,18 +2774,19 @@
 
     setInterval(() => {
        if (auth.currentUser && window.player) {
+          if (window.userPlan === 'normal') return; // Normal plan: no save
           try {
               const currentTime = Math.floor(window.player.getCurrentTime());
               const videoData = window.player.getVideoData();
               const playlist = window.player.getPlaylist ? window.player.getPlaylist() : [];
               const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
               if (videoData && videoData.video_id) {
-                 set(ref(rtdb, 'users/' + auth.currentUser.uid + '/musicProgress'), {
+                 localStorage.setItem('danifu_music_progress', JSON.stringify({
                     videoId: videoData.video_id,
                     index: playlistIndex >= 0 ? playlistIndex : Math.max(0, playlist.indexOf(videoData.video_id)),
                     time: currentTime,
                     timestamp: new Date().getTime()
-                 });
+                 }));
              }
           } catch (error) {
              console.log("Error guardando msica:", error);
@@ -2720,6 +2796,7 @@
 
     // =========================================================
     // --- NOTEPAD CONTROLLER (LOCAL & CLOUD) ---
+    // =========================================================
     // =========================================================
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
 
@@ -2873,7 +2950,7 @@
     window.maxPages = window.getPlanLimits ? window.getPlanLimits().maxNotepadPages : 3;
 
     // =========================================================
-    // --- GEMINI AI ASSISTANT PANEL ---
+    // --- GEMINI AI ASSISTANT WITH TABS, CONTEXT & BUBBLES ---
     // =========================================================
     function getGeminiUserScope() {
       return window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest';
@@ -3037,7 +3114,13 @@
       window.showPlanPopup('Gemini API Key eliminada.');
     });
 
-    document.getElementById('sendGeminiBtn')?.addEventListener('click', async function() {
+    document.getElementById('geminiClearBtn')?.addEventListener('click', function() {
+      if (!confirm('¿Borrar el historial de este chat?')) return;
+      geminiSetChat(geminiActiveTab, []);
+      geminiLoadChat(geminiActiveTab);
+    });
+
+    function geminiSendMessage() {
       var promptInput = document.getElementById('geminiPromptInput');
       var prompt = promptInput ? promptInput.value.trim() : '';
       var apiKey = getGeminiKeyForUser();
@@ -3050,28 +3133,33 @@
       appendGeminiMessage('user', prompt);
       if (promptInput) promptInput.value = '';
 
-      try {
-        var url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
-
-        var response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
-        });
-
-        var data = await response.json();
-
-        if (!response.ok) {
-          var googleError = data?.error?.message || 'Error ' + response.status;
+      fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+      })
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(result) {
+        if (!result.ok) {
+          var googleError = result.data?.error?.message || 'Error';
           appendGeminiMessage('assistant', 'Google API Error: ' + googleError);
           return;
         }
-
-        var text = data?.candidates?.[0]?.content?.parts?.map(function(part) { return part.text || ''; }).join('\n').trim();
+        var text = result.data?.candidates?.[0]?.content?.parts?.map(function(part) { return part.text || ''; }).join('\n').trim();
         appendGeminiMessage('assistant', text || 'No response received.');
-      } catch (error) {
+      })
+      .catch(function(error) {
         console.error("Error de conexión:", error);
         appendGeminiMessage('assistant', 'Error de conexión. Revisa tu consola de desarrollador.');
+      });
+    }
+
+    document.getElementById('sendGeminiBtn')?.addEventListener('click', geminiSendMessage);
+
+    document.getElementById('geminiPromptInput')?.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        geminiSendMessage();
       }
     });
 
@@ -3082,7 +3170,7 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     // =========================================================
-    // --- MUSIC PLAYER CONTROLLER ---
+    // --- MUSIC PLAYER CONTROLLER (LOCAL SAVE FOR EXTENDED/PREMIUM) ---
     // =========================================================
     window.youtubePlayerReady = false;
     window.player = null;
@@ -3345,6 +3433,9 @@
 
   <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
   <script>
+    // =========================================================
+    // --- SPA ROUTER (3-VIEW SWITCHER) ---
+    // =========================================================
     // Legacy alias so any remaining internal calls don't break
     window.toggleAppView = function() {
       var deepFlow = document.getElementById('deep-flow-view');
@@ -3372,6 +3463,9 @@
 
   <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
   <script>
+    // =========================================================
+    // --- CONFIGURATION & VIEW ROUTER ---
+    // =========================================================
     // =========================================================
     // --- CONFIGURATION & VIEW ROUTER ---
     // =========================================================
@@ -3500,6 +3594,9 @@
 
   <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
   <script>
+    // =========================================================
+    // --- DOMINON BUSINESS LOGIC (CALCULATOR, THEMES, POMODORO) ---
+    // =========================================================
     // Calculadora
     const display = document.getElementById('display');
     let currentInput = '0'; let previousInput = ''; let operation = null; let waitingForSecondOperand = false;
@@ -3551,10 +3648,17 @@
     function applyDominonTheme(themeName) {
       var view = document.getElementById('main-dashboard-view');
       if (!view) return;
-      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#111827', black: '#6B7280' };
+      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#1f2937', black: '#6B7280' };
       view.classList.remove('black-theme', 'light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
       view.classList.add(themeName + '-theme');
       view.style.setProperty('--color-highlight', colors[themeName] || colors.black);
+      // Sync TradingView iframe theme
+      var iframe = document.getElementById('tradingViewChart');
+      if (iframe) {
+        var tvTheme = themeName === 'light' ? 'light' : 'dark';
+        var src = iframe.src.replace(/theme=\w+/, 'theme=' + tvTheme);
+        iframe.src = src;
+      }
     }
 
     function applyQuantisTheme(themeName) {
@@ -3587,7 +3691,10 @@
       const select = document.getElementById('symbolSelect');
       const symbol = select.value;
       const iframe = document.getElementById('tradingViewChart');
-      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
+      var view = document.getElementById('main-dashboard-view');
+      var isLight = view && view.classList.contains('light-theme');
+      var tvTheme = isLight ? 'light' : 'dark';
+      const newSrc = `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=${tvTheme}&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=0&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&no-cache`;
       iframe.src = newSrc;
       localStorage.setItem('danifu_chart_symbol', symbol);
     };
@@ -3652,6 +3759,9 @@
 
   <!-- LGICA DE OPERACIN DE TERMINAL CRYPTO: DEEP FLOW -->
   <script>
+    // =========================================================
+    // --- DEEP FLOW CRYPTO TERMINAL ---
+    // =========================================================
     const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
     const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
     const IT=[{name:'DeFi Liquidation',short:'LIQUIDATION',color:'#FF3131',anomalous:true},{name:'Staking Lock',short:'STAKE LOCK',color:'#00F0FF',anomalous:false},{name:'Whale Outflow',short:'OUTFLOW',color:'#FF007F',anomalous:true},{name:'Whale Inflow',short:'INFLOW',color:'#39FF14',anomalous:false},{name:'DEX Swap',short:'DEX SWAP',color:'#FFD700',anomalous:false},{name:'Bridge Transfer',short:'BRIDGE',color:'#8A2BE2',anomalous:false},{name:'OTC Settlement',short:'OTC DEAL',color:'#FF8C00',anomalous:false},{name:'Treasury Movement',short:'TREASURY',color:'#00CED1',anomalous:false},{name:'Yield Deposit',short:'YIELD DEP',color:'#7FFF00',anomalous:false},{name:'Margin Repayment',short:'MARGIN REP',color:'#DC143C',anomalous:false}];
@@ -3841,7 +3951,7 @@
   <script>
   (function() {
     // =========================================================
-    // --- QUANTIS INFINITE CANVAS ENGINE ---
+    // --- QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
     // =========================================================
     var QS = {
       lang: 'es',
@@ -3927,7 +4037,27 @@
       qRedrawCanvas();
     }
 
+    function qGetCanvasBounds() {
+      var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
+      var size = limits.quantisSize || 2000;
+      var half = size / 2;
+      return { size: size, half: half };
+    }
+
+    function qClampPan() {
+      var bounds = qGetCanvasBounds();
+      var maxPan = bounds.half * (QS.zoom - 1) + 100;
+      QS.panX = Math.max(-maxPan, Math.min(maxPan, QS.panX));
+      QS.panY = Math.max(-maxPan, Math.min(maxPan, QS.panY));
+    }
+
+    function qIsWithinBounds(x, y) {
+      var bounds = qGetCanvasBounds();
+      return x >= -bounds.half && x <= bounds.half && y >= -bounds.half && y <= bounds.half;
+    }
+
     function qUpdateTransform() {
+      qClampPan();
       QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
     }
 
@@ -4188,6 +4318,12 @@
     };
 
     function qSetupWorkspaceButtons() {
+      document.getElementById('q-center-canvas-btn')?.addEventListener('click', function() {
+        QS.panX = 0;
+        QS.panY = 0;
+        QS.zoom = 1.0;
+        qUpdateTransform();
+      });
       document.getElementById('q-export-project-btn')?.addEventListener('click', function() {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (window.userPlan === 'normal') return window.showPlanPopup('Export Project requiere Extended o Premium.');
@@ -4283,6 +4419,10 @@
               var rect = QD.canvas.getBoundingClientRect();
               var x = (e.clientX - rect.left) / QS.zoom;
               var y = (e.clientY - rect.top)  / QS.zoom;
+              if (!qIsWithinBounds(x, y)) {
+                window.showPlanPopup('Fuera de los límites del canvas.');
+                return;
+              }
               qCreateText(x, y);
             }
           }
@@ -4292,8 +4432,14 @@
       QD.viewport.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         var rect = QD.canvas.getBoundingClientRect();
-        QS.ctxCoords.x = (e.clientX - rect.left) / QS.zoom;
-        QS.ctxCoords.y = (e.clientY - rect.top)  / QS.zoom;
+        var cx = (e.clientX - rect.left) / QS.zoom;
+        var cy = (e.clientY - rect.top)  / QS.zoom;
+        if (!qIsWithinBounds(cx, cy)) {
+          window.showPlanPopup('Fuera de los límites del canvas.');
+          return;
+        }
+        QS.ctxCoords.x = cx;
+        QS.ctxCoords.y = cy;
         QD.ctxMenu.style.display = 'block';
         QD.ctxMenu.style.left = e.clientX + 'px';
         QD.ctxMenu.style.top  = e.clientY + 'px';
@@ -4332,8 +4478,12 @@
       }
       if (!(e.target === QD.viewport || e.target === QD.canvas || e.target === QD.drawCanvas)) return;
       e.preventDefault();
-      QS.isDrawing = true;
       var p = qCanvasPoint(e);
+      if (!qIsWithinBounds(p.x, p.y)) {
+        window.showPlanPopup('Fuera de los límites del canvas.');
+        return;
+      }
+      QS.isDrawing = true;
       if (QS.drawMode === 'line' || QS.drawMode === 'circle') {
         QS.activePath = {
           mode: QS.drawMode,
