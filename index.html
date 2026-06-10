@@ -146,6 +146,15 @@
       color: #1f2937;
       border-color: #d1d5db;
     }
+    #main-dashboard-view.light-theme .tab-btn {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .tab-btn.active {
+      background: #1f2937;
+      color: #ffffff;
+    }
     #main-dashboard-view.black-theme {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
@@ -2311,11 +2320,8 @@
         position: relative;
         overflow: hidden;
         background: var(--quantis-bg);
-        background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px), linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
-        background-size: 30px 30px;
         cursor: grab;
       }
-      #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-canvas-container {
         position: absolute;
         width: 8000px;
@@ -2324,6 +2330,7 @@
         left: -4000px;
         transform-origin: center;
       }
+      #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-drawing-canvas {
         position: absolute;
         inset: 0;
@@ -2700,6 +2707,36 @@
     };
 
     // =========================================================
+    // --- MUSIC PLAYER SAVED PROGRESS LOADER (GLOBAL) ---
+    // =========================================================
+    window.loadSavedMusic = function() {
+      if (!auth.currentUser) return;
+      if (window.userPlan === 'normal') return; // Normal plan: no save
+      try {
+        var saved = localStorage.getItem('danifu_music_progress');
+        if (!saved) return;
+        var data = JSON.parse(saved);
+        if (data && window.player) {
+          setTimeout(function() {
+            try {
+              window.player.cuePlaylist({
+                listType: 'playlist',
+                list: playlistId,
+                index: data.index || 0,
+                startSeconds: data.time || 0
+              });
+              setTimeout(updateSongDisplay, 800);
+            } catch (e) {
+              console.error('Error cargando msica guardada:', e);
+            }
+          }, 1500);
+        }
+      } catch (e) {
+        console.error('Error cargando progreso de msica:', e);
+      }
+    };
+
+    // =========================================================
     // --- FIREBASE AUTH & PLAN DETECTION ---
     // =========================================================
     onAuthStateChanged(auth, async (user) => {
@@ -2711,36 +2748,7 @@
 
         window.applyMembershipPlan(await detectUserPlan(user));
         window.loadNote(window.activeTab);
-
-        // =========================================================
-        // --- MUSIC PLAYER SAVED PROGRESS LOADER ---
-        // =========================================================
-        window.loadSavedMusic = function() {
-          if (!auth.currentUser) return;
-          if (window.userPlan === 'normal') return; // Normal plan: no save
-          try {
-            var saved = localStorage.getItem('danifu_music_progress');
-            if (!saved) return;
-            var data = JSON.parse(saved);
-            if (data && window.player) {
-              setTimeout(function() {
-                try {
-                  window.player.cuePlaylist({
-                    listType: 'playlist',
-                    list: playlistId,
-                    index: data.index || 0,
-                    startSeconds: data.time || 0
-                  });
-                  setTimeout(updateSongDisplay, 800);
-                } catch (e) {
-                  console.error('Error cargando msica guardada:', e);
-                }
-              }, 1500);
-            }
-          } catch (e) {
-            console.error('Error cargando progreso de msica:', e);
-          }
-        };
+        window.loadSavedMusic();
 
       } else {
         window.applyMembershipPlan('normal');
@@ -2796,7 +2804,6 @@
 
     // =========================================================
     // --- NOTEPAD CONTROLLER (LOCAL & CLOUD) ---
-    // =========================================================
     // =========================================================
     window.activeTab = localStorage.getItem('danifu_active_tab') || "1";
 
@@ -3467,8 +3474,6 @@
     // --- CONFIGURATION & VIEW ROUTER ---
     // =========================================================
     // =========================================================
-    // --- CONFIGURATION & VIEW ROUTER ---
-    // =========================================================
     (function() {
       window.currentLang = localStorage.getItem('danifu_lang') || 'es';
       const I18N = {
@@ -4034,6 +4039,10 @@
       QD.drawCanvas.height = size;
       QD.drawCanvas.style.width = size + 'px';
       QD.drawCanvas.style.height = size + 'px';
+      // Full-length grid covering the entire canvas box
+      var gridColor = getComputedStyle(QD.canvas).getPropertyValue('--quantis-grid-dot').trim() || 'rgba(168,85,247,0.07)';
+      QD.canvas.style.backgroundImage = 'linear-gradient(' + gridColor + ' 1px, transparent 1px), linear-gradient(90deg, ' + gridColor + ' 1px, transparent 1px)';
+      QD.canvas.style.backgroundSize = '30px 30px';
       qRedrawCanvas();
     }
 
@@ -4816,6 +4825,11 @@
       var file = e.target.files[0];
       if (!file) return;
       var x = QS.ctxCoords.x, y = QS.ctxCoords.y;
+      if (!qIsWithinBounds(x, y)) {
+        window.showPlanPopup('Fuera de los límites del canvas.');
+        e.target.value = '';
+        return;
+      }
       if (file.type.startsWith('image/')) {
         var reader = new FileReader();
         reader.onload = function(ev) {
