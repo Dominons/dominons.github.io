@@ -2465,7 +2465,6 @@
           <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
           <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
           <button class="q-tool-btn" id="q-center-canvas-btn" type="button" title="Centrar Canvas"><i class="fa-solid fa-crosshairs"></i></button>
-          <button class="q-tool-btn q-draw-tool" id="q-pencil-btn" type="button" title="Drawing Tools"><i class="fa-solid fa-pencil"></i></button>
         </div>
         <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
           <i class="fa-solid fa-gear"></i>
@@ -4079,8 +4078,8 @@
       var size = limits.quantisSize || 2000;
       QD.canvas.style.width = size + 'px';
       QD.canvas.style.height = size + 'px';
-      QD.canvas.style.left = (-size / 2) + 'px';
-      QD.canvas.style.top = (-size / 2) + 'px';
+      QD.canvas.style.left = '0px';
+      QD.canvas.style.top = '0px';
       // SVG doesn't need width/height properties in the same way as canvas
       // The SVG element already inherits size from its parent container
       QD.drawSvg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
@@ -4457,12 +4456,14 @@
         var mouseY = e.clientY - rect.top - rect.height / 2;
         var oldZoom = QS.zoom;
         var intensity = 0.05;
-        QS.zoom = e.deltaY < 0
-          ? Math.min(QS.zoom + intensity, 3)
-          : Math.max(QS.zoom - intensity, 0.35);
-        qClampZoom();
+
+        var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
+        var bounds = qGetCanvasBounds();
+        QS.zoom = Math.max(Math.max(0.35, QD.viewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
+
         var canvasX = (mouseX - QS.panX) / oldZoom;
         var canvasY = (mouseY - QS.panY) / oldZoom;
+
         QS.panX = mouseX - canvasX * QS.zoom;
         QS.panY = mouseY - canvasY * QS.zoom;
         qUpdateTransform();
@@ -4517,10 +4518,7 @@
            QD.viewport.classList.remove('grabbing');
          }
        });
-      window.addEventListener('mouseup', function() {
-        if (QS.isPanning) { QS.isPanning = false; QD.viewport.classList.remove('grabbing'); }
-      });
-      // Click to create text
+       // Click to create text
       QD.viewport.addEventListener('mouseup', function(e) {
         if (QS.drawMode) return;
         if (e.target === QD.viewport || e.target === QD.canvas) {
@@ -4665,6 +4663,11 @@
       }
       QS.drawMode = QS.drawMode === mode ? null : mode;
       window.qUpdateDrawingControls();
+      // Auto-open drawing tools panel when a mode is selected
+      if (QS.drawMode) {
+        var panel = document.getElementById('quantis-drawing-tools-panel');
+        if (panel) panel.classList.add('open');
+      }
     }
 
     function qToggleDrawPanel() {
@@ -4685,17 +4688,16 @@
       if (panel) panel.classList.remove('open');
     }
 
+    // Expose drawing controls globally for inline onclick handlers (e.g., context menu)
+    window.qSetDrawMode = qSetDrawMode;
+    window.qToggleDrawPanel = qToggleDrawPanel;
+    window.qCloseDrawPanel = qCloseDrawPanel;
+
     function qSetupDrawingControls() {
       if (!QD.viewport) return;
       QD.viewport.addEventListener('mousedown', qBeginDraw);
       window.addEventListener('mousemove', qMoveDraw);
       window.addEventListener('mouseup', qEndDraw);
-
-      // Header pencil button toggles floating panel
-      document.getElementById('q-pencil-btn')?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        qToggleDrawPanel();
-      });
 
       // Close button inside panel
       document.getElementById('q-draw-close')?.addEventListener('click', qCloseDrawPanel);
@@ -4753,7 +4755,7 @@
       document.addEventListener('click', function(e) {
         var panel = document.getElementById('quantis-drawing-tools-panel');
         if (!panel || !panel.classList.contains('open')) return;
-        if (!panel.contains(e.target) && e.target.id !== 'q-pencil-btn' && !e.target.closest('#q-pencil-btn')) {
+        if (!panel.contains(e.target)) {
           panel.classList.remove('open');
         }
       });
