@@ -4059,8 +4059,8 @@
           e.preventDefault();
 
           var rect = QD.viewport.getBoundingClientRect();
-          var mouseX = e.clientX - rect.left - rect.width / 2;
-          var mouseY = e.clientY - rect.top - rect.height / 2;
+          var mouseX = e.clientX - rect.left;
+          var mouseY = e.clientY - rect.top;
           var oldZoom = QS.zoom;
           var intensity = 0.05;
 
