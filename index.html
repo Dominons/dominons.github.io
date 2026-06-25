@@ -4004,8 +4004,8 @@
   <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
   <script>
   (function() {
-    // =========================================================
-    QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
+   // =========================================================
+    // --- QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
     // =========================================================
     var QS = {
       lang: 'es',
@@ -4028,7 +4028,7 @@
         { id: 'qp-2', name: 'Proyecto Beta',  pages: ['Resumen'] }
       ],
       canvasData: {
-        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito  Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
+        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
         '0-1': [],
         '1-0': []
       },
@@ -4059,8 +4059,8 @@
           e.preventDefault();
 
           var rect = QD.viewport.getBoundingClientRect();
-          var mouseX = e.clientX - rect.left;
-          var mouseY = e.clientY - rect.top;
+          var mouseX = e.clientX - rect.left - rect.width / 2;
+          var mouseY = e.clientY - rect.top - rect.height / 2;
           var oldZoom = QS.zoom;
           var intensity = 0.05;
 
@@ -4976,5 +4976,7 @@
   })();
   </script>
 
+</body>
+</html>
 </body>
 </html>
