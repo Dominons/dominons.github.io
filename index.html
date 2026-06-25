@@ -4005,7 +4005,7 @@
   <script>
   (function() {
     // =========================================================
-    // --- QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
+    QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
     // =========================================================
     var QS = {
       lang: 'es',
@@ -4028,7 +4028,7 @@
         { id: 'qp-2', name: 'Proyecto Beta',  pages: ['Resumen'] }
       ],
       canvasData: {
-        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
+        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito  Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
         '0-1': [],
         '1-0': []
       },
@@ -4059,8 +4059,8 @@
           e.preventDefault();
 
           var rect = QD.viewport.getBoundingClientRect();
-          var mouseX = e.clientX - rect.left - rect.width / 2;
-          var mouseY = e.clientY - rect.top - rect.height / 2;
+          var mouseX = e.clientX - rect.left;
+          var mouseY = e.clientY - rect.top;
           var oldZoom = QS.zoom;
           var intensity = 0.05;
 
@@ -4151,166 +4151,12 @@
     }
 
     // =========================================================
-    // QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
-    // =========================================================
-    var QS = {
-      lang: 'es',
-      zoom: 1.0,
-      panX: 0,
-      panY: 0,
-      isPanning: false,
-      startX: 0,
-      startY: 0,
-      isDrawing: false,
-      drawMode: null,
-      drawColor: '#000000',
-      drawSize: 8,
-      activePath: null,
-      ctxCoords: { x: 0, y: 0 },
-      activeProj: 0,
-      activePage: 0,
-      projects: [
-        { id: 'qp-1', name: 'Proyecto Alpha', pages: ['Página Inicial', 'Investigación'] },
-        { id: 'qp-2', name: 'Proyecto Beta',  pages: ['Resumen'] }
-      ],
-      canvasData: {
-        '0-0': [{ type:'text', x:3870, y:3870, desc:'Bienvenida', content:'Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.' }],
-        '0-1': [],
-        '1-0': []
-      },
-      drawings: {}
-    };
-
-    // =========================================================
-    // --- QUANTIS DOM REFERENCES ---
-    // =========================================================
-    var QD = {};
-
-    function qInit() {
-      QD.viewport   = document.getElementById('quantis-viewport');
-      QD.canvas     = document.getElementById('quantis-canvas-container');
-      QD.drawSvg    = document.getElementById('quantis-drawing-svg');
-      // QD.drawCtx removed - SVG doesn't use canvas 2D context
-      QD.projList   = document.getElementById('q-projects-list');
-      QD.ctxMenu    = document.getElementById('q-context-menu');
-      QD.fileInput  = document.getElementById('q-file-input');
-      QD.clock      = document.getElementById('quantis-clock');
-
-      if (!QD.viewport) return; // view not present
-
-      // Global wheel listener - intercepts ALL scroll events when quantis-view is visible
-      window.addEventListener('wheel', function(e) {
-        var quantisView = document.getElementById('quantis-view');
-        if (quantisView && !quantisView.classList.contains('hidden-view')) {
-          e.preventDefault();
-
-          var rect = QD.viewport.getBoundingClientRect();
-          // Se remueve la resta de la mitad del viewport para alinearse con el transform-origin (0,0)
-          var mouseX = e.clientX - rect.left;
-          var mouseY = e.clientY - rect.top;
-          
-          var oldZoom = QS.zoom;
-          
-          // Uso de multiplicador para una transición de zoom más fluida y proporcional
-          var zoomFactor = 1.08;
-          var newZoom = e.deltaY < 0 ? oldZoom * zoomFactor : oldZoom / zoomFactor;
-          
-          var bounds = qGetCanvasBounds();
-          var minZoom = Math.max(0.35, QD.viewport.clientWidth / bounds.size);
-          var maxZoom = 3.0;
-          QS.zoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
-
-          var canvasX = (mouseX - QS.panX) / oldZoom;
-          var canvasY = (mouseY - QS.panY) / oldZoom;
-
-          QS.panX = mouseX - canvasX * QS.zoom;
-          QS.panY = mouseY - canvasY * QS.zoom;
-          
-          qUpdateTransform();
-        }
-      }, { passive: false });
-
-      qLoadWorkspace();
-      qApplyCanvasSize();
-      qRenderProjects();
-      qLoadPage(QS.activeProj, QS.activePage, true);
-      qSetupCanvas();
-      qSetupWorkspaceButtons();
-      qSetupDrawingControls();
-      qSetupClock();
-      window.qUpdateDrawingControls();
-    }
-
-    // ---- CLOCK ----
-    function qSetupClock() {
-      function tick() {
-        if (!QD.clock) return;
-        var n = new Date();
-        var pad = function(v){ return String(v).padStart(2,'0'); };
-        QD.clock.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
-      }
-      tick();
-      setInterval(tick, 1000);
-    }
-
-    // ---- CANVAS TRANSFORM ----
-    function qApplyCanvasSize() {
-      if (!QD.canvas) return;
-      var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
-      var size = limits.quantisSize || 2000;
-      QD.canvas.style.width = size + 'px';
-      QD.canvas.style.height = size + 'px';
-      QD.canvas.style.left = '0px';
-      QD.canvas.style.top = '0px';
-      // SVG doesn't need width/height properties in the same way as canvas
-      // The SVG element already inherits size from its parent container
-      QD.drawSvg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
-      QD.drawSvg.style.width = size + 'px';
-      QD.drawSvg.style.height = size + 'px';
-      // Grid is now handled by the static CSS background on #quantis-viewport
-      qRedrawCanvas();
-    }
-
-    function qGetCanvasBounds() {
-      var limits = window.getPlanLimits ? window.getPlanLimits() : { quantisSize: 2000 };
-      var size = limits.quantisSize || 2000;
-      var half = size / 2;
-      return { size: size, half: half };
-    }
-
-    function qClampPan() {
-      var bounds = qGetCanvasBounds();
-      var maxPanX = (bounds.size * QS.zoom) / 2;
-      var maxPanY = (bounds.size * QS.zoom) / 2;
-      QS.panX = Math.max(-maxPanX, Math.min(maxPanX, QS.panX));
-      QS.panY = Math.max(-maxPanY, Math.min(maxPanY, QS.panY));
-    }
-
-    function qGetZoomConstraints() {
-      var bounds = qGetCanvasBounds();
-      var minZoom = Math.max(0.35, Math.max(QD.viewport.clientWidth / bounds.size, QD.viewport.clientHeight / bounds.size));
-      var maxZoom = Math.min(3.0, bounds.size / Math.min(QD.viewport.clientWidth, QD.viewport.clientHeight));
-      return { min: minZoom, max: maxZoom };
-    }
-
-    function qIsWithinBounds(x, y) {
-      var bounds = qGetCanvasBounds();
-      return x >= 0 && x <= bounds.size && y >= 0 && y <= bounds.size;
-    }
-
-    function qUpdateTransform() {
-      qClampPan();
-      QD.canvas.style.transform = 'translate3d('+QS.panX+'px,'+QS.panY+'px,0) scale('+QS.zoom+')';
-    }
-
-    // =========================================================
     // --- QUANTIS LOCAL STORAGE ENGINE ---
     // =========================================================
     function qWorkspaceKey() {
       return QS.activeProj + '-' + QS.activePage;
     }
 
-    // [Se mantienen el resto de las funciones exactamente igual]
     function qNormalizeDrawingPaths(key) {
       if (!Array.isArray(QS.drawings[key])) QS.drawings[key] = [];
       QS.drawings[key] = QS.drawings[key].filter(function(path) {
@@ -4374,6 +4220,7 @@
 
     function qRedrawCanvas() {
       if (!QD.drawSvg) return;
+      // Remove existing SVG elements inside QD.drawSvg
       while (QD.drawSvg.firstChild) {
         QD.drawSvg.removeChild(QD.drawSvg.firstChild);
       }
@@ -4392,7 +4239,6 @@
       qNormalizeDrawingPaths(qWorkspaceKey());
     }
 
-    // [Se mantienen el resto de las funciones exactamente igual]
     function qLoadDrawing() {
       qRedrawCanvas();
     }
@@ -4629,11 +4475,14 @@
     // ---- CANVAS EVENTS ----
     function qSetupCanvas() {
       var clickT = 0, clickX = 0, clickY = 0, isMouseDragging = false;
+      // Pan start + click tracking
       QD.viewport.addEventListener('mousedown', function(e) {
         if (e.button === 0) {
           if (QS.drawMode) {
+            // Left-click with drawing mode - start drawing
             qBeginDraw(e);
           } else {
+            // Left-click without drawing mode - start panning
             if (e.target === QD.viewport || e.target === QD.canvas) {
               QS.isPanning = true;
               QS.startX = e.clientX - QS.panX;
@@ -4645,6 +4494,7 @@
             }
           }
         } else if (e.button === 2) {
+          // Right-click - always pan, never show context menu
           if (e.target === QD.viewport || e.target === QD.canvas) {
             QS.isPanning = true;
             QS.startX = e.clientX - QS.panX;
@@ -4673,6 +4523,7 @@
            QD.viewport.classList.remove('grabbing');
          }
        });
+       // Click to create text
       QD.viewport.addEventListener('mouseup', function(e) {
         if (QS.drawMode) return;
         if (e.target === QD.viewport || e.target === QD.canvas) {
@@ -4692,6 +4543,7 @@
           }
         }
       });
+       // Right-click context menu (only if not dragging)
        QD.viewport.addEventListener('contextmenu', function(e) {
          if (isMouseDragging) {
            e.preventDefault();
@@ -4816,6 +4668,7 @@
       }
       QS.drawMode = QS.drawMode === mode ? null : mode;
       window.qUpdateDrawingControls();
+      // Auto-open drawing tools panel when a mode is selected
       if (QS.drawMode) {
         var panel = document.getElementById('quantis-drawing-tools-panel');
         if (panel) panel.classList.add('open');
@@ -4840,6 +4693,7 @@
       if (panel) panel.classList.remove('open');
     }
 
+    // Expose drawing controls globally for inline onclick handlers (e.g., context menu)
     window.qSetDrawMode = qSetDrawMode;
     window.qToggleDrawPanel = qToggleDrawPanel;
     window.qCloseDrawPanel = qCloseDrawPanel;
@@ -4850,18 +4704,23 @@
       window.addEventListener('mousemove', qMoveDraw);
       window.addEventListener('mouseup', qEndDraw);
 
+      // Close button inside panel
       document.getElementById('q-draw-close')?.addEventListener('click', qCloseDrawPanel);
+
+      // Panel tool buttons
       document.getElementById('q-draw-pencil')?.addEventListener('click', function(){ qSetDrawMode('pencil'); });
       document.getElementById('q-draw-eraser')?.addEventListener('click', function(){ qSetDrawMode('eraser'); });
       document.getElementById('q-draw-line')?.addEventListener('click', function(){ qSetDrawMode('line'); });
       document.getElementById('q-draw-circle')?.addEventListener('click', function(){ qSetDrawMode('circle'); });
 
+      // Panel brush size
       document.getElementById('q-draw-thickness')?.addEventListener('input', function(e) {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
         QS.drawSize = parseInt(e.target.value, 10) || 8;
       });
 
+      // Panel color toggles
       document.getElementById('q-draw-cblack')?.addEventListener('click', function() {
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (!qIsPremiumBrush()) return window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
@@ -4877,6 +4736,7 @@
         document.getElementById('q-draw-cblack')?.classList.remove('active');
       });
 
+      // Panel drag
       var panel = document.getElementById('quantis-drawing-tools-panel');
       var panelHeader = panel ? panel.querySelector('.q-draw-header') : null;
       if (panel && panelHeader) {
@@ -4896,6 +4756,7 @@
         document.addEventListener('mouseup', function() { pDrag = false; });
       }
 
+      // Close panel on click outside
       document.addEventListener('click', function(e) {
         var panel = document.getElementById('quantis-drawing-tools-panel');
         if (!panel || !panel.classList.contains('open')) return;
@@ -4942,6 +4803,7 @@
       del.onclick = function(){ blk.remove(); qSavePage(); };
       blk.appendChild(del);
 
+      // Drag
       blk.addEventListener('mousedown', function(e) {
         if (e.target.closest('input') || e.target.closest('a') || e.target.isContentEditable || e.target.closest('.q-block-del')) return;
         e.stopPropagation();
@@ -5037,6 +4899,7 @@
         img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;';
         img.src = fileData;
         box.appendChild(img);
+        // resize handle
         var rh = document.createElement('div');
         rh.style.cssText = 'position:absolute;bottom:3px;right:3px;width:14px;height:14px;cursor:se-resize;color:var(--quantis-faint);display:flex;align-items:center;justify-content:center;font-size:10px;';
         rh.innerHTML = '<i class="fa-solid fa-maximize" style="transform:rotate(90deg)"></i>';
