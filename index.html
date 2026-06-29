@@ -4052,23 +4052,29 @@
 
       if (!QD.viewport) return; // view not present
 
-      // Global wheel listener - intercepts ALL scroll events when quantis-view is visible
-      QD.viewport.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        var rect = QD.viewport.getBoundingClientRect();
-        var mouseX = e.clientX - rect.left - rect.width / 2;
-        var mouseY = e.clientY - rect.top - rect.height / 2;
-        var oldZoom = QS.zoom;
-        var intensity = 0.05;
-        var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
-        var bounds = qGetCanvasBounds();
-        QS.zoom = Math.max(Math.max(0.35, QD.viewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
-        var canvasX = (mouseX - QS.panX) / oldZoom;
-        var canvasY = (mouseY - QS.panY) / oldZoom;
-        QS.panX = mouseX - canvasX * QS.zoom;
-        QS.panY = mouseY - canvasY * QS.zoom;
-        qUpdateTransform();
-      }, { passive: false });
+      // Global wheel listener: capture phase intercepts ALL scroll events before browser default
+      window.addEventListener('wheel', function(e) {
+        var quantisView = document.getElementById('quantis-view');
+        if (quantisView && !quantisView.classList.contains('hidden-view')) {
+          console.log('[Quantis Zoom] wheel deltaY:', e.deltaY, 'zoom:', QS.zoom, 'pan:', QS.panX, QS.panY);
+          e.preventDefault();
+          var rect = QD.viewport.getBoundingClientRect();
+          console.log('[Quantis Zoom] viewport rect:', rect.width, rect.height);
+          var mouseX = e.clientX - rect.left - rect.width / 2;
+          var mouseY = e.clientY - rect.top - rect.height / 2;
+          var oldZoom = QS.zoom;
+          var intensity = 0.05;
+          var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
+          var bounds = qGetCanvasBounds();
+          QS.zoom = Math.max(Math.max(0.35, QD.viewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
+          var canvasX = (mouseX - QS.panX) / oldZoom;
+          var canvasY = (mouseY - QS.panY) / oldZoom;
+          QS.panX = mouseX - canvasX * QS.zoom;
+          QS.panY = mouseY - canvasY * QS.zoom;
+          console.log('[Quantis Zoom] new zoom:', QS.zoom, 'new pan:', QS.panX, QS.panY);
+          qUpdateTransform();
+        }
+      }, { capture: true, passive: false });
 
       qLoadWorkspace();
       qApplyCanvasSize();
