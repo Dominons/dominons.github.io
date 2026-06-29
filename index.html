@@ -4054,44 +4054,21 @@
 
       // Global wheel listener - intercepts ALL scroll events when quantis-view is visible
       QD.viewport.addEventListener('wheel', function(e) {
-
-    e.preventDefault();
-
-  
-
-    var rect = QD.viewport.getBoundingClientRect();
-
-    var mouseX = e.clientX - rect.left;
-
-    var mouseY = e.clientY - rect.top;
-
-    var oldZoom = QS.zoom;
-
-    var intensity = 0.05;
-
-  
-
-    var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
-
-    var bounds = qGetCanvasBounds();
-
-    QS.zoom = Math.max(Math.max(0.35, QD.viewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
-
- 
-
-    var canvasX = (mouseX - QS.panX) / oldZoom;
-
-    var canvasY = (mouseY - QS.panY) / oldZoom;
-
-
-
-    QS.panX = mouseX - canvasX * QS.zoom;
-
-    QS.panY = mouseY - canvasY * QS.zoom;
-
-    qUpdateTransform();
-
-     }, { passive: false });
+        e.preventDefault();
+        var rect = QD.viewport.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left - rect.width / 2;
+        var mouseY = e.clientY - rect.top - rect.height / 2;
+        var oldZoom = QS.zoom;
+        var intensity = 0.05;
+        var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
+        var bounds = qGetCanvasBounds();
+        QS.zoom = Math.max(Math.max(0.35, QD.viewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
+        var canvasX = (mouseX - QS.panX) / oldZoom;
+        var canvasY = (mouseY - QS.panY) / oldZoom;
+        QS.panX = mouseX - canvasX * QS.zoom;
+        QS.panY = mouseY - canvasY * QS.zoom;
+        qUpdateTransform();
+      }, { passive: false });
 
       qLoadWorkspace();
       qApplyCanvasSize();
