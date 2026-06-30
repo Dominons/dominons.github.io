@@ -2345,7 +2345,7 @@
           left: 0;
           transform-origin: 0 0;
           background: transparent;
-          border: 1px solid var(--quantis-boundary);
+          border: 3px solid var(--quantis-boundary);
         }
       #quantis-viewport.grabbing { cursor: grabbing; }
       #quantis-drawing-svg {
@@ -3102,7 +3102,7 @@
         parts.push('The user\'s active notes are:\n' + notepad.value.trim());
       }
       try {
-        var qData = JSON.parse(localStorage.getItem('quantis_local_data') || '{}');
+        var qData = JSON.parse(localStorage.getItem(quantisStorageKey()) || '{}');
         if (qData.projects && qData.projects.length) {
           var summary = qData.projects.map(function(p) {
             return p.name + ' (' + (p.pages || []).length + ' pages)';
@@ -4271,9 +4271,14 @@
       qPersistWorkspace();
     }
 
+    function quantisStorageKey() {
+      var uid = window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest';
+      return 'quantis_local_data_' + uid;
+    }
+
     function qPersistWorkspace() {
       try {
-        localStorage.setItem('quantis_local_data', JSON.stringify({
+        localStorage.setItem(quantisStorageKey(), JSON.stringify({
           projects: QS.projects,
           canvasData: QS.canvasData,
           drawings: QS.drawings,
@@ -4287,7 +4292,16 @@
 
     function qLoadWorkspace() {
       try {
-        var raw = localStorage.getItem('quantis_local_data');
+        var raw = localStorage.getItem(quantisStorageKey());
+        // Migration: si no hay datos con el key nuevo pero sí con el viejo, migrarlos
+        if (!raw) {
+          var oldRaw = localStorage.getItem('quantis_local_data');
+          if (oldRaw) {
+            localStorage.setItem(quantisStorageKey(), oldRaw);
+            localStorage.removeItem('quantis_local_data');
+            raw = oldRaw;
+          }
+        }
         if (!raw) return;
         var data = JSON.parse(raw);
         if (Array.isArray(data.projects)) QS.projects = data.projects;
@@ -4460,7 +4474,7 @@
         if (!window.isMembershipPlanReady) return window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
         if (window.userPlan === 'normal') return window.showPlanPopup('Export Project requiere Extended o Premium.');
         qSaveWorkspace();
-        var blob = new Blob([localStorage.getItem('quantis_local_data') || '{}'], { type: 'application/json;charset=utf-8' });
+        var blob = new Blob([localStorage.getItem(quantisStorageKey()) || '{}'], { type: 'application/json;charset=utf-8' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = 'quantis_workspace.json';
