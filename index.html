@@ -4052,28 +4052,47 @@
 
       if (!QD.viewport) return; // view not present
 
-      // Quantis Viewport Isolation - Separate zoom handler for Quantis to prevent interference with Dominon/Deep Flow
+      // ===== QUANTIS VIEWPORT — ZOOM & SCROLL (corregido) =====
+      // Aislado al #quantis-viewport para no interferir con Dominon / Deep Flow.
       var quantisViewport = QD.viewport;
+
       quantisViewport.addEventListener('wheel', function(e) {
-        // Prevent default browser scroll behavior
-        e.preventDefault();
-        
-        // Ensure the zoom handler only activates when Quantis view is visible and mouse is over the viewport
-        if (quantisView && quantisView.classList.contains('hidden-view')) return;
+        // 1) Si el evento no nace dentro del viewport, dejamos que el
+        //    navegador haga scroll normal (no robamos el scroll global).
         if (!(e.target === quantisViewport || quantisViewport.contains(e.target))) return;
-        
-        var rect = quantisViewport.getBoundingClientRect();
-        var mouseX = e.clientX - rect.left - rect.width / 2;
-        var mouseY = e.clientY - rect.top - rect.height / 2;
+
+        // 2) Sólo ahora cancelamos el scroll nativo: el zoom lo maneja JS.
+        e.preventDefault();
+
+        var rect  = quantisViewport.getBoundingClientRect();
+        // 3) Coordenadas del mouse RELATIVAS A LA ESQUINA SUPERIOR IZQUIERDA
+        //    del viewport (coincide con transform-origin:0 0 del canvas).
+        var mouseX = e.clientX - rect.left;
+        var mouseY = e.clientY - rect.top;
+
         var oldZoom = QS.zoom;
-        var intensity = 0.05;
-        var newZoom = e.deltaY < 0 ? oldZoom + intensity : oldZoom - intensity;
-        var bounds = qGetCanvasBounds();
-        QS.zoom = Math.max(Math.max(0.35, quantisViewport.clientWidth / bounds.size), Math.min(3.0, newZoom));
+
+        // 4) Intensidad proporcional al delta (funciona con mouse y trackpad).
+        //    CtrlKey = gesto de pinch-zoom en trackpad → zoom más fino.
+        var factor  = e.ctrlKey ? 0.01 : 0.0015;
+        var newZoom = oldZoom * (1 - e.deltaY * factor);
+
+        // 5) Limitamos el zoom según el tamaño del canvas y la vista.
+        var bounds    = qGetCanvasBounds();
+        var minZoom   = Math.max(0.2, quantisViewport.clientWidth  / bounds.size);
+        var minZoomY  = Math.max(0.2, quantisViewport.clientHeight / bounds.size);
+        minZoom = Math.max(minZoom, minZoomY);
+        var maxZoom   = 3.0;
+        QS.zoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
+        if (QS.zoom === oldZoom) return; // no hay cambio → no movemos el pan
+
+        // 6) Zoom-to-mouse: el punto del canvas que estaba bajo el cursor
+        //    antes del zoom debe seguir estando bajo el cursor después.
         var canvasX = (mouseX - QS.panX) / oldZoom;
         var canvasY = (mouseY - QS.panY) / oldZoom;
         QS.panX = mouseX - canvasX * QS.zoom;
         QS.panY = mouseY - canvasY * QS.zoom;
+
         qUpdateTransform();
       }, { passive: false });
 
