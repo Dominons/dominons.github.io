@@ -2503,10 +2503,11 @@
 
     <!-- CONTEXT MENU -->
     <div id="q-context-menu">
-      <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
-      <button onclick="qSetDrawMode('pencil')"><i class="fa-solid fa-pencil"></i> Pincel</button>
-      <button onclick="qSetDrawMode('eraser')"><i class="fa-solid fa-eraser"></i> Borrador</button>
-    </div>
+  <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
+  <button onclick="qSelectDrawColor('#000000')"><i class="fa-solid fa-circle" style="color:#000;text-shadow:0 0 1px #888"></i> Negro</button>
+  <button onclick="qSelectDrawColor('#ffffff')"><i class="fa-solid fa-circle" style="color:#fff;text-shadow:0 0 1px #444"></i> Blanco</button>
+  <button onclick="qSetFreeMode()"><i class="fa-solid fa-hand"></i> Modo libre</button>
+  </div>
     <input type="file" id="q-file-input" onchange="qHandleFile(event)">
 
   </div>
@@ -4712,10 +4713,46 @@
       if (panel) panel.classList.remove('open');
     }
 
-    // Expose drawing controls globally for inline onclick handlers (e.g., context menu)
+        // Expose drawing controls globally for inline onclick handlers (e.g., context menu)
     window.qSetDrawMode = qSetDrawMode;
     window.qToggleDrawPanel = qToggleDrawPanel;
     window.qCloseDrawPanel = qCloseDrawPanel;
+
+    // ===== Selección rápida de color desde el menú contextual =====
+    // Elige color y activa automáticamente el modo pincel.
+    window.qSelectDrawColor = function(color) {
+      if (!window.isMembershipPlanReady) {
+        window.showPlanPopup('Cargando tu plan. Intentalo de nuevo en un momento.');
+        return;
+      }
+      if (!qIsPremiumBrush()) {
+        window.showPlanPopup('Drawing Tools son exclusivos de Premium.');
+        return;
+      }
+      QS.drawColor = color;
+      QS.drawMode = 'pencil';
+
+      // Sincroniza los botones de color del panel flotante
+      document.getElementById('q-draw-cblack')?.classList.toggle('active', color === '#000000');
+      document.getElementById('q-draw-cwhite')?.classList.toggle('active', color === '#ffffff');
+
+      // Refresca estado de los botones de herramienta y abre el panel
+      window.qUpdateDrawingControls();
+      var panel = document.getElementById('quantis-drawing-tools-panel');
+      if (panel) panel.classList.add('open');
+
+      // Cierra el menú contextual
+      if (QD.ctxMenu) QD.ctxMenu.style.display = 'none';
+    };
+
+    // ===== Vuelve a modo navegar/arrastrar sin pintar =====
+    window.qSetFreeMode = function() {
+      QS.drawMode = null;
+      window.qUpdateDrawingControls();
+      var panel = document.getElementById('quantis-drawing-tools-panel');
+      if (panel) panel.classList.remove('open');
+      if (QD.ctxMenu) QD.ctxMenu.style.display = 'none';
+    };
 
     function qSetupDrawingControls() {
       if (!QD.viewport) return;
