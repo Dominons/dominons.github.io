@@ -301,15 +301,15 @@
     }
 
     /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW) ========== */
-    #main-dashboard-view {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444;
+        #main-dashboard-view {
+      --color-dark-bg: #0D0D0D;
+      --color-header-bg: #151515;
+      --color-border: #2E2E2E;
       --color-highlight: #A855F7;
-      --color-main-bg: #282828;
+      --color-main-bg: #151515;
       --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --color-input-bg: #0D0D0D;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.6);
       --main-gap: 15px;
       width: 100%;
       height: 100vh;
@@ -450,7 +450,7 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    #main-dashboard-view .user-info {
+        #main-dashboard-view .user-info {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -459,6 +459,18 @@
       border: 1px solid var(--color-border);
       border-radius: 20px;
       font-size: 0.85em;
+      animation: userInfoPurplePulse 3.5s ease-in-out infinite;
+    }
+
+    @keyframes userInfoPurplePulse {
+      0%, 100% {
+        border-color: rgba(124, 58, 237, 0.30);
+        box-shadow: 0 0 4px rgba(124, 58, 237, 0.12);
+      }
+      50% {
+        border-color: rgba(124, 58, 237, 0.70);
+        box-shadow: 0 0 10px rgba(124, 58, 237, 0.35);
+      }
     }
         #main-dashboard-view .user-avatar {
       width: 28px;
@@ -509,17 +521,17 @@
       transition: background 0.3s ease;
       font-size: 0.9em;
       white-space: nowrap;
-      animation: boxCyanPulse 3.5s ease-in-out infinite;
+            animation: boxIndigoPulse 3.5s ease-in-out infinite;
     }
 
-    @keyframes boxCyanPulse {
+    @keyframes boxIndigoPulse {
       0%, 100% {
-        border-color: rgba(34, 211, 238, 0.25);
-        box-shadow: 0 0 4px rgba(34, 211, 238, 0.10);
+        border-color: rgba(139, 92, 246, 0.25);
+        box-shadow: 0 0 4px rgba(139, 92, 246, 0.10);
       }
       50% {
-        border-color: rgba(34, 211, 238, 0.60);
-        box-shadow: 0 0 10px rgba(34, 211, 238, 0.30);
+        border-color: rgba(139, 92, 246, 0.60);
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.30);
       }
     }
 
@@ -1162,17 +1174,17 @@
       border-radius: 4px;
       max-width: 180px;
       overflow: hidden;
-      animation: songAmberPulse 3.5s ease-in-out infinite;
+            animation: songLavenderPulse 3.5s ease-in-out infinite;
     }
 
-    @keyframes songAmberPulse {
+    @keyframes songLavenderPulse {
       0%, 100% {
-        border-color: rgba(245, 158, 11, 0.25);
-        box-shadow: 0 0 4px rgba(245, 158, 11, 0.10);
+        border-color: rgba(196, 181, 253, 0.25);
+        box-shadow: 0 0 4px rgba(196, 181, 253, 0.10);
       }
       50% {
-        border-color: rgba(245, 158, 11, 0.60);
-        box-shadow: 0 0 10px rgba(245, 158, 11, 0.30);
+        border-color: rgba(196, 181, 253, 0.60);
+        box-shadow: 0 0 10px rgba(196, 181, 253, 0.30);
       }
     }
 
