@@ -44,17 +44,12 @@
       display: none !important;
     }
 
-    /* Estado inicial invisible antes de entrar o al salir */
-    .view-invisible {
-      opacity: 0 !important;
-      transform: translateY(10px) !important;
-    }
-
-    /* --- Botón de navegación: solo texto, sin fondo ni borde --- */
+       /* --- Botón de navegación: marco animado suave --- */
     .glow-button {
-      background: transparent;
-      border: none;
-      padding: 0;
+      background: rgba(168, 85, 247, 0.06);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 8px;
+      padding: 6px 14px;
       color: var(--color-text);
       font-family: inherit;
       font-weight: 600;
@@ -62,9 +57,58 @@
       letter-spacing: 0.5px;
       text-transform: uppercase;
       cursor: pointer;
-      transition: color 0.2s ease;
+      position: relative;
+      overflow: visible;
+      transition: color 0.25s ease, border-color 0.25s ease,
+                  box-shadow 0.25s ease, background 0.25s ease;
+      animation: navBorderPulse 3.5s ease-in-out infinite;
     }
 
+    @keyframes navBorderPulse {
+      0%, 100% {
+        border-color: rgba(168, 85, 247, 0.25);
+        box-shadow: 0 0 4px rgba(168, 85, 247, 0.10);
+      }
+      50% {
+        border-color: rgba(168, 85, 247, 0.60);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.30);
+      }
+    }
+
+    .glow-button:hover {
+      color: #D8B4FE;
+      border-color: rgba(168, 85, 247, 0.9);
+      background: rgba(168, 85, 247, 0.14);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+    }
+
+    .glow-button:active {
+      transform: scale(0.96);
+    }
+
+    /* --- Partículas al cambiar de vista --- */
+    .nav-particle {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      background: radial-gradient(circle, #E9D5FF 0%, #A855F7 60%, transparent 100%);
+      box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.7);
+      animation: navParticleFly 0.65s cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
+    }
+
+    @keyframes navParticleFly {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--px), var(--py)) scale(0.2);
+      }
+    }
     .glow-button:hover {
       color: var(--color-highlight);
     }
@@ -6183,8 +6227,33 @@
   })();
 </script>
 
-
-</body>
-</html>
+  <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
+  <script>
+    (function () {
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.glow-button');
+        if (!btn || !btn.getAttribute('onclick')) return;
+        var r = btn.getBoundingClientRect();
+        var cx = r.left + r.width / 2;
+        var cy = r.top + r.height / 2;
+        for (var i = 0; i < 12; i++) {
+          (function (i) {
+            setTimeout(function () {
+              var p = document.createElement('span');
+              p.className = 'nav-particle';
+              var angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.5;
+              var dist = 22 + Math.random() * 26;
+              p.style.left = cx + 'px';
+              p.style.top = cy + 'px';
+              p.style.setProperty('--px', (Math.cos(angle) * dist).toFixed(1) + 'px');
+              p.style.setProperty('--py', (Math.sin(angle) * dist).toFixed(1) + 'px');
+              document.body.appendChild(p);
+              setTimeout(function () { p.remove(); }, 700);
+            }, i * 8);
+          })(i);
+        }
+      }, true);
+    })();
+  </script>
 </body>
 </html>
