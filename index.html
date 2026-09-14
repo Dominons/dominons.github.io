@@ -4941,10 +4941,18 @@
         : "guest";
     }
 
+        function qNextDrawId() {
+      return "qd_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+    }
+
     function qNormalizeDrawingPaths(key) {
       if (!Array.isArray(QS.drawings[key])) QS.drawings[key] = [];
       QS.drawings[key] = QS.drawings[key].filter(function (path) {
         return path && Array.isArray(path.points) && path.points.length > 0;
+      });
+      // FASE 0: ID único por dibujo (migra automáticamente los paths viejos sin ID)
+      QS.drawings[key].forEach(function (path) {
+        if (!path.id) path.id = qNextDrawId();
       });
       return QS.drawings[key];
     }
@@ -5720,8 +5728,9 @@
         return;
       }
       QS.isDrawing = true;
-      if (QS.drawMode === "line" || QS.drawMode === "circle") {
+            if (QS.drawMode === "line" || QS.drawMode === "circle") {
         QS.activePath = {
+          id: qNextDrawId(),
           mode: QS.drawMode,
           color: QS.drawColor,
           size: QS.drawSize,
@@ -5733,6 +5742,7 @@
         };
       } else {
         QS.activePath = {
+          id: qNextDrawId(),
           mode: QS.drawMode,
           color: QS.drawColor,
           size: QS.drawSize,
