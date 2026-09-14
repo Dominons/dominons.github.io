@@ -2778,8 +2778,6 @@
   <button id="q-draw-open-tools" onclick="event.stopPropagation(); qToggleDrawPanel()"><i class="fa-solid fa-paintbrush"></i> Drawing Tools</button>
   <button onclick="qSelectDrawColor('#000000')"><i class="fa-solid fa-circle" style="color:#000;text-shadow:0 0 1px #888"></i> Negro</button>
   <button onclick="qSelectDrawColor('#ffffff')"><i class="fa-solid fa-circle" style="color:#fff;text-shadow:0 0 1px #444"></i> Blanco</button>
-  <button onclick="qSelectDrawColor('#EF4444')"><i class="fa-solid fa-circle" style="color:#EF4444"></i> Rojo</button>
-  <button onclick="qSelectDrawColor('#22C55E')"><i class="fa-solid fa-circle" style="color:#22C55E"></i> Verde</button>
   <button onclick="qSetFreeMode()"><i class="fa-solid fa-hand"></i> Modo libre</button>
   </div>
     <input type="file" id="q-file-input" onchange="qHandleFile(event)">
@@ -2803,7 +2801,6 @@
     </div>
     <div class="q-draw-row">
       <button class="q-draw-btn" id="q-draw-rect" title="Rectangle"><i class="fa-regular fa-square"></i> Rect</button>
-      <button class="q-draw-btn" id="q-draw-square" title="Square"><i class="fa-solid fa-square"></i> Square</button>
       <button class="q-draw-btn" id="q-draw-lineh" title="Horizontal Line"><i class="fa-solid fa-minus"></i> H-Line</button>
       <button class="q-draw-btn" id="q-draw-linev" title="Vertical Line"><i class="fa-solid fa-arrows-up-down"></i> V-Line</button>
     </div>
@@ -2811,7 +2808,6 @@
       <label>Color</label>
       <button class="q-draw-color-toggle" data-color="#A855F7" style="background:#A855F7" title="Violet"></button>
       <button class="q-draw-color-toggle" data-color="#EC4899" style="background:#EC4899" title="Magenta"></button>
-      <button class="q-draw-color-toggle" data-color="#8B5CF6" style="background:#8B5CF6" title="Indigo"></button>
       <button class="q-draw-color-toggle" data-color="#C4B5FD" style="background:#C4B5FD" title="Lavender"></button>
       <button class="q-draw-color-toggle" data-color="#EF4444" style="background:#EF4444" title="Red"></button>
       <button class="q-draw-color-toggle" data-color="#F59E0B" style="background:#F59E0B" title="Amber"></button>
@@ -5779,73 +5775,106 @@
         window.showPlanPopup("Fuera de los límites del canvas.");
         return;
       }
-      QS.isDrawing = true;
-            if (
-        QS.drawMode === "line" || QS.drawMode === "circle" ||
-        QS.drawMode === "rectangle" || QS.drawMode === "square" ||
-        QS.drawMode === "lineh" || QS.drawMode === "linev"
-      ) {
-        QS.activePath = {
-          id: qNextDrawId(),
-          mode: QS.drawMode,
-          color: QS.drawColor,
-          size: QS.drawSize,
-          points: [
-            { x: p.x, y: p.y },
-            { x: p.x, y: p.y },
-          ],
-          origin: { x: p.x, y: p.y },
-        };
-      } else {
-        QS.activePath = {
-          id: qNextDrawId(),
-          mode: QS.drawMode,
-          color: QS.drawColor,
-          size: QS.drawSize,
-          points: [{ x: p.x, y: p.y }],
-        };
-        qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
-        qStrokeVectorPath(QS.activePath);
-      }
-    }
+QS.isDrawing = true;
+       if (QS.drawMode === "eraser") {
+         return;
+       }
+             if (
+         QS.drawMode === "line" || QS.drawMode === "circle" ||
+         QS.drawMode === "rectangle" || QS.drawMode === "square" ||
+         QS.drawMode === "lineh" || QS.drawMode === "linev"
+       ) {
+         QS.activePath = {
+           id: qNextDrawId(),
+           mode: QS.drawMode,
+           color: QS.drawColor,
+           size: QS.drawSize,
+           points: [
+             { x: p.x, y: p.y },
+             { x: p.x, y: p.y },
+           ],
+           origin: { x: p.x, y: p.y },
+         };
+       } else {
+         QS.activePath = {
+           id: qNextDrawId(),
+           mode: QS.drawMode,
+           color: QS.drawColor,
+           size: QS.drawSize,
+           points: [{ x: p.x, y: p.y }],
+         };
+         qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
+         qStrokeVectorPath(QS.activePath);
+       }
+     }
 
-    function qMoveDraw(e) {
-      if (!QS.isDrawing || !QS.drawMode || !QS.activePath) return;
-      e.preventDefault();
-      var p = qCanvasPoint(e);
-      if (
-        QS.drawMode === "line" || QS.drawMode === "circle" ||
-        QS.drawMode === "rectangle" || QS.drawMode === "square" ||
-        QS.drawMode === "lineh" || QS.drawMode === "linev"
-      ) {
-        QS.activePath.points[1] = { x: p.x, y: p.y };
-        qRedrawCanvas();
-        qStrokeVectorPath(QS.activePath);
-        return;
-      }
-      var points = QS.activePath.points;
-      var lastPoint = points[points.length - 1];
-      if (lastPoint && Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y) < 0.75)
-        return;
-      points.push({ x: p.x, y: p.y });
-      qStrokeLiveSegment(QS.activePath, lastPoint, p);
-    }
+function qMoveDraw(e) {
+       if (!QS.isDrawing || !QS.drawMode) return;
+       e.preventDefault();
+       var p = qCanvasPoint(e);
+       if (QS.drawMode === "eraser") {
+         var drawings = qNormalizeDrawingPaths(qWorkspaceKey());
+         var eraseRadius = QS.drawSize;
+         var changed = false;
+         for (var i = drawings.length - 1; i >= 0; i--) {
+           var path = drawings[i];
+           if (!path.points || path.points.length === 0) continue;
+           var hit = false;
+           for (var j = 0; j < path.points.length; j++) {
+             if (Math.hypot(path.points[j].x - p.x, path.points[j].y - p.y) <= eraseRadius + (path.size || 8)) { hit = true; break; }
+           }
+           if (!hit && path.points.length >= 2) {
+             var minX = Math.min(path.points[0].x, path.points[1].x) - eraseRadius;
+             var maxX = Math.max(path.points[0].x, path.points[1].x) + eraseRadius;
+             var minY = Math.min(path.points[0].y, path.points[1].y) - eraseRadius;
+             var maxY = Math.max(path.points[0].y, path.points[1].y) + eraseRadius;
+             if (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY) hit = true;
+           }
+           if (hit) { drawings.splice(i, 1); changed = true; }
+         }
+         if (changed) { qRedrawCanvas(); qSaveWorkspace(); }
+         return;
+       }
+       if (!QS.activePath) return;
+       if (
+         QS.drawMode === "line" || QS.drawMode === "circle" ||
+         QS.drawMode === "rectangle" || QS.drawMode === "square" ||
+         QS.drawMode === "lineh" || QS.drawMode === "linev"
+       ) {
+         QS.activePath.points[1] = { x: p.x, y: p.y };
+         qRedrawCanvas();
+         qStrokeVectorPath(QS.activePath);
+         return;
+       }
+       var points = QS.activePath.points;
+       var lastPoint = points[points.length - 1];
+       if (lastPoint && Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y) < 0.75)
+         return;
+       points.push({ x: p.x, y: p.y });
+       qStrokeLiveSegment(QS.activePath, lastPoint, p);
+     }
 
-    function qEndDraw() {
-      if (!QS.isDrawing) return;
-      QS.isDrawing = false;
-      if (
-        QS.activePath &&
-        (QS.activePath.mode === "line" || QS.activePath.mode === "circle" ||
-         QS.activePath.mode === "rectangle" || QS.activePath.mode === "square" ||
-         QS.activePath.mode === "lineh" || QS.activePath.mode === "linev")
-      ) {
-        qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
-        qRedrawCanvas();
-      }
-      QS.activePath = null;
-      qSaveWorkspace();
-    }
+function qEndDraw() {
+       if (!QS.isDrawing) return;
+       QS.isDrawing = false;
+       if (QS.drawMode === "eraser") {
+         qRedrawCanvas();
+         qSaveWorkspace();
+         QS.activePath = null;
+         return;
+       }
+       if (
+         QS.activePath &&
+         (QS.activePath.mode === "line" || QS.activePath.mode === "circle" ||
+          QS.activePath.mode === "rectangle" || QS.activePath.mode === "square" ||
+          QS.activePath.mode === "lineh" || QS.activePath.mode === "linev")
+       ) {
+         qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
+         qRedrawCanvas();
+       }
+       QS.activePath = null;
+       qSaveWorkspace();
+     }
 
     function qSetDrawMode(mode) {
       if (!window.isMembershipPlanReady) {
@@ -6010,7 +6039,6 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
           });
 
         document.getElementById("q-draw-rect")?.addEventListener("click", function () { qSetDrawMode("rectangle"); });
-        document.getElementById("q-draw-square")?.addEventListener("click", function () { qSetDrawMode("square"); });
         document.getElementById("q-draw-lineh")?.addEventListener("click", function () { qSetDrawMode("lineh"); });
         document.getElementById("q-draw-linev")?.addEventListener("click", function () { qSetDrawMode("linev"); });
 
@@ -6070,9 +6098,6 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       document
         .getElementById("q-draw-rect")
         ?.classList.toggle("active", QS.drawMode === "rectangle");
-      document
-        .getElementById("q-draw-square")
-        ?.classList.toggle("active", QS.drawMode === "square");
       document
         .getElementById("q-draw-lineh")
         ?.classList.toggle("active", QS.drawMode === "lineh");
