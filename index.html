@@ -2808,7 +2808,7 @@
     </div>
     <div class="q-draw-row">
       <label>Color</label>
-      <button class="q-draw-color-toggle active" data-color="#A855F7" style="background:#A855F7" title="Violet"></button>
+      <button class="q-draw-color-toggle" data-color="#A855F7" style="background:#A855F7" title="Violet"></button>
       <button class="q-draw-color-toggle" data-color="#EC4899" style="background:#EC4899" title="Magenta"></button>
       <button class="q-draw-color-toggle" data-color="#8B5CF6" style="background:#8B5CF6" title="Indigo"></button>
       <button class="q-draw-color-toggle" data-color="#C4B5FD" style="background:#C4B5FD" title="Lavender"></button>
@@ -5990,23 +5990,28 @@ document.querySelectorAll("#quantis-drawing-tools-panel .q-draw-color-toggle").f
          });
        });
 
-       document.getElementById("q-draw-custom-color")?.addEventListener("input", function (e) {
-           if (!window.isMembershipPlanReady)
-             return window.showPlanPopup(
-               "Cargando tu plan. Intentalo de nuevo en un momento.",
-             );
-           if (!qIsPremiumBrush())
-             return window.showPlanPopup(
-               "Drawing Tools son exclusivos de Premium.",
-             );
-           QS.drawColor = e.target.value;
-           document.querySelectorAll("#quantis-drawing-tools-panel .q-draw-color-toggle").forEach(function (b) {
-             b.classList.remove("active");
-           });
-           window.qUpdateDrawingControls();
-           var panel = document.getElementById("quantis-drawing-tools-panel");
-           if (panel) panel.classList.add("open");
-         });
+document.getElementById("q-draw-custom-color")?.addEventListener("input", function (e) {
+            if (!window.isMembershipPlanReady)
+              return window.showPlanPopup(
+                "Cargando tu plan. Intentalo de nuevo en un momento.",
+              );
+            if (!qIsPremiumBrush())
+              return window.showPlanPopup(
+                "Drawing Tools son exclusivos de Premium.",
+              );
+            QS.drawColor = e.target.value;
+            document.querySelectorAll("#quantis-drawing-tools-panel .q-draw-color-toggle").forEach(function (b) {
+              b.classList.remove("active");
+            });
+            window.qUpdateDrawingControls();
+            var panel = document.getElementById("quantis-drawing-tools-panel");
+            if (panel) panel.classList.add("open");
+          });
+
+        document.getElementById("q-draw-rect")?.addEventListener("click", function () { qSetDrawMode("rectangle"); });
+        document.getElementById("q-draw-square")?.addEventListener("click", function () { qSetDrawMode("square"); });
+        document.getElementById("q-draw-lineh")?.addEventListener("click", function () { qSetDrawMode("lineh"); });
+        document.getElementById("q-draw-linev")?.addEventListener("click", function () { qSetDrawMode("linev"); });
 
        var panel = document.getElementById("quantis-drawing-tools-panel");
        var panelHeader = panel ? panel.querySelector(".q-draw-header") : null;
