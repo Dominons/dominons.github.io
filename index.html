@@ -2790,21 +2790,37 @@
     <div class="q-draw-row">
       <button class="q-draw-btn" id="q-draw-pencil" title="Pencil"><i class="fa-solid fa-pencil"></i> Pencil</button>
       <button class="q-draw-btn" id="q-draw-eraser" title="Eraser"><i class="fa-solid fa-eraser"></i> Eraser</button>
-    </div>
-    <div class="q-draw-row">
       <button class="q-draw-btn" id="q-draw-line" title="Line"><i class="fa-solid fa-grip-lines"></i> Line</button>
-      <button class="q-draw-btn" id="q-draw-circle" title="Circle"><i class="fa-regular fa-circle"></i> Circle</button>
     </div>
     <div class="q-draw-row">
+      <button class="q-draw-btn" id="q-draw-circle" title="Circle"><i class="fa-regular fa-circle"></i> Circle</button>
+      <button class="q-draw-btn" id="q-draw-rect" title="Rectángulo"><i class="fa-regular fa-square"></i> Rect</button>
+      <button class="q-draw-btn" id="q-draw-square" title="Cuadrado"><i class="fa-solid fa-vector-square"></i> Square</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn" id="q-draw-lineh" title="Línea horizontal"><i class="fa-solid fa-minus"></i> Line H</button>
+      <button class="q-draw-btn" id="q-draw-linev" title="Línea vertical"><i class="fa-solid fa-grip-lines-vertical"></i> Line V</button>
+    </div>
+    <div class="q-draw-row" id="q-draw-palette">
       <label>Color</label>
-      <button class="q-draw-color-toggle c-black active" id="q-draw-cblack" title="Black"></button>
-      <button class="q-draw-color-toggle c-white" id="q-draw-cwhite" title="White"></button>
+      <button class="q-draw-color-toggle" data-color="#A855F7" style="background:#A855F7" title="Violeta"></button>
+      <button class="q-draw-color-toggle" data-color="#EC4899" style="background:#EC4899" title="Magenta"></button>
+      <button class="q-draw-color-toggle" data-color="#8B5CF6" style="background:#8B5CF6" title="Índigo"></button>
+      <button class="q-draw-color-toggle" data-color="#C4B5FD" style="background:#C4B5FD" title="Lavanda"></button>
+      <button class="q-draw-color-toggle" data-color="#EF4444" style="background:#EF4444" title="Rojo"></button>
+      <button class="q-draw-color-toggle" data-color="#F59E0B" style="background:#F59E0B" title="Ámbar"></button>
+      <button class="q-draw-color-toggle" data-color="#22C55E" style="background:#22C55E" title="Verde"></button>
+      <button class="q-draw-color-toggle" data-color="#22D3EE" style="background:#22D3EE" title="Cian"></button>
+      <button class="q-draw-color-toggle active" data-color="#000000" style="background:#000000" title="Negro"></button>
+      <button class="q-draw-color-toggle" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco"></button>
+      <input type="color" id="q-draw-custom-color" value="#A855F7" title="Color personalizado" style="width:22px;height:22px;padding:0;border:2px solid var(--quantis-faint,#52525b);border-radius:50%;background:none;cursor:pointer;">
     </div>
     <div class="q-draw-row">
       <label>Thickness</label>
       <input type="range" class="q-draw-size" id="q-draw-thickness" min="2" max="40" value="8">
     </div>
   </div>
+
 
   <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
   <div id="plansModal" aria-hidden="true">
@@ -5005,6 +5021,22 @@
         !path.points.length
       )
         return;
+            var pts = path.points;
+      if (path.mode !== "circle" && path.points.length >= 2) {
+        var a = path.points[0], b = path.points[1];
+        if (path.mode === "rectangle") {
+          pts = [{x:a.x,y:a.y},{x:b.x,y:a.y},{x:b.x,y:b.y},{x:a.x,y:b.y},{x:a.x,y:a.y}];
+        } else if (path.mode === "square") {
+          var dx = b.x - a.x, dy = b.y - a.y;
+          var s = Math.max(Math.abs(dx), Math.abs(dy));
+          var c = { x: a.x + (dx >= 0 ? s : -s), y: a.y + (dy >= 0 ? s : -s) };
+          pts = [{x:a.x,y:a.y},{x:c.x,y:a.y},{x:c.x,y:c.y},{x:a.x,y:c.y},{x:a.x,y:a.y}];
+        } else if (path.mode === "lineh") {
+          pts = [{x:a.x,y:a.y},{x:b.x,y:a.y}];
+        } else if (path.mode === "linev") {
+          pts = [{x:a.x,y:a.y},{x:a.x,y:b.y}];
+        }
+      }
       var svgElement;
       if (path.mode === "circle" && path.points.length >= 2) {
         var cx = path.points[0].x,
@@ -5014,12 +5046,13 @@
         var r = Math.hypot(px - cx, py - cy);
         svgElement = qCreateSvgCircle(cx, cy, r, path.size, path.color);
       } else {
-        svgElement = qCreateSvgPath(
-          path.points,
+          svgElement = qCreateSvgPath(
+          pts,
           path.size,
           path.color,
           path.mode,
         );
+
       }
       if (svgElement) {
         QD.drawSvg.appendChild(svgElement);
@@ -5728,7 +5761,7 @@
         return;
       }
       QS.isDrawing = true;
-            if (QS.drawMode === "line" || QS.drawMode === "circle") {
+            if (["line","circle","rectangle","square","lineh","linev"].indexOf(QS.drawMode) !== -1) {
         QS.activePath = {
           id: qNextDrawId(),
           mode: QS.drawMode,
@@ -5757,13 +5790,7 @@
       if (!QS.isDrawing || !QS.drawMode || !QS.activePath) return;
       e.preventDefault();
       var p = qCanvasPoint(e);
-      if (QS.drawMode === "line") {
-        QS.activePath.points[1] = { x: p.x, y: p.y };
-        qRedrawCanvas();
-        qStrokeVectorPath(QS.activePath);
-        return;
-      }
-      if (QS.drawMode === "circle") {
+            if (QS.drawMode !== "pencil" && QS.drawMode !== "eraser") {
         QS.activePath.points[1] = { x: p.x, y: p.y };
         qRedrawCanvas();
         qStrokeVectorPath(QS.activePath);
@@ -5782,7 +5809,7 @@
       QS.isDrawing = false;
       if (
         QS.activePath &&
-        (QS.activePath.mode === "line" || QS.activePath.mode === "circle")
+        ["line","circle","rectangle","square","lineh","linev"].indexOf(QS.activePath.mode) !== -1
       ) {
         qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
         qRedrawCanvas();
@@ -5848,11 +5875,13 @@
       QS.drawColor = color;
       QS.drawMode = "pencil";
       document
-        .getElementById("q-draw-cblack")
-        ?.classList.toggle("active", color === "#000000");
-      document
-        .getElementById("q-draw-cwhite")
-        ?.classList.toggle("active", color === "#ffffff");
+        .querySelectorAll("#q-draw-palette .q-draw-color-toggle")
+        .forEach(function (b) {
+          b.classList.toggle(
+            "active",
+            (b.dataset.color || "").toLowerCase() === (color || "").toLowerCase(),
+          );
+        });
       window.qUpdateDrawingControls();
       var panel = document.getElementById("quantis-drawing-tools-panel");
       if (panel) panel.classList.add("open");
@@ -5891,6 +5920,16 @@
         ?.addEventListener("click", function () {
           qSetDrawMode("line");
         });
+            document.getElementById("q-draw-rect")?.addEventListener("click", function () { qSetDrawMode("rectangle"); 
+        });
+      document.getElementById("q-draw-square")?.addEventListener("click", function () { qSetDrawMode("square");
+        });
+  
+      document.getElementById("q-draw-lineh")?.addEventListener("click", function () { qSetDrawMode("lineh"); 
+        });
+      
+      document.getElementById("q-draw-linev")?.addEventListener("click", function () { qSetDrawMode("linev"); 
+        });
       document
         .getElementById("q-draw-circle")
         ?.addEventListener("click", function () {
@@ -5911,36 +5950,28 @@
           QS.drawSize = parseInt(e.target.value, 10) || 8;
         });
 
-      document
-        .getElementById("q-draw-cblack")
-        ?.addEventListener("click", function () {
+            document.querySelectorAll("#q-draw-palette .q-draw-color-toggle").forEach(function (btn) {
+        btn.addEventListener("click", function () {
           if (!window.isMembershipPlanReady)
-            return window.showPlanPopup(
-              "Cargando tu plan. Intentalo de nuevo en un momento.",
-            );
+            return window.showPlanPopup("Cargando tu plan. Intentalo de nuevo en un momento.");
           if (!qIsPremiumBrush())
-            return window.showPlanPopup(
-              "Drawing Tools son exclusivos de Premium.",
-            );
-          QS.drawColor = "#000000";
-          document.getElementById("q-draw-cblack")?.classList.add("active");
-          document.getElementById("q-draw-cwhite")?.classList.remove("active");
+            return window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          QS.drawColor = btn.dataset.color;
+          document.querySelectorAll("#q-draw-palette .q-draw-color-toggle").forEach(function (b) {
+            b.classList.toggle("active", b === btn);
+          });
         });
-      document
-        .getElementById("q-draw-cwhite")
-        ?.addEventListener("click", function () {
-          if (!window.isMembershipPlanReady)
-            return window.showPlanPopup(
-              "Cargando tu plan. Intentalo de nuevo en un momento.",
-            );
-          if (!qIsPremiumBrush())
-            return window.showPlanPopup(
-              "Drawing Tools son exclusivos de Premium.",
-            );
-          QS.drawColor = "#ffffff";
-          document.getElementById("q-draw-cwhite")?.classList.add("active");
-          document.getElementById("q-draw-cblack")?.classList.remove("active");
+      });
+      document.getElementById("q-draw-custom-color")?.addEventListener("input", function (e) {
+        if (!window.isMembershipPlanReady)
+          return window.showPlanPopup("Cargando tu plan. Intentalo de nuevo en un momento.");
+        if (!qIsPremiumBrush())
+          return window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+        QS.drawColor = e.target.value;
+        document.querySelectorAll("#q-draw-palette .q-draw-color-toggle").forEach(function (b) {
+          b.classList.remove("active");
         });
+      });
 
       var panel = document.getElementById("quantis-drawing-tools-panel");
       var panelHeader = panel ? panel.querySelector(".q-draw-header") : null;
