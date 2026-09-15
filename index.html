@@ -2814,7 +2814,7 @@
       <button id="q-draw-close" style="background:none;border:none;color:var(--quantis-faint,#71717a);cursor:pointer;font-size:12px;"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="q-draw-row">
-      <button class="q-draw-btn q-draw-tool" id="q-draw-select" title="Select"><i class="fa-solid fa-vector-square"></i> Select</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-select" title="Select (V)"><i class="fa-solid fa-vector-square"></i> Select</button>
     </div>
     <div class="q-draw-row">
       <button class="q-draw-btn q-draw-tool" id="q-draw-pencil" title="Pencil"><i class="fa-solid fa-pencil"></i> Pencil</button>
@@ -4981,11 +4981,20 @@
         if (Math.hypot(path.points[i].x - px, path.points[i].y - py) <= threshold) return true;
       }
       if (path.points.length >= 2) {
-        var minX = Math.min.apply(null, path.points.map(function(p) { return p.x; })) - threshold;
-        var maxX = Math.max.apply(null, path.points.map(function(p) { return p.x; })) + threshold;
-        var minY = Math.min.apply(null, path.points.map(function(p) { return p.y; })) - threshold;
-        var maxY = Math.max.apply(null, path.points.map(function(p) { return p.y; })) + threshold;
-        if (px >= minX && px <= maxX && py >= minY && py <= maxY) return true;
+        for (var i = 0; i < path.points.length - 1; i++) {
+          var ax = path.points[i].x, ay = path.points[i].y;
+          var bx = path.points[i+1].x, by = path.points[i+1].y;
+          var dx = bx - ax, dy = by - ay;
+          var len2 = dx*dx + dy*dy;
+          var t = len2 !== 0 ? Math.max(0, Math.min(1, ((px-ax)*dx + (py-ay)*dy) / len2)) : 0;
+          var cx = ax + t*dx, cy = ay + t*dy;
+          if (Math.hypot(px-cx, py-cy) <= threshold) return true;
+        }
+      }
+      if (path.mode === "circle" && path.points.length >= 2) {
+        var cx0 = path.points[0].x, cy0 = path.points[0].y;
+        var r = Math.hypot(path.points[1].x - cx0, path.points[1].y - cy0);
+        if (Math.abs(Math.hypot(px-cx0, py-cy0) - r) <= threshold) return true;
       }
       return false;
     }
@@ -5059,25 +5068,39 @@
         qPushUndo();
         var key = qWorkspaceKey();
         var drawings = qNormalizeDrawingPaths(key);
-        var offset = 20;
+        var offsetX = 20, offsetY = 20;
+        var useCursor = QS.lastMouse && QS.lastMouse.x !== undefined && QS.lastMouse.y !== undefined;
+        if (useCursor) {
+          var rect = QD.viewport ? QD.viewport.getBoundingClientRect() : null;
+          if (rect) {
+            var canvasX = (QS.lastMouse.x - rect.left) / QS.zoom - QS.panX;
+            var canvasY = (QS.lastMouse.y - rect.top) / QS.zoom - QS.panY;
+            var cloneTest = JSON.parse(JSON.stringify(QS.clipboard[0]));
+            var testBox = qGetPathBoundingBox(cloneTest);
+            if (testBox) {
+              offsetX = canvasX - (testBox.x + testBox.w / 2);
+              offsetY = canvasY - (testBox.y + testBox.h / 2);
+            }
+          }
+        }
         var newPaths = [];
         QS.clipboard.forEach(function (src) {
           var clone = JSON.parse(JSON.stringify(src));
           clone.id = qNextDrawId();
           if (clone.points) {
             clone.points.forEach(function (pt) {
-              pt.x += offset;
-              pt.y += offset;
+              pt.x += offsetX;
+              pt.y += offsetY;
             });
           }
           if (clone.origin) {
-            clone.origin.x += offset;
-            clone.origin.y += offset;
+            clone.origin.x += offsetX;
+            clone.origin.y += offsetY;
           }
           var box = qGetPathBoundingBox(clone);
           if (box && (box.x + box.w > 8000 * QS.zoom || box.y + box.h > 8000 * QS.zoom || box.x < 0 || box.y < 0)) {
-            var clampedX = Math.max(0, Math.min(box.x, 8000 * QS.zoom - box.w - offset));
-            var clampedY = Math.max(0, Math.min(box.y, 8000 * QS.zoom - box.h - offset));
+            var clampedX = Math.max(0, Math.min(box.x, 8000 * QS.zoom - box.w - 20));
+            var clampedY = Math.max(0, Math.min(box.y, 8000 * QS.zoom - box.h - 20));
             var dx = clampedX - box.x;
             var dy = clampedY - box.y;
             clone.points.forEach(function (pt) { pt.x += dx; });
@@ -6337,6 +6360,8 @@ function qEndDraw() {
 
     function qSetupDrawingControls() {
       if (!QD.viewport) return;
+      QS.lastMouse = null;
+      window.addEventListener("mousemove", function(e) { QS.lastMouse = {x: e.clientX, y: e.clientY}; });
       QD.viewport.addEventListener("mousedown", qBeginDraw);
       window.addEventListener("mousemove", qMoveDraw);
       window.addEventListener("mouseup", qEndDraw);
@@ -6436,38 +6461,34 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         document.getElementById("q-draw-delete")?.addEventListener("click", function () { window.qDeleteSelection(); });
 
         var panel = document.getElementById("quantis-drawing-tools-panel");
-       var panelHeader = panel ? panel.querySelector(".q-draw-header") : null;
-       if (panel && panelHeader) {
-         var pDrag = false,
-           pSX,
-           pSY,
-           pLX,
-           pLY;
-         panelHeader.addEventListener("mousedown", function (e) {
-           if (e.target.closest("button")) return;
-           pDrag = true;
-           pSX = e.clientX;
-           pSY = e.clientY;
-           pLX = panel.offsetLeft;
-           pLY = panel.offsetTop;
-           e.preventDefault();
-         });
-         document.addEventListener("mousemove", function (e) {
-           if (!pDrag) return;
-           panel.style.left = pLX + e.clientX - pSX + "px";
-           panel.style.top = pLY + e.clientY - pSY + "px";
-         });
-         document.addEventListener("mouseup", function () {
-           pDrag = false;
-         });
-       }
+        var panelHeader = panel ? panel.querySelector(".q-draw-header") : null;
+        if (panel && panelHeader) {
+          var pDrag = false,
+            pSX,
+            pSY,
+            pLX,
+            pLY;
+          panelHeader.addEventListener("mousedown", function (e) {
+            if (e.target.closest("button")) return;
+            pDrag = true;
+            pSX = e.clientX;
+            pSY = e.clientY;
+            pLX = panel.offsetLeft;
+            pLY = panel.offsetTop;
+            e.preventDefault();
+          });
+          document.addEventListener("mousemove", function (e) {
+            if (!pDrag) return;
+            panel.style.left = pLX + e.clientX - pSX + "px";
+            panel.style.top = pLY + e.clientY - pSY + "px";
+          });
+          document.addEventListener("mouseup", function () {
+            pDrag = false;
+          });
+        }
 
-       document.addEventListener("click", function (e) {
-         var panel = document.getElementById("quantis-drawing-tools-panel");
-         if (!panel || !panel.classList.contains("open")) return;
-         if (!panel.contains(e.target)) panel.classList.remove("open");
-       });
-     }
+        document.getElementById("q-draw-close")?.addEventListener("click", qCloseDrawPanel);
+      }
 
       window.qUpdateDrawingControls = function () {
         if (!window.isMembershipPlanReady) return;
@@ -6519,36 +6540,45 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         }
       };
 
-      // Atajos de teclado globales para Quantis (FASE 3 y FASE 4)
+      // Atajos de teclado globales para Quantis (FASE 3, FASE 4 y modo)
       document.addEventListener("keydown", function (e) {
         var quantisView = document.getElementById("quantis-view");
         if (!quantisView || quantisView.classList.contains("hidden-view")) return;
         var tag = e.target.tagName;
         if (tag === "INPUT" || tag === "TEXTAREA" || e.target.isContentEditable) return;
         var isCtrl = e.ctrlKey || e.metaKey;
-        if (!isCtrl) return;
         var inSelectMode = QS.drawMode === "select";
         var movingSelection = inSelectMode && QS.isDraggingSelection;
 
-        if ((e.key === "c" || e.key === "C") && !e.shiftKey && QS.selectedPaths.length > 0) {
-          e.preventDefault();
-          window.qCopySelection();
-        }
-        if ((e.key === "v" || e.key === "V") && !e.shiftKey && QS.clipboard.length > 0 && inSelectMode && !movingSelection) {
+        if ((e.key === "v" || e.key === "V") && (e.ctrlKey || e.metaKey) && !e.shiftKey && QS.clipboard.length > 0 && inSelectMode && !movingSelection) {
           e.preventDefault();
           window.qPasteSelection();
         }
-        if ((e.key === "z" || e.key === "Z") && !e.shiftKey) {
+        if ((e.key === "c" || e.key === "C") && (e.ctrlKey || e.metaKey) && !e.shiftKey && QS.selectedPaths.length > 0) {
+          e.preventDefault();
+          window.qCopySelection();
+        }
+        if ((e.key === "z" || e.key === "Z") && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
           e.preventDefault();
           window.qUndo();
         }
-        if ((e.key === "y" || e.key === "Y") || ((e.key === "z" || e.key === "Z") && e.shiftKey)) {
+        if ((e.key === "y" || e.key === "Y") && (e.ctrlKey || e.metaKey) || (e.key === "z" || e.key === "Z") && (e.ctrlKey || e.metaKey) && e.shiftKey) {
           e.preventDefault();
           window.qRedo();
         }
         if ((e.key === "Delete" || e.key === "Backspace") && QS.selectedPaths.length > 0 && inSelectMode && !movingSelection) {
           e.preventDefault();
           window.qDeleteSelection();
+        }
+        if (!e.shiftKey && !e.ctrlKey && !e.metaKey) {
+          if (e.key === "v" || e.key === "V") {
+            e.preventDefault();
+            window.qSetDrawMode("select");
+          }
+          if (e.key === "b" || e.key === "B") {
+            e.preventDefault();
+            window.qSetFreeMode();
+          }
         }
       });
 
