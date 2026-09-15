@@ -2724,7 +2724,6 @@
       /* ===== Selection mode styles ===== */
       #q-selection-marquee {
         position: absolute;
-        border: 2px dashed #A855F7;
         background: rgba(168, 85, 247, 0.08);
         pointer-events: none;
         z-index: 10;
@@ -2732,7 +2731,6 @@
       }
       #q-selection-box {
         position: absolute;
-        border: 2px dashed #A855F7;
         pointer-events: none;
         z-index: 10;
         display: none;
@@ -2740,7 +2738,6 @@
       }
       #q-selection-box .q-sel-rect {
         position: absolute;
-        border: 1.5px dashed #A855F7;
         pointer-events: none;
         background: rgba(168, 85, 247, 0.04);
       }
@@ -2784,12 +2781,12 @@
 
       <!-- INFINITE CANVAS VIEWPORT -->
        <main id="quantis-viewport">
-         <div id="quantis-canvas-container">
-           <svg id="quantis-drawing-svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
-         </div>
-          <span id="q-zoom-hint">SCROLL: ZOOM &nbsp;|&nbsp; DRAG: PAN &nbsp;|&nbsp; CLICK: NEW BLOCK &nbsp;|&nbsp; RIGHT-CLICK: FILE</span>
-          <div id="q-selection-marquee"></div>
-          <div id="q-selection-box"></div>
+          <div id="quantis-canvas-container">
+            <svg id="quantis-drawing-svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+            <div id="q-selection-marquee"></div>
+            <div id="q-selection-box"></div>
+          </div>
+          <span id="q-zoom-hint">SCROLL: ZOOM &amp; DRAG: PAN &amp; CLICK: NEW BLOCK &amp; RIGHT-CLICK: FILE</span>
           <div id="quantisSaveLoader" class="cloud-loader-wrap" title="Guardando en la nube...">
            <div class="cloud-loader"></div>
          </div>
@@ -5024,10 +5021,11 @@
       boxEl.style.top = box.y + "px";
       boxEl.style.width = box.w + "px";
       boxEl.style.height = box.h + "px";
-      boxEl.innerHTML = '<div class="q-sel-rect" style="left:0;top:0;width:100%;height:100%;"></div>';
-    }
+       boxEl.innerHTML = '<div class="q-sel-rect" style="left:0;top:0;width:100%;height:100%;"></div>';
+       qSetSelectionBorder();
+     }
 
-    function qIsPathSelected(path) {
+     function qIsPathSelected(path) {
       return QS.selectedPaths.indexOf(path) !== -1;
     }
 
@@ -5039,10 +5037,20 @@
         if (!shiftKey) QS.selectedPaths = [];
         QS.selectedPaths.push(path);
       }
-      qUpdateSelectionVisual();
-    }
+       qUpdateSelectionVisual();
+     }
 
-    function qUpdateTransform() {
+     function qSetSelectionBorder() {
+       var b = 2 / Math.max(0.1, QS.zoom);
+       var marqueeEl = document.getElementById("q-selection-marquee");
+       if (marqueeEl) marqueeEl.style.borderWidth = b + "px";
+       var boxEl = document.getElementById("q-selection-box");
+       if (boxEl) boxEl.style.borderWidth = b + "px";
+       var selRect = boxEl ? boxEl.querySelector(".q-sel-rect") : null;
+       if (selRect) selRect.style.borderWidth = (1.5 / Math.max(0.1, QS.zoom)) + "px";
+     }
+
+     function qUpdateTransform() {
       qClampPan();
       QD.canvas.style.transform =
         "translate3d(" +
@@ -5912,15 +5920,16 @@
             QS.selectedPaths = [];
             qUpdateSelectionVisual();
           }
-          QS.isSelecting = true;
-          var marqueeEl = document.getElementById("q-selection-marquee");
-          if (marqueeEl) {
-            marqueeEl.style.display = "block";
-            marqueeEl.style.left = p.x + "px";
-            marqueeEl.style.top = p.y + "px";
-            marqueeEl.style.width = "0px";
-            marqueeEl.style.height = "0px";
-          }
+           QS.isSelecting = true;
+           var marqueeEl = document.getElementById("q-selection-marquee");
+           if (marqueeEl) {
+             marqueeEl.style.display = "block";
+             marqueeEl.style.left = p.x + "px";
+             marqueeEl.style.top = p.y + "px";
+             marqueeEl.style.width = "0px";
+             marqueeEl.style.height = "0px";
+             qSetSelectionBorder();
+           }
         }
         return;
       }
@@ -5982,17 +5991,18 @@ function qMoveDraw(e) {
               if (selBox) {
                 var box = qGetSelectedPathsBoundingBox();
                 if (box) {
-                  selBox.style.left = box.x + "px";
-                  selBox.style.top = box.y + "px";
-                  selBox.style.width = box.w + "px";
-                  selBox.style.height = box.h + "px";
-                }
-              }
+               selBox.style.left = box.x + "px";
+                   selBox.style.top = box.y + "px";
+                   selBox.style.width = box.w + "px";
+                   selBox.style.height = box.h + "px";
+                 }
+               }
+               qSetSelectionBorder();
             }
             qRedrawCanvas();
             return;
           }
-          if (QS.isSelecting && QS.marqueeStart) {
+           if (QS.isSelecting && QS.marqueeStart) {
             var marqueeEl = document.getElementById("q-selection-marquee");
             if (marqueeEl) {
               var mx = Math.min(QS.marqueeStart.x, p.x);
@@ -6003,6 +6013,7 @@ function qMoveDraw(e) {
               marqueeEl.style.top = my + "px";
               marqueeEl.style.width = mw + "px";
               marqueeEl.style.height = mh + "px";
+              qSetSelectionBorder();
             }
           }
           return;
