@@ -2843,6 +2843,15 @@
       <input type="color" id="q-draw-custom-color" value="#000000" title="Custom color">
     </div>
     <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-undo" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-redo" title="Redo (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i> Redo</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-copy" title="Copy (Ctrl+C)"><i class="fa-solid fa-copy"></i> Copy</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-paste" title="Paste (Ctrl+V)"><i class="fa-solid fa-paste"></i> Paste</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-delete" title="Delete (Del)"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+    <div class="q-draw-row">
       <label>Thickness</label>
       <input type="range" class="q-draw-size" id="q-draw-thickness" min="2" max="40" value="8">
     </div>
@@ -4769,6 +4778,9 @@
         "1-0": [],
       },
       drawings: {},
+      clipboard: [],
+      undoStack: {},
+      redoStack: {},
     };
     window.QS = QS;
 
@@ -5021,11 +5033,132 @@
       boxEl.style.top = box.y + "px";
       boxEl.style.width = box.w + "px";
       boxEl.style.height = box.h + "px";
-       boxEl.innerHTML = '<div class="q-sel-rect" style="left:0;top:0;width:100%;height:100%;"></div>';
-       qSetSelectionBorder();
-     }
+      boxEl.innerHTML = '<div class="q-sel-rect" style="left:0;top:0;width:100%;height:100%;"></div>';
+        qSetSelectionBorder();
+      }
 
-     function qIsPathSelected(path) {
+      // FASE 3 — COPIAR / PEGAR / ELIMINAR
+      window.qCopySelection = function () {
+        if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
+          window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          return;
+        }
+        if (QS.selectedPaths.length > 0) {
+          QS.clipboard = JSON.parse(JSON.stringify(QS.selectedPaths));
+        }
+        qUpdateDrawingControls();
+      };
+
+      window.qPasteSelection = function () {
+        if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
+          window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          return;
+        }
+        if (QS.clipboard.length === 0) return;
+        if (QS.drawMode !== "select") return;
+        qPushUndo();
+        var key = qWorkspaceKey();
+        var drawings = qNormalizeDrawingPaths(key);
+        var offset = 20;
+        var newPaths = [];
+        QS.clipboard.forEach(function (src) {
+          var clone = JSON.parse(JSON.stringify(src));
+          clone.id = qNextDrawId();
+          if (clone.points) {
+            clone.points.forEach(function (pt) {
+              pt.x += offset;
+              pt.y += offset;
+            });
+          }
+          if (clone.origin) {
+            clone.origin.x += offset;
+            clone.origin.y += offset;
+          }
+          var box = qGetPathBoundingBox(clone);
+          if (box && (box.x + box.w > 8000 * QS.zoom || box.y + box.h > 8000 * QS.zoom || box.x < 0 || box.y < 0)) {
+            var clampedX = Math.max(0, Math.min(box.x, 8000 * QS.zoom - box.w - offset));
+            var clampedY = Math.max(0, Math.min(box.y, 8000 * QS.zoom - box.h - offset));
+            var dx = clampedX - box.x;
+            var dy = clampedY - box.y;
+            clone.points.forEach(function (pt) { pt.x += dx; });
+            clone.points.forEach(function (pt) { pt.y += dy; });
+            if (clone.origin) { clone.origin.x += dx; clone.origin.y += dy; }
+          }
+          drawings.push(clone);
+          newPaths.push(clone);
+        });
+        QS.selectedPaths = newPaths;
+        qRedrawCanvas();
+        qUpdateSelectionVisual();
+        qUpdateDrawingControls();
+        qSaveWorkspace();
+      };
+
+      window.qDeleteSelection = function () {
+        if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
+          window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          return;
+        }
+        if (QS.selectedPaths.length === 0) return;
+        qPushUndo();
+        var key = qWorkspaceKey();
+        var drawings = qNormalizeDrawingPaths(key);
+        var selectedIds = QS.selectedPaths.map(function (p) { return p.id; });
+        QS.drawings[key] = drawings.filter(function (p) { return selectedIds.indexOf(p.id) === -1; });
+        QS.selectedPaths = [];
+        qUpdateSelectionVisual();
+        qRedrawCanvas();
+        qUpdateDrawingControls();
+        qSaveWorkspace();
+      };
+
+      // FASE 4 — DESHACER / REHACER
+      function qPushUndo() {
+        var key = qWorkspaceKey();
+        if (!QS.undoStack[key]) QS.undoStack[key] = [];
+        var snapshot = JSON.stringify(qNormalizeDrawingPaths(key));
+        QS.undoStack[key].push(snapshot);
+        if (QS.undoStack[key].length > 50) QS.undoStack[key].shift();
+        QS.redoStack[key] = [];
+      }
+
+      window.qUndo = function () {
+        if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
+          window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          return;
+        }
+        var key = qWorkspaceKey();
+        if (!QS.undoStack[key] || QS.undoStack[key].length === 0) return;
+        if (QS.drawMode === "select" && QS.isDraggingSelection) return;
+        var snapshot = QS.undoStack[key].pop();
+        if (!QS.redoStack[key]) QS.redoStack[key] = [];
+        QS.redoStack[key].push(JSON.stringify(qNormalizeDrawingPaths(key)));
+        QS.drawings[key] = JSON.parse(snapshot);
+        qRedrawCanvas();
+        qClearSelection();
+        qUpdateDrawingControls();
+        qSaveWorkspace();
+      };
+
+      window.qRedo = function () {
+        if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
+          window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
+          return;
+        }
+        var key = qWorkspaceKey();
+        if (!QS.redoStack[key] || QS.redoStack[key].length === 0) return;
+        if (QS.drawMode === "select" && QS.isDraggingSelection) return;
+        var snapshot = QS.redoStack[key].pop();
+        if (!QS.undoStack[key]) QS.undoStack[key] = [];
+        QS.undoStack[key].push(JSON.stringify(qNormalizeDrawingPaths(key)));
+        QS.drawings[key] = JSON.parse(snapshot);
+        qRedrawCanvas();
+        qClearSelection();
+        qUpdateDrawingControls();
+        qSaveWorkspace();
+      };
+
+      function qIsPathSelected(path) {
       return QS.selectedPaths.indexOf(path) !== -1;
     }
 
@@ -5972,6 +6105,7 @@ function qMoveDraw(e) {
         if (QS.drawMode === "select") {
           QS.marqueeEnd = { x: p.x, y: p.y };
           if (QS.isDraggingSelection && QS.selectedPaths.length > 0 && QS.selectionDragStart) {
+            qPushUndo();
             var dx = (p.x - QS.selectionDragStart.x) / QS.zoom;
             var dy = (p.y - QS.selectionDragStart.y) / QS.zoom;
             QS.selectionDragStart = { x: p.x, y: p.y };
@@ -6019,6 +6153,7 @@ function qMoveDraw(e) {
           return;
         }
         if (QS.drawMode === "eraser") {
+          qPushUndo();
           var drawings = qNormalizeDrawingPaths(qWorkspaceKey());
           var eraseRadius = QS.drawSize;
           var changed = false;
@@ -6106,6 +6241,7 @@ function qEndDraw() {
            QS.activePath.mode === "rectangle" || QS.activePath.mode === "square" ||
            QS.activePath.mode === "lineh" || QS.activePath.mode === "linev")
         ) {
+          qPushUndo();
           qNormalizeDrawingPaths(qWorkspaceKey()).push(QS.activePath);
           qRedrawCanvas();
         }
@@ -6289,11 +6425,17 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
             if (panel) panel.classList.add("open");
           });
 
-        document.getElementById("q-draw-rect")?.addEventListener("click", function () { qSetDrawMode("rectangle"); });
-        document.getElementById("q-draw-lineh")?.addEventListener("click", function () { qSetDrawMode("lineh"); });
-        document.getElementById("q-draw-linev")?.addEventListener("click", function () { qSetDrawMode("linev"); });
+         document.getElementById("q-draw-rect")?.addEventListener("click", function () { qSetDrawMode("rectangle"); });
+         document.getElementById("q-draw-lineh")?.addEventListener("click", function () { qSetDrawMode("lineh"); });
+         document.getElementById("q-draw-linev")?.addEventListener("click", function () { qSetDrawMode("linev"); });
 
-       var panel = document.getElementById("quantis-drawing-tools-panel");
+        document.getElementById("q-draw-undo")?.addEventListener("click", function () { window.qUndo(); });
+        document.getElementById("q-draw-redo")?.addEventListener("click", function () { window.qRedo(); });
+        document.getElementById("q-draw-copy")?.addEventListener("click", function () { window.qCopySelection(); });
+        document.getElementById("q-draw-paste")?.addEventListener("click", function () { window.qPasteSelection(); });
+        document.getElementById("q-draw-delete")?.addEventListener("click", function () { window.qDeleteSelection(); });
+
+        var panel = document.getElementById("quantis-drawing-tools-panel");
        var panelHeader = panel ? panel.querySelector(".q-draw-header") : null;
        if (panel && panelHeader) {
          var pDrag = false,
@@ -6327,46 +6469,92 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
        });
      }
 
-     window.qUpdateDrawingControls = function () {
-       if (!window.isMembershipPlanReady) return;
-       var hasBrush = qIsPremiumBrush();
-       document.querySelectorAll(".q-draw-tool").forEach(function (el) {
-         el.style.opacity = hasBrush ? "1" : "0.58";
-         el.title = hasBrush ? el.title || "" : "Premium only";
-       });
-       document
-         .getElementById("q-draw-select")
-         ?.classList.toggle("active", QS.drawMode === "select");
-       document
-         .getElementById("q-draw-pencil")
-         ?.classList.toggle("active", QS.drawMode === "pencil");
-       document
-         .getElementById("q-draw-eraser")
-         ?.classList.toggle("active", QS.drawMode === "eraser");
-       document
-         .getElementById("q-draw-line")
-         ?.classList.toggle("active", QS.drawMode === "line");
-       document
-         .getElementById("q-draw-circle")
-         ?.classList.toggle("active", QS.drawMode === "circle");
-       document
-         .getElementById("q-draw-rect")
-         ?.classList.toggle("active", QS.drawMode === "rectangle");
-       document
-         .getElementById("q-draw-lineh")
-         ?.classList.toggle("active", QS.drawMode === "lineh");
-       document
-         .getElementById("q-draw-linev")
-         ?.classList.toggle("active", QS.drawMode === "linev");
-       if (!hasBrush) {
-         QS.drawMode = null;
-         qCloseDrawPanel();
-       }
-     };
+      window.qUpdateDrawingControls = function () {
+        if (!window.isMembershipPlanReady) return;
+        var hasBrush = qIsPremiumBrush();
+        document.querySelectorAll(".q-draw-tool").forEach(function (el) {
+          el.style.opacity = hasBrush ? "1" : "0.58";
+          el.title = hasBrush ? el.title || "" : "Premium only";
+        });
+        document
+          .getElementById("q-draw-select")
+          ?.classList.toggle("active", QS.drawMode === "select");
+        document
+          .getElementById("q-draw-pencil")
+          ?.classList.toggle("active", QS.drawMode === "pencil");
+        document
+          .getElementById("q-draw-eraser")
+          ?.classList.toggle("active", QS.drawMode === "eraser");
+        document
+          .getElementById("q-draw-line")
+          ?.classList.toggle("active", QS.drawMode === "line");
+        document
+          .getElementById("q-draw-circle")
+          ?.classList.toggle("active", QS.drawMode === "circle");
+        document
+          .getElementById("q-draw-rect")
+          ?.classList.toggle("active", QS.drawMode === "rectangle");
+        document
+          .getElementById("q-draw-lineh")
+          ?.classList.toggle("active", QS.drawMode === "lineh");
+        document
+          .getElementById("q-draw-linev")
+          ?.classList.toggle("active", QS.drawMode === "linev");
 
-    // =========================================================
-    // --- QUANTIS BLOCK FACTORY ---
-    // =========================================================
+        var key = qWorkspaceKey();
+        var undoBtn = document.getElementById("q-draw-undo");
+        var redoBtn = document.getElementById("q-draw-redo");
+        if (undoBtn) undoBtn.style.opacity = (QS.undoStack[key] && QS.undoStack[key].length > 0) ? "1" : "0.4";
+        if (redoBtn) redoBtn.style.opacity = (QS.redoStack[key] && QS.redoStack[key].length > 0) ? "1" : "0.4";
+        var copyBtn = document.getElementById("q-draw-copy");
+        var pasteBtn = document.getElementById("q-draw-paste");
+        var deleteBtn = document.getElementById("q-draw-delete");
+        if (copyBtn) copyBtn.style.opacity = (QS.selectedPaths.length > 0) ? "1" : "0.4";
+        if (pasteBtn) pasteBtn.style.opacity = (QS.clipboard.length > 0 && QS.drawMode === "select") ? "1" : "0.4";
+        if (deleteBtn) deleteBtn.style.opacity = (QS.selectedPaths.length > 0 && QS.drawMode === "select") ? "1" : "0.4";
+
+        if (!hasBrush) {
+          QS.drawMode = null;
+          qCloseDrawPanel();
+        }
+      };
+
+      // Atajos de teclado globales para Quantis (FASE 3 y FASE 4)
+      document.addEventListener("keydown", function (e) {
+        var quantisView = document.getElementById("quantis-view");
+        if (!quantisView || quantisView.classList.contains("hidden-view")) return;
+        var tag = e.target.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || e.target.isContentEditable) return;
+        var isCtrl = e.ctrlKey || e.metaKey;
+        if (!isCtrl) return;
+        var inSelectMode = QS.drawMode === "select";
+        var movingSelection = inSelectMode && QS.isDraggingSelection;
+
+        if ((e.key === "c" || e.key === "C") && !e.shiftKey && QS.selectedPaths.length > 0) {
+          e.preventDefault();
+          window.qCopySelection();
+        }
+        if ((e.key === "v" || e.key === "V") && !e.shiftKey && QS.clipboard.length > 0 && inSelectMode && !movingSelection) {
+          e.preventDefault();
+          window.qPasteSelection();
+        }
+        if ((e.key === "z" || e.key === "Z") && !e.shiftKey) {
+          e.preventDefault();
+          window.qUndo();
+        }
+        if ((e.key === "y" || e.key === "Y") || ((e.key === "z" || e.key === "Z") && e.shiftKey)) {
+          e.preventDefault();
+          window.qRedo();
+        }
+        if ((e.key === "Delete" || e.key === "Backspace") && QS.selectedPaths.length > 0 && inSelectMode && !movingSelection) {
+          e.preventDefault();
+          window.qDeleteSelection();
+        }
+      });
+
+     // =========================================================
+     // --- QUANTIS BLOCK FACTORY ---
+     // =========================================================
     function qMakeBlock(x, y, descVal) {
       var blk = document.createElement("div");
       blk.className = "q-canvas-el";
