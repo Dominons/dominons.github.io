@@ -6128,7 +6128,6 @@ function qMoveDraw(e) {
         if (QS.drawMode === "select") {
           QS.marqueeEnd = { x: p.x, y: p.y };
           if (QS.isDraggingSelection && QS.selectedPaths.length > 0 && QS.selectionDragStart) {
-            qPushUndo();
             var dx = (p.x - QS.selectionDragStart.x) / QS.zoom;
             var dy = (p.y - QS.selectionDragStart.y) / QS.zoom;
             QS.selectionDragStart = { x: p.x, y: p.y };
@@ -6176,7 +6175,6 @@ function qMoveDraw(e) {
           return;
         }
         if (QS.drawMode === "eraser") {
-          qPushUndo();
           var drawings = qNormalizeDrawingPaths(qWorkspaceKey());
           var eraseRadius = QS.drawSize;
           var changed = false;
@@ -6244,6 +6242,7 @@ function qEndDraw() {
             });
             qUpdateSelectionVisual();
           } else if (QS.selectionDragStart) {
+            qPushUndo();
             qUpdateSelectionVisual();
           }
           QS.marqueeStart = null;
@@ -6253,6 +6252,7 @@ function qEndDraw() {
           return;
         }
         if (QS.drawMode === "eraser") {
+          qPushUndo();
           qRedrawCanvas();
           qSaveWorkspace();
           QS.activePath = null;
@@ -6358,11 +6358,16 @@ function qEndDraw() {
       if (QD.ctxMenu) QD.ctxMenu.style.display = "none";
     };
 
-    function qSetupDrawingControls() {
-      if (!QD.viewport) return;
-      QS.lastMouse = null;
-      window.addEventListener("mousemove", function(e) { QS.lastMouse = {x: e.clientX, y: e.clientY}; });
-      QD.viewport.addEventListener("mousedown", qBeginDraw);
+      function qSetupDrawingControls() {
+        if (!QD.viewport) return;
+        QS.lastMouse = null;
+        window.addEventListener("mousemove", function(e) {
+          var qv = document.getElementById("quantis-view");
+          if (qv && !qv.classList.contains("hidden-view")) {
+            QS.lastMouse = {x: e.clientX, y: e.clientY};
+          }
+        });
+        QD.viewport.addEventListener("mousedown", qBeginDraw);
       window.addEventListener("mousemove", qMoveDraw);
       window.addEventListener("mouseup", qEndDraw);
 
