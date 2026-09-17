@@ -39,15 +39,15 @@
       transform: translateY(0);
     }
 
-    /* La clase hidden-view sigue ocultando fÃ­sicamente el elemento cuando termina la animaciÃ³n */
+    /* La clase hidden-view sigue ocultando físicamente el elemento cuando termina la animación */
     .hidden-view {
       display: none !important;
     }
 
-       /* --- BotÃ³n de navegaciÃ³n: marco animado suave --- */
+       /* --- Botón de navegación: marco violeta suave --- */
     .glow-button {
       background: rgba(168, 85, 247, 0.06);
-      border: 1px solid rgba(168, 85, 247, 0.35);
+      border: 1px solid var(--color-highlight);
       border-radius: 8px;
       padding: 6px 14px;
       color: var(--color-text);
@@ -61,18 +61,6 @@
       overflow: visible;
       transition: color 0.25s ease, border-color 0.25s ease,
                   box-shadow 0.25s ease, background 0.25s ease;
-      animation: navBorderPulse 3.5s ease-in-out infinite;
-    }
-
-    @keyframes navBorderPulse {
-      0%, 100% {
-        border-color: rgba(168, 85, 247, 0.25);
-        box-shadow: 0 0 4px rgba(168, 85, 247, 0.10);
-      }
-      50% {
-        border-color: rgba(168, 85, 247, 0.60);
-        box-shadow: 0 0 10px rgba(168, 85, 247, 0.30);
-      }
     }
 
     .glow-button:hover {
@@ -86,7 +74,7 @@
       transform: scale(0.96);
     }
 
-    /* --- PartÃ­culas al cambiar de vista --- */
+    /* --- Partículas al cambiar de vista --- */
     .nav-particle {
       position: fixed;
       width: 5px;
@@ -165,13 +153,17 @@
         transform: rotate(-360deg);
       }
     }
-    /* PosiciÃ³n del loader en el notepad (esquina superior derecha) */
+    /* Posición del loader en el notepad (esquina superior derecha) */
     #notepadSaveLoader {
       top: 8px;
       right: 8px;
     }
-    
-    /* Loader de reproducciÃ³n (panel del reproductor) */
+    /* Posición del loader en Quantis (cabecera, lado derecho) */
+    #quantisSaveLoader {
+      top: 6px;
+      right: 6px;
+    }
+    /* Loader de reproducción (panel del reproductor) */
     #musicLoader {
       top: 8px;
       right: 8px;
@@ -849,6 +841,7 @@
     /* ========== PLANES, CONFIGURACION GLOBAL Y CONTROLES COMPARTIDOS ========== */
     #plansModal,
     #dominon-config-dropdown,
+    #quantis-config-dropdown,
     #miniPlanPopup {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -959,7 +952,8 @@
     }
     .plan-contact-card.open { display: block; }
     .plan-contact-card p { margin: 6px 0; }
-    #dominon-config-dropdown {
+    #dominon-config-dropdown,
+    #quantis-config-dropdown {
       position: fixed;
       top: 58px;
       right: 18px;
@@ -973,7 +967,8 @@
       padding: 12px;
       color: #e4e4e7;
     }
-    #dominon-config-dropdown.open { display: block; }
+    #dominon-config-dropdown.open,
+    #quantis-config-dropdown.open { display: block; }
     .config-label {
       font-size: 10px;
       font-weight: 800;
@@ -988,7 +983,8 @@
       gap: 8px;
       margin-bottom: 12px;
     }
-    #dominon-config-dropdown .theme-btn {
+    #dominon-config-dropdown .theme-btn,
+    #quantis-config-dropdown .theme-btn {
       width: 24px;
       height: 24px;
       border-radius: 50%;
@@ -996,10 +992,13 @@
       cursor: pointer;
     }
     #dominon-config-dropdown .theme-btn.black,
-    #dominon-config-dropdown .theme-btn.white { background: #000000; border-color: #FFFFFF; }
+    #quantis-config-dropdown .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #dominon-config-dropdown .theme-btn.white,
+    #quantis-config-dropdown .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
     #dominon-config-dropdown .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
     #dominon-config-dropdown .theme-btn.green { background: #39FF14; border-color: #39FF14; }
     #dominon-config-dropdown .theme-btn.red { background: #FF3131; border-color: #FF3131; }
+    #dominon-config-dropdown .theme-btn.blue { background: #00AEEF; border-color: #00AEEF; }
     .language-toggle {
       border: 1px solid rgba(168,85,247,0.45);
       background: var(--color-input-bg, #1f1f26);
@@ -1919,6 +1918,87 @@
       opacity: 0;
     }
 
+    /* ===== Floating Drawing Tools Panel ===== */
+    #quantis-drawing-tools-panel {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      background: var(--quantis-surface-bg, #111318);
+      border: 2px solid var(--quantis-accent, #A855F7);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(168,85,247,0.3);
+      padding: 12px;
+      min-width: 200px;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #quantis-drawing-tools-panel.open { display: block; }
+    #quantis-drawing-tools-panel .q-draw-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--quantis-accent, #A855F7);
+      margin-bottom: 10px;
+      cursor: move;
+      user-select: none;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(168,85,247,0.15);
+    }
+    #quantis-drawing-tools-panel .q-draw-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    #quantis-drawing-tools-panel .q-draw-row label {
+      font-size: 9px;
+      color: var(--quantis-muted, #71717a);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn {
+      background: transparent;
+      border: 1px solid rgba(168,85,247,0.3);
+      color: var(--quantis-muted, #71717a);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn:hover {
+      border-color: var(--quantis-accent, #A855F7);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn.active {
+      border-color: var(--quantis-accent, #A855F7);
+      background: rgba(168,85,247,0.18);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-size {
+      width: 100%;
+      accent-color: var(--quantis-accent, #A855F7);
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--quantis-faint, #52525b);
+      cursor: pointer;
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+    #quantis-drawing-tools-panel #q-draw-custom-color {
+      width: 22px; height: 22px; border: 2px solid var(--quantis-faint, #52525b); border-radius: 50%; cursor: pointer; padding: 0; background: none;
+    }
+    #quantis-drawing-tools-panel #q-draw-custom-color::-webkit-color-swatch-wrapper { padding: 2px; }
+    #quantis-drawing-tools-panel #q-draw-custom-color::-webkit-color-swatch { border-radius: 50%; border: none; }
 
     /* ===== Neon Borders ===== */
     #dominon-config-dropdown.open,
@@ -2096,7 +2176,7 @@
       <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
-            <h2>Mini-GrÃ¡fico</h2>
+            <h2>Mini-Gráfico</h2>
           </div>
           <iframe class="chart-iframe" id="tradingViewChart"
             src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=1&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
@@ -2129,13 +2209,13 @@
             <div id="display" class="calc-display">0</div>
             <div class="calculator-grid">
               <button class="calc-button clear" onclick="clearDisplay()">C</button>
-              <button class="calc-button" onclick="backspace()">âŒ«</button>
+              <button class="calc-button" onclick="backspace()">⌫</button>
               <button class="calc-button operator" onclick="percentage()">%</button>
-              <button class="calc-button operator" onclick="appendOperator('/')">Ã·</button>
+              <button class="calc-button operator" onclick="appendOperator('/')">÷</button>
               <button class="calc-button" onclick="appendNumber('7')">7</button>
               <button class="calc-button" onclick="appendNumber('8')">8</button>
               <button class="calc-button" onclick="appendNumber('9')">9</button>
-              <button class="calc-button operator" onclick="appendOperator('*')">Ã—</button>
+              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
               <button class="calc-button" onclick="appendNumber('4')">4</button>
               <button class="calc-button" onclick="appendNumber('5')">5</button>
               <button class="calc-button" onclick="appendNumber('6')">6</button>
@@ -2209,13 +2289,13 @@
   <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
   <div id="deep-flow-view" class="app-view-transition hidden-view">
     <header id="hdr">
-            <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span><span id="demo-badge" title="Datos de transacciones simulados con fines demostrativos. Precios reales vÃ­a CoinGecko.">DEMO</span>
+            <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span><span id="demo-badge" title="Datos de transacciones simulados con fines demostrativos. Precios reales vía CoinGecko.">DEMO</span>
       <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
       <button class="ctrl-btn" id="sound-toggle">SND ON</button>
       <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
       <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
       <button class="glow-button" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
-      
+      <button class="glow-button" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')">QUANTIS</button>
       <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
       <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
       <span id="hdr-date"></span><span id="hdr-clock"></span>
@@ -2257,9 +2337,513 @@
     </main>
   </div>
 
+  <!-- VISTA SPA 3: QUANTIS CANVAS -->
+  <div id="quantis-view" class="app-view-transition hidden-view">
+    <style>
+      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
+      #quantis-view {
+        --quantis-bg: #0b0c10;
+        --quantis-header-bg: #111318;
+        --quantis-sidebar-bg: #0e0f14;
+        --quantis-surface-bg: #111318;
+        --quantis-text: #e4e4e7;
+        --quantis-muted: #71717a;
+        --quantis-faint: #52525b;
+        --quantis-border: rgba(168,85,247,0.2);
+        --quantis-grid-dot: rgba(168,85,247,0.07);
+        --quantis-shadow: rgba(0,0,0,0.5);
+        --quantis-accent: #A855F7;
+        --quantis-boundary: rgba(255, 255, 255, 0.25);
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--quantis-bg);
+        color: var(--quantis-text);
+        font-family: 'JetBrains Mono', monospace;
+        overflow: hidden;
+      }
+      #quantis-view.light-theme {
+        --quantis-bg: #f4f4f5;
+        --quantis-header-bg: #ffffff;
+        --quantis-sidebar-bg: #fafafa;
+        --quantis-surface-bg: #ffffff;
+        --quantis-text: #18181b;
+        --quantis-muted: #52525b;
+        --quantis-faint: #71717a;
+        --quantis-border: rgba(168,85,247,0.22);
+        --quantis-grid-dot: rgba(168,85,247,0.14);
+        --quantis-shadow: rgba(15,23,42,0.12);
+        --quantis-boundary: rgba(0, 0, 0, 0.3);
+      }
+      #quantis-view.hidden-view { display: none !important; }
+
+      #quantis-header {
+        height: 48px;
+        background: var(--quantis-header-bg);
+        border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        flex-shrink: 0;
+        z-index: 30;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        position: relative;
+      }
+      #quantis-nav-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #quantis-brand {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 3px;
+        color: var(--quantis-accent);
+        text-shadow: 0 0 8px rgba(168,85,247,0.5);
+        margin-right: 14px;
+        user-select: none;
+      }
+      .q-nav-btn {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.3);
+        color: var(--quantis-muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        padding: 4px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .q-nav-btn:hover {
+        border-color: var(--quantis-accent);
+        color: var(--quantis-accent);
+        background: rgba(168,85,247,0.08);
+        text-shadow: 0 0 4px rgba(168,85,247,0.4);
+      }
+      .q-nav-btn.active-view {
+        background: rgba(168,85,247,0.15);
+        border-color: var(--quantis-accent);
+        color: var(--quantis-accent);
+      }
+      #quantis-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #quantis-clock {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        color: var(--quantis-faint);
+        user-select: none;
+      }
+      #toggleMusicPanelQuantis {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.35);
+        color: var(--quantis-accent);
+        font-size: 13px;
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      #toggleMusicPanelQuantis:hover {
+        background: rgba(168,85,247,0.15);
+        box-shadow: 0 0 6px rgba(168,85,247,0.3);
+      }
+      #quantis-tools {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #quantis-tools .q-tool-btn,
+      #quantis-tools .icon-square-btn {
+        height: 30px;
+        min-width: 30px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+      }
+      #q-brush-size {
+        width: 62px;
+        accent-color: var(--quantis-accent);
+      }
+      .q-color-toggle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid var(--quantis-faint);
+        cursor: pointer;
+      }
+      .q-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+      .q-color-toggle.black { background:#000; }
+      .q-color-toggle.white { background:#fff; }
+      #quantis-tools .q-tool-btn.active {
+        border-color: var(--quantis-accent);
+        color: #fff;
+        background: rgba(168,85,247,0.18);
+      }
+
+      /* ===== QUANTIS BODY LAYOUT ===== */
+      #quantis-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* Sidebar */
+      #quantis-sidebar {
+        width: 180px;
+        min-width: 180px;
+        background: var(--quantis-sidebar-bg);
+        border-right: 1px solid rgba(168,85,247,0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      #quantis-sidebar-header {
+        padding: 12px 14px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(168,85,247,0.08);
+      }
+      #quantis-sidebar-header span {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--quantis-faint);
+        text-transform: uppercase;
+      }
+      #q-add-project-btn {
+        background: none;
+        border: none;
+        color: var(--quantis-faint);
+        cursor: pointer;
+        font-size: 12px;
+        padding: 2px 4px;
+        border-radius: 3px;
+        transition: color 0.15s;
+      }
+      #q-add-project-btn:hover { color: var(--quantis-accent); }
+      #q-projects-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 10px;
+      }
+      #q-projects-list::-webkit-scrollbar { width: 4px; }
+      #q-projects-list::-webkit-scrollbar-track { background: transparent; }
+      #q-projects-list::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.25); border-radius: 2px; }
+      .q-proj-item { margin-bottom: 12px; }
+      .q-proj-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--quantis-muted);
+        text-transform: uppercase;
+        padding: 2px 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+      .q-proj-label:hover { color: var(--quantis-text); }
+      .q-proj-label i { color: #d97706; margin-right: 5px; }
+      .q-page-list { padding-left: 10px; border-left: 1px solid rgba(168,85,247,0.12); }
+      .q-page-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 10px;
+        color: var(--quantis-faint);
+        padding: 4px 6px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background 0.12s;
+      }
+      .q-page-item:hover { background: rgba(168,85,247,0.08); color: var(--quantis-muted); }
+      .q-page-item.active { background: rgba(168,85,247,0.14); color: var(--quantis-accent); border-left: 2px solid var(--quantis-accent); }
+      .q-page-item i { color: var(--quantis-faint); margin-right: 5px; font-size: 9px; }
+      .q-page-del {
+        background: none; border: none; color: var(--quantis-faint); cursor: pointer; font-size: 9px; padding: 0 2px;
+        transition: color 0.12s;
+      }
+      .q-page-del:hover { color: #ef4444; }
+
+      /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
+#quantis-viewport {
+         flex: 1;
+         position: relative;
+         overflow: hidden;
+         background: var(--quantis-bg);
+         background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px),
+                           linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
+         background-size: 30px 30px;
+         cursor: grab;
+       }
+#quantis-canvas-container {
+          position: absolute;
+          width: 8000px;
+          height: 8000px;
+          top: 0;
+          left: 0;
+          transform-origin: 0 0;
+          background: transparent;
+          border: 3px solid var(--quantis-boundary);
+        }
+      #quantis-viewport.grabbing { cursor: grabbing; }
+      #quantis-drawing-svg {
+        position: absolute;
+        inset: 0;
+        width: 8000px;
+        height: 8000px;
+        pointer-events: none;
+        z-index: 1;
+      }
+      /* Canvas blocks */
+      .q-canvas-el {
+        position: absolute;
+        background: var(--quantis-surface-bg);
+        border: 1px solid var(--quantis-border);
+        border-radius: 4px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        min-width: 160px;
+        user-select: none;
+        will-change: transform;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+        z-index: 5;
+      }
+      .q-canvas-el:hover { border-color: rgba(168,85,247,0.5); }
+      .q-block-desc {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--quantis-faint);
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid transparent;
+        width: 100%;
+        margin-bottom: 6px;
+        outline: none;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .q-block-desc:focus { border-bottom-color: rgba(168,85,247,0.3); color: var(--quantis-muted); }
+      .q-block-desc::placeholder { color: var(--quantis-faint); }
+      .q-block-text {
+        font-size: 11px;
+        color: var(--quantis-muted);
+        line-height: 1.6;
+        outline: none;
+        min-height: 24px;
+        word-break: break-word;
+        white-space: pre-wrap;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .q-block-text a { color: #818cf8; text-decoration: underline; }
+      .q-block-del {
+        position: absolute;
+        top: -8px; right: -8px;
+        background: #7f1d1d;
+        color: white;
+        border: none;
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        font-size: 9px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .q-canvas-el:hover .q-block-del { display: flex; }
+      /* Context menu */
+      #q-context-menu {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        background: var(--quantis-surface-bg);
+        border: 1px solid rgba(168,85,247,0.3);
+        border-radius: 4px;
+        padding: 4px 0;
+        min-width: 160px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      }
+      #q-context-menu button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        background: none;
+        border: none;
+        color: var(--quantis-muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        padding: 7px 14px;
+        cursor: pointer;
+        text-align: left;
+      }
+      #q-context-menu button:hover { background: rgba(168,85,247,0.1); color: var(--quantis-text); }
+      #q-context-menu button i { color: var(--quantis-faint); font-size: 10px; }
+      #q-file-input { display: none; }
+
+      /* Zoom hint */
+      #q-zoom-hint {
+        position: absolute;
+        bottom: 12px;
+        right: 14px;
+        font-size: 9px;
+        letter-spacing: 1px;
+        color: var(--quantis-faint);
+        pointer-events: none;
+        user-select: none;
+      }
+      /* ===== Selection mode styles ===== */
+      #q-selection-marquee {
+        position: absolute;
+        background: rgba(168, 85, 247, 0.08);
+        pointer-events: none;
+        z-index: 10;
+        display: none;
+      }
+      #q-selection-box {
+        position: absolute;
+        pointer-events: none;
+        z-index: 10;
+        display: none;
+        background: rgba(168, 85, 247, 0.06);
+      }
+      #q-selection-box .q-sel-rect {
+        position: absolute;
+        pointer-events: none;
+        background: rgba(168, 85, 247, 0.04);
+      }
+    </style>
+
+    <!-- QUANTIS HEADER -->
+    <header id="quantis-header">
+      <div id="quantis-nav-left">
+        <span id="quantis-brand">QUANTIS</span>
+        <button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
+        <button class="glow-button" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
+      </div>
+      <div id="quantis-nav-right">
+        <span id="quantis-clock">00:00:00</span>
+        <div id="quantis-tools">
+          <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
+          <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
+          <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
+          <button class="q-tool-btn" id="q-center-canvas-btn" type="button" title="Centrar Canvas"><i class="fa-solid fa-crosshairs"></i></button>
+        </div>
+        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
+          <i class="fa-solid fa-music"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- QUANTIS BODY -->
+    <div id="quantis-body">
+
+      <!-- SIDEBAR: Proyectos / Páginas -->
+      <aside id="quantis-sidebar">
+        <div id="quantis-sidebar-header">
+          <span>Proyectos</span>
+          <button id="q-add-project-btn" title="Nuevo Proyecto" onclick="qAddProject()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="q-projects-list"></div>
+      </aside>
+
+      <!-- INFINITE CANVAS VIEWPORT -->
+       <main id="quantis-viewport">
+          <div id="quantis-canvas-container">
+            <svg id="quantis-drawing-svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+            <div id="q-selection-marquee"></div>
+            <div id="q-selection-box"></div>
+          </div>
+          <span id="q-zoom-hint">SCROLL: ZOOM &amp; DRAG: PAN &amp; CLICK: NEW BLOCK &amp; RIGHT-CLICK: FILE</span>
+          <div id="quantisSaveLoader" class="cloud-loader-wrap" title="Guardando en la nube...">
+           <div class="cloud-loader"></div>
+         </div>
+       </main>
+
+    </div>
+
+    <!-- CONTEXT MENU -->
+    <div id="q-context-menu">
+  <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
+  <button id="q-draw-open-tools" onclick="event.stopPropagation(); qToggleDrawPanel()"><i class="fa-solid fa-paintbrush"></i> Drawing Tools</button>
+  <button onclick="qSelectDrawColor('#000000')"><i class="fa-solid fa-circle" style="color:#000;text-shadow:0 0 1px #888"></i> Negro</button>
+  <button onclick="qSelectDrawColor('#ffffff')"><i class="fa-solid fa-circle" style="color:#fff;text-shadow:0 0 1px #444"></i> Blanco</button>
+  <button onclick="qSetFreeMode()"><i class="fa-solid fa-hand"></i> Modo libre</button>
+  </div>
+    <input type="file" id="q-file-input" onchange="qHandleFile(event)">
+
+  </div>
   <!-- FIN VISTA SPA 3: QUANTIS -->
 
   <!-- FLOATING DRAWING TOOLS PANEL -->
+  <div id="quantis-drawing-tools-panel">
+    <div class="q-draw-header" id="q-draw-drag-handle">
+      <span>DRAWING TOOLS</span>
+      <button id="q-draw-close" style="background:none;border:none;color:var(--quantis-faint,#71717a);cursor:pointer;font-size:12px;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-select" title="Select (V)"><i class="fa-solid fa-vector-square"></i> Select</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-pencil" title="Pencil"><i class="fa-solid fa-pencil"></i> Pencil</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-eraser" title="Eraser"><i class="fa-solid fa-eraser"></i> Eraser</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-line" title="Line"><i class="fa-solid fa-grip-lines"></i> Line</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-circle" title="Circle"><i class="fa-regular fa-circle"></i> Circle</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-rect" title="Rectangle"><i class="fa-regular fa-square"></i> Rect</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-lineh" title="Horizontal Line"><i class="fa-solid fa-minus"></i> H-Line</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-linev" title="Vertical Line"><i class="fa-solid fa-arrows-up-down"></i> V-Line</button>
+    </div>
+    <div class="q-draw-row">
+      <label>Color</label>
+      <button class="q-draw-color-toggle" data-color="#A855F7" style="background:#A855F7" title="Violet"></button>
+      <button class="q-draw-color-toggle" data-color="#EC4899" style="background:#EC4899" title="Magenta"></button>
+      <button class="q-draw-color-toggle" data-color="#C4B5FD" style="background:#C4B5FD" title="Lavender"></button>
+      <button class="q-draw-color-toggle" data-color="#EF4444" style="background:#EF4444" title="Red"></button>
+      <button class="q-draw-color-toggle" data-color="#F59E0B" style="background:#F59E0B" title="Amber"></button>
+      <button class="q-draw-color-toggle" data-color="#22C55E" style="background:#22C55E" title="Green"></button>
+      <button class="q-draw-color-toggle" data-color="#22D3EE" style="background:#22D3EE" title="Cyan"></button>
+      <button class="q-draw-color-toggle active" data-color="#000000" style="background:#000000" title="Black"></button>
+      <button class="q-draw-color-toggle" data-color="#FFFFFF" style="background:#FFFFFF" title="White"></button>
+      <input type="color" id="q-draw-custom-color" value="#000000" title="Custom color">
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-undo" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-redo" title="Redo (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i> Redo</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-copy" title="Copy (Ctrl+C)"><i class="fa-solid fa-copy"></i> Copy</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-paste" title="Paste (Ctrl+V)"><i class="fa-solid fa-paste"></i> Paste</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-delete" title="Delete (Del)"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+    <div class="q-draw-row">
+      <label>Thickness</label>
+      <input type="range" class="q-draw-size" id="q-draw-thickness" min="2" max="40" value="8">
+    </div>
+  </div>
 
   <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
   <div id="plansModal" aria-hidden="true">
@@ -2325,8 +2909,17 @@
     </div>
   </div>
 
-  
-    
+  <div id="quantis-config-dropdown" aria-hidden="true">
+    <p class="config-label">Quantis Theme</p>
+    <div class="config-row">
+      <button class="theme-btn black" onclick="setTheme('black', 'quantis')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('white', 'quantis')" title="White"></button>
+    </div>
+    <p class="config-label">Language</p>
+    <div class="config-row">
+      <button class="language-toggle" id="quantisLangToggle" type="button">ES / EN</button>
+    </div>
+  </div>
 
   <div id="miniPlanPopup"></div>
 
@@ -2341,7 +2934,7 @@
         <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
         <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
         <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
-        <button class="music-btn" id="repeatBtn" title="Sin repeticiÃ³n"><i class="fa-solid fa-repeat"></i></button>
+        <button class="music-btn" id="repeatBtn" title="Sin repetición"><i class="fa-solid fa-repeat"></i></button>
       </div>
       
       <div class="progress-time">
@@ -2358,7 +2951,7 @@
         <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
         <i class="fa-solid fa-volume-high"></i>
       </div>
-      <div id="musicLoader" class="cloud-loader-wrap" title="Cargando reproducciÃ³n...">
+      <div id="musicLoader" class="cloud-loader-wrap" title="Cargando reproducción...">
         <div class="cloud-loader"></div>
       </div>
     </div>
@@ -2516,7 +3109,7 @@
       try {
         await setDoc(doc(db, "users", auth.currentUser.uid, "dominon", "music"),
           Object.assign({}, data, { savedAt: Date.now() }), { merge: true });
-      } catch (e) { console.warn("Error guardando mÃºsica en Firebase:", e); }
+      } catch (e) { console.warn("Error guardando música en Firebase:", e); }
     };
     window.loadDominonMusicCloud = async function() {
       if (!window.isPremiumPlan() || !auth.currentUser) return;
@@ -2536,7 +3129,7 @@
           try { if (typeof data.repeatMode !== 'undefined') localStorage.setItem(storageKeyForUser('danifu_repeat_'), data.repeatMode); } catch (e) {}
           if (typeof window.applyMusicSavedData === 'function') window.applyMusicSavedData(data);
         }
-      } catch (e) { console.warn("Error cargando mÃºsica desde Firebase:", e); }
+      } catch (e) { console.warn("Error cargando música desde Firebase:", e); }
     };
     // --- Gemini chats: cloud sync (solo Premium) ---
     window.saveGeminiCloud = async function(chats) {
@@ -2643,7 +3236,7 @@
         window.loadSavedMusic();
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
-        // sesiÃ³n, asÃ­ que aquÃ­ se asegura que cada usuario vea su propio proyecto.
+        // sesión, así que aquí se asegura que cada usuario vea su propio proyecto.
         window.qReloadWorkspace?.();
         window.qLoadFromFirebase?.();
 
@@ -2887,7 +3480,7 @@
     }
 
     // --- Cifrado local de la API Key ---
-    // Se guarda cifrada (AES-GCM vÃ­a Web Crypto cuando estÃ¡ disponible),
+    // Se guarda cifrada (AES-GCM vía Web Crypto cuando está disponible),
     // con fallback XOR+base64 para contextos sin crypto.subtle (ej. file://).
     var GEMINI_ENC_SECRET = 'danifu_gemini_local_secret_v1';
 
@@ -3098,7 +3691,7 @@
     });
 
     document.getElementById('geminiClearBtn')?.addEventListener('click', function() {
-      if (!confirm('Â¿Borrar el historial de este chat?')) return;
+      if (!confirm('¿Borrar el historial de este chat?')) return;
       geminiSetChat(geminiActiveTab, []);
       geminiLoadChat(geminiActiveTab);
     });
@@ -3142,8 +3735,8 @@
       })
       .catch(function(error) {
         if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
-        console.error("Error de conexiÃ³n:", error);
-        appendGeminiMessage('assistant', 'Error de conexiÃ³n. Revisa tu consola de desarrollador.');
+        console.error("Error de conexión:", error);
+        appendGeminiMessage('assistant', 'Error de conexión. Revisa tu consola de desarrollador.');
       });
     }
 
@@ -3291,7 +3884,7 @@
       if (!btn) return;
       if (repeatMode === 0) {
         btn.innerHTML = '<i class="fa-solid fa-repeat"></i>';
-        btn.title = 'Sin repeticiÃ³n';
+        btn.title = 'Sin repetición';
         btn.style.opacity = '0.4';
         btn.style.color = '';
         if (window.player && window.player.setLoop) window.player.setLoop(false);
@@ -3303,7 +3896,7 @@
         if (window.player && window.player.setLoop) window.player.setLoop(true);
       } else {
         btn.innerHTML = '<i class="fa-solid fa-repeat"></i><span style="font-size:8px;position:absolute;top:1px;right:1px;font-weight:700;">1</span>';
-        btn.title = 'Repetir canciÃ³n';
+        btn.title = 'Repetir canción';
         btn.style.opacity = '1';
         btn.style.color = 'var(--color-highlight)';
         if (window.player && window.player.setLoop) window.player.setLoop(false);
@@ -3552,12 +4145,12 @@
       window.switchAppView(isFlowHidden ? 'deep-flow-view' : 'main-dashboard-view');
     };
 
-    // New 3-view router â€” add/remove .hidden-view cleanly across all views with fade transitions
+    // New 3-view router — add/remove .hidden-view cleanly across all views with fade transitions
     window.switchAppView = function(targetViewId) {
       var ALL_VIEWS = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
       var currentActiveView = null;
 
-      // 1. Identificar la vista que estÃ¡ visible actualmente
+      // 1. Identificar la vista que está visible actualmente
       ALL_VIEWS.forEach(function(id) {
         var el = document.getElementById(id);
         if (el && !el.classList.contains('hidden-view')) {
@@ -3565,7 +4158,7 @@
         }
       });
 
-      // Reproducir sonido si la funciÃ³n existe
+      // Reproducir sonido si la función existe
       if (typeof playClickSound === 'function') {
         try { playClickSound(); } catch(e) {}
       }
@@ -3574,7 +4167,7 @@
       if (currentActiveView && currentActiveView.id !== targetViewId) {
         currentActiveView.classList.add('view-invisible');
 
-        // Esperar a que termine la transiciÃ³n de salida (200ms)
+        // Esperar a que termine la transición de salida (200ms)
         setTimeout(function() {
           currentActiveView.classList.add('hidden-view');
           currentActiveView.classList.remove('view-invisible');
@@ -3583,12 +4176,12 @@
           revealTargetView(targetViewId);
         }, 200);
       } else {
-        // Si no habÃ­a vista activa previa, mostrar directamente
+        // Si no había vista activa previa, mostrar directamente
         revealTargetView(targetViewId);
       }
     };
 
-    // FunciÃ³n auxiliar para realizar el fade-in de la nueva vista
+    // Función auxiliar para realizar el fade-in de la nueva vista
     function revealTargetView(targetViewId) {
       var targetEl = document.getElementById(targetViewId);
       if (!targetEl) return;
@@ -3600,10 +4193,10 @@
       // Forzar un reflow para que el navegador procese el estado invisible inicial
       void targetEl.offsetWidth;
 
-      // Quitar la invisibilidad para que ocurra la transiciÃ³n de entrada suave
+      // Quitar la invisibilidad para que ocurra la transición de entrada suave
       targetEl.classList.remove('view-invisible');
 
-      // Forzar actualizaciÃ³n del layout de Quantis si se accede a esa vista
+      // Forzar actualización del layout de Quantis si se accede a esa vista
       if (targetViewId === 'quantis-view' && typeof window.qApplyPlanLimits === 'function') {
         window.qApplyPlanLimits();
       }
@@ -4123,8 +4716,13 @@
       initAll();
     }
   </script>
-
-  <!-- PARTÃCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
+  <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
+<script>
+  (function () {
+    // =========================================================
+    // --- QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
+    // =========================================================
+    var QS = {
       lang: "es",
       zoom: 1.0,
       panX: 0,
@@ -4149,7 +4747,7 @@
         {
           id: "qp-1",
           name: "Proyecto Alpha",
-          pages: ["PÃ¡gina Inicial", "InvestigaciÃ³n"],
+          pages: ["Página Inicial", "Investigación"],
         },
         { id: "qp-2", name: "Proyecto Beta", pages: ["Resumen"] },
       ],
@@ -4161,7 +4759,7 @@
             y: 3870,
             desc: "Bienvenida",
             content:
-              "Lienzo Infinito â€” Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.",
+              "Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.",
           },
         ],
         "0-1": [],
@@ -4190,7 +4788,7 @@
 
       if (!QD.viewport) return;
 
-      // ===== QUANTIS VIEWPORT â€” ZOOM & SCROLL =====
+      // ===== QUANTIS VIEWPORT — ZOOM & SCROLL =====
       var quantisViewport = QD.viewport;
 
       quantisViewport.addEventListener(
@@ -4242,7 +4840,7 @@
       qSetupAutoSave();
       window.qUpdateDrawingControls();
 
-      // Auto-guardar Quantis en Firebase cada 60 segundos si el usuario estÃ¡ autenticado
+      // Auto-guardar Quantis en Firebase cada 60 segundos si el usuario está autenticado
       setInterval(function() {
         var view = document.getElementById('quantis-view');
         if (view && !view.classList.contains('hidden-view') && window.auth && window.auth.currentUser) {
@@ -4272,7 +4870,7 @@
 
     // ---- AUTO-SAVE ----
     function qSetupAutoSave() {
-      // Guarda cada 30 segundos si Quantis estÃ¡ visible y hay sesiÃ³n iniciada
+      // Guarda cada 30 segundos si Quantis está visible y hay sesión iniciada
       setInterval(function () {
         var view = document.getElementById("quantis-view");
         if (
@@ -4285,7 +4883,7 @@
         }
       }, 30000);
 
-      // Guarda al cambiar de pestaÃ±a o minimizar ventana
+      // Guarda al cambiar de pestaña o minimizar ventana
       document.addEventListener("visibilitychange", function () {
         if (
           document.visibilityState === "hidden" &&
@@ -4297,7 +4895,7 @@
         }
       });
 
-      // Guarda antes de cerrar el navegador (solo con sesiÃ³n activa, para no
+      // Guarda antes de cerrar el navegador (solo con sesión activa, para no
       // volcar el workspace del usuario en la clave 'guest' al hacer logout)
       window.addEventListener("beforeunload", function () {
         if (window.auth && window.auth.currentUser) {
@@ -4436,7 +5034,7 @@
         qSetSelectionBorder();
       }
 
-      // FASE 3 â€” COPIAR / PEGAR / ELIMINAR
+      // FASE 3 — COPIAR / PEGAR / ELIMINAR
       window.qCopySelection = function () {
         if (!window.isMembershipPlanReady || !qIsPremiumBrush()) {
           window.showPlanPopup("Drawing Tools son exclusivos de Premium.");
@@ -4525,7 +5123,7 @@
         qSaveWorkspace();
       };
 
-      // FASE 4 â€” DESHACER / REHACER
+      // FASE 4 — DESHACER / REHACER
       function qPushUndo() {
         var key = qWorkspaceKey();
         if (!QS.undoStack[key]) QS.undoStack[key] = [];
@@ -4632,7 +5230,7 @@
       QS.drawings[key] = QS.drawings[key].filter(function (path) {
         return path && Array.isArray(path.points) && path.points.length > 0;
       });
-      // FASE 0: ID Ãºnico por dibujo (migra automÃ¡ticamente los paths viejos sin ID)
+      // FASE 0: ID único por dibujo (migra automáticamente los paths viejos sin ID)
       QS.drawings[key].forEach(function (path) {
         if (!path.id) path.id = qNextDrawId();
       });
@@ -4791,7 +5389,7 @@
     };
 
     // =========================================================
-    // FIX: qPersistWorkspace â€” guarda siempre, sin chequeo de UID
+    // FIX: qPersistWorkspace — guarda siempre, sin chequeo de UID
     // =========================================================
     function qPersistWorkspace() {
       try {
@@ -4812,20 +5410,20 @@
     }
 
     // =========================================================
-    // FIX: qLoadWorkspace â€” eliminado el bloqueo por UID
+    // FIX: qLoadWorkspace — eliminado el bloqueo por UID
     // El UID mismatch causaba que nunca se cargara el workspace
-    // al arrancar (Firebase auth aÃºn no resuelto â†’ uid='guest')
+    // al arrancar (Firebase auth aún no resuelto → uid='guest')
     // =========================================================
     function qLoadWorkspace() {
       try {
-        // Reinicia por completo el workspace antes de cargar: asÃ­ nunca se
+        // Reinicia por completo el workspace antes de cargar: así nunca se
         // mantiene el estado del usuario anterior (p. ej. lo que el cierre de
-        // sesiÃ³n pudo volcar en la clave 'guest') al entrar otro usuario.
+        // sesión pudo volcar en la clave 'guest') al entrar otro usuario.
         QS.projects = [
           {
             id: "qp-1",
             name: "Proyecto Alpha",
-            pages: ["PÃ¡gina Inicial", "InvestigaciÃ³n"],
+            pages: ["Página Inicial", "Investigación"],
           },
           { id: "qp-2", name: "Proyecto Beta", pages: ["Resumen"] },
         ];
@@ -4837,7 +5435,7 @@
               y: 3870,
               desc: "Bienvenida",
               content:
-                "Lienzo Infinito â€” Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.",
+                "Lienzo Infinito — Click para crear un bloque. Scroll para zoom. Arrastra para navegar. Clic derecho para insertar archivos.",
             },
           ],
           "0-1": [],
@@ -4849,9 +5447,9 @@
 
         var raw = localStorage.getItem(quantisStorageKey());
         if (!raw) {
-          // MigraciÃ³n Ãºnica: datos guardados con la antigua clave global compartida
+          // Migración única: datos guardados con la antigua clave global compartida
           // ("quantis_local_data"). Solo se atribuyen a este usuario si su UID coincide,
-          // asÃ­ no se pierde la informaciÃ³n ya guardada.
+          // así no se pierde la información ya guardada.
           try {
             var old = localStorage.getItem("quantis_local_data");
             if (old) {
@@ -4866,8 +5464,8 @@
         if (!raw) return;
         var data = JSON.parse(raw);
         // ELIMINADO: if (data.uid && data.uid !== qCurrentUid()) return;
-        // Esa comprobaciÃ³n bloqueaba la carga porque auth no estaba
-        // resuelto todavÃ­a cuando se llamaba qInit().
+        // Esa comprobación bloqueaba la carga porque auth no estaba
+        // resuelto todavía cuando se llamaba qInit().
         if (Array.isArray(data.projects) && data.projects.length)
           QS.projects = data.projects;
         if (data.canvasData && typeof data.canvasData === "object")
@@ -4876,7 +5474,7 @@
           QS.drawings = data.drawings;
         QS.activeProj = Number.isInteger(data.activeProj) ? data.activeProj : 0;
         QS.activePage = Number.isInteger(data.activePage) ? data.activePage : 0;
-        // Seguridad: asegurarse de que los Ã­ndices siguen siendo vÃ¡lidos
+        // Seguridad: asegurarse de que los índices siguen siendo válidos
         QS.activeProj = Math.min(
           QS.activeProj,
           Math.max(0, QS.projects.length - 1),
@@ -4898,8 +5496,8 @@
     // Expuesto globalmente para que el handler de auth pueda
     // recargar el workspace cuando el usuario se autentica.
     window.qReloadWorkspace = function () {
-      // IMPORTANTE: no se llama a qSavePage() aquÃ­. Al cambiar de usuario,
-      // qSavePage internamente llama a qPersistWorkspace() y guardarÃ­a el
+      // IMPORTANTE: no se llama a qSavePage() aquí. Al cambiar de usuario,
+      // qSavePage internamente llama a qPersistWorkspace() y guardaría el
       // workspace visible (que puede ser el del usuario anterior) dentro de la
       // clave del usuario actual. Siempre se parte de un workspace limpio.
       qLoadWorkspace();
@@ -4909,7 +5507,7 @@
     };
 
     // =========================================================
-    // FIX: qSavePage â€” guarda el canvas actual en memoria y localStorage
+    // FIX: qSavePage — guarda el canvas actual en memoria y localStorage
     // =========================================================
     function qSavePage() {
       if (!QD.canvas) return;
@@ -5011,19 +5609,19 @@
         };
         lbl.appendChild(nameSpan);
 
-        // BotÃ³n: agregar pÃ¡gina
+        // Botón: agregar página
         var addPageBtn = document.createElement("button");
         addPageBtn.style.cssText =
           "background:none;border:none;color:var(--quantis-faint);cursor:pointer;font-size:10px;padding:2px 4px;";
         addPageBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-        addPageBtn.title = "Nueva PÃ¡gina";
+        addPageBtn.title = "Nueva Página";
         addPageBtn.onclick = function (e) {
           e.stopPropagation();
           qAddPage(pi);
         };
         lbl.appendChild(addPageBtn);
 
-        // FIX: BotÃ³n para eliminar proyecto
+        // FIX: Botón para eliminar proyecto
         var delProjBtn = document.createElement("button");
         delProjBtn.style.cssText =
           "background:none;border:none;color:#ef4444;cursor:pointer;font-size:10px;padding:2px 4px;opacity:0.7;";
@@ -5053,13 +5651,13 @@
           var del = document.createElement("button");
           del.className = "q-page-del";
           del.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-          // FIX: reindexar claves de pÃ¡ginas al eliminar
+          // FIX: reindexar claves de páginas al eliminar
           del.onclick = function (e) {
             e.stopPropagation();
-            if (!confirm("Â¿Eliminar esta pÃ¡gina?")) return;
+            if (!confirm("¿Eliminar esta página?")) return;
             // Guardar estado actual antes de borrar
             qSavePage();
-            // Reindexar canvasData y drawings para las pÃ¡ginas posteriores
+            // Reindexar canvasData y drawings para las páginas posteriores
             var totalPages = proj.pages.length;
             for (var k = gi + 1; k < totalPages; k++) {
               QS.canvasData[pi + "-" + (k - 1)] =
@@ -5068,11 +5666,11 @@
               delete QS.canvasData[pi + "-" + k];
               delete QS.drawings[pi + "-" + k];
             }
-            // Eliminar la Ãºltima (que ya fue movida un lugar antes)
+            // Eliminar la última (que ya fue movida un lugar antes)
             delete QS.canvasData[pi + "-" + (totalPages - 1)];
             delete QS.drawings[pi + "-" + (totalPages - 1)];
             proj.pages.splice(gi, 1);
-            // Si la pÃ¡gina eliminada era la activa o anterior, ajustar
+            // Si la página eliminada era la activa o anterior, ajustar
             var newPage = QS.activePage;
             if (QS.activeProj === pi) {
               if (QS.activePage === gi) {
@@ -5081,7 +5679,7 @@
                 newPage = QS.activePage - 1;
               }
             }
-            if (!proj.pages.length) proj.pages.push("PÃ¡gina 1");
+            if (!proj.pages.length) proj.pages.push("Página 1");
             var newProj = QS.activeProj;
             newPage = Math.min(newPage, proj.pages.length - 1);
             qLoadPage(newProj, newPage, true);
@@ -5124,23 +5722,23 @@
       }
     };
 
-    // FIX: qDeleteProject â€” elimina proyecto y reindexea claves de proyectos posteriores
+    // FIX: qDeleteProject — elimina proyecto y reindexea claves de proyectos posteriores
     function qDeleteProject(pi) {
       if (QS.projects.length <= 1) {
-        alert("No puedes eliminar el Ãºnico proyecto.");
+        alert("No puedes eliminar el único proyecto.");
         return;
       }
       if (
         !confirm(
-          'Â¿Eliminar proyecto "' +
+          '¿Eliminar proyecto "' +
             QS.projects[pi].name +
-            '" y todas sus pÃ¡ginas?',
+            '" y todas sus páginas?',
         )
       )
         return;
       qSavePage();
 
-      // Eliminar datos de todas las pÃ¡ginas de este proyecto
+      // Eliminar datos de todas las páginas de este proyecto
       var proj = QS.projects[pi];
       proj.pages.forEach(function (_, gi) {
         delete QS.canvasData[pi + "-" + gi];
@@ -5190,7 +5788,7 @@
         );
         return;
       }
-      var n = prompt("Nombre de la nueva pÃ¡gina:");
+      var n = prompt("Nombre de la nueva página:");
       if (n && n.trim()) {
         QS.projects[projIdx].pages.push(n.trim());
         var newIdx = QS.projects[projIdx].pages.length - 1;
@@ -5367,7 +5965,7 @@
               var x = (e.clientX - rect.left) / QS.zoom;
               var y = (e.clientY - rect.top) / QS.zoom;
               if (!qIsWithinBounds(x, y)) {
-                window.showPlanPopup("Fuera de los lÃ­mites del canvas.");
+                window.showPlanPopup("Fuera de los límites del canvas.");
                 return;
               }
               qCreateText(x, y);
@@ -5385,7 +5983,7 @@
         var cx = (e.clientX - rect.left) / QS.zoom;
         var cy = (e.clientY - rect.top) / QS.zoom;
         if (!qIsWithinBounds(cx, cy)) {
-          window.showPlanPopup("Fuera de los lÃ­mites del canvas.");
+          window.showPlanPopup("Fuera de los límites del canvas.");
           return;
         }
         QS.ctxCoords.x = cx;
@@ -5437,7 +6035,7 @@
        e.preventDefault();
        var p = qCanvasPoint(e);
       if (!qIsWithinBounds(p.x, p.y)) {
-        window.showPlanPopup("Fuera de los lÃ­mites del canvas.");
+        window.showPlanPopup("Fuera de los límites del canvas.");
         return;
       }
       QS.isDrawing = true;
@@ -5990,10 +6588,10 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       desc.type = "text";
       desc.className = "q-block-desc";
       desc.value = descVal || "";
-      desc.placeholder = "AÃ±adir descripciÃ³n...";
-      // Guarda al salir del campo de descripciÃ³n
+      desc.placeholder = "Añadir descripción...";
+      // Guarda al salir del campo de descripción
       desc.addEventListener("blur", qSavePage);
-      // TambiÃ©n guarda al escribir (debounced)
+      // También guarda al escribir (debounced)
       var _descTimer;
       desc.addEventListener("input", function () {
         clearTimeout(_descTimer);
@@ -6046,15 +6644,15 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
     }
 
     function qCreateText(x, y) {
-      qRecreateText(x, y, "", "Escribe algo aquÃ­...", false);
+      qRecreateText(x, y, "", "Escribe algo aquí...", false);
       qSavePage();
     }
 
     // =========================================================
-    // FIX: qRecreateText â€” eliminado { once: true } del blur.
+    // FIX: qRecreateText — eliminado { once: true } del blur.
     // Se usa un handler reutilizable con activateEditing() para
-    // evitar acumulaciÃ³n de listeners al doble-clic sobre links.
-    // TambiÃ©n aÃ±adido listener de 'input' con debounce para
+    // evitar acumulación de listeners al doble-clic sobre links.
+    // También añadido listener de 'input' con debounce para
     // guardar mientras el usuario escribe, sin esperar al blur.
     // =========================================================
     function qRecreateText(x, y, desc, content, isLink) {
@@ -6081,11 +6679,11 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         }
       }
 
-      // Activa el modo ediciÃ³n en el textNode y registra listeners
+      // Activa el modo edición en el textNode y registra listeners
       function activateEditing() {
         textNode.contentEditable = "true";
         textNode.setAttribute("data-is-link", "false");
-        // Remover antes de aÃ±adir para evitar duplicados
+        // Remover antes de añadir para evitar duplicados
         textNode.removeEventListener("blur", onBlur);
         textNode.addEventListener("blur", onBlur);
         textNode.removeEventListener("input", onInput);
@@ -6101,14 +6699,14 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
 
       blk.appendChild(textNode);
       QD.canvas.appendChild(blk);
-      if (content === "Escribe algo aquÃ­...") {
+      if (content === "Escribe algo aquí...") {
         textNode.focus();
         document.execCommand("selectAll", false, null);
       }
     }
 
     // =========================================================
-    // FIX: qMakeLink â€” ahora recibe onEdit callback para
+    // FIX: qMakeLink — ahora recibe onEdit callback para
     // reconectar listeners correctamente al doble-clic,
     // sin acumular handlers ni usar { once: true }.
     // =========================================================
@@ -6127,7 +6725,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       });
       textNode.appendChild(a);
 
-      // Doble clic: volver al modo ediciÃ³n
+      // Doble clic: volver al modo edición
       function onDblClick(e) {
         textNode.removeEventListener("dblclick", onDblClick);
         e.stopPropagation();
@@ -6223,7 +6821,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       var x = QS.ctxCoords.x,
         y = QS.ctxCoords.y;
       if (!qIsWithinBounds(x, y)) {
-        window.showPlanPopup("Fuera de los lÃ­mites del canvas.");
+        window.showPlanPopup("Fuera de los límites del canvas.");
         e.target.value = "";
         return;
       }
@@ -6272,7 +6870,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
   })();
 </script>
 
-  <!-- PARTÃCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
+  <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
   <script>
     (function () {
       document.addEventListener('click', function (e) {
