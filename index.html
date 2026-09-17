@@ -84,18 +84,6 @@
       z-index: 9999;
       background: radial-gradient(circle, #E9D5FF 0%, #A855F7 60%, transparent 100%);
       box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.7);
-      animation: navParticleFly 0.65s cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
-    }
-
-    @keyframes navParticleFly {
-      0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--px), var(--py)) scale(0.2);
-      }
     }
     
     /* --- Loader de guardado en la nube (Premium) --- */
@@ -444,37 +432,14 @@
       border: 1px solid var(--color-border);
       border-radius: 20px;
       font-size: 0.85em;
-      animation: userInfoPurplePulse 3.5s ease-in-out infinite;
     }
 
-    @keyframes userInfoPurplePulse {
-      0%, 100% {
-        border-color: rgba(124, 58, 237, 0.30);
-        box-shadow: 0 0 4px rgba(124, 58, 237, 0.12);
-      }
-      50% {
-        border-color: rgba(124, 58, 237, 0.70);
-        box-shadow: 0 0 10px rgba(124, 58, 237, 0.35);
-      }
-    }
-        #main-dashboard-view .user-avatar {
+    #main-dashboard-view .user-avatar {
       width: 28px;
       height: 28px;
       border-radius: 50%;
       border: 2px solid var(--color-highlight);
       object-fit: cover;
-      animation: avatarPinkPulse 3.5s ease-in-out infinite;
-    }
-
-    @keyframes avatarPinkPulse {
-      0%, 100% {
-        border-color: rgba(236, 72, 153, 0.30);
-        box-shadow: 0 0 4px rgba(236, 72, 153, 0.15);
-      }
-      50% {
-        border-color: rgba(236, 72, 153, 0.70);
-        box-shadow: 0 0 10px rgba(236, 72, 153, 0.35);
-      }
     }
 
     #main-dashboard-view .user-name {
@@ -497,7 +462,7 @@
     #main-dashboard-view .logout-btn:hover {
       background: #b91c1c;
     }
-        #main-dashboard-view .box {
+    #main-dashboard-view .box {
       border: 1px solid var(--color-border);
       padding: 4px 10px;
       background: var(--color-input-bg);
@@ -506,18 +471,6 @@
       transition: background 0.3s ease;
       font-size: 0.9em;
       white-space: nowrap;
-            animation: boxIndigoPulse 3.5s ease-in-out infinite;
-    }
-
-    @keyframes boxIndigoPulse {
-      0%, 100% {
-        border-color: rgba(139, 92, 246, 0.25);
-        box-shadow: 0 0 4px rgba(139, 92, 246, 0.10);
-      }
-      50% {
-        border-color: rgba(139, 92, 246, 0.60);
-        box-shadow: 0 0 10px rgba(139, 92, 246, 0.30);
-      }
     }
 
     #main-dashboard-view .main {
@@ -1157,20 +1110,9 @@
       border: 1px solid var(--color-border);
       padding: 6px 12px;
       border-radius: 4px;
+      padding: 6px 12px;
       max-width: 180px;
       overflow: hidden;
-            animation: songLavenderPulse 3.5s ease-in-out infinite;
-    }
-
-    @keyframes songLavenderPulse {
-      0%, 100% {
-        border-color: rgba(196, 181, 253, 0.25);
-        box-shadow: 0 0 4px rgba(196, 181, 253, 0.10);
-      }
-      50% {
-        border-color: rgba(196, 181, 253, 0.60);
-        box-shadow: 0 0 10px rgba(196, 181, 253, 0.30);
-      }
     }
 
     #main-dashboard-view .song-marquee {
