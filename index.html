@@ -285,7 +285,8 @@
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.6);
       --main-gap: 15px;
       width: 100%;
-      height: 100vh;
+      min-height: 100vh;
+      height: auto;
       background: var(--color-dark-bg);
       color: var(--color-text);
     }
@@ -395,8 +396,9 @@
     #main-dashboard-view .container {
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
+      grid-template-rows: auto auto;
+      min-height: 100vh;
+      height: auto;
     }
     #main-dashboard-view .container.hidden {
       display: none !important;
@@ -480,8 +482,9 @@
       display: flex;
       flex-direction: column;
       gap: var(--main-gap);
-      height: calc(100vh - 52px);
-      overflow-y: auto;
+      min-height: calc(100vh - 52px);
+      height: auto;
+      overflow-y: visible;
       box-sizing: border-box;
     }
     #main-dashboard-view .main::-webkit-scrollbar {
@@ -1007,12 +1010,14 @@
       display: flex;
       flex-direction: column;
       padding: 0;
+      flex-shrink: 0;
+      width: 100%;
     }
     .gemini-layout {
       display: flex;
-      min-height: 380px;
-      height: 460px;
-      max-height: 65vh;
+      min-height: 420px;
+      height: 480px;
+      flex-shrink: 0;
     }
     .gemini-sidebar {
       width: 0;
