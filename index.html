@@ -2012,6 +2012,22 @@
       background: #e5e7eb;
       color: #1f2937;
     }
+    .gemini-thinking {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.85;
+    }
+    .gemini-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(168,85,247,0.25);
+      border-top-color: var(--color-highlight);
+      border-radius: 50%;
+      animation: geminiSpin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes geminiSpin { to { transform: rotate(360deg); } }
 
     /* ===== Gemini Tab Bar ===== */
     .gemini-tab-bar {
@@ -3638,6 +3654,8 @@
       geminiLoadChat(geminiActiveTab);
     });
 
+    var GEMINI_SYSTEM_INSTRUCTION = "Eres un asesor experto, versatil y de maximo nivel. Tu mision es ayudar al usuario en cualquier tema que solicite, brindando siempre la respuesta mas fina, completa, precisa y util que puedas dar. Te diriges al usuario con respeto, cordialidad y profesionalismo en todo momento. Usas un lenguaje claro, bien estructurado y adaptado al nivel del usuario. Si la pregunta es compleja, razonas paso a paso y entregas la mejor calidad posible. No mencionas ni revelas informacion sobre la pagina web, paneles, codigo interno o estructura del sitio: actuas unicamente como un asistente independiente y general. Respondes por defecto en espanol, salvo que el usuario te pida otro idioma.";
+
     async function geminiSendMessage() {
       var promptInput = document.getElementById('geminiPromptInput');
       var prompt = promptInput ? promptInput.value.trim() : '';
@@ -3645,24 +3663,27 @@
       if (!apiKey) return window.showPlanPopup('Guarda tu Google AI Studio API Key primero.');
       if (!prompt) return;
 
-      var fullPrompt = prompt;
-
       appendGeminiMessage('user', prompt);
       if (promptInput) promptInput.value = '';
 
       var history = document.getElementById('geminiChatHistory');
       var loadingEl = document.createElement('div');
-      loadingEl.className = 'gemini-message gemini-assistant';
-      loadingEl.textContent = 'Cargando...';
+      loadingEl.className = 'gemini-message gemini-assistant gemini-thinking';
+      loadingEl.innerHTML = '<span class="gemini-spinner"></span><span>Pensando...</span>';
       if (history) {
         history.appendChild(loadingEl);
         history.scrollTop = history.scrollHeight;
       }
 
-      fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+      var chatHistory = geminiGetChat(geminiActiveTab);
+      var contents = chatHistory.map(function(m) {
+        return { role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] };
+      });
+
+      fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+        body: JSON.stringify({ systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] }, contents: contents })
       })
       .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
       .then(function(result) {
