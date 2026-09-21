@@ -285,8 +285,7 @@
       --shadow-light: 0 0 8px rgba(0, 0, 0, 0.6);
       --main-gap: 15px;
       width: 100%;
-      min-height: 100vh;
-      height: auto;
+      height: 100vh;
       background: var(--color-dark-bg);
       color: var(--color-text);
     }
@@ -396,9 +395,8 @@
     #main-dashboard-view .container {
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
-      min-height: 100vh;
-      height: auto;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
     }
     #main-dashboard-view .container.hidden {
       display: none !important;
@@ -482,24 +480,15 @@
       display: flex;
       flex-direction: column;
       gap: var(--main-gap);
-      min-height: calc(100vh - 52px);
-      height: auto;
-      overflow-y: visible;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
       box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
-    #main-dashboard-view .main::-webkit-scrollbar {
-      width: 10px;
-    }
-    #main-dashboard-view .main::-webkit-scrollbar-track {
-      background: var(--color-input-bg);
-    }
-    #main-dashboard-view .main::-webkit-scrollbar-thumb {
-      background: var(--color-highlight);
-      border-radius: 5px;
-    }
-    #main-dashboard-view .main::-webkit-scrollbar-thumb:hover {
-      background: #8b3ed9;
-    }
+    #main-dashboard-view .main::-webkit-scrollbar { width: 0; height: 0; }
+    #main-dashboard-view .main::-webkit-scrollbar-track { background: transparent; }
+    #main-dashboard-view .main::-webkit-scrollbar-thumb { background: transparent; }
     #main-dashboard-view .chart-panel {
       background: var(--color-input-bg);
       border: 2px solid var(--color-highlight);
