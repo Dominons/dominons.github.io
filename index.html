@@ -3680,26 +3680,76 @@
         return { role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] };
       });
 
-      fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + encodeURIComponent(apiKey), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] }, contents: contents })
-      })
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-      .then(function(result) {
-        if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
-        if (!result.ok) {
-          var googleError = result.data?.error?.message || 'Error';
-          appendGeminiMessage('assistant', 'Google API Error: ' + googleError);
-          return;
+      var GEMINI_FALLBACK_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
+      var sendBtn = document.getElementById('sendGeminiBtn');
+      if (sendBtn) sendBtn.disabled = true;
+
+      async function geminiFetchWithFallback(models, attempt) {
+        if (attempt >= models.length) throw new Error('ALL_MODELS_OVERLOADED');
+        var model = models[attempt];
+        if (attempt > 0 && loadingEl) {
+          var label = loadingEl.querySelector('span:last-child');
+          if (label) label.textContent = 'Reintentando con ' + model + '...';
         }
-        var text = result.data?.candidates?.[0]?.content?.parts?.map(function(part) { return part.text || ''; }).join('\n').trim();
-        appendGeminiMessage('assistant', text || 'No response received.');
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, 25000);
+        try {
+          var r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + encodeURIComponent(apiKey), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] }, contents: contents }),
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          var d = await r.json();
+          if (r.ok) return d;
+          var msg = (d && d.error && d.error.message) ? d.error.message : '';
+          var isOverloaded = r.status === 429 || r.status === 503 || /high demand|overloaded|quota|rate limit|temporarily unavailable/i.test(msg);
+          if (isOverloaded && attempt + 1 < models.length) {
+            await new Promise(function(res){ setTimeout(res, 1200 * (attempt + 1)); });
+            return geminiFetchWithFallback(models, attempt + 1);
+          }
+          var err = new Error(msg || 'Error ' + r.status);
+          err.data = d; throw err;
+        } catch (e) {
+          clearTimeout(timeoutId);
+          if (e.name === 'AbortError') {
+            if (attempt + 1 < models.length) {
+              await new Promise(function(res){ setTimeout(res, 800); });
+              return geminiFetchWithFallback(models, attempt + 1);
+            }
+            throw new Error('TIMEOUT');
+          }
+          if (e.message === 'ALL_MODELS_OVERLOADED' || e.message === 'TIMEOUT') throw e;
+          var isNet = /Failed to fetch|NetworkError|TypeError/i.test(e.message || '');
+          if (isNet && attempt + 1 < models.length) {
+            await new Promise(function(res){ setTimeout(res, 800); });
+            return geminiFetchWithFallback(models, attempt + 1);
+          }
+          throw e;
+        }
+      }
+
+      geminiFetchWithFallback(GEMINI_FALLBACK_MODELS, 0)
+      .then(function(data) {
+        if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
+        if (sendBtn) sendBtn.disabled = false;
+        var text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts
+          ? data.candidates[0].content.parts.map(function(part) { return part.text || ''; }).join('\n').trim()
+          : '';
+        appendGeminiMessage('assistant', text || 'Respuesta vacia del modelo.');
       })
       .catch(function(error) {
         if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
-        console.error("Error de conexión:", error);
-        appendGeminiMessage('assistant', 'Error de conexión. Revisa tu consola de desarrollador.');
+        if (sendBtn) sendBtn.disabled = false;
+        console.error("Gemini error:", error);
+        if (error.message === 'ALL_MODELS_OVERLOADED') {
+          appendGeminiMessage('assistant', 'El servicio de Gemini esta con alta demanda en este momento. Reintente en unos segundos — el sistema probo automaticamente con modelos alternativos (3.6-flash, 3.5-flash, 3.5-lite, 2.5-flash).');
+        } else if (error.message === 'TIMEOUT') {
+          appendGeminiMessage('assistant', 'La solicitud tardo demasiado (timeout 25s). El modelo esta saturado, por favor reintente en unos segundos.');
+        } else {
+          appendGeminiMessage('assistant', 'Error: ' + (error.message || 'Error de conexion. Revisa tu consola de desarrollador.'));
+        }
       });
     }
 
