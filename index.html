@@ -1002,28 +1002,149 @@
       background: var(--color-main-bg);
       border: 1px solid var(--color-border);
       border-radius: 8px;
-      padding: 14px;
       box-shadow: var(--shadow-light);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
     }
-    .gemini-panel h2 {
-      margin: 0 0 12px;
-      color: var(--color-highlight);
-      font-size: 1.05rem;
+    .gemini-layout {
+      display: flex;
+      min-height: 380px;
+      height: 460px;
+      max-height: 65vh;
     }
+    .gemini-sidebar {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      background: #0f0f0f;
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.22s ease, min-width 0.22s ease;
+      flex-shrink: 0;
+    }
+    .gemini-sidebar.open {
+      width: 220px;
+      min-width: 220px;
+    }
+    .gemini-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 10px;
+      border-bottom: 1px solid #222;
+      font-size: 0.8em;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: 0.4px;
+    }
+    .gemini-sidebar-header button {
+      background: var(--color-highlight);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .gemini-sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .gemini-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82em;
+      color: var(--color-text);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .gemini-sidebar-item:hover { background: #1a1a1a; }
+    .gemini-sidebar-item.active { background: #1e1e1e; border-color: var(--color-highlight); color: #fff; }
+    .gemini-sidebar-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+    .gemini-sidebar-item .gemini-rename-btn {
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .gemini-sidebar-item:hover .gemini-rename-btn,
+    .gemini-sidebar-item.active .gemini-rename-btn { opacity: 1; }
+    .gemini-sidebar-item .gemini-rename-btn:hover { background: #2a2a2a; color: #fff; }
+    .gemini-sidebar-footer {
+      padding: 8px;
+      border-top: 1px solid #222;
+      display: flex;
+      gap: 6px;
+    }
+    .gemini-sidebar-footer button {
+      flex: 1;
+      background: #1a1a1a;
+      color: var(--color-text);
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      font-size: 0.75em;
+    }
+    .gemini-sidebar-footer button:hover { background: #222; }
+    .gemini-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--color-main-bg);
+    }
+    .gemini-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    .gemini-sidebar-toggle {
+      background: #1a1a1a;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .gemini-sidebar-toggle:hover { background: #222; }
+    .gemini-topbar-title { font-size: 0.85em; font-weight: 700; color: var(--color-text); display: flex; align-items: center; gap: 6px; }
     .gemini-history {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 160px;
-      max-height: 260px;
-      overflow: auto;
-      background: var(--color-input-bg);
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 10px;
-      line-height: 1.45;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 14px 12px;
+      line-height: 1.5;
+      background: transparent;
     }
     .gemini-settings,
     .gemini-input-row {
@@ -1031,8 +1152,10 @@
       gap: 8px;
       align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      padding: 0 10px 10px;
+      flex-shrink: 0;
     }
+    .gemini-settings { padding-top: 8px; }
     .gemini-settings input,
     .gemini-input-row textarea {
       flex: 1 1 240px;
@@ -1043,7 +1166,8 @@
       padding: 9px;
     }
     .gemini-input-row textarea {
-      min-height: 72px;
+      min-height: 52px;
+      max-height: 120px;
       resize: vertical;
     }
     .gemini-btn {
@@ -1989,28 +2113,31 @@
 
     /* ===== Gemini Chat Bubbles ===== */
     .gemini-message {
-      max-width: 80%;
-      padding: 8px 12px;
-      border-radius: 10px;
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 12px;
       font-size: 0.9em;
-      line-height: 1.45;
+      line-height: 1.5;
       word-break: break-word;
+      white-space: pre-wrap;
     }
     .gemini-message.gemini-user {
       align-self: flex-end;
       background: var(--color-highlight);
-      color: var(--color-dark-bg);
-      border-bottom-right-radius: 2px;
+      color: #fff;
+      border-bottom-right-radius: 4px;
     }
     .gemini-message.gemini-assistant {
       align-self: flex-start;
-      background: #2a2a2a;
-      color: var(--color-text);
-      border-bottom-left-radius: 2px;
+      background: #000000;
+      color: #EAEAEA;
+      border: 1px solid #1a1a1a;
+      border-bottom-left-radius: 4px;
     }
     #main-dashboard-view.light-theme .gemini-message.gemini-assistant {
-      background: #e5e7eb;
-      color: #1f2937;
+      background: #0a0a0a;
+      color: #EAEAEA;
+      border-color: #222;
     }
     .gemini-thinking {
       display: flex;
@@ -2221,23 +2348,36 @@
         </div>
 
         <section class="gemini-panel" id="geminiAssistantPanel">
-          <h2 style="display:flex;align-items:center;gap:8px;">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI Assistant
-            <button id="geminiKeyIcon" title="Toggle API Key" style="background:none;border:none;color:var(--color-highlight);cursor:pointer;font-size:14px;"><i class="fa-solid fa-key"></i></button>
-            <button id="geminiClearBtn" title="Clear History" style="background:none;border:none;color:var(--color-highlight);cursor:pointer;font-size:13px;margin-left:auto;"><i class="fa-solid fa-trash-can"></i></button>
-          </h2>
-          <div class="gemini-tab-bar" id="geminiTabBar"></div>
-          <div class="gemini-history" id="geminiChatHistory"></div>
-          <div class="gemini-settings">
-            <div id="geminiKeyRow" class="hidden">
-              <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
-              <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-              <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+          <div class="gemini-layout">
+            <aside class="gemini-sidebar" id="geminiSidebar">
+              <div class="gemini-sidebar-header">
+                <span>Conversaciones</span>
+                <button id="geminiNewChatBtn" title="Nueva conversacion"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <div class="gemini-sidebar-list" id="geminiTabBar"></div>
+              <div class="gemini-sidebar-footer">
+                <button id="geminiKeyIcon" title="API Key"><i class="fa-solid fa-key"></i> Key</button>
+                <button id="geminiClearBtn" title="Borrar chat actual"><i class="fa-solid fa-trash-can"></i> Borrar</button>
+              </div>
+            </aside>
+            <div class="gemini-main">
+              <div class="gemini-topbar">
+                <button id="geminiSidebarToggle" class="gemini-sidebar-toggle" title="Mostrar conversaciones"><i class="fa-solid fa-bars"></i></button>
+                <span class="gemini-topbar-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--color-highlight)"></i> Gemini</span>
+              </div>
+              <div class="gemini-history" id="geminiChatHistory"></div>
+              <div class="gemini-settings">
+                <div id="geminiKeyRow" class="hidden">
+                  <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
+                  <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                  <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                </div>
+              </div>
+              <div class="gemini-input-row">
+                <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
+                <button class="gemini-btn" id="sendGeminiBtn" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+              </div>
             </div>
-          </div>
-          <div class="gemini-input-row">
-            <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
-            <button class="gemini-btn" id="sendGeminiBtn" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
           </div>
         </section>
       </main>
@@ -3535,6 +3675,24 @@
       var scope = getGeminiUserScope();
       return 'gemini_chats_history_' + scope;
     }
+    function geminiChatNamesKey() {
+      return 'gemini_chat_names_' + getGeminiUserScope();
+    }
+    function geminiLoadNames() {
+      try { return JSON.parse(localStorage.getItem(geminiChatNamesKey()) || '{}'); } catch(e){ return {}; }
+    }
+    function geminiSaveNames(names) {
+      localStorage.setItem(geminiChatNamesKey(), JSON.stringify(names));
+    }
+    function geminiGetName(tab) {
+      var names = geminiLoadNames();
+      return names['chat_' + tab] || ('Chat ' + tab);
+    }
+    function geminiSetName(tab, name) {
+      var names = geminiLoadNames();
+      names['chat_' + tab] = name;
+      geminiSaveNames(names);
+    }
 
     function geminiLoadChats() {
       try {
@@ -3565,25 +3723,31 @@
       if (!bar) return;
       bar.innerHTML = '';
       for (var i = 1; i <= geminiChatCount; i++) {
-        var btn = document.createElement('button');
-        btn.className = 'tab-btn' + (i === geminiActiveTab ? ' active' : '');
-        btn.textContent = 'Chat ' + i;
-        btn.onclick = function(n) { return function() { geminiSwitchTab(n); }; }(i);
-        bar.appendChild(btn);
-      }
-      if (geminiChatCount < geminiMaxTabs) {
-        var plus = document.createElement('button');
-        plus.className = 'tab-btn';
-        plus.innerHTML = '<i class="fa-solid fa-plus"></i>';
-        plus.onclick = function() {
-          if (geminiChatCount >= geminiMaxTabs) return;
-          geminiChatCount++;
-          geminiActiveTab = geminiChatCount;
-          geminiSetChat(geminiActiveTab, []);
-          geminiRenderTabs();
-          geminiLoadChat(geminiActiveTab);
-        };
-        bar.appendChild(plus);
+        (function(n){
+          var row = document.createElement('div');
+          row.className = 'gemini-sidebar-item' + (n === geminiActiveTab ? ' active' : '');
+          row.onclick = function(){ geminiSwitchTab(n); };
+          var label = document.createElement('span');
+          label.textContent = geminiGetName(n);
+          row.appendChild(label);
+          var dots = document.createElement('button');
+          dots.className = 'gemini-rename-btn';
+          dots.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+          dots.title = 'Renombrar';
+          dots.onclick = function(e){
+            e.stopPropagation();
+            var cur = geminiGetName(n);
+            var nuevo = prompt('Renombrar conversacion:', cur);
+            if (nuevo === null) return;
+            nuevo = nuevo.trim();
+            if (!nuevo) return;
+            if (nuevo.length > 30) nuevo = nuevo.slice(0,30);
+            geminiSetName(n, nuevo);
+            geminiRenderTabs();
+          };
+          row.appendChild(dots);
+          bar.appendChild(row);
+        })(i);
       }
     }
 
@@ -3601,7 +3765,7 @@
       msgs.forEach(function(msg) {
         var line = document.createElement('div');
         line.className = 'gemini-message gemini-' + msg.role;
-        line.textContent = (msg.role === 'user' ? 'You: ' : 'Gemini: ') + msg.text;
+        line.textContent = msg.text;
         history.appendChild(line);
       });
       history.scrollTop = history.scrollHeight;
@@ -3612,7 +3776,7 @@
       if (!history) return;
       var line = document.createElement('div');
       line.className = 'gemini-message gemini-' + role;
-      line.textContent = (role === 'user' ? 'You: ' : 'Gemini: ') + text;
+      line.textContent = text;
       history.appendChild(line);
       history.scrollTop = history.scrollHeight;
       var msgs = geminiGetChat(geminiActiveTab);
@@ -3627,9 +3791,23 @@
       geminiLoadChat(geminiActiveTab);
     };
 
+    document.getElementById('geminiSidebarToggle')?.addEventListener('click', function() {
+      document.getElementById('geminiSidebar')?.classList.toggle('open');
+    });
+    document.getElementById('geminiNewChatBtn')?.addEventListener('click', function() {
+      if (geminiChatCount >= geminiMaxTabs) return window.showPlanPopup('Maximo 5 conversaciones.');
+      geminiChatCount++;
+      geminiActiveTab = geminiChatCount;
+      geminiSetChat(geminiActiveTab, []);
+      geminiSetName(geminiActiveTab, 'Chat ' + geminiActiveTab);
+      document.getElementById('geminiSidebar')?.classList.add('open');
+      geminiRenderTabs();
+      geminiLoadChat(geminiActiveTab);
+    });
     document.getElementById('geminiKeyIcon')?.addEventListener('click', function() {
+      document.getElementById('geminiSidebar')?.classList.add('open');
       var row = document.getElementById('geminiKeyRow');
-      if (row) row.classList.toggle('hidden');
+      if (row) row.classList.remove('hidden');
     });
 
     document.getElementById('saveGeminiKeyBtn')?.addEventListener('click', async function() {
