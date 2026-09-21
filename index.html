@@ -3680,7 +3680,7 @@
         return { role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] };
       });
 
-      fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+      fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + encodeURIComponent(apiKey), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] }, contents: contents })
