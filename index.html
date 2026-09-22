@@ -3286,31 +3286,26 @@
     // =========================================================
     // --- MUSIC PLAYER SAVED PROGRESS LOADER (GLOBAL) ---
     // =========================================================
-    window._musicRestored = false;
     window.loadSavedMusic = function() {
       if (!auth.currentUser) return;
-      if (window._musicRestored) return;
-      window._musicRestored = true;
       try {
         var saved = localStorage.getItem(storageKeyForUser('danifu_music_progress_'));
         var data = null;
         if (saved) {
           try { data = JSON.parse(saved); } catch (e) { data = null; }
         }
-        if (data && data.videoId && window.player) {
-          setTimeout(function() {
-            try {
-              window.player.cuePlaylist({
-                listType: 'playlist',
-                list: playlistId,
-                index: data.index || 0,
-                startSeconds: data.time || 0
-              });
-              setTimeout(updateSongDisplay, 800);
-            } catch (e) {
-              console.error('Error cargando msica guardada:', e);
-            }
-          }, 1500);
+        if (data && data.index !== undefined && window.player) {
+          try {
+            window.player.cuePlaylist({
+              listType: 'playlist',
+              list: playlistId,
+              index: data.index || 0,
+              startSeconds: data.time || 0
+            });
+            setTimeout(updateSongDisplay, 800);
+          } catch (e) {
+            console.error('Error cargando msica guardada:', e);
+          }
         }
         if (window.isPremiumPlan && window.isPremiumPlan()) {
           window.loadDominonMusicCloud && window.loadDominonMusicCloud();
@@ -3970,6 +3965,13 @@
       if (volSlider) volSlider.value = savedVolume;
 
       window.youtubePlayerReady = true;
+
+      window.player.cuePlaylist({
+        listType: 'playlist',
+        list: playlistId,
+        index: 0,
+        startSeconds: 0
+      });
 
       setTimeout(updateSongDisplay, 1000);
 
