@@ -4160,50 +4160,57 @@
       }
     };
 
+    window._navLock = 0;
     window.nextVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
+      var now = Date.now();
+      if (now - window._navLock < 800) return;
+      window._navLock = now;
       try {
-        var now = Date.now();
-        if (window._nextLock && now - window._nextLock < 900) return;
-        window._nextLock = now;
-        window.player.nextVideo();
-        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 350);
-        setTimeout(updateSongDisplay, 900);
-        setTimeout(updateSongDisplay, 1900);
-      } catch(err) {
-        console.error('Error en nextVideo:', err);
-      }
+        var idx = -1, list = null;
+        try { idx = window.player.getPlaylistIndex(); } catch(e){}
+        try { list = window.player.getPlaylist(); } catch(e){}
+        if (idx >= 0 && list && window.player.playVideoAt) {
+          var next = idx + 1;
+          if (next < list.length) { window.player.playVideoAt(next); }
+          else if (repeatMode === 1 && list.length) { window.player.playVideoAt(0); }
+          else { window.player.nextVideo(); }
+        } else {
+          window.player.nextVideo();
+        }
+        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
+        setTimeout(updateSongDisplay, 700);
+        setTimeout(updateSongDisplay, 1600);
+      } catch(err) { console.error('Error en nextVideo:', err); }
     };
 
     window.prevVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
+      var now = Date.now();
+      if (now - window._navLock < 800) return;
+      window._navLock = now;
       try {
-        var now = Date.now();
-        if (window._prevLock && now - window._prevLock < 900) return;
-        window._prevLock = now;
         var cur = 0;
-        try { cur = window.player.getCurrentTime ? window.player.getCurrentTime() : 0; } catch(e){}
+        try { cur = window.player.getCurrentTime(); } catch(e){}
         if (cur > 3) {
           window.player.seekTo(0, true);
-          window.player.playVideo();
-          setTimeout(updateSongDisplay, 800);
+          try{ window.player.playVideo(); }catch(e){}
+          setTimeout(updateSongDisplay, 600);
           return;
         }
-        var idx = -1;
-        try { idx = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : -1; } catch(e){}
-        if (idx <= 0) {
-          window.player.seekTo(0, true);
-          window.player.playVideo();
-          setTimeout(updateSongDisplay, 800);
-          return;
+        var idx = -1, list = null;
+        try { idx = window.player.getPlaylistIndex(); } catch(e){}
+        try { list = window.player.getPlaylist(); } catch(e){}
+        if (idx >= 0 && list && window.player.playVideoAt) {
+          if (idx > 0) { window.player.playVideoAt(idx - 1); }
+          else { window.player.seekTo(0, true); try{ window.player.playVideo(); }catch(e){} }
+        } else {
+          window.player.previousVideo();
         }
-        window.player.previousVideo();
-        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 350);
-        setTimeout(updateSongDisplay, 900);
-        setTimeout(updateSongDisplay, 1900);
-      } catch(err) {
-        console.error('Error en prevVideo:', err);
-      }
+        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
+        setTimeout(updateSongDisplay, 700);
+        setTimeout(updateSongDisplay, 1600);
+      } catch(err) { console.error('Error en prevVideo:', err); }
     };
 
     window.seekVideo = function(time) {
