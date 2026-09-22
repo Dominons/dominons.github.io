@@ -3935,17 +3935,22 @@
       return 'danifu_repeat_' + (window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest');
     }
 
+    window._manualNavUntil = 0;
     function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
       window.player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
+        height: '180',
+        width: '320',
         playerVars: {
           'listType': 'playlist',
           'list': playlistId,
           'autoplay': 0,
           'controls': 0,
           'fs': 0,
+          'iv_load_policy': 3,
+          'rel': 0,
+          'playsinline': 1,
+          'origin': location.origin,
           'index': 0
         },
         events: {
@@ -4121,8 +4126,8 @@
         } catch(e) {}
       }
 
-      // Repeticin: detecta fin de cancin y la rearma segn el modo
-      if (repeatMode > 0 && window.player && window.player.getCurrentTime && window.player.getDuration) {
+      // Repeticin: detecta fin de cancin y la rearma segn el modo (pausado 2s tras skip manual)
+      if (Date.now() > (window._manualNavUntil || 0) && repeatMode > 0 && window.player && window.player.getCurrentTime && window.player.getDuration) {
         try {
           if (window.player.getPlayerState() === 1) {
             var c = window.player.getCurrentTime();
@@ -4135,7 +4140,7 @@
                 var pl = window.player.getPlaylist ? window.player.getPlaylist() : [];
                 var pi = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
                 if (pl && pi >= 0 && pi < pl.length - 1) {
-                  window.player.nextVideo();
+                  window.player.playVideoAt ? window.player.playVideoAt(pi+1) : window.player.nextVideo();
                 } else if (pl && pl.length) {
                   window.player.playVideoAt ? window.player.playVideoAt(0) : window.player.seekTo(0);
                 }
@@ -4161,11 +4166,26 @@
     };
 
     window._navLock = 0;
+    function _forcePlayRetry() {
+      setTimeout(function(){
+        try {
+          var st = window.player.getPlayerState();
+          if (st !== 1) window.player.playVideo();
+        } catch(e){}
+      }, 1800);
+      setTimeout(function(){
+        try {
+          var st = window.player.getPlayerState();
+          if (st === 3) { window.player.playVideo(); }
+        } catch(e){}
+      }, 3200);
+    }
     window.nextVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
       var now = Date.now();
       if (now - window._navLock < 800) return;
       window._navLock = now;
+      window._manualNavUntil = now + 2500;
       try {
         var idx = -1, list = null;
         try { idx = window.player.getPlaylistIndex(); } catch(e){}
@@ -4179,6 +4199,7 @@
           window.player.nextVideo();
         }
         setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
+        _forcePlayRetry();
         setTimeout(updateSongDisplay, 700);
         setTimeout(updateSongDisplay, 1600);
       } catch(err) { console.error('Error en nextVideo:', err); }
@@ -4189,6 +4210,7 @@
       var now = Date.now();
       if (now - window._navLock < 800) return;
       window._navLock = now;
+      window._manualNavUntil = now + 2500;
       try {
         var cur = 0;
         try { cur = window.player.getCurrentTime(); } catch(e){}
@@ -4208,6 +4230,7 @@
           window.player.previousVideo();
         }
         setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
+        _forcePlayRetry();
         setTimeout(updateSongDisplay, 700);
         setTimeout(updateSongDisplay, 1600);
       } catch(err) { console.error('Error en prevVideo:', err); }
