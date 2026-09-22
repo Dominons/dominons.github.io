@@ -3939,18 +3939,14 @@
     function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
       window.player = new YT.Player('youtube-player', {
-        height: '180',
-        width: '320',
+        height: '1',
+        width: '1',
         playerVars: {
           'listType': 'playlist',
           'list': playlistId,
           'autoplay': 0,
           'controls': 0,
           'fs': 0,
-          'iv_load_policy': 3,
-          'rel': 0,
-          'playsinline': 1,
-          'origin': location.origin,
           'index': 0
         },
         events: {
