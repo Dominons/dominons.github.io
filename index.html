@@ -3286,32 +3286,25 @@
     // =========================================================
     // --- MUSIC PLAYER SAVED PROGRESS LOADER (GLOBAL) ---
     // =========================================================
+    // Solo LEE y devuelve el progreso guardado {index, time}. No toca el player.
     window.loadSavedMusic = function() {
-      if (!auth.currentUser) return;
+      if (!auth.currentUser) return null;
       try {
+        if (window.isPremiumPlan && window.isPremiumPlan()) {
+          window.loadDominonMusicCloud && window.loadDominonMusicCloud();
+        }
         var saved = localStorage.getItem(storageKeyForUser('danifu_music_progress_'));
         var data = null;
         if (saved) {
           try { data = JSON.parse(saved); } catch (e) { data = null; }
         }
-        if (data && data.index !== undefined && window.player) {
-          try {
-            window.player.cuePlaylist({
-              listType: 'playlist',
-              list: playlistId,
-              index: data.index || 0,
-              startSeconds: data.time || 0
-            });
-            setTimeout(updateSongDisplay, 800);
-          } catch (e) {
-            console.error('Error cargando msica guardada:', e);
-          }
+        if (data && data.index !== undefined) {
+          return { index: data.index || 0, time: data.time || 0 };
         }
-        if (window.isPremiumPlan && window.isPremiumPlan()) {
-          window.loadDominonMusicCloud && window.loadDominonMusicCloud();
-        }
+        return null;
       } catch (e) {
         console.error('Error cargando progreso de msica:', e);
+        return null;
       }
     };
 
@@ -3327,7 +3320,7 @@
 
         window.applyMembershipPlan(await detectUserPlan(user));
         window.loadNote(window.activeTab);
-        window.loadSavedMusic();
+        if (window.maybeInitializeMusic) window.maybeInitializeMusic();
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
         // sesión, así que aquí se asegura que cada usuario vea su propio proyecto.
@@ -3906,7 +3899,6 @@
   </script>
 
   <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     // =========================================================
     // --- MUSIC PLAYER CONTROLLER (LOCAL SAVE FOR EXTENDED/PREMIUM) ---
@@ -3915,6 +3907,7 @@
     window.player = null;
     window.playerCommands = [];
     var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
+    var musicPlaylistInitialized = false;
 
     window.executeWhenPlayerReady = function(command) {
       if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
@@ -3934,6 +3927,11 @@
     }
 
     function onYouTubeIframeAPIReady() {
+      if (!document.getElementById('youtube-player')) {
+        console.error('Error del player: elemento #youtube-player no existe.');
+        return;
+      }
+      if (window.player) return;
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
       window.player = new YT.Player('youtube-player', {
         height: '1',
@@ -3950,13 +3948,40 @@
           'onReady': onPlayerReady,
           'onStateChange': onPlayerStateChange,
           'onError': function(e) {
-             console.error('Error del player:', e.data);
+             var codes = {2:'parametro invalido', 5:'error HTML5', 100:'video no encontrado/privado', 101:'propietario bloquea embed', 150:'propietario bloquea embed'};
+             console.error('Error del player:', e.data, codes[e.data] || '');
           }
         }
       });
     }
-    // Exponer la inicializacin globalmente para YouTube iframe API
+    // Exponer la inicializacin globalmente para YouTube iframe API (definido ANTES de cargar iframe_api)
     window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+    // UNICA inicializacion de playlist: cuePlaylist se ejecuta UNA sola vez aqui.
+    function maybeInitializeMusic() {
+      if (musicPlaylistInitialized) return true;
+      if (!window.youtubePlayerReady || !window.player) return false;
+      var idx = 0, t = 0;
+      try {
+        var s = (window.loadSavedMusic ? window.loadSavedMusic() : null);
+        if (s) { idx = s.index || 0; t = s.time || 0; }
+      } catch (e) {}
+      try {
+        window.player.cuePlaylist({
+          listType: 'playlist',
+          list: playlistId,
+          index: idx,
+          startSeconds: t
+        });
+        musicPlaylistInitialized = true;
+        setTimeout(updateSongDisplay, 400);
+        return true;
+      } catch (e) {
+        console.error('Error inicializando playlist:', e);
+        return false;
+      }
+    }
+    window.maybeInitializeMusic = maybeInitializeMusic;
 
     function onPlayerReady(event) {
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
@@ -3966,15 +3991,6 @@
 
       window.youtubePlayerReady = true;
 
-      window.player.cuePlaylist({
-        listType: 'playlist',
-        list: playlistId,
-        index: 0,
-        startSeconds: 0
-      });
-
-      setTimeout(updateSongDisplay, 1000);
-
       while (window.playerCommands.length > 0) {
         var cmd = window.playerCommands.shift();
         if (window.player && window.player[cmd.fn]) {
@@ -3982,9 +3998,7 @@
         }
       }
 
-      if (window.loadSavedMusic) {
-        window.loadSavedMusic();
-      }
+      maybeInitializeMusic();
       repeatMode = repeatStateFromStorage();
       updateRepeatButton();
     }
@@ -4007,6 +4021,15 @@
       if (event.data === YT.PlayerState.PLAYING) {
         if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
         updateSongDisplay();
+        setTimeout(function() {
+          try {
+            var vd = window.player.getVideoData();
+            var t = (vd && vd.title) ? vd.title : '';
+            if (t && _elSongTitle && (!_elSongTitle.textContent || _elSongTitle.textContent === 'Listo para Play')) {
+              _elSongTitle.textContent = t;
+            }
+          } catch (e) {}
+        }, 400);
       } else if (event.data === YT.PlayerState.ENDED) {
         if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
         if (!window.player) return;
@@ -4024,9 +4047,10 @@
             }
           } catch (e) {}
         }
-      } else {
+      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.UNSTARTED || event.data === YT.PlayerState.CUED) {
         if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
       }
+      // BUFFERING (3): se mantiene el estado visual actual, sin cambios.
     }
 
     function updateRepeatButton() {
@@ -4121,32 +4145,35 @@
     }, 1000);
 
     window.playPauseVideo = function() {
-      if (window.youtubePlayerReady && window.player) {
-        var state = window.player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-          window.player.pauseVideo();
-        } else {
-          window.player.playVideo();
-        }
+      if (!window.youtubePlayerReady || !window.player) return;
+      if (!musicPlaylistInitialized) {
+        if (!maybeInitializeMusic()) return;
+        window.player.playVideo();
+        return;
+      }
+      var state = window.player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        window.player.pauseVideo();
+      } else {
+        window.player.playVideo();
       }
     };
 
     window._navLock = 0;
     window.nextVideo = function() {
-      if (!window.youtubePlayerReady || !window.player) return;
+      if (!window.youtubePlayerReady || !window.player || !musicPlaylistInitialized) return;
       var now = Date.now();
-      if (now - window._navLock < 1000) return;
+      if (now - window._navLock < 300) return;
       window._navLock = now;
       try {
         window.player.nextVideo();
-        setTimeout(updateSongDisplay, 1200);
       } catch(err) { console.error('Error en nextVideo:', err); }
     };
 
     window.prevVideo = function() {
-      if (!window.youtubePlayerReady || !window.player) return;
+      if (!window.youtubePlayerReady || !window.player || !musicPlaylistInitialized) return;
       var now = Date.now();
-      if (now - window._navLock < 1000) return;
+      if (now - window._navLock < 300) return;
       window._navLock = now;
       try {
         var cur = 0;
@@ -4156,7 +4183,6 @@
           return;
         }
         window.player.previousVideo();
-        setTimeout(updateSongDisplay, 1200);
       } catch(err) { console.error('Error en prevVideo:', err); }
     };
 
@@ -4266,7 +4292,13 @@
         });
       }
     });
+
+    // Si la API de YouTube ya estaba cacheada/cargada, inicializar directo.
+    if (window.YT && window.YT.Player && !window.player) {
+      try { onYouTubeIframeAPIReady(); } catch (e) { console.error('Error init YT cached:', e); }
+    }
   </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
   <script>
