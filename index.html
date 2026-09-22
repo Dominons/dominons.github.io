@@ -3286,8 +3286,11 @@
     // =========================================================
     // --- MUSIC PLAYER SAVED PROGRESS LOADER (GLOBAL) ---
     // =========================================================
+    window._musicRestored = false;
     window.loadSavedMusic = function() {
       if (!auth.currentUser) return;
+      if (window._musicRestored) return;
+      window._musicRestored = true;
       try {
         var saved = localStorage.getItem(storageKeyForUser('danifu_music_progress_'));
         var data = null;
@@ -3935,7 +3938,6 @@
       return 'danifu_repeat_' + (window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest');
     }
 
-    window._manualNavUntil = 0;
     function onYouTubeIframeAPIReady() {
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
       window.player = new YT.Player('youtube-player', {
@@ -3968,16 +3970,6 @@
       if (volSlider) volSlider.value = savedVolume;
 
       window.youtubePlayerReady = true;
-
-      var plist = window.player.getPlaylist();
-      if (!plist || plist.length === 0) {
-        window.player.cuePlaylist({
-          listType: 'playlist',
-          list: playlistId,
-          index: 0,
-          startSeconds: 0
-        });
-      }
 
       setTimeout(updateSongDisplay, 1000);
 
@@ -4114,7 +4106,7 @@
         } catch(e) {}
       }
 
-      if (_masterTick % 6 === 0 && window.player && window.player.getVideoData) {
+      if (_masterTick % 10 === 0 && window.player && window.player.getVideoData) {
         try {
           var videoData = window.player.getVideoData();
           var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
@@ -4122,33 +4114,9 @@
         } catch(e) {}
       }
 
-      // Repeticin: detecta fin de cancin y la rearma segn el modo (pausado 2s tras skip manual)
-      if (Date.now() > (window._manualNavUntil || 0) && repeatMode > 0 && window.player && window.player.getCurrentTime && window.player.getDuration) {
-        try {
-          if (window.player.getPlayerState() === 1) {
-            var c = window.player.getCurrentTime();
-            var d = window.player.getDuration();
-            if (d > 0 && c >= d - 1) {
-              if (repeatMode === 2) {
-                window.player.seekTo(0);
-                window.player.playVideo();
-              } else if (repeatMode === 1) {
-                var pl = window.player.getPlaylist ? window.player.getPlaylist() : [];
-                var pi = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
-                if (pl && pi >= 0 && pi < pl.length - 1) {
-                  window.player.playVideoAt ? window.player.playVideoAt(pi+1) : window.player.nextVideo();
-                } else if (pl && pl.length) {
-                  window.player.playVideoAt ? window.player.playVideoAt(0) : window.player.seekTo(0);
-                }
-              }
-            }
-          }
-        } catch(e) {}
-      }
-
       if (_masterTick >= 600) _masterTick = 0;
 
-    }, 500);
+    }, 1000);
 
     window.playPauseVideo = function() {
       if (window.youtubePlayerReady && window.player) {
@@ -4162,73 +4130,31 @@
     };
 
     window._navLock = 0;
-    function _forcePlayRetry() {
-      setTimeout(function(){
-        try {
-          var st = window.player.getPlayerState();
-          if (st !== 1) window.player.playVideo();
-        } catch(e){}
-      }, 1800);
-      setTimeout(function(){
-        try {
-          var st = window.player.getPlayerState();
-          if (st === 3) { window.player.playVideo(); }
-        } catch(e){}
-      }, 3200);
-    }
     window.nextVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
       var now = Date.now();
-      if (now - window._navLock < 800) return;
+      if (now - window._navLock < 1000) return;
       window._navLock = now;
-      window._manualNavUntil = now + 2500;
       try {
-        var idx = -1, list = null;
-        try { idx = window.player.getPlaylistIndex(); } catch(e){}
-        try { list = window.player.getPlaylist(); } catch(e){}
-        if (idx >= 0 && list && window.player.playVideoAt) {
-          var next = idx + 1;
-          if (next < list.length) { window.player.playVideoAt(next); }
-          else if (repeatMode === 1 && list.length) { window.player.playVideoAt(0); }
-          else { window.player.nextVideo(); }
-        } else {
-          window.player.nextVideo();
-        }
-        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
-        _forcePlayRetry();
-        setTimeout(updateSongDisplay, 700);
-        setTimeout(updateSongDisplay, 1600);
+        window.player.nextVideo();
+        setTimeout(updateSongDisplay, 1200);
       } catch(err) { console.error('Error en nextVideo:', err); }
     };
 
     window.prevVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
       var now = Date.now();
-      if (now - window._navLock < 800) return;
+      if (now - window._navLock < 1000) return;
       window._navLock = now;
-      window._manualNavUntil = now + 2500;
       try {
         var cur = 0;
         try { cur = window.player.getCurrentTime(); } catch(e){}
         if (cur > 3) {
           window.player.seekTo(0, true);
-          try{ window.player.playVideo(); }catch(e){}
-          setTimeout(updateSongDisplay, 600);
           return;
         }
-        var idx = -1, list = null;
-        try { idx = window.player.getPlaylistIndex(); } catch(e){}
-        try { list = window.player.getPlaylist(); } catch(e){}
-        if (idx >= 0 && list && window.player.playVideoAt) {
-          if (idx > 0) { window.player.playVideoAt(idx - 1); }
-          else { window.player.seekTo(0, true); try{ window.player.playVideo(); }catch(e){} }
-        } else {
-          window.player.previousVideo();
-        }
-        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 250);
-        _forcePlayRetry();
-        setTimeout(updateSongDisplay, 700);
-        setTimeout(updateSongDisplay, 1600);
+        window.player.previousVideo();
+        setTimeout(updateSongDisplay, 1200);
       } catch(err) { console.error('Error en prevVideo:', err); }
     };
 
