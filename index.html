@@ -2356,8 +2356,12 @@
             </aside>
             <div class="gemini-main">
               <div class="gemini-topbar">
-                <button id="geminiSidebarToggle" class="gemini-sidebar-toggle" title="Mostrar conversaciones"><i class="fa-solid fa-bars"></i></button>
-                <span class="gemini-topbar-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--color-highlight)"></i> Gemini</span>
+                <button id="geminiSidebarToggle" class="gemini-sidebar-toggle" title="Conversaciones" style="background:none;border:none;padding:4px;cursor:pointer;display:grid;place-items:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini">
+                    <defs><linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A8CFF"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs>
+                    <path d="M12 0L13.9 8.1L22 12L13.9 15.9L12 24L10.1 15.9L2 12L10.1 8.1Z" fill="url(#geminiGrad)"/>
+                  </svg>
+                </button>
               </div>
               <div class="gemini-history" id="geminiChatHistory"></div>
               <div class="gemini-settings">
@@ -4159,8 +4163,13 @@
     window.nextVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
       try {
+        var now = Date.now();
+        if (window._nextLock && now - window._nextLock < 900) return;
+        window._nextLock = now;
         window.player.nextVideo();
-        setTimeout(updateSongDisplay, 1000);
+        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 350);
+        setTimeout(updateSongDisplay, 900);
+        setTimeout(updateSongDisplay, 1900);
       } catch(err) {
         console.error('Error en nextVideo:', err);
       }
@@ -4169,8 +4178,29 @@
     window.prevVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
       try {
+        var now = Date.now();
+        if (window._prevLock && now - window._prevLock < 900) return;
+        window._prevLock = now;
+        var cur = 0;
+        try { cur = window.player.getCurrentTime ? window.player.getCurrentTime() : 0; } catch(e){}
+        if (cur > 3) {
+          window.player.seekTo(0, true);
+          window.player.playVideo();
+          setTimeout(updateSongDisplay, 800);
+          return;
+        }
+        var idx = -1;
+        try { idx = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : -1; } catch(e){}
+        if (idx <= 0) {
+          window.player.seekTo(0, true);
+          window.player.playVideo();
+          setTimeout(updateSongDisplay, 800);
+          return;
+        }
         window.player.previousVideo();
-        setTimeout(updateSongDisplay, 1000);
+        setTimeout(function(){ try{ window.player.playVideo(); }catch(e){} }, 350);
+        setTimeout(updateSongDisplay, 900);
+        setTimeout(updateSongDisplay, 1900);
       } catch(err) {
         console.error('Error en prevVideo:', err);
       }
