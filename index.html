@@ -3060,6 +3060,7 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app-check.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDOuLA7meYcSX7zpxHl6sA8eDGS21QD0CY",
@@ -3078,6 +3079,12 @@
     const db = getFirestore(app);
     const rtdb = getDatabase(app);
     const provider = new GoogleAuthProvider();
+
+    // --- Firebase App Check (reCAPTCHA Enterprise) ---
+    const appCheck = initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider("6LfNfdItAAAAADL3xJz5rm-vlEqMqtggXnOoWXXJ"),
+      isTokenAutoRefreshEnabled: true
+    });
 
     // Exportar instancias de bases de datos y auth al contexto de window
     window.db = db;
