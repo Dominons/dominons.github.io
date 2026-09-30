@@ -954,6 +954,41 @@
       cursor: pointer;
       font-weight: 800;
     }
+    #perf-panel {
+      position: fixed;
+      top: 58px;
+      right: 214px;
+      width: 238px;
+      display: none;
+      z-index: 99991;
+      background: #111318;
+      border: 1px solid rgba(168,85,247,0.34);
+      border-radius: 8px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+      padding: 12px;
+      color: #e4e4e7;
+      font-size: 12px;
+    }
+    #perf-panel.open { display: block; }
+    .perf-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: #a855f7;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .perf-title button { background: none; border: none; color: #71717a; cursor: pointer; font-size: 12px; }
+    .perf-est { color: #71717a; font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .perf-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1f1f26; }
+    .perf-row b { color: #fff; }
+    .perf-toggles { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .perf-toggles label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .perf-toggles input { accent-color: #A855F7; }
+    html.perf-no-anim *, html.perf-no-anim *::before, html.perf-no-anim *::after { animation: none !important; transition: none !important; }
     .notepad-actions {
       display: flex;
       gap: 6px;
@@ -3003,6 +3038,26 @@
     <div class="config-row">
       <button class="language-toggle" id="dominonLangToggle" type="button">ES / EN</button>
     </div>
+    <p class="config-label">Monitor</p>
+    <div class="config-row">
+      <button class="language-toggle" id="perfToggleBtn" type="button"><i class="fa-solid fa-gauge-high"></i> Rendimiento</button>
+    </div>
+  </div>
+
+  <div id="perf-panel" aria-hidden="true">
+    <p class="perf-title"><span>Rendimiento <span class="perf-est">(estimación)</span></span><button id="perfCloseBtn" type="button" title="Cerrar">✕</button></p>
+    <div class="perf-row"><span>FPS</span><b id="perfFps">–</b></div>
+    <div class="perf-row"><span>Long tasks/s</span><b id="perfLt">–</b></div>
+    <div class="perf-row"><span>Bloqueo ms/s</span><b id="perfLtMs">–</b></div>
+    <div class="perf-row" id="perfMemRow"><span>Memoria JS</span><b id="perfMem">–</b></div>
+    <div class="perf-row"><span>TX/s Deep Flow</span><b id="perfTx">–</b></div>
+    <div class="perf-row"><span>Redibujos Quantis</span><b id="perfQ">–</b></div>
+    <div class="perf-toggles">
+      <label><input type="checkbox" id="perfTglFeed" checked> Feed Deep Flow</label>
+      <label><input type="checkbox" id="perfTglTx" checked> Txs simuladas</label>
+      <label><input type="checkbox" id="perfTglSound" checked> Sonido/radar</label>
+      <label><input type="checkbox" id="perfTglAnim" checked> Animaciones CSS</label>
+    </div>
   </div>
 
   <div id="quantis-config-dropdown" aria-hidden="true">
@@ -3319,6 +3374,19 @@
     // --- FIREBASE AUTH & PLAN DETECTION ---
     // =========================================================
     onAuthStateChanged(auth, async (user) => {
+      window.authReady = true;
+      try {
+        var _uid = user ? user.uid : 'guest';
+        if (window.musicInitUid !== null && window.musicInitUid !== _uid) {
+          window.musicPlaylistInitialized = false;
+          window.musicCloudChecked = false;
+          window.musicUserInteracted = false;
+          window._musicCloudLateApplied = false;
+          window._musicCloudWait = false;
+          if (window._musicCloudTimer) { try { clearTimeout(window._musicCloudTimer); } catch (e) {}           window._musicCloudTimer = null; }
+        }
+      } catch (e) {}
+      try { if (window.perfApplyToggles) window.perfApplyToggles(); } catch (e) {}
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
@@ -3327,7 +3395,7 @@
 
         window.applyMembershipPlan(await detectUserPlan(user));
         window.loadNote(window.activeTab);
-        if (window.maybeInitializeMusic) window.maybeInitializeMusic();
+        if (window.tryInitMusic) window.tryInitMusic();
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
         // sesión, así que aquí se asegura que cada usuario vea su propio proyecto.
@@ -3338,6 +3406,7 @@
         window.applyMembershipPlan('normal');
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
+        if (window.tryInitMusic) window.tryInitMusic();
       }
     });
 
@@ -3370,16 +3439,29 @@
 
     setInterval(() => {
        if (auth.currentUser && window.player) {
+          try {
+              var _st = -1;
+              try { _st = window.player.getPlayerState ? window.player.getPlayerState() : -1; } catch (e) { _st = -1; }
+              if (_st !== 1 && _st !== 2) return; // solo PLAYING o PAUSED: nunca unstarted/cued/buffering
+              var _vd0 = null;
+              try { _vd0 = window.player.getVideoData ? window.player.getVideoData() : null; } catch (e) { _vd0 = null; }
+              if (!_vd0 || !_vd0.video_id) return;
+          } catch (e) { return; }
           window.showCloudLoader('musicLoader');
           try {
               const currentTime = Math.floor(window.player.getCurrentTime());
               const videoData = window.player.getVideoData();
               const playlist = window.player.getPlaylist ? window.player.getPlaylist() : [];
-              const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : 0;
+              const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : -1;
+              var realIndex = (typeof playlistIndex === 'number' && playlistIndex >= 0) ? playlistIndex : -1;
+              if (realIndex < 0 && videoData && videoData.video_id && playlist && playlist.indexOf) {
+                 realIndex = playlist.indexOf(videoData.video_id);
+              }
+              if (!(realIndex >= 0)) return; // index dudoso: no sobrescribir progreso
               if (videoData && videoData.video_id) {
                  const payload = {
                     videoId: videoData.video_id,
-                    index: playlistIndex >= 0 ? playlistIndex : Math.max(0, playlist.indexOf(videoData.video_id)),
+                    index: realIndex,
                     time: currentTime,
                     timestamp: new Date().getTime()
                  };
@@ -3915,6 +3997,13 @@
     window.playerCommands = [];
     var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
     var musicPlaylistInitialized = false;
+    window.authReady = false;
+    window.musicCloudChecked = false;
+    window.musicUserInteracted = false;
+    window.musicInitUid = null;
+    window._musicCloudWait = false;
+    window._musicCloudTimer = null;
+    window._musicCloudLateApplied = false;
 
     window.executeWhenPlayerReady = function(command) {
       if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
@@ -3964,24 +4053,88 @@
     // Exponer la inicializacin globalmente para YouTube iframe API (definido ANTES de cargar iframe_api)
     window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
+    // Lee el progreso LOCAL sin tocar el player (guest y sesion).
+    function musicLocalProgress() {
+      try {
+        var k = (window.storageKeyForUser ? window.storageKeyForUser('danifu_music_progress_') : 'danifu_music_progress_guest');
+        var raw = localStorage.getItem(k);
+        if (!raw) return null;
+        var d = null;
+        try { d = JSON.parse(raw); } catch (e) { d = null; }
+        if (d && d.index !== undefined) return { index: d.index || 0, time: d.time || 0 };
+      } catch (e) {}
+      return null;
+    }
+
+    function musicCurrentUid() {
+      try {
+        return (window.auth && window.auth.currentUser) ? window.auth.currentUser.uid : 'guest';
+      } catch (e) { return 'guest'; }
+    }
+
+    function musicDoCue(idx, t) {
+      window.player.cuePlaylist({
+        listType: 'playlist',
+        list: playlistId,
+        index: idx || 0,
+        startSeconds: t || 0
+      });
+      musicPlaylistInitialized = true;
+      window.musicInitUid = musicCurrentUid();
+      setTimeout(updateSongDisplay, 400);
+    }
+
+    // Resolucion tardia de la nube: solo si el usuario aun no interactuo y el UID coincide.
+    function musicCloudDone() {
+      if (window._musicCloudTimer) { try { clearTimeout(window._musicCloudTimer); } catch (e) {} window._musicCloudTimer = null; }
+      window._musicCloudWait = false;
+      window.musicCloudChecked = true;
+      if (musicPlaylistInitialized) {
+        try {
+          if (!window.musicUserInteracted && !window._musicCloudLateApplied && musicCurrentUid() === window.musicInitUid && window.player) {
+            window._musicCloudLateApplied = true;
+            var s = musicLocalProgress();
+            if (s) {
+              window.player.cuePlaylist({ listType: 'playlist', list: playlistId, index: s.index || 0, startSeconds: s.time || 0 });
+              setTimeout(updateSongDisplay, 400);
+            }
+          }
+        } catch (e) {}
+        return;
+      }
+      maybeInitializeMusic();
+    }
+
     // UNICA inicializacion de playlist: cuePlaylist se ejecuta UNA sola vez aqui.
+    // Requiere player listo + auth resuelto. En Premium espera a la nube (max 2.5s).
     function maybeInitializeMusic() {
       if (musicPlaylistInitialized) return true;
       if (!window.youtubePlayerReady || !window.player) return false;
-      var idx = 0, t = 0;
+      if (!window.authReady) return false;
+      var premium = false;
+      try { premium = !!(window.isPremiumPlan && window.isPremiumPlan()); } catch (e) {}
+      if (premium && !window.musicCloudChecked) {
+        if (!window._musicCloudWait) {
+          window._musicCloudWait = true;
+          window._musicCloudTimer = setTimeout(function() {
+            window._musicCloudWait = false;
+            window.musicCloudChecked = true;
+            maybeInitializeMusic();
+          }, 2500);
+          try {
+            var r = (window.loadDominonMusicCloud ? window.loadDominonMusicCloud() : null);
+            if (r && typeof r.then === 'function') {
+              r.then(function() { musicCloudDone(); }, function() { musicCloudDone(); });
+            } else {
+              musicCloudDone();
+            }
+          } catch (e) { musicCloudDone(); }
+        }
+        return false;
+      }
       try {
-        var s = (window.loadSavedMusic ? window.loadSavedMusic() : null);
-        if (s) { idx = s.index || 0; t = s.time || 0; }
-      } catch (e) {}
-      try {
-        window.player.cuePlaylist({
-          listType: 'playlist',
-          list: playlistId,
-          index: idx,
-          startSeconds: t
-        });
-        musicPlaylistInitialized = true;
-        setTimeout(updateSongDisplay, 400);
+        var s = musicLocalProgress();
+        musicDoCue(s ? s.index : 0, s ? s.time : 0);
         return true;
       } catch (e) {
         console.error('Error inicializando playlist:', e);
@@ -3989,6 +4142,7 @@
       }
     }
     window.maybeInitializeMusic = maybeInitializeMusic;
+    window.tryInitMusic = function() { try { return maybeInitializeMusic(); } catch (e) { return false; } };
 
     function onPlayerReady(event) {
       var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
@@ -4153,6 +4307,7 @@
 
     window.playPauseVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
+      window.musicUserInteracted = true;
       if (!musicPlaylistInitialized) {
         if (!maybeInitializeMusic()) return;
         window.player.playVideo();
@@ -4172,6 +4327,7 @@
       var now = Date.now();
       if (now - window._navLock < 300) return;
       window._navLock = now;
+      window.musicUserInteracted = true;
       try {
         window.player.nextVideo();
       } catch(err) { console.error('Error en nextVideo:', err); }
@@ -4182,6 +4338,7 @@
       var now = Date.now();
       if (now - window._navLock < 300) return;
       window._navLock = now;
+      window.musicUserInteracted = true;
       try {
         var cur = 0;
         try { cur = window.player.getCurrentTime(); } catch(e){}
@@ -4195,6 +4352,7 @@
 
     window.seekVideo = function(time) {
       if (window.youtubePlayerReady && window.player) {
+        window.musicUserInteracted = true;
         window.player.seekTo(time, true);
       }
     };
@@ -4818,7 +4976,15 @@
     function handleLedgerClick(e){const h=e.target.closest('.hash-clickable');if(h){e.stopPropagation();const hash=h.getAttribute('data-copy-hash');if(!hash)return;copyToClipboard(hash).then(()=>{const o=h.textContent,oc=h.style.color;h.textContent=t('copied');h.style.color='#39FF14';setTimeout(()=>{h.textContent=o;h.style.color=oc},1000)});return}const r=e.target.closest('.row');if(!r)return;const tid=r.getAttribute('data-id'),sub=DOM.ledgerBody.querySelector('.submenu[data-sub-id="'+tid+'"]');if(!sub)return;playClickSound();if(STATE.openSubmenuEl===sub){sub.classList.remove('open');r.classList.remove('active');STATE.openSubmenuRow=null;STATE.openSubmenuEl=null}else{if(STATE.openSubmenuEl){STATE.openSubmenuEl.classList.remove('open');if(STATE.openSubmenuRow)STATE.openSubmenuRow.classList.remove('active')}sub.classList.add('open');r.classList.add('active');STATE.openSubmenuRow=r;STATE.openSubmenuEl=sub;setTimeout(()=>sub.scrollIntoView({block:'nearest',behavior:'instant'}),0)}}
     function connectObserver(){if(STATE.observer)STATE.observer.disconnect();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)return;STATE.observer=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){renderBatch();if(STATE.renderedCount>=STATE.visible.length||STATE.renderedCount>=MAX_VISIBLE)STATE.observer.disconnect()}},{root:DOM.ledgerBody,rootMargin:'0px 0px 100px 0px',threshold:0});STATE.observer.observe(DOM.scrollSentinel)}
 
-    function startTimerEngine(){setInterval(updateClock,1000);setInterval(updateDate,60000);setInterval(async()=>{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar();if(STATE.apiAlive){const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT)}},POLL_INTERVAL)}
+    window._dfTimers=window._dfTimers||{clock:null,date:null,price:null,tx:null};
+    window._dfPriceBusy=false;
+    window._perfTxCount=window._perfTxCount||0;
+    async function dfPriceTick(){if(window._dfPriceBusy)return;window._dfPriceBusy=true;try{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar()}finally{window._dfPriceBusy=false}}
+    function dfTxTick(){if(!STATE.apiAlive)return;try{const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT);window._perfTxCount+=nT.length}catch(e){}}
+    function perfSavedToggles(){try{var k=(window.storageKeyForUser?window.storageKeyForUser('danifu_perf_toggles_'):'danifu_perf_toggles_guest');var t=JSON.parse(localStorage.getItem(k)||'null');if(t&&typeof t==='object')return t}catch(e){}return null}
+    function startTimerEngine(){if(window._dfTimers.clock)return;window._dfTimers.clock=setInterval(updateClock,1000);window._dfTimers.date=setInterval(updateDate,60000);var t=null;try{t=perfSavedToggles()}catch(e){}if(!t||t.feed!==false)window._dfTimers.price=setInterval(dfPriceTick,POLL_INTERVAL);if(!t||t.tx!==false)window._dfTimers.tx=setInterval(dfTxTick,POLL_INTERVAL)}
+    function perfDfStart(which){if(which==='price'&&!window._dfTimers.price)window._dfTimers.price=setInterval(dfPriceTick,POLL_INTERVAL);if(which==='tx'&&!window._dfTimers.tx)window._dfTimers.tx=setInterval(dfTxTick,POLL_INTERVAL)}
+    function perfDfStop(which){if(which==='price'&&window._dfTimers.price){clearInterval(window._dfTimers.price);window._dfTimers.price=null}if(which==='tx'&&window._dfTimers.tx){clearInterval(window._dfTimers.tx);window._dfTimers.tx=null}}
 
     function initDeepFlow(){
       window.deepFlowSetLanguage=function(lang){STATE.lang=lang==='en'?'en':'es';applyLanguage();if(typeof window.applyGlobalStaticLanguage==='function')window.applyGlobalStaticLanguage()};
@@ -7070,6 +7236,147 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
           })(i);
         }
       }, true);
+    })();
+  </script>
+  <script>
+    // =========================================================
+    // --- MONITOR DE RENDIMIENTO (solo mide con panel abierto) ---
+    // =========================================================
+    (function() {
+      var open = false, rafId = 0, frames = 0, secTimer = null;
+      var ltObs = null, ltN = 0, ltMs = 0, t0 = 0, tx0 = 0, q0 = 0;
+      function el(id) { return document.getElementById(id); }
+      function tglKey() {
+        try { return (window.storageKeyForUser ? window.storageKeyForUser('danifu_perf_toggles_') : 'danifu_perf_toggles_guest'); }
+        catch (e) { return 'danifu_perf_toggles_guest'; }
+      }
+      function loadToggles() {
+        var d = { feed: true, tx: true, sound: true, anim: true };
+        try {
+          var s = JSON.parse(localStorage.getItem(tglKey()) || 'null');
+          if (s && typeof s === 'object') {
+            if (typeof s.feed === 'boolean') d.feed = s.feed;
+            if (typeof s.tx === 'boolean') d.tx = s.tx;
+            if (typeof s.sound === 'boolean') d.sound = s.sound;
+            if (typeof s.anim === 'boolean') d.anim = s.anim;
+          }
+        } catch (e) {}
+        return d;
+      }
+      function applyToggles() {
+        var t = loadToggles();
+        try {
+          if (t.feed) { if (typeof perfDfStart === 'function') perfDfStart('price'); }
+          else { if (typeof perfDfStop === 'function') perfDfStop('price'); }
+          if (t.tx) { if (typeof perfDfStart === 'function') perfDfStart('tx'); }
+          else { if (typeof perfDfStop === 'function') perfDfStop('tx'); }
+        } catch (e) {}
+        try { if (typeof STATE !== 'undefined') STATE.soundEnabled = !!t.sound; } catch (e) {}
+        try { document.documentElement.classList.toggle('perf-no-anim', !t.anim); } catch (e) {}
+        var f = el('perfTglFeed'), x = el('perfTglTx'), s = el('perfTglSound'), a = el('perfTglAnim');
+        if (f) f.checked = !!t.feed;
+        if (x) x.checked = !!t.tx;
+        if (s) s.checked = !!t.sound;
+        if (a) a.checked = !!t.anim;
+      }
+      window.perfApplyToggles = applyToggles;
+      function wrapQuantis() {
+        try {
+          if (typeof qLoadPage === 'function' && !qLoadPage._perfWrapped) {
+            var _o = qLoadPage;
+            var _w = function() {
+              window._perfQCount = (window._perfQCount || 0) + 1;
+              return _o.apply(this, arguments);
+            };
+            _w._perfWrapped = true;
+            qLoadPage = _w;
+          }
+        } catch (e) {}
+      }
+      function tick() {
+        frames++;
+      }
+      function loop() {
+        if (!open) return;
+        tick();
+        rafId = requestAnimationFrame(loop);
+      }
+      function openPanel() {
+        if (open) return;
+        open = true;
+        wrapQuantis();
+        var p = el('perf-panel');
+        if (p) { p.classList.add('open'); p.setAttribute('aria-hidden', 'false'); }
+        frames = 0; ltN = 0; ltMs = 0; t0 = Date.now();
+        tx0 = window._perfTxCount || 0; q0 = window._perfQCount || 0;
+        try {
+          if (typeof PerformanceObserver !== 'undefined') {
+            ltObs = new PerformanceObserver(function(list) {
+              try {
+                var es = list.getEntries();
+                for (var i = 0; i < es.length; i++) { ltN++; ltMs += es[i].duration || 0; }
+              } catch (e) {}
+            });
+            ltObs.observe({ entryTypes: ['longtask'] });
+          }
+        } catch (e) { ltObs = null; }
+        try {
+          if (el('perfMemRow') && !(window.performance && window.performance.memory)) el('perfMemRow').style.display = 'none';
+        } catch (e) {}
+        rafId = requestAnimationFrame(loop);
+        secTimer = setInterval(function() {
+          var now = Date.now(), dt = Math.max(1, (now - t0) / 1000);
+          var fps = el('perfFps'), lt = el('perfLt'), ltm = el('perfLtMs');
+          if (fps) fps.textContent = Math.round(frames / dt);
+          if (lt) lt.textContent = ltN;
+          if (ltm) ltm.textContent = Math.round(ltMs);
+          frames = 0; ltN = 0; ltMs = 0; t0 = now;
+          try {
+            var m = el('perfMem');
+            if (m && window.performance && window.performance.memory) {
+              m.textContent = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(1) + ' MB';
+            }
+          } catch (e) {}
+          try {
+            var tx = el('perfTx');
+            if (tx) tx.textContent = (((window._perfTxCount || 0) - tx0) / dt).toFixed(1);
+            var q = el('perfQ');
+            if (q) q.textContent = ((window._perfQCount || 0) - q0) + ' total';
+          } catch (e) {}
+        }, 1000);
+      }
+      function closePanel() {
+        if (!open) return;
+        open = false;
+        try { cancelAnimationFrame(rafId); } catch (e) {}
+        try { if (secTimer) clearInterval(secTimer); } catch (e) {}
+        secTimer = null;
+        try { if (ltObs) ltObs.disconnect(); } catch (e) {}
+        ltObs = null;
+        var p = el('perf-panel');
+        if (p) { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); }
+      }
+      function bindToggle(id, key) {
+        var c = el(id);
+        if (!c) return;
+        c.addEventListener('change', function() {
+          var t = loadToggles();
+          t[key] = !!c.checked;
+          try { localStorage.setItem(tglKey(), JSON.stringify(t)); } catch (e) {}
+          applyToggles();
+        });
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        applyToggles();
+        var b = el('perfToggleBtn');
+        if (b) b.addEventListener('click', function(e) { e.stopPropagation(); open ? closePanel() : openPanel(); });
+        var c = el('perfCloseBtn');
+        if (c) c.addEventListener('click', function() { closePanel(); });
+        bindToggle('perfTglFeed', 'feed');
+        bindToggle('perfTglTx', 'tx');
+        bindToggle('perfTglSound', 'sound');
+        bindToggle('perfTglAnim', 'anim');
+      });
     })();
   </script>
 </body>
