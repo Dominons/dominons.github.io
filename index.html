@@ -985,6 +985,13 @@
     .perf-est { color: #71717a; font-weight: 400; letter-spacing: 0; text-transform: none; }
     .perf-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1f1f26; }
     .perf-row b { color: #fff; }
+    .perf-sub { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #71717a; margin: 2px 0 6px; text-transform: uppercase; }
+    .perf-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 6px; }
+    .perf-table th { text-align: left; font-size: 10px; color: #71717a; font-weight: 800; padding: 2px 4px 4px 0; border-bottom: 1px solid #2a2a33; }
+    .perf-table th:nth-child(2), .perf-table th:nth-child(3) { text-align: right; }
+    .perf-table td { padding: 2px 4px 2px 0; border-bottom: 1px solid #1f1f26; color: #e4e4e7; }
+    .perf-table td:nth-child(2), .perf-table td:nth-child(3) { text-align: right; color: #fff; font-variant-numeric: tabular-nums; }
+    .perf-conclusion { font-size: 11px; color: #c4b5fd; padding: 6px 0; line-height: 1.45; }
     .perf-toggles { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
     .perf-toggles label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .perf-toggles input { accent-color: #A855F7; }
@@ -3046,12 +3053,10 @@
 
   <div id="perf-panel" aria-hidden="true">
     <p class="perf-title"><span>Rendimiento <span class="perf-est">(estimación)</span></span><button id="perfCloseBtn" type="button" title="Cerrar">✕</button></p>
-    <div class="perf-row"><span>FPS</span><b id="perfFps">–</b></div>
-    <div class="perf-row"><span>Long tasks/s</span><b id="perfLt">–</b></div>
-    <div class="perf-row"><span>Bloqueo ms/s</span><b id="perfLtMs">–</b></div>
-    <div class="perf-row" id="perfMemRow"><span>Memoria JS</span><b id="perfMem">–</b></div>
-    <div class="perf-row"><span>TX/s Deep Flow</span><b id="perfTx">–</b></div>
-    <div class="perf-row"><span>Redibujos Quantis</span><b id="perfQ">–</b></div>
+    <div class="perf-sub">Top consumidores (JS propio)</div>
+    <table class="perf-table"><thead><tr><th>Módulo</th><th>ms/s</th><th>llam/s</th></tr></thead><tbody id="perfTopBody"><tr><td colspan="3">–</td></tr></tbody></table>
+    <div class="perf-row"><span>Bloqueos &gt;50ms</span><b id="perfLt">–</b></div>
+    <div class="perf-conclusion" id="perfConclusion">JS propio: –</div>
     <div class="perf-toggles">
       <label><input type="checkbox" id="perfTglFeed" checked> Feed Deep Flow</label>
       <label><input type="checkbox" id="perfTglTx" checked> Txs simuladas</label>
@@ -4273,7 +4278,7 @@
     var _elSongTitle   = document.getElementById('songTitle');
     var _masterTick    = 0;
 
-    setInterval(function() {
+    function musicMasterTick() {
       _masterTick++;
 
       if (_masterTick % 2 === 0) {
@@ -4303,7 +4308,8 @@
 
       if (_masterTick >= 600) _masterTick = 0;
 
-    }, 1000);
+    }
+    setInterval(function() { musicMasterTick(); }, 1000);
 
     window.playPauseVideo = function() {
       if (!window.youtubePlayerReady || !window.player) return;
@@ -4982,8 +4988,8 @@
     async function dfPriceTick(){if(window._dfPriceBusy)return;window._dfPriceBusy=true;try{const[pd,gd]=await Promise.all([fetchPrices(),fetchGlobal()]);if(!pd&&!gd){STATE.apiAlive=false;DOM.statusDot.classList.remove('live');DOM.hdrConnStatus.style.display='inline';updateTickers(null);updateGlobalData(null);return}if(!STATE.apiAlive){STATE.apiAlive=true;DOM.statusDot.classList.add('live');DOM.hdrConnStatus.style.display='none'}updateTickers(pd);updateGlobalData(gd);updateVolatility();updateGas();updateSSR();if(STATE.dataStream==='onchain')updateOnchainSidebar();else updateBinanceSidebar()}finally{window._dfPriceBusy=false}}
     function dfTxTick(){if(!STATE.apiAlive)return;try{const gen=STATE.dataStream==='binance'?generateLiveBinanceTx:generateLiveOnchainTx,cnt=1+Math.floor(Math.random()*3),nT=[];for(let i=0;i<cnt;i++)nT.push(gen());prependLiveTxs(nT);window._perfTxCount+=nT.length}catch(e){}}
     function perfSavedToggles(){try{var k=(window.storageKeyForUser?window.storageKeyForUser('danifu_perf_toggles_'):'danifu_perf_toggles_guest');var t=JSON.parse(localStorage.getItem(k)||'null');if(t&&typeof t==='object')return t}catch(e){}return null}
-    function startTimerEngine(){if(window._dfTimers.clock)return;window._dfTimers.clock=setInterval(updateClock,1000);window._dfTimers.date=setInterval(updateDate,60000);var t=null;try{t=perfSavedToggles()}catch(e){}if(!t||t.feed!==false)window._dfTimers.price=setInterval(dfPriceTick,POLL_INTERVAL);if(!t||t.tx!==false)window._dfTimers.tx=setInterval(dfTxTick,POLL_INTERVAL)}
-    function perfDfStart(which){if(which==='price'&&!window._dfTimers.price)window._dfTimers.price=setInterval(dfPriceTick,POLL_INTERVAL);if(which==='tx'&&!window._dfTimers.tx)window._dfTimers.tx=setInterval(dfTxTick,POLL_INTERVAL)}
+    function startTimerEngine(){if(window._dfTimers.clock)return;window._dfTimers.clock=setInterval(updateClock,1000);window._dfTimers.date=setInterval(updateDate,60000);var t=null;try{t=perfSavedToggles()}catch(e){}if(!window._dfTimers.price&&(!t||t.feed!==false))window._dfTimers.price=setInterval(function(){dfPriceTick()},POLL_INTERVAL);if(!window._dfTimers.tx&&(!t||t.tx!==false))window._dfTimers.tx=setInterval(function(){dfTxTick()},POLL_INTERVAL)}
+    function perfDfStart(which){if(which==='price'&&!window._dfTimers.price)window._dfTimers.price=setInterval(function(){dfPriceTick()},POLL_INTERVAL);if(which==='tx'&&!window._dfTimers.tx)window._dfTimers.tx=setInterval(function(){dfTxTick()},POLL_INTERVAL)}
     function perfDfStop(which){if(which==='price'&&window._dfTimers.price){clearInterval(window._dfTimers.price);window._dfTimers.price=null}if(which==='tx'&&window._dfTimers.tx){clearInterval(window._dfTimers.tx);window._dfTimers.tx=null}}
 
     function initDeepFlow(){
@@ -7240,11 +7246,54 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
   </script>
   <script>
     // =========================================================
-    // --- MONITOR DE RENDIMIENTO (solo mide con panel abierto) ---
+    // --- MONITOR DE RENDIMIENTO: tiempo REAL de JS por modulo ---
+    // =========================================================
+    // Medicion sincrona (CPU, sin espera de red) con performance.now().
+    // Solo el llamado mas externo registra: las funciones llamadas dentro
+    // de otra ya envuelta NO se cuentan dos veces.
+    window.__perfReg = window.__perfReg || {};
+    window.__perfDepth = window.__perfDepth || 0;
+    window.__perfWrap = function(nombre, fn) {
+      if (typeof fn !== 'function' || fn._perfWrapped) return fn;
+      var w = function() {
+        var outer = (window.__perfDepth === 0);
+        window.__perfDepth++;
+        var t0 = 0;
+        try { t0 = performance.now(); } catch (e) {}
+        var out = fn.apply(this, arguments);
+        var dt = 0;
+        try { dt = performance.now() - t0; } catch (e) {}
+        window.__perfDepth--;
+        if (outer) {
+          var r = window.__perfReg[nombre];
+          if (!r) r = window.__perfReg[nombre] = { ms: 0, calls: 0 };
+          r.ms += dt; r.calls++;
+        }
+        return out;
+      };
+      w._perfWrapped = true;
+      return w;
+    };
+    // Envolver despues de que cada funcion exista (este script va al final del body).
+    try { if (typeof dfPriceTick === 'function') dfPriceTick = window.__perfWrap('DF precio/poll', dfPriceTick); } catch (e) {}
+    try { if (typeof dfTxTick === 'function') dfTxTick = window.__perfWrap('DF txs', dfTxTick); } catch (e) {}
+    try { if (typeof prependLiveTxs === 'function') prependLiveTxs = window.__perfWrap('DF lista txs', prependLiveTxs); } catch (e) {}
+    try { if (typeof renderBatch === 'function') renderBatch = window.__perfWrap('DF render lote', renderBatch); } catch (e) {}
+    try { if (typeof updateOnchainSidebar === 'function') updateOnchainSidebar = window.__perfWrap('DF sidebar onchain', updateOnchainSidebar); } catch (e) {}
+    try { if (typeof updateBinanceSidebar === 'function') updateBinanceSidebar = window.__perfWrap('DF sidebar binance', updateBinanceSidebar); } catch (e) {}
+    try { if (typeof musicMasterTick === 'function') musicMasterTick = window.__perfWrap('Musica tick', musicMasterTick); } catch (e) {}
+    try { if (typeof updateSongDisplay === 'function') updateSongDisplay = window.__perfWrap('Musica titulo', updateSongDisplay); } catch (e) {}
+    try { if (typeof qLoadPage === 'function') qLoadPage = window.__perfWrap('Quantis pagina', qLoadPage); } catch (e) {}
+    try { if (window.qSaveToFirebase) window.qSaveToFirebase = window.__perfWrap('Guardado Firebase', window.qSaveToFirebase); } catch (e) {}
+  </script>
+  <script>
+    // =========================================================
+    // --- PANEL DE RENDIMIENTO (pinta solo con panel abierto) ---
     // =========================================================
     (function() {
-      var open = false, rafId = 0, frames = 0, secTimer = null;
-      var ltObs = null, ltN = 0, ltMs = 0, t0 = 0, tx0 = 0, q0 = 0;
+      var open = false, secTimer = null;
+      var ltObs = null, ltN = 0, ltMs = 0;
+      var buckets = [];
       function el(id) { return document.getElementById(id); }
       function tglKey() {
         try { return (window.storageKeyForUser ? window.storageKeyForUser('danifu_perf_toggles_') : 'danifu_perf_toggles_guest'); }
@@ -7280,35 +7329,63 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         if (a) a.checked = !!t.anim;
       }
       window.perfApplyToggles = applyToggles;
-      function wrapQuantis() {
+      function snapReg() {
+        var s = {};
         try {
-          if (typeof qLoadPage === 'function' && !qLoadPage._perfWrapped) {
-            var _o = qLoadPage;
-            var _w = function() {
-              window._perfQCount = (window._perfQCount || 0) + 1;
-              return _o.apply(this, arguments);
-            };
-            _w._perfWrapped = true;
-            qLoadPage = _w;
+          for (var k in window.__perfReg) {
+            if (Object.prototype.hasOwnProperty.call(window.__perfReg, k)) {
+              s[k] = { ms: window.__perfReg[k].ms, calls: window.__perfReg[k].calls };
+            }
           }
         } catch (e) {}
+        return s;
       }
-      function tick() {
-        frames++;
+      function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       }
-      function loop() {
-        if (!open) return;
-        tick();
-        rafId = requestAnimationFrame(loop);
+      function paint() {
+        var now = Date.now();
+        buckets.push({ t: now, snap: snapReg() });
+        while (buckets.length > 11) buckets.shift();
+        var body = el('perfTopBody'), conc = el('perfConclusion');
+        if (buckets.length < 2) {
+          if (body) body.innerHTML = '<tr><td colspan="3">midiendo…</td></tr>';
+          return;
+        }
+        var first = buckets[0], last = buckets[buckets.length - 1];
+        var dt = Math.max(1, (last.t - first.t) / 1000);
+        var rows = [], total = 0;
+        for (var k in last.snap) {
+          if (!Object.prototype.hasOwnProperty.call(last.snap, k)) continue;
+          var a = first.snap[k] || { ms: 0, calls: 0 }, b = last.snap[k];
+          var ms = (b.ms - a.ms) / dt, calls = (b.calls - a.calls) / dt;
+          if (b.calls <= 0) continue;
+          rows.push({ k: k, ms: ms, calls: calls });
+          total += ms;
+        }
+        rows.sort(function(x, y) { return y.ms - x.ms; });
+        if (body) {
+          if (!rows.length) { body.innerHTML = '<tr><td colspan="3">sin actividad</td></tr>'; }
+          else {
+            var h = '';
+            for (var i = 0; i < rows.length; i++) {
+              h += '<tr><td>' + esc(rows[i].k) + '</td><td>' + rows[i].ms.toFixed(1) + '</td><td>' + rows[i].calls.toFixed(1) + '</td></tr>';
+            }
+            body.innerHTML = h;
+          }
+        }
+        var lt = el('perfLt');
+        if (lt) lt.textContent = ltN + ' (' + Math.round(ltMs) + ' ms)';
+        ltN = 0; ltMs = 0;
+        if (conc) conc.textContent = 'JS propio: ' + total.toFixed(1) + ' ms/s. Si la página se traba y el valor es bajo (<20), el consumo está en un iframe (TradingView/YouTube).';
       }
       function openPanel() {
         if (open) return;
         open = true;
-        wrapQuantis();
         var p = el('perf-panel');
         if (p) { p.classList.add('open'); p.setAttribute('aria-hidden', 'false'); }
-        frames = 0; ltN = 0; ltMs = 0; t0 = Date.now();
-        tx0 = window._perfTxCount || 0; q0 = window._perfQCount || 0;
+        buckets = [];
+        ltN = 0; ltMs = 0;
         try {
           if (typeof PerformanceObserver !== 'undefined') {
             ltObs = new PerformanceObserver(function(list) {
@@ -7320,35 +7397,12 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
             ltObs.observe({ entryTypes: ['longtask'] });
           }
         } catch (e) { ltObs = null; }
-        try {
-          if (el('perfMemRow') && !(window.performance && window.performance.memory)) el('perfMemRow').style.display = 'none';
-        } catch (e) {}
-        rafId = requestAnimationFrame(loop);
-        secTimer = setInterval(function() {
-          var now = Date.now(), dt = Math.max(1, (now - t0) / 1000);
-          var fps = el('perfFps'), lt = el('perfLt'), ltm = el('perfLtMs');
-          if (fps) fps.textContent = Math.round(frames / dt);
-          if (lt) lt.textContent = ltN;
-          if (ltm) ltm.textContent = Math.round(ltMs);
-          frames = 0; ltN = 0; ltMs = 0; t0 = now;
-          try {
-            var m = el('perfMem');
-            if (m && window.performance && window.performance.memory) {
-              m.textContent = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(1) + ' MB';
-            }
-          } catch (e) {}
-          try {
-            var tx = el('perfTx');
-            if (tx) tx.textContent = (((window._perfTxCount || 0) - tx0) / dt).toFixed(1);
-            var q = el('perfQ');
-            if (q) q.textContent = ((window._perfQCount || 0) - q0) + ' total';
-          } catch (e) {}
-        }, 1000);
+        paint();
+        secTimer = setInterval(paint, 1000);
       }
       function closePanel() {
         if (!open) return;
         open = false;
-        try { cancelAnimationFrame(rafId); } catch (e) {}
         try { if (secTimer) clearInterval(secTimer); } catch (e) {}
         secTimer = null;
         try { if (ltObs) ltObs.disconnect(); } catch (e) {}
@@ -7367,6 +7421,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         });
       }
       document.addEventListener('DOMContentLoaded', function() {
+        try { if (window.qSaveToFirebase) window.qSaveToFirebase = window.__perfWrap('Guardado Firebase', window.qSaveToFirebase); } catch (e) {}
         applyToggles();
         var b = el('perfToggleBtn');
         if (b) b.addEventListener('click', function(e) { e.stopPropagation(); open ? closePanel() : openPanel(); });
