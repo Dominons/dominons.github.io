@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="anim-on">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,9 +34,13 @@
 
     /* --- Clases para transiciones suaves de vistas SPA --- */
     .app-view-transition {
-      transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      transition: opacity var(--anim-dur-view) ease, transform var(--anim-dur-view) ease;
       opacity: 1;
       transform: translateY(0);
+    }
+    .view-invisible {
+      opacity: 0;
+      transform: translateY(12px);
     }
 
     /* La clase hidden-view sigue ocultando físicamente el elemento cuando termina la animación */
@@ -59,8 +63,8 @@
       cursor: pointer;
       position: relative;
       overflow: visible;
-      transition: color 0.25s ease, border-color 0.25s ease,
-                  box-shadow 0.25s ease, background 0.25s ease;
+      transition: color var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease,
+                  background var(--anim-dur-ui) ease, transform var(--anim-dur-ui) ease;
     }
 
     .glow-button:hover {
@@ -68,10 +72,6 @@
       border-color: rgba(168, 85, 247, 0.9);
       background: rgba(168, 85, 247, 0.14);
       box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
-    }
-
-    .glow-button:active {
-      transform: scale(0.96);
     }
 
     /* --- Partículas al cambiar de vista --- */
@@ -85,6 +85,64 @@
       background: radial-gradient(circle, #E9D5FF 0%, #A855F7 60%, transparent 100%);
       box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.7);
     }
+
+    /* ===== SISTEMA DE MODOS DE ANIMACION (html.anim-on / html.anim-off) ===== */
+    /* Solo se animan opacity y transform. NUNCA box-shadow ni filter. */
+    :root {
+      --anim-dur-view: 0.5s;
+      --anim-dur-ui: 0.2s;
+      --float-bg: #111318;
+      --float-text: #e4e4e7;
+      --float-border: rgba(168,85,247,0.34);
+      --float-shadow: 0 14px 36px rgba(255,255,255,0.08);
+    }
+    html.anim-off {
+      --anim-dur-view: 0s;
+      --anim-dur-ui: 0s;
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: scale(0.98) translateY(-4px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
+    /* MODO ANIMADO: apertura de paneles flotantes (display none<->block -> keyframes) */
+    html.anim-on #dominon-config-dropdown.open,
+    html.anim-on #quantis-config-dropdown.open,
+    html.anim-on #miniPlanPopup.open,
+    html.anim-on #perf-panel.open,
+    html.anim-on #plansModal.open,
+    html.anim-on #plansModal.open .plans-card,
+    html.anim-on #musicPanel:not(.hidden) { animation: floatIn var(--anim-dur-ui) ease both; }
+    /* MODO ANIMADO: botones con press + micro-lift */
+    html.anim-on .glow-button:hover { transform: translateY(-1px); }
+    html.anim-on .glow-button:active { transform: scale(0.96); }
+    html.anim-on .icon-square-btn:hover { transform: translateY(-1px); }
+    html.anim-on .plan-option:hover { transform: translateY(-2px); }
+    /* MODO ANIMADO: stagger sutil en filas del ledger de Deep Flow */
+    html.anim-on #ledger-body .row { animation: rowIn var(--anim-dur-ui) ease both; }
+    html.anim-on #ledger-body .row:nth-child(2) { animation-delay: 30ms; }
+    html.anim-on #ledger-body .row:nth-child(3) { animation-delay: 60ms; }
+    html.anim-on #ledger-body .row:nth-child(4) { animation-delay: 90ms; }
+    html.anim-on #ledger-body .row:nth-child(5) { animation-delay: 120ms; }
+    html.anim-on #ledger-body .row:nth-child(6) { animation-delay: 150ms; }
+    /* MODO ESTATICO: reset global + anulaciones expresas */
+    html.anim-off *, html.anim-off *::before, html.anim-off *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+    html.anim-off .glow-button:hover {
+      box-shadow: none;
+      color: var(--color-text);
+      border-color: var(--color-highlight);
+      background: rgba(168, 85, 247, 0.06);
+    }
+    html.anim-off .glow-button:active { transform: none; }
+    html.anim-off .icon-square-btn:hover { transform: none; }
+    html.anim-off .plan-option:hover { transform: none; }
+    html.anim-off .nav-particle { display: none; }
     
     /* --- Loader de guardado en la nube (Premium) --- */
     .cloud-loader-wrap {
@@ -805,7 +863,6 @@
     }
     .icon-square-btn:hover {
       background: rgba(168,85,247,0.14);
-      transform: translateY(-1px);
     }
     #plansModal {
       position: fixed;
@@ -822,13 +879,18 @@
       width: min(940px, 96vw);
       max-height: 88vh;
       overflow: auto;
-      background: #111318;
-      border: 1px solid rgba(168,85,247,0.38);
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
       border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
-      color: #f4f4f5;
+      box-shadow: var(--float-shadow);
+      color: var(--float-text);
       padding: 20px;
     }
+    .plans-card .plan-option { background: var(--float-bg); border-color: var(--float-border); }
+    .plans-card .plan-option h3,
+    .plans-card .plan-option ul,
+    .plans-card .plan-contact-card,
+    .plans-card .plans-close { color: var(--float-text); }
     .plans-header {
       display: flex;
       align-items: center;
@@ -867,7 +929,6 @@
     }
     .plan-option:hover {
       border-color: #A855F7;
-      transform: translateY(-2px);
     }
     .plan-option h3 {
       margin: 0 0 6px;
@@ -905,12 +966,12 @@
       width: 186px;
       display: none;
       z-index: 99990;
-      background: #111318;
-      border: 1px solid rgba(168,85,247,0.34);
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
       border-radius: 8px;
-      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+      box-shadow: var(--float-shadow);
       padding: 12px;
-      color: #e4e4e7;
+      color: var(--float-text);
     }
     #dominon-config-dropdown.open,
     #quantis-config-dropdown.open { display: block; }
@@ -946,8 +1007,8 @@
     #dominon-config-dropdown .theme-btn.blue { background: #00AEEF; border-color: #00AEEF; }
     .language-toggle {
       border: 1px solid rgba(168,85,247,0.45);
-      background: var(--color-input-bg, #1f1f26);
-      color: #e4e4e7;
+      background: var(--float-bg, #1f1f26);
+      color: var(--float-text, #e4e4e7);
       border-radius: 999px;
       padding: 5px 10px;
       min-width: 64px;
@@ -961,12 +1022,12 @@
       width: 238px;
       display: none;
       z-index: 99991;
-      background: #111318;
-      border: 1px solid rgba(168,85,247,0.34);
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
       border-radius: 8px;
-      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+      box-shadow: var(--float-shadow);
       padding: 12px;
-      color: #e4e4e7;
+      color: var(--float-text);
       font-size: 12px;
     }
     #perf-panel.open { display: block; }
@@ -984,18 +1045,21 @@
     .perf-title button { background: none; border: none; color: #71717a; cursor: pointer; font-size: 12px; }
     .perf-est { color: #71717a; font-weight: 400; letter-spacing: 0; text-transform: none; }
     .perf-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1f1f26; }
-    .perf-row b { color: #fff; }
+    .perf-row b { color: var(--float-text); }
     .perf-sub { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #71717a; margin: 2px 0 6px; text-transform: uppercase; }
     .perf-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 6px; }
     .perf-table th { text-align: left; font-size: 10px; color: #71717a; font-weight: 800; padding: 2px 4px 4px 0; border-bottom: 1px solid #2a2a33; }
     .perf-table th:nth-child(2), .perf-table th:nth-child(3) { text-align: right; }
-    .perf-table td { padding: 2px 4px 2px 0; border-bottom: 1px solid #1f1f26; color: #e4e4e7; }
-    .perf-table td:nth-child(2), .perf-table td:nth-child(3) { text-align: right; color: #fff; font-variant-numeric: tabular-nums; }
-    .perf-conclusion { font-size: 11px; color: #c4b5fd; padding: 6px 0; line-height: 1.45; }
+    .perf-table td { padding: 2px 4px 2px 0; border-bottom: 1px solid #1f1f26; color: var(--float-text); }
+    .perf-table td:nth-child(2), .perf-table td:nth-child(3) { text-align: right; color: var(--float-text); font-weight: 700; font-variant-numeric: tabular-nums; }
+
     .perf-toggles { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
     .perf-toggles label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .perf-toggles input { accent-color: #A855F7; }
-    html.perf-no-anim *, html.perf-no-anim *::before, html.perf-no-anim *::after { animation: none !important; transition: none !important; }
+    #dominon-config-dropdown, #quantis-config-dropdown, #miniPlanPopup { cursor: move; touch-action: none; }
+    #musicPanel .music-drag-handle { touch-action: none; }
+    #dominon-config-dropdown button, #quantis-config-dropdown button, #miniPlanPopup button,
+    #dominon-config-dropdown input, #quantis-config-dropdown input, #dominon-config-dropdown label { cursor: pointer; }
     .notepad-actions {
       display: flex;
       gap: 6px;
@@ -1022,12 +1086,12 @@
       bottom: 18px;
       display: none;
       z-index: 100001;
-      background: #111318;
-      border: 1px solid rgba(168,85,247,0.42);
-      color: #f4f4f5;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      color: var(--float-text);
       border-radius: 8px;
       padding: 10px 12px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+      box-shadow: var(--float-shadow);
       font-size: 0.86rem;
     }
     #miniPlanPopup.open { display: block; }
@@ -1942,12 +2006,13 @@
       position: fixed;
       top: 60px;
       right: 20px;
-      background: #1F1F1F;
+      background: var(--float-bg);
+      color: var(--float-text);
       border: 2px solid var(--color-highlight);
       padding: 15px;
       border-radius: 8px;
       z-index: 10000;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: var(--float-shadow);
       min-width: 280px;
     }
     #musicPanel.hidden {
@@ -2297,7 +2362,7 @@
       <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
-            <h2>Mini-Gráfico</h2>
+            <h2>TradingView</h2>
           </div>
           <iframe class="chart-iframe" id="tradingViewChart"
             src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=1&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
@@ -3056,12 +3121,11 @@
     <div class="perf-sub">Top consumidores (JS propio)</div>
     <table class="perf-table"><thead><tr><th>Módulo</th><th>ms/s</th><th>llam/s</th></tr></thead><tbody id="perfTopBody"><tr><td colspan="3">–</td></tr></tbody></table>
     <div class="perf-row"><span>Bloqueos &gt;50ms</span><b id="perfLt">–</b></div>
-    <div class="perf-conclusion" id="perfConclusion">JS propio: –</div>
     <div class="perf-toggles">
       <label><input type="checkbox" id="perfTglFeed" checked> Feed Deep Flow</label>
       <label><input type="checkbox" id="perfTglTx" checked> Txs simuladas</label>
       <label><input type="checkbox" id="perfTglSound" checked> Sonido/radar</label>
-      <label><input type="checkbox" id="perfTglAnim" checked> Animaciones CSS</label>
+      <label><input type="checkbox" id="perfTglAnim" checked> Modo animado</label>
     </div>
   </div>
 
@@ -4369,6 +4433,72 @@
       }
     };
 
+    // Drag generico reutilizable para paneles flotantes (pointer events + rAF, sin thrash).
+    // handleEl puede ser toda la superficie del panel: los clicks en botones/inputs/labels no arrastran.
+    window.makeDraggable = function(panelEl, handleEl, storeKey) {
+      if (!panelEl || !handleEl) return;
+      var dragging = false, moved = false, sx = 0, sy = 0, px = 0, py = 0, nx = 0, ny = 0, raf = 0;
+      function apply() {
+        raf = 0;
+        panelEl.style.left = nx + 'px';
+        panelEl.style.top = ny + 'px';
+        panelEl.style.right = 'auto';
+        panelEl.style.bottom = 'auto';
+      }
+      handleEl.addEventListener('pointerdown', function(e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        try { if (e.target && e.target.closest && e.target.closest('button, input, a, select, textarea, label')) return; } catch (err) {}
+        dragging = true; moved = false;
+        sx = e.clientX; sy = e.clientY;
+        try {
+          var r = panelEl.getBoundingClientRect();
+          px = r.left; py = r.top;
+        } catch (err) { dragging = false; return; }
+        try { handleEl.setPointerCapture(e.pointerId); } catch (err) {}
+        e.preventDefault();
+      });
+      handleEl.addEventListener('pointermove', function(e) {
+        if (!dragging) return;
+        var dx = e.clientX - sx, dy = e.clientY - sy;
+        if (!moved && Math.abs(dx) + Math.abs(dy) < 4) return;
+        moved = true;
+        nx = px + dx; ny = py + dy;
+        if (!raf) raf = requestAnimationFrame(apply);
+      });
+      function end() {
+        if (!dragging) return;
+        dragging = false;
+        if (raf) { try { cancelAnimationFrame(raf); } catch (err) {} raf = 0; apply(); }
+        if (moved && storeKey) {
+          try { localStorage.setItem(storeKey, JSON.stringify({ left: panelEl.style.left, top: panelEl.style.top })); } catch (err) {}
+        }
+        if (moved) {
+          // Suprimir el click posterior al arrastre para no disparar el click-outside que cierra dropdowns
+          var suppress = function(ev) {
+            ev.stopPropagation();
+            try { ev.preventDefault(); } catch (err) {}
+            document.removeEventListener('click', suppress, true);
+          };
+          document.addEventListener('click', suppress, true);
+          setTimeout(function() { document.removeEventListener('click', suppress, true); }, 50);
+        }
+        moved = false;
+      }
+      handleEl.addEventListener('pointerup', end);
+      handleEl.addEventListener('pointercancel', end);
+      if (storeKey) {
+        try {
+          var s = JSON.parse(localStorage.getItem(storeKey) || 'null');
+          if (s && s.left && s.top) {
+            panelEl.style.left = s.left;
+            panelEl.style.top = s.top;
+            panelEl.style.right = 'auto';
+            panelEl.style.bottom = 'auto';
+          }
+        } catch (err) {}
+      }
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
       var playPauseBtn = document.getElementById('playPauseBtn');
       var nextBtn = document.getElementById('nextBtn');
@@ -4435,32 +4565,14 @@
         });
       }
 
-      // Music panel drag
+      // Music panel drag (reutilizable)
       var musicPanel = document.getElementById('musicPanel');
       var dragHandle = musicPanel ? musicPanel.querySelector('.music-drag-handle') : null;
-      if (musicPanel && dragHandle) {
-        var isDragging = false, dragStartX, dragStartY, panelStartX, panelStartY;
-        dragHandle.addEventListener('mousedown', function(e) {
-          isDragging = true;
-          dragStartX = e.clientX;
-          dragStartY = e.clientY;
-          panelStartX = musicPanel.offsetLeft;
-          panelStartY = musicPanel.offsetTop;
-          musicPanel.style.cursor = 'move';
-          e.preventDefault();
-        });
-        document.addEventListener('mousemove', function(e) {
-          if (!isDragging) return;
-          musicPanel.style.left = (panelStartX + e.clientX - dragStartX) + 'px';
-          musicPanel.style.top = (panelStartY + e.clientY - dragStartY) + 'px';
-          musicPanel.style.right = 'auto';
-        });
-        document.addEventListener('mouseup', function() {
-          if (isDragging) {
-            isDragging = false;
-            if (musicPanel) musicPanel.style.cursor = '';
-          }
-        });
+      if (window.makeDraggable) {
+        window.makeDraggable(musicPanel, dragHandle || musicPanel, 'danifu_panel_pos_musicPanel');
+        window.makeDraggable(document.getElementById('dominon-config-dropdown'), document.getElementById('dominon-config-dropdown'), 'danifu_panel_pos_dominonCfg');
+        window.makeDraggable(document.getElementById('quantis-config-dropdown'), document.getElementById('quantis-config-dropdown'), 'danifu_panel_pos_quantisCfg');
+        window.makeDraggable(document.getElementById('miniPlanPopup'), document.getElementById('miniPlanPopup'), 'danifu_panel_pos_miniPlan');
       }
     });
 
@@ -4505,14 +4617,16 @@
       if (currentActiveView && currentActiveView.id !== targetViewId) {
         currentActiveView.classList.add('view-invisible');
 
-        // Esperar a que termine la transición de salida (200ms)
+        // Esperar a que termine la transición de salida (0.5s animado / 0ms estático)
+        var exitMs = 500;
+        try { if (document.documentElement.classList.contains('anim-off')) exitMs = 0; } catch (e) {}
         setTimeout(function() {
           currentActiveView.classList.add('hidden-view');
           currentActiveView.classList.remove('view-invisible');
 
           // Mostrar la nueva vista
           revealTargetView(targetViewId);
-        }, 200);
+        }, exitMs);
       } else {
         // Si no había vista activa previa, mostrar directamente
         revealTargetView(targetViewId);
@@ -4554,7 +4668,7 @@
           plans: 'PLANES',
           plansTitle: 'Planes de membresia',
           notepad: 'Bloc de Notas - Nota ',
-          chart: 'Mini-Grafico',
+          chart: 'TradingView',
           calculator: 'Calculadora',
           pomodoro: 'Pomodoro',
           start: 'INICIAR',
@@ -4567,7 +4681,7 @@
           plans: 'PLANS',
           plansTitle: 'Membership plans',
           notepad: 'Notepad - Note ',
-          chart: 'Mini-Chart',
+          chart: 'TradingView',
           calculator: 'Calculator',
           pomodoro: 'Pomodoro',
           start: 'START',
@@ -4746,16 +4860,30 @@
       view.classList.add((themeName === 'light' ? 'light' : 'black') + '-theme');
     }
 
+    // Variables de paneles flotantes segun tema efectivo (misma fuente que setTheme).
+    // Oscuro: fondo oscuro + sombra blanca sutil. Claro: fondo claro + sombra negra.
+    function syncFloatVars(isLight) {
+      var root = null;
+      try { root = document.documentElement; } catch (e) { return; }
+      if (!root || !root.style) return;
+      root.style.setProperty('--float-bg', isLight ? '#ffffff' : '#111318');
+      root.style.setProperty('--float-text', isLight ? '#1f2937' : '#e4e4e7');
+      root.style.setProperty('--float-border', isLight ? 'rgba(168,85,247,0.45)' : 'rgba(168,85,247,0.34)');
+      root.style.setProperty('--float-shadow', isLight ? '0 14px 36px rgba(0,0,0,0.25)' : '0 14px 36px rgba(255,255,255,0.08)');
+    }
+
     window.setTheme = function (color, targetView) {
       var themeName = getThemeName(color);
       var viewName = getActiveThemeView(targetView);
       if (viewName === 'quantis') {
         applyQuantisTheme(themeName);
         localStorage.setItem('danifu_quantis_theme', themeName);
+        syncFloatVars(themeName === 'light');
         return;
       }
       applyDominonTheme(themeName);
       localStorage.setItem('danifu_dominon_theme', themeName);
+      syncFloatVars(themeName === 'light');
       
       // DYNAMIC THEME SYNC FOR FLOATING ELEMENTS (shared across views)
       const floatingElements = [
@@ -7220,6 +7348,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
   <script>
     (function () {
       document.addEventListener('click', function (e) {
+        try { if (document.documentElement.classList.contains('anim-off')) return; } catch (err) {}
         var btn = e.target.closest('.glow-button');
         if (!btn || !btn.getAttribute('onclick')) return;
         var r = btn.getBoundingClientRect();
@@ -7321,7 +7450,10 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
           else { if (typeof perfDfStop === 'function') perfDfStop('tx'); }
         } catch (e) {}
         try { if (typeof STATE !== 'undefined') STATE.soundEnabled = !!t.sound; } catch (e) {}
-        try { document.documentElement.classList.toggle('perf-no-anim', !t.anim); } catch (e) {}
+        try {
+          document.documentElement.classList.toggle('anim-off', !t.anim);
+          document.documentElement.classList.toggle('anim-on', !!t.anim);
+        } catch (e) {}
         var f = el('perfTglFeed'), x = el('perfTglTx'), s = el('perfTglSound'), a = el('perfTglAnim');
         if (f) f.checked = !!t.feed;
         if (x) x.checked = !!t.tx;
@@ -7347,21 +7479,20 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         var now = Date.now();
         buckets.push({ t: now, snap: snapReg() });
         while (buckets.length > 11) buckets.shift();
-        var body = el('perfTopBody'), conc = el('perfConclusion');
+        var body = el('perfTopBody');
         if (buckets.length < 2) {
           if (body) body.innerHTML = '<tr><td colspan="3">midiendo…</td></tr>';
           return;
         }
         var first = buckets[0], last = buckets[buckets.length - 1];
         var dt = Math.max(1, (last.t - first.t) / 1000);
-        var rows = [], total = 0;
+        var rows = [];
         for (var k in last.snap) {
           if (!Object.prototype.hasOwnProperty.call(last.snap, k)) continue;
           var a = first.snap[k] || { ms: 0, calls: 0 }, b = last.snap[k];
           var ms = (b.ms - a.ms) / dt, calls = (b.calls - a.calls) / dt;
           if (b.calls <= 0) continue;
           rows.push({ k: k, ms: ms, calls: calls });
-          total += ms;
         }
         rows.sort(function(x, y) { return y.ms - x.ms; });
         if (body) {
@@ -7377,7 +7508,6 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         var lt = el('perfLt');
         if (lt) lt.textContent = ltN + ' (' + Math.round(ltMs) + ' ms)';
         ltN = 0; ltMs = 0;
-        if (conc) conc.textContent = 'JS propio: ' + total.toFixed(1) + ' ms/s. Si la página se traba y el valor es bajo (<20), el consumo está en un iframe (TradingView/YouTube).';
       }
       function openPanel() {
         if (open) return;
