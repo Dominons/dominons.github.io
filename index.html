@@ -209,12 +209,6 @@
       top: 6px;
       right: 6px;
     }
-    /* Loader de reproducción (panel del reproductor) */
-    #musicLoader {
-      top: 8px;
-      right: 8px;
-    }
-
     /* ========== LOGIN SCREEN (ESTTICA EN LA RAZ) ========== */
     #loginScreen {
       position: fixed;
@@ -2076,14 +2070,25 @@
       cursor: pointer;
       border-radius: 2px;
     }
-    #youtube-player {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
+    .music-dropzone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px 10px;
+      margin-bottom: 12px;
+      color: var(--color-text);
+      font-size: 0.8em;
+      cursor: pointer;
+      background: rgba(168, 85, 247, 0.06);
+      text-align: center;
     }
+    .music-dropzone.hidden { display: none !important; }
+    .music-dropzone.dragover { background: rgba(168, 85, 247, 0.18); border-style: solid; }
+    .music-dropzone.reject { border-color: #ef4444; color: #ef4444; }
+    .music-btn:disabled { opacity: 0.35; cursor: default; }
 
     /* ===== Floating Drawing Tools Panel ===== */
     #quantis-drawing-tools-panel {
@@ -2350,7 +2355,7 @@
           </button>
           <div class="music-container">
             <div class="song-display">
-              <span id="songTitle" class="song-marquee">Listo para Play</span>
+              <span id="songTitle" class="song-marquee">Arrastrá tus MP3</span>
             </div>
             <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
               <i class="fa-solid fa-music"></i>
@@ -3143,36 +3148,37 @@
 
   <div id="miniPlanPopup"></div>
 
-  <!-- ELEMENTOS DE SOPORTE DE REPRODUCTOR MULTIMEDIA -->
-  <div id="youtube-player"></div>
-
   <div id="musicPanel" class="hidden">
     <div class="music-player-panel">
-      <div class="player-header music-drag-handle">REPRODUCTOR</div>
-      
+      <div class="player-header music-drag-handle"><i class="fa-solid fa-music"></i> REPRODUCTOR</div>
+
+      <label id="musicDropzone" class="music-dropzone" title="Arrastrá tus MP3 aquí o hacé clic para agregar">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <span>Arrastrá tus MP3 aquí</span>
+        <input type="file" id="musicFileInput" accept="audio/*" multiple hidden>
+      </label>
+
       <div class="player-controls">
         <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
         <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
         <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
         <button class="music-btn" id="repeatBtn" title="Sin repetición"><i class="fa-solid fa-repeat"></i></button>
+        <button class="music-btn" id="clearBtn" title="Limpiar lista"><i class="fa-solid fa-trash"></i></button>
       </div>
-      
+
       <div class="progress-time">
         <span id="current-time">0:00</span>
         <span id="duration-time">0:00</span>
       </div>
-      
+
       <div class="progress-bar-container">
         <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
       </div>
-      
+
       <div class="volume-control">
         <i class="fa-solid fa-volume-low"></i>
         <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
         <i class="fa-solid fa-volume-high"></i>
-      </div>
-      <div id="musicLoader" class="cloud-loader-wrap" title="Cargando reproducción...">
-        <div class="cloud-loader"></div>
       </div>
     </div>
   </div>
@@ -3331,33 +3337,6 @@
         window.hideCloudLoader(id);
       }, 900);
     };
-    window.saveDominonMusicCloud = async function(data) {
-      if (!window.isPremiumPlan() || !auth.currentUser) return;
-      try {
-        await setDoc(doc(db, "users", auth.currentUser.uid, "dominon", "music"),
-          Object.assign({}, data, { savedAt: Date.now() }), { merge: true });
-      } catch (e) { console.warn("Error guardando música en Firebase:", e); }
-    };
-    window.loadDominonMusicCloud = async function() {
-      if (!window.isPremiumPlan() || !auth.currentUser) return;
-      try {
-        var snap = await getDoc(doc(db, "users", auth.currentUser.uid, "dominon", "music"));
-        if (!snap.exists()) return;
-        var data = snap.data();
-        if (!data) return;
-        var localRaw = localStorage.getItem(storageKeyForUser('danifu_music_progress_'));
-        var localAt = 0;
-        try { if (localRaw) localAt = (JSON.parse(localRaw) || {}).timestamp || 0; } catch (e) {}
-        if ((data.savedAt || 0) > localAt) {
-          localStorage.setItem(storageKeyForUser('danifu_music_progress_'), JSON.stringify({
-            videoId: data.videoId || '', index: data.index || 0, time: data.time || 0, timestamp: data.savedAt || Date.now()
-          }));
-          try { if (typeof data.volume !== 'undefined') localStorage.setItem(storageKeyForUser('danifu_volume_'), data.volume); } catch (e) {}
-          try { if (typeof data.repeatMode !== 'undefined') localStorage.setItem(storageKeyForUser('danifu_repeat_'), data.repeatMode); } catch (e) {}
-          if (typeof window.applyMusicSavedData === 'function') window.applyMusicSavedData(data);
-        }
-      } catch (e) { console.warn("Error cargando música desde Firebase:", e); }
-    };
     // --- Gemini chats: cloud sync (solo Premium) ---
     window.saveGeminiCloud = async function(chats) {
       if (!window.isPremiumPlan() || !auth.currentUser) return;
@@ -3415,46 +3394,9 @@
     };
 
     // =========================================================
-    // --- MUSIC PLAYER SAVED PROGRESS LOADER (GLOBAL) ---
-    // =========================================================
-    // Solo LEE y devuelve el progreso guardado {index, time}. No toca el player.
-    window.loadSavedMusic = function() {
-      if (!auth.currentUser) return null;
-      try {
-        if (window.isPremiumPlan && window.isPremiumPlan()) {
-          window.loadDominonMusicCloud && window.loadDominonMusicCloud();
-        }
-        var saved = localStorage.getItem(storageKeyForUser('danifu_music_progress_'));
-        var data = null;
-        if (saved) {
-          try { data = JSON.parse(saved); } catch (e) { data = null; }
-        }
-        if (data && data.index !== undefined) {
-          return { index: data.index || 0, time: data.time || 0 };
-        }
-        return null;
-      } catch (e) {
-        console.error('Error cargando progreso de msica:', e);
-        return null;
-      }
-    };
-
-    // =========================================================
     // --- FIREBASE AUTH & PLAN DETECTION ---
     // =========================================================
     onAuthStateChanged(auth, async (user) => {
-      window.authReady = true;
-      try {
-        var _uid = user ? user.uid : 'guest';
-        if (window.musicInitUid !== null && window.musicInitUid !== _uid) {
-          window.musicPlaylistInitialized = false;
-          window.musicCloudChecked = false;
-          window.musicUserInteracted = false;
-          window._musicCloudLateApplied = false;
-          window._musicCloudWait = false;
-          if (window._musicCloudTimer) { try { clearTimeout(window._musicCloudTimer); } catch (e) {}           window._musicCloudTimer = null; }
-        }
-      } catch (e) {}
       try { if (window.perfApplyToggles) window.perfApplyToggles(); } catch (e) {}
       if (user) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -3464,7 +3406,6 @@
 
         window.applyMembershipPlan(await detectUserPlan(user));
         window.loadNote(window.activeTab);
-        if (window.tryInitMusic) window.tryInitMusic();
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
         // sesión, así que aquí se asegura que cada usuario vea su propio proyecto.
@@ -3475,76 +3416,14 @@
         window.applyMembershipPlan('normal');
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('mainApp').classList.add('hidden');
-        if (window.tryInitMusic) window.tryInitMusic();
       }
     });
 
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = async () => {
-      try { if (window.player && window.player.stopVideo) window.player.stopVideo(); } catch (e) {}
       await signOut(auth);
       window.location.reload();
     };
-
-    // =========================================================
-    // --- MUSIC PLAYER AUTOSAVE ENGINE ---
-    // =========================================================
-    window.waitForPlayerPlaying = function(callback) {
-      var attempts = 0;
-      var timer = setInterval(function() {
-        attempts++;
-        try {
-          if (window.player && window.player.getPlayerState && window.player.getPlayerState() === 1) {
-            clearInterval(timer);
-            callback();
-          } else if (attempts >= 30) {
-            clearInterval(timer);
-          }
-        } catch (error) {
-          clearInterval(timer);
-        }
-      }, 200);
-    };
-
-    setInterval(() => {
-       if (auth.currentUser && window.player) {
-          try {
-              var _st = -1;
-              try { _st = window.player.getPlayerState ? window.player.getPlayerState() : -1; } catch (e) { _st = -1; }
-              if (_st !== 1 && _st !== 2) return; // solo PLAYING o PAUSED: nunca unstarted/cued/buffering
-              var _vd0 = null;
-              try { _vd0 = window.player.getVideoData ? window.player.getVideoData() : null; } catch (e) { _vd0 = null; }
-              if (!_vd0 || !_vd0.video_id) return;
-          } catch (e) { return; }
-          window.showCloudLoader('musicLoader');
-          try {
-              const currentTime = Math.floor(window.player.getCurrentTime());
-              const videoData = window.player.getVideoData();
-              const playlist = window.player.getPlaylist ? window.player.getPlaylist() : [];
-              const playlistIndex = window.player.getPlaylistIndex ? window.player.getPlaylistIndex() : -1;
-              var realIndex = (typeof playlistIndex === 'number' && playlistIndex >= 0) ? playlistIndex : -1;
-              if (realIndex < 0 && videoData && videoData.video_id && playlist && playlist.indexOf) {
-                 realIndex = playlist.indexOf(videoData.video_id);
-              }
-              if (!(realIndex >= 0)) return; // index dudoso: no sobrescribir progreso
-              if (videoData && videoData.video_id) {
-                 const payload = {
-                    videoId: videoData.video_id,
-                    index: realIndex,
-                    time: currentTime,
-                    timestamp: new Date().getTime()
-                 };
-                 localStorage.setItem(storageKeyForUser('danifu_music_progress_'), JSON.stringify(payload));
-                 if (window.isPremiumPlan && window.isPremiumPlan() && window.saveDominonMusicCloud) {
-                    window.saveDominonMusicCloud(payload);
-                 }
-             }
-          } catch (error) {
-             console.log("Error guardando msica:", error);
-          }
-          setTimeout(() => { window.hideCloudLoader('musicLoader'); }, 1500);
-       }
-    }, 30000);
 
     // =========================================================
     // --- NOTEPAD CONTROLLER (LOCAL & CLOUD) ---
@@ -4056,233 +3935,126 @@
     window.initGeminiAssistant();
   </script>
 
-  <!-- LGICA DE CONTROL DEL REPRODUCTOR MULTIMEDIA DE YOUTUBE -->
+  <!-- REPRODUCTOR DE AUDIO LOCAL (archivos desde la PC, sin YouTube) -->
   <script>
     // =========================================================
-    // --- MUSIC PLAYER CONTROLLER (LOCAL SAVE FOR EXTENDED/PREMIUM) ---
+    // --- LOCAL AUDIO PLAYER (solo memoria, sin guardado) ---
     // =========================================================
-    window.youtubePlayerReady = false;
-    window.player = null;
-    window.playerCommands = [];
-    var playlistId = 'PLKByqT47PJxp9fLnCY9Fptz-BBuoW9OWG';
-    var musicPlaylistInitialized = false;
-    window.authReady = false;
-    window.musicCloudChecked = false;
-    window.musicUserInteracted = false;
-    window.musicInitUid = null;
-    window._musicCloudWait = false;
-    window._musicCloudTimer = null;
-    window._musicCloudLateApplied = false;
+    window.audioEl = new Audio();
+    window.audioEl.preload = 'auto';
+    window.audioEl.volume = 0.5;
+    var musicTracks = []; // {file, name, url} — vive solo en memoria, muere al recargar
+    var musicIndex = -1;
+    var repeatMode = 0; // 0=off, 1=repetir todo, 2=repetir una (solo memoria)
 
-    window.executeWhenPlayerReady = function(command) {
-      if (window.youtubePlayerReady && window.player && window.player[command.fn]) {
-        window.player[command.fn].apply(window.player, command.args);
-      } else {
-        window.playerCommands.push(command);
-      }
-    };
-
-    function musicVolumeKey() {
-      if (window.storageKeyForUser) return window.storageKeyForUser('danifu_volume_');
-      return 'danifu_volume_' + (window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest');
-    }
-    function musicRepeatKey() {
-      if (window.storageKeyForUser) return window.storageKeyForUser('danifu_repeat_');
-      return 'danifu_repeat_' + (window.auth && window.auth.currentUser ? window.auth.currentUser.uid : 'guest');
+    function musicStripExt(name) {
+      return String(name || '').replace(/\.[^.]+$/, '');
     }
 
-    function onYouTubeIframeAPIReady() {
-      if (!document.getElementById('youtube-player')) {
-        console.error('Error del player: elemento #youtube-player no existe.');
-        return;
-      }
-      if (window.player) return;
-      var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
-      window.player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        playerVars: {
-          'listType': 'playlist',
-          'list': playlistId,
-          'autoplay': 0,
-          'controls': 0,
-          'fs': 0,
-          'index': 0
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange,
-          'onError': function(e) {
-             var codes = {2:'parametro invalido', 5:'error HTML5', 100:'video no encontrado/privado', 101:'propietario bloquea embed', 150:'propietario bloquea embed'};
-             console.error('Error del player:', e.data, codes[e.data] || '');
-          }
-        }
-      });
-    }
-    // Exponer la inicializacin globalmente para YouTube iframe API (definido ANTES de cargar iframe_api)
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    function musicHasTracks() { return musicTracks.length > 0; }
 
-    // Lee el progreso LOCAL sin tocar el player (guest y sesion).
-    function musicLocalProgress() {
+    function musicIsAudioFile(f) {
+      if (!f) return false;
       try {
-        var k = (window.storageKeyForUser ? window.storageKeyForUser('danifu_music_progress_') : 'danifu_music_progress_guest');
-        var raw = localStorage.getItem(k);
-        if (!raw) return null;
-        var d = null;
-        try { d = JSON.parse(raw); } catch (e) { d = null; }
-        if (d && d.index !== undefined) return { index: d.index || 0, time: d.time || 0 };
+        if (f.type && f.type.indexOf('audio/') === 0) return true;
       } catch (e) {}
-      return null;
+      return /\.(mp3|ogg|oga|wav|m4a|aac|opus|flac|webm)$/i.test(f.name || '');
     }
 
-    function musicCurrentUid() {
+    function musicRefreshUI() {
+      var dz = document.getElementById('musicDropzone');
+      if (dz) dz.classList.toggle('hidden', musicHasTracks());
+      updateSongDisplay();
+      musicUpdateNavButtons();
+    }
+
+    function musicUpdateNavButtons() {
+      var multi = musicTracks.length > 1;
+      var prev = document.getElementById('prevBtn');
+      var next = document.getElementById('nextBtn');
+      if (prev) prev.disabled = !multi;
+      if (next) next.disabled = !multi;
+    }
+
+    function musicLoadIndex(i, autoplay) {
+      if (!musicHasTracks()) return;
+      var n = musicTracks.length;
+      musicIndex = ((i % n) + n) % n;
       try {
-        return (window.auth && window.auth.currentUser) ? window.auth.currentUser.uid : 'guest';
-      } catch (e) { return 'guest'; }
+        window.audioEl.src = musicTracks[musicIndex].url;
+        if (autoplay) {
+          var p = window.audioEl.play();
+          if (p && typeof p.catch === 'function') p.catch(function() {});
+        }
+      } catch (e) { console.error('Error cargando pista:', e); }
+      updateSongDisplay();
+      musicUpdateNavButtons();
     }
 
-    function musicDoCue(idx, t) {
-      window.player.cuePlaylist({
-        listType: 'playlist',
-        list: playlistId,
-        index: idx || 0,
-        startSeconds: t || 0
-      });
-      musicPlaylistInitialized = true;
-      window.musicInitUid = musicCurrentUid();
-      setTimeout(updateSongDisplay, 400);
-    }
-
-    // Resolucion tardia de la nube: solo si el usuario aun no interactuo y el UID coincide.
-    function musicCloudDone() {
-      if (window._musicCloudTimer) { try { clearTimeout(window._musicCloudTimer); } catch (e) {} window._musicCloudTimer = null; }
-      window._musicCloudWait = false;
-      window.musicCloudChecked = true;
-      if (musicPlaylistInitialized) {
+    function musicAddFiles(files) {
+      if (!files || !files.length) return 0;
+      var added = 0;
+      var wasEmpty = !musicHasTracks();
+      for (var k = 0; k < files.length; k++) {
+        var f = files[k];
+        if (!musicIsAudioFile(f)) continue;
+        try { if (!f.size) continue; } catch (e) { continue; }
         try {
-          if (!window.musicUserInteracted && !window._musicCloudLateApplied && musicCurrentUid() === window.musicInitUid && window.player) {
-            window._musicCloudLateApplied = true;
-            var s = musicLocalProgress();
-            if (s) {
-              window.player.cuePlaylist({ listType: 'playlist', list: playlistId, index: s.index || 0, startSeconds: s.time || 0 });
-              setTimeout(updateSongDisplay, 400);
-            }
-          }
-        } catch (e) {}
-        return;
+          musicTracks.push({ file: f, name: f.name || ('Pista ' + (musicTracks.length + 1)), url: URL.createObjectURL(f) });
+          added++;
+        } catch (e) { console.error('Error agregando pista:', e); }
       }
-      maybeInitializeMusic();
+      if (added > 0) {
+        if (wasEmpty) musicLoadIndex(0, false);
+        else musicRefreshUI();
+      }
+      return added;
     }
 
-    // UNICA inicializacion de playlist: cuePlaylist se ejecuta UNA sola vez aqui.
-    // Requiere player listo + auth resuelto. En Premium espera a la nube (max 2.5s).
-    function maybeInitializeMusic() {
-      if (musicPlaylistInitialized) return true;
-      if (!window.youtubePlayerReady || !window.player) return false;
-      if (!window.authReady) return false;
-      var premium = false;
-      try { premium = !!(window.isPremiumPlan && window.isPremiumPlan()); } catch (e) {}
-      if (premium && !window.musicCloudChecked) {
-        if (!window._musicCloudWait) {
-          window._musicCloudWait = true;
-          window._musicCloudTimer = setTimeout(function() {
-            window._musicCloudWait = false;
-            window.musicCloudChecked = true;
-            maybeInitializeMusic();
-          }, 2500);
-          try {
-            var r = (window.loadDominonMusicCloud ? window.loadDominonMusicCloud() : null);
-            if (r && typeof r.then === 'function') {
-              r.then(function() { musicCloudDone(); }, function() { musicCloudDone(); });
-            } else {
-              musicCloudDone();
-            }
-          } catch (e) { musicCloudDone(); }
-        }
-        return false;
+    function musicClearList() {
+      try { window.audioEl.pause(); } catch (e) {}
+      try { window.audioEl.removeAttribute('src'); window.audioEl.load(); } catch (e) {}
+      for (var i = 0; i < musicTracks.length; i++) {
+        try { URL.revokeObjectURL(musicTracks[i].url); } catch (e) {}
       }
-      try {
-        var s = musicLocalProgress();
-        musicDoCue(s ? s.index : 0, s ? s.time : 0);
-        return true;
-      } catch (e) {
-        console.error('Error inicializando playlist:', e);
-        return false;
-      }
-    }
-    window.maybeInitializeMusic = maybeInitializeMusic;
-    window.tryInitMusic = function() { try { return maybeInitializeMusic(); } catch (e) { return false; } };
-
-    function onPlayerReady(event) {
-      var savedVolume = localStorage.getItem(musicVolumeKey()) || 50;
-      event.target.setVolume(parseInt(savedVolume));
-      var volSlider = document.getElementById('volumeSlider');
-      if (volSlider) volSlider.value = savedVolume;
-
-      window.youtubePlayerReady = true;
-
-      while (window.playerCommands.length > 0) {
-        var cmd = window.playerCommands.shift();
-        if (window.player && window.player[cmd.fn]) {
-          window.player[cmd.fn].apply(window.player, cmd.args);
-        }
-      }
-
-      maybeInitializeMusic();
-      repeatMode = repeatStateFromStorage();
-      updateRepeatButton();
+      musicTracks = [];
+      musicIndex = -1;
+      musicRefreshUI();
     }
 
-    function repeatStateFromStorage() {
-      try {
-        var v = parseInt(localStorage.getItem(musicRepeatKey()), 10);
-        return (v === 0 || v === 1 || v === 2) ? v : 0;
-      } catch (e) { return 0; }
+    function musicDropReject() {
+      var dz = document.getElementById('musicDropzone');
+      if (!dz) return;
+      dz.classList.add('reject');
+      setTimeout(function() { dz.classList.remove('reject'); }, 700);
     }
-    function saveRepeatState() {
-      try { localStorage.setItem(musicRepeatKey(), String(repeatMode)); } catch (e) {}
-      if (window.isPremiumPlan && window.isPremiumPlan() && window.saveDominonMusicCloud) {
-        window.saveDominonMusicCloud({ repeatMode: repeatMode });
-      }
+
+    function musicSetPlayIcon(playing) {
+      var b = document.getElementById('playPauseBtn');
+      if (b) b.innerHTML = playing ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
     }
-    var repeatMode = repeatStateFromStorage(); // 0=off, 1=repeat all, 2=repeat one
-    function onPlayerStateChange(event) {
-      var playBtn = document.getElementById('playPauseBtn');
-      if (event.data === YT.PlayerState.PLAYING) {
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-        updateSongDisplay();
-        setTimeout(function() {
-          try {
-            var vd = window.player.getVideoData();
-            var t = (vd && vd.title) ? vd.title : '';
-            if (t && _elSongTitle && (!_elSongTitle.textContent || _elSongTitle.textContent === 'Listo para Play')) {
-              _elSongTitle.textContent = t;
-            }
-          } catch (e) {}
-        }, 400);
-      } else if (event.data === YT.PlayerState.ENDED) {
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        if (!window.player) return;
+
+    try {
+      window.audioEl.addEventListener('play', function() { musicSetPlayIcon(true); });
+      window.audioEl.addEventListener('pause', function() { musicSetPlayIcon(false); });
+      window.audioEl.addEventListener('ended', function() {
+        musicSetPlayIcon(false);
+        if (!musicHasTracks()) return;
         if (repeatMode === 2) {
-          window.player.seekTo(0);
-          window.player.playVideo();
-        } else if (repeatMode === 1) {
           try {
-            var plist = window.player.getPlaylist();
-            var pIdx = window.player.getPlaylistIndex();
-            if (plist && pIdx >= 0 && pIdx >= plist.length - 1) {
-              window.player.playVideoAt ? window.player.playVideoAt(0) : window.player.seekTo(0);
-            } else {
-              window.player.nextVideo();
-            }
+            window.audioEl.currentTime = 0;
+            var p = window.audioEl.play();
+            if (p && typeof p.catch === 'function') p.catch(function() {});
           } catch (e) {}
+        } else if (repeatMode === 1) {
+          musicLoadIndex(musicIndex + 1, true);
+        } else {
+          if (musicIndex < musicTracks.length - 1) musicLoadIndex(musicIndex + 1, true);
+          else updateSongDisplay();
         }
-      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.UNSTARTED || event.data === YT.PlayerState.CUED) {
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-      }
-      // BUFFERING (3): se mantiene el estado visual actual, sin cambios.
-    }
-
+      });
+      window.audioEl.addEventListener('error', function() { console.error('Error de audio en la pista actual.'); });
+    } catch (e) {}
     function updateRepeatButton() {
       var btn = document.getElementById('repeatBtn');
       if (!btn) return;
@@ -4291,47 +4063,32 @@
         btn.title = 'Sin repetición';
         btn.style.opacity = '0.4';
         btn.style.color = '';
-        if (window.player && window.player.setLoop) window.player.setLoop(false);
       } else if (repeatMode === 1) {
         btn.innerHTML = '<i class="fa-solid fa-repeat"></i>';
         btn.title = 'Repetir toda la lista';
         btn.style.opacity = '1';
         btn.style.color = 'var(--color-highlight)';
-        if (window.player && window.player.setLoop) window.player.setLoop(true);
       } else {
         btn.innerHTML = '<i class="fa-solid fa-repeat"></i><span style="font-size:8px;position:absolute;top:1px;right:1px;font-weight:700;">1</span>';
         btn.title = 'Repetir canción';
         btn.style.opacity = '1';
         btn.style.color = 'var(--color-highlight)';
-        if (window.player && window.player.setLoop) window.player.setLoop(false);
       }
     }
 
     window.setRepeatMode = function() {
       repeatMode = (repeatMode + 1) % 3;
       updateRepeatButton();
-      saveRepeatState();
-    };
-    window.applyMusicSavedData = function(musicData) {
-      if (!musicData) return;
-      if (typeof musicData.volume !== 'undefined' && !isNaN(musicData.volume) && window.player) {
-        window.player.setVolume(parseInt(musicData.volume));
-        var volSlider = document.getElementById('volumeSlider');
-        if (volSlider) volSlider.value = musicData.volume;
-      }
-      if (typeof musicData.repeatMode !== 'undefined') {
-        repeatMode = (musicData.repeatMode === 1 || musicData.repeatMode === 2) ? musicData.repeatMode : 0;
-        updateRepeatButton();
-        saveRepeatState();
-      }
     };
 
     function updateSongDisplay() {
-      if (!window.player || !window.player.getVideoData) return;
+      if (!_elSongTitle) return;
       try {
-        var videoData = window.player.getVideoData();
-        var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
-        if (_elSongTitle) _elSongTitle.textContent = title;
+        if (musicHasTracks() && musicIndex >= 0 && musicTracks[musicIndex]) {
+          _elSongTitle.textContent = musicStripExt(musicTracks[musicIndex].name);
+        } else {
+          _elSongTitle.textContent = 'Arrastrá tus MP3';
+        }
       } catch (error) {}
     }
 
@@ -4350,25 +4107,18 @@
         if (_elFechaHora) _elFechaHora.textContent = d.toLocaleDateString() + " " + d.toLocaleTimeString();
       }
 
-      if (window.player && window.player.getCurrentTime) {
-        try {
-          var cur = Math.floor(window.player.getCurrentTime());
-          var dur = Math.floor(window.player.getDuration());
-          if (_elCurrentTime) _elCurrentTime.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
-          if (dur > 0) {
-            if (_elDuration) _elDuration.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
-            if (_elProgress) _elProgress.value = (cur / dur) * 100;
-          }
-        } catch(e) {}
-      }
-
-      if (_masterTick % 10 === 0 && window.player && window.player.getVideoData) {
-        try {
-          var videoData = window.player.getVideoData();
-          var title = (videoData && videoData.title) ? videoData.title : 'Listo para Play';
-          if (_elSongTitle) _elSongTitle.textContent = title;
-        } catch(e) {}
-      }
+      try {
+        var cur = Math.floor(window.audioEl.currentTime || 0);
+        var dur = Math.floor(window.audioEl.duration || 0);
+        if (_elCurrentTime) _elCurrentTime.textContent = Math.floor(cur/60) + ":" + (cur%60).toString().padStart(2,'0');
+        if (dur > 0) {
+          if (_elDuration) _elDuration.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+          if (_elProgress && document.activeElement !== _elProgress) _elProgress.value = (cur / dur) * 100;
+        } else {
+          if (_elDuration) _elDuration.textContent = '0:00';
+          if (_elProgress && document.activeElement !== _elProgress) _elProgress.value = 0;
+        }
+      } catch(e) {}
 
       if (_masterTick >= 600) _masterTick = 0;
 
@@ -4376,61 +4126,54 @@
     setInterval(function() { musicMasterTick(); }, 1000);
 
     window.playPauseVideo = function() {
-      if (!window.youtubePlayerReady || !window.player) return;
-      window.musicUserInteracted = true;
-      if (!musicPlaylistInitialized) {
-        if (!maybeInitializeMusic()) return;
-        window.player.playVideo();
-        return;
-      }
-      var state = window.player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING) {
-        window.player.pauseVideo();
-      } else {
-        window.player.playVideo();
-      }
+      if (!musicHasTracks()) return;
+      try {
+        if (window.audioEl.paused) {
+          if (musicIndex < 0) musicLoadIndex(0, false);
+          var p = window.audioEl.play();
+          if (p && typeof p.catch === 'function') p.catch(function() {});
+        } else {
+          window.audioEl.pause();
+        }
+      } catch(err) { console.error('Error en playPause:', err); }
     };
 
     window._navLock = 0;
     window.nextVideo = function() {
-      if (!window.youtubePlayerReady || !window.player || !musicPlaylistInitialized) return;
+      if (musicTracks.length < 2) return;
       var now = Date.now();
       if (now - window._navLock < 300) return;
       window._navLock = now;
-      window.musicUserInteracted = true;
-      try {
-        window.player.nextVideo();
-      } catch(err) { console.error('Error en nextVideo:', err); }
+      try { musicLoadIndex(musicIndex + 1, !window.audioEl.paused); }
+      catch(err) { console.error('Error en nextVideo:', err); }
     };
 
     window.prevVideo = function() {
-      if (!window.youtubePlayerReady || !window.player || !musicPlaylistInitialized) return;
+      if (musicTracks.length < 2) return;
       var now = Date.now();
       if (now - window._navLock < 300) return;
       window._navLock = now;
-      window.musicUserInteracted = true;
       try {
         var cur = 0;
-        try { cur = window.player.getCurrentTime(); } catch(e){}
+        try { cur = window.audioEl.currentTime || 0; } catch(e){}
         if (cur > 3) {
-          window.player.seekTo(0, true);
+          try { window.audioEl.currentTime = 0; } catch(e){}
           return;
         }
-        window.player.previousVideo();
+        musicLoadIndex(musicIndex - 1, !window.audioEl.paused);
       } catch(err) { console.error('Error en prevVideo:', err); }
     };
 
     window.seekVideo = function(time) {
-      if (window.youtubePlayerReady && window.player) {
-        window.musicUserInteracted = true;
-        window.player.seekTo(time, true);
-      }
+      try { window.audioEl.currentTime = time; } catch(e){}
     };
 
     window.setVideoVolume = function(volume) {
-      if (window.youtubePlayerReady && window.player) {
-        window.player.setVolume(volume);
-      }
+      try {
+        var v = parseInt(volume, 10);
+        if (isNaN(v)) return;
+        window.audioEl.volume = Math.max(0, Math.min(100, v)) / 100;
+      } catch(e){}
     };
 
     // Drag generico reutilizable para paneles flotantes (pointer events + rAF, sin thrash).
@@ -4545,25 +4288,78 @@
 
       if (volumeSlider) {
         volumeSlider.addEventListener('input', function(e) {
-          var volume = parseInt(e.target.value);
-          window.setVideoVolume(volume);
-          localStorage.setItem(musicVolumeKey(), volume);
-          if (window.isPremiumPlan && window.isPremiumPlan() && window.saveDominonMusicCloud) {
-            window.saveDominonMusicCloud({ volume: volume });
-          }
+          window.setVideoVolume(parseInt(e.target.value, 10));
         });
       }
 
       if (progressBar) {
         progressBar.addEventListener('input', function(e) {
-          if (!window.player || !window.player.getDuration) return;
-          var duration = window.player.getDuration();
+          var duration = 0;
+          try { duration = window.audioEl.duration || 0; } catch (err) {}
           if (duration) {
-            var newTime = (parseInt(e.target.value) / 100) * duration;
+            var newTime = (parseInt(e.target.value, 10) / 100) * duration;
             window.seekVideo(newTime);
           }
         });
       }
+
+      // Carga de archivos solo dentro del panel (dropzone + input).
+      var musicPanelOpen = function() {
+        var mp = document.getElementById('musicPanel');
+        return !!(mp && !mp.classList.contains('hidden'));
+      };
+      var dz = document.getElementById('musicDropzone');
+      var fileInput = document.getElementById('musicFileInput');
+      if (fileInput) {
+        fileInput.addEventListener('change', function() {
+          if (!musicPanelOpen()) { fileInput.value = ''; return; }
+          var added = 0;
+          try { added = musicAddFiles(fileInput.files); } catch (err) {}
+          if (!added) musicDropReject();
+          fileInput.value = '';
+        });
+      }
+      if (dz) {
+        dz.addEventListener('dragenter', function(e) {
+          if (!musicPanelOpen()) return;
+          e.preventDefault();
+          dz.classList.add('dragover');
+        });
+        dz.addEventListener('dragover', function(e) {
+          if (!musicPanelOpen()) return;
+          e.preventDefault();
+          dz.classList.add('dragover');
+        });
+        dz.addEventListener('dragleave', function() { dz.classList.remove('dragover'); });
+        dz.addEventListener('drop', function(e) {
+          dz.classList.remove('dragover');
+          if (!musicPanelOpen()) return;
+          e.preventDefault();
+          // Los archivos los procesa el handler a nivel documento (evita doble carga).
+        });
+      }
+      // Nivel documento: SIEMPRE cancela (evita que el navegador abra el archivo),
+      // pero solo acepta archivos sobre la dropzone con el panel abierto.
+      document.addEventListener('dragover', function(e) { try { e.preventDefault(); } catch (err) {} });
+      document.addEventListener('drop', function(e) {
+        try { e.preventDefault(); } catch (err) {}
+        try {
+          if (!musicPanelOpen()) return;
+          var t = e.target;
+          var zone = (t && t.closest) ? t.closest('#musicDropzone') : null;
+          if (!zone) return;
+          var dt = e.dataTransfer;
+          var added = (dt && dt.files) ? musicAddFiles(dt.files) : 0;
+          if (!added) musicDropReject();
+        } catch (err) {}
+      });
+      var clearBtn = document.getElementById('clearBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() { try { musicClearList(); } catch (err) {} });
+      }
+
+      updateRepeatButton();
+      musicRefreshUI();
 
       // Music panel drag (reutilizable)
       var musicPanel = document.getElementById('musicPanel');
@@ -4575,13 +4371,7 @@
         window.makeDraggable(document.getElementById('miniPlanPopup'), document.getElementById('miniPlanPopup'), 'danifu_panel_pos_miniPlan');
       }
     });
-
-    // Si la API de YouTube ya estaba cacheada/cargada, inicializar directo.
-    if (window.YT && window.YT.Player && !window.player) {
-      try { onYouTubeIframeAPIReady(); } catch (e) { console.error('Error init YT cached:', e); }
-    }
   </script>
-  <script src="https://www.youtube.com/iframe_api"></script>
 
   <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
   <script>
