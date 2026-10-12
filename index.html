@@ -209,7 +209,7 @@
       top: 6px;
       right: 6px;
     }
-    /* ========== LOGIN SCREEN (ESTTICA EN LA RAZ) ========== */
+    /* ========== LOGIN SCREEN (ESTÁTICA EN LA RAÍZ) ========== */
     #loginScreen {
       position: fixed;
       inset: 0;
@@ -2304,7 +2304,7 @@
 </head>
 <body>
 
-  <!-- PANTALLA DE AUTENTICACIN (FIREBASE) -->
+  <!-- PANTALLA DE AUTENTICACIÓN (FIREBASE) -->
   <div id="loginScreen">
     <div class="stars-container">
       <div id="stars"></div>
@@ -2321,7 +2321,7 @@
           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
         </svg>
-        Iniciar sesin con Google
+        Iniciar sesión con Google
       </button>
     </div>
   </div>
@@ -2346,11 +2346,11 @@
           <div class="user-info" id="userInfo">
             <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
             <span class="user-name" id="userName"></span>
-            <button class="logout-btn" id="logoutBtn" title="Cerrar sesin">
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
               <i class="fas fa-sign-out-alt"></i>
             </button>
           </div>
-          <button class="icon-square-btn" id="dominonConfigBtn" title="Configuracion">
+          <button class="icon-square-btn" id="dominonConfigBtn" title="Configuración">
             <i class="fa-solid fa-gear"></i>
           </button>
           <div class="music-container">
@@ -2385,10 +2385,10 @@
               </div>
             </div>
             <div class="notepad-tabs" id="notepad-tabs">
-              <!-- Pestaas dinmicas -->
+              <!-- Pestañas dinámicas -->
             </div>
           </div>
-          <textarea id="notepad" placeholder="Escribe tus notas aqu..."></textarea>
+          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
           <div id="notepadSaveLoader" class="cloud-loader-wrap" title="Guardando en la nube...">
             <div class="cloud-loader"></div>
           </div>
@@ -2418,26 +2418,6 @@
               <button class="calc-button zero" onclick="appendNumber('0')">0</button>
               <button class="calc-button" onclick="appendNumber('.')">.</button>
               <button class="calc-button equals" onclick="calculate()">=</button>
-              <!-- Legacy calculator layout removed by membership refactor. -->
-              <template>
-              <button class="calc-button" onclick="backspace()">?</button>
-              <button class="calc-button operator" onclick="appendOperator('/')">/</button>
-              <button class="calc-button operator" onclick="appendOperator('*')"></button>
-              <button class="calc-button" onclick="appendNumber('7')">7</button>
-              <button class="calc-button" onclick="appendNumber('8')">8</button>
-              <button class="calc-button" onclick="appendNumber('9')">9</button>
-              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
-              <button class="calc-button" onclick="appendNumber('4')">4</button>
-              <button class="calc-button" onclick="appendNumber('5')">5</button>
-              <button class="calc-button" onclick="appendNumber('6')">6</button>
-              <button class="calc-button operator" onclick="appendOperator('+')">+</button>
-              <button class="calc-button" onclick="appendNumber('1')">1</button>
-              <button class="calc-button" onclick="appendNumber('2')">2</button>
-              <button class="calc-button" onclick="appendNumber('3')">3</button>
-              <button class="calc-button equals" onclick="calculate()">=</button>
-              <button class="calc-button zero" onclick="appendNumber('0')">0</button>
-              <button class="calc-button" onclick="appendNumber('.')">.</button>
-              </template>
             </div>
           </div>
 
@@ -2458,7 +2438,7 @@
             <aside class="gemini-sidebar" id="geminiSidebar">
               <div class="gemini-sidebar-header">
                 <span>Conversaciones</span>
-                <button id="geminiNewChatBtn" title="Nueva conversacion"><i class="fa-solid fa-plus"></i></button>
+                <button id="geminiNewChatBtn" title="Nueva conversación"><i class="fa-solid fa-plus"></i></button>
               </div>
               <div class="gemini-sidebar-list" id="geminiTabBar"></div>
               <div class="gemini-sidebar-footer">
@@ -2954,7 +2934,7 @@
           <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
           <button class="q-tool-btn" id="q-center-canvas-btn" type="button" title="Centrar Canvas"><i class="fa-solid fa-crosshairs"></i></button>
         </div>
-        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuracion">
+        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuración">
           <i class="fa-solid fa-gear"></i>
         </button>
         <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
@@ -3183,7 +3163,7 @@
     </div>
   </div>
 
-  <!-- SCRIPTS DE INICIALIZACIN DE FIREBASE (V10 MODULAR) -->
+  <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -3457,7 +3437,6 @@
           notepadEl.value = "";
        }
     };
-    window.loadNoteFromFirestore = window.loadNote;
 
     window.saveCurrentNote = async function() {
        const notepadEl = document.getElementById('notepad');
@@ -3517,7 +3496,7 @@
 
         plusBtn.onclick = function() {
           if (window.createdPagesCount >= window.maxPages) {
-            alert('Limite de paginas alcanzado para tu plan actual.');
+            alert('Límite de páginas alcanzado para tu plan actual.');
           } else {
             window.createdPagesCount++;
             localStorage.setItem(storageKeyForUser('danifu_pages_count_'), window.createdPagesCount);
@@ -3533,7 +3512,7 @@
 
     window.exportCurrentNote = function() {
       if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Export Note esta disponible en Extended.');
+        window.showPlanPopup('Export Note está disponible en Extended.');
         return;
       }
       const note = document.getElementById('notepad');
@@ -3547,7 +3526,7 @@
 
     window.importCurrentNote = function(file) {
       if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Import Note esta disponible en Extended.');
+        window.showPlanPopup('Import Note está disponible en Extended.');
         return;
       }
       if (!file) return;
@@ -3564,7 +3543,7 @@
 
     document.getElementById('exportNoteBtn')?.addEventListener('click', window.exportCurrentNote);
     document.getElementById('importNoteBtn')?.addEventListener('click', function() {
-      if (window.userPlan !== 'Extended') return window.showPlanPopup('Import Note esta disponible en Extended.');
+      if (window.userPlan !== 'Extended') return window.showPlanPopup('Import Note está disponible en Extended.');
       document.getElementById('importNoteInput')?.click();
     });
     document.getElementById('importNoteInput')?.addEventListener('change', function(e) {
@@ -3858,7 +3837,7 @@
       geminiLoadChat(geminiActiveTab);
     });
 
-    var GEMINI_SYSTEM_INSTRUCTION = "Eres un asesor experto, versatil y de maximo nivel. Tu mision es ayudar al usuario en cualquier tema que solicite, brindando siempre la respuesta mas fina, completa, precisa y util que puedas dar. Te diriges al usuario con respeto, cordialidad y profesionalismo en todo momento. Usas un lenguaje claro, bien estructurado y adaptado al nivel del usuario. Si la pregunta es compleja, razonas paso a paso y entregas la mejor calidad posible. No mencionas ni revelas informacion sobre la pagina web, paneles, codigo interno o estructura del sitio: actuas unicamente como un asistente independiente y general. Respondes por defecto en espanol, salvo que el usuario te pida otro idioma.";
+    var GEMINI_SYSTEM_INSTRUCTION = "Eres un asesor experto, versatil y de maximo nivel. Tu mision es ayudar al usuario en cualquier tema que solicite, brindando siempre la respuesta más fina, completa, precisa y útil que puedas dar. Te diriges al usuario con respeto, cordialidad y profesionalismo en todo momento. Usas un lenguaje claro, bien estructurado y adaptado al nivel del usuario. Si la pregunta es compleja, razonas paso a paso y entregas la mejor calidad posible. No mencionas ni revelas informacion sobre la pagina web, paneles, codigo interno o estructura del sitio: actuas unicamente como un asistente independiente y general. Respondes por defecto en espanol, salvo que el usuario te pida otro idioma.";
 
     async function geminiSendMessage() {
       var promptInput = document.getElementById('geminiPromptInput');
@@ -4378,13 +4357,6 @@
     // =========================================================
     // --- SPA ROUTER (3-VIEW SWITCHER) ---
     // =========================================================
-    // Legacy alias so any remaining internal calls don't break
-    window.toggleAppView = function() {
-      var deepFlow = document.getElementById('deep-flow-view');
-      var isFlowHidden = deepFlow ? deepFlow.classList.contains('hidden-view') : true;
-      window.switchAppView(isFlowHidden ? 'deep-flow-view' : 'main-dashboard-view');
-    };
-
     // New 3-view router — add/remove .hidden-view cleanly across all views with fade transitions
     window.switchAppView = function(targetViewId) {
       var ALL_VIEWS = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
@@ -4574,7 +4546,7 @@
     })();
   </script>
 
-  <!-- LGICA DE NEGOCIO Y OPERACIN GENERAL DE DOMINON -->
+  <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
   <script>
     // =========================================================
     // --- DOMINON BUSINESS LOGIC (CALCULATOR, THEMES, POMODORO) ---
@@ -4774,7 +4746,7 @@
       const input = document.getElementById('custom-min');
       const mins = parseInt(input.value);
       if (!mins || mins <= 0) {
-        alert("Por favor ingresa un nmero de minutos vlido.");
+        alert("Por favor ingresa un número de minutos válido.");
         return;
       }
       clearInterval(pomoInterval);
@@ -4786,12 +4758,12 @@
     };
   </script>
 
-  <!-- LGICA DE OPERACIN DE TERMINAL CRYPTO: DEEP FLOW -->
+  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
   <script>
     // =========================================================
     // --- DEEP FLOW CRYPTO TERMINAL ---
     // =========================================================
-    const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCION',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'INDICE VOLATILIDAD',ssr:'RAZON OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANALISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'METRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACION',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
+    const LANG={en:{brand:'DEEP FLOW',value:'VALUE (USD)',asset:'ASSET',action:'ACTION',fromTo:'FROM / TO',time:'TIME',filterPlaceholder:'FILTER ASSET...',btcDom:'BTC DOMINANCE',totalMcap:'TOTAL MARKET CAP',volIndex:'VOLATILITY INDEX',ssr:'STABLE SUPPLY RATIO',whaleRatio:'WHALE BUY/SELL',hotContracts:'TOP HOT CONTRACTS',txHash:'TX HASH',gasFee:'GAS FEE',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 TERMINAL ANALYSIS',noResults:'NO MATCHING TRANSACTIONS',buy:'BUY',sell:'SELL',copied:'COPIED',hours24:'24h',showAll:'SHOW ALL',massiveOnly:'MASSIVE +500M',swapsOnly:'SWAPS ONLY',yieldOnly:'YIELD ONLY',spotBuyOnly:'SPOT BUYS ONLY',futuresOnly:'FUTURES ONLY',sndOn:'SND ON',sndOff:'MUTE',onChainStream:'ON-CHAIN',binanceStream:'BINANCE METRICS',binanceVolume:'BINANCE 24H SPOT VOL',proofOfReserves:'PROOF OF RESERVES',backed:'BACKED',topPairs:'TOP TRADING PAIRS',spotBuy:'SPOT BUY',spotSell:'SPOT SELL',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futures',orderId:'ORDER ID',executedPrice:'EXEC PRICE',location:'LOCATION',amountValue:'AMOUNT / VALUE',pair:'PAIR',actionType:'ACTION TYPE'},es:{brand:'DEEP FLOW',value:'VALOR (USD)',asset:'ACTIVO',action:'ACCIÓN',fromTo:'DE / A',time:'HORA',filterPlaceholder:'FILTRAR ACTIVO...',btcDom:'DOMINANCIA BTC',totalMcap:'CAP. MERCADO TOTAL',volIndex:'ÍNDICE VOLATILIDAD',ssr:'RAZÓN OFERTA ESTABLES',whaleRatio:'COMPRA/VENTA BALL.',hotContracts:'CONTRATOS TOP',txHash:'HASH TX',gasFee:'TASA GAS',onChain:'ON-CHAIN',terminalAnalysis:'\u26A1 ANÁLISIS TERMINAL',noResults:'SIN TRANSACCIONES',buy:'COMPRA',sell:'VENTA',copied:'COPIADO',hours24:'24h',showAll:'MOSTRAR TODO',massiveOnly:'MASIVOS +500M',swapsOnly:'SOLO SWAPS',yieldOnly:'SOLO RENDIMIENTO',spotBuyOnly:'COMPRAS SPOT',futuresOnly:'SOLO FUTUROS',sndOn:'SONIDO ON',sndOff:'SILENCIO',onChainStream:'ON-CHAIN',binanceStream:'MÉTRICAS BINANCE',binanceVolume:'VOLUMEN SPOT 24H',proofOfReserves:'PRUEBA DE RESERVAS',backed:'RESPALDADO',topPairs:'PARES TOP',spotBuy:'COMPRA SPOT',spotSell:'VENTA SPOT',futuresLong:'FUT LONG',futuresShort:'FUT SHORT',binanceSpot:'Binance Spot',binanceFutures:'Binance Futuros',orderId:'ID ORDEN',executedPrice:'PRECIO EJEC',location:'UBICACIÓN',amountValue:'MONTO / VALOR',pair:'PAR',actionType:'TIPO ACCION'}};
     const TOKENS=[{sym:'BTC',name:'Bitcoin',minVal:5e6,maxVal:5e8,color:'#F7931A',icon:'\u20BF',weight:24},{sym:'ETH',name:'Ethereum',minVal:2e6,maxVal:2e8,color:'#627EEA',icon:'\u039E',weight:22},{sym:'USDT',name:'Tether',minVal:1e7,maxVal:1e9,color:'#26A17B',icon:'\u20AE',weight:14},{sym:'USDC',name:'USD Coin',minVal:5e6,maxVal:5e8,color:'#2775CA',icon:'U',weight:11},{sym:'STETH',name:'Lido Staked ETH',minVal:5e6,maxVal:3e8,color:'#00A3FF',icon:'S',weight:6},{sym:'WBTC',name:'Wrapped Bitcoin',minVal:1e6,maxVal:1e8,color:'#F7931A',icon:'W',weight:5},{sym:'DAI',name:'Dai',minVal:5e6,maxVal:5e8,color:'#F5AC37',icon:'D',weight:5},{sym:'LINK',name:'Chainlink',minVal:5e5,maxVal:5e7,color:'#2A5ADA',icon:'L',weight:3},{sym:'UNI',name:'Uniswap',minVal:2e5,maxVal:3e7,color:'#FF007A',icon:'U',weight:2},{sym:'AAVE',name:'Aave',minVal:1e6,maxVal:8e7,color:'#B6509E',icon:'A',weight:2},{sym:'CRV',name:'Curve DAO',minVal:5e5,maxVal:4e7,color:'#FF4E4E',icon:'C',weight:2},{sym:'MKR',name:'Maker',minVal:2e6,maxVal:1.5e8,color:'#1AAB9B',icon:'M',weight:1},{sym:'COMP',name:'Compound',minVal:3e5,maxVal:2.5e7,color:'#00D395',icon:'C',weight:1},{sym:'SNX',name:'Synthetix',minVal:2e5,maxVal:2e7,color:'#00D1FF',icon:'S',weight:1},{sym:'LDO',name:'Lido DAO',minVal:5e5,maxVal:6e7,color:'#00A3FF',icon:'L',weight:1}];
     const IT=[{name:'DeFi Liquidation',short:'LIQUIDATION',color:'#FF3131',anomalous:true},{name:'Staking Lock',short:'STAKE LOCK',color:'#00F0FF',anomalous:false},{name:'Whale Outflow',short:'OUTFLOW',color:'#FF007F',anomalous:true},{name:'Whale Inflow',short:'INFLOW',color:'#39FF14',anomalous:false},{name:'DEX Swap',short:'DEX SWAP',color:'#FFD700',anomalous:false},{name:'Bridge Transfer',short:'BRIDGE',color:'#8A2BE2',anomalous:false},{name:'OTC Settlement',short:'OTC DEAL',color:'#FF8C00',anomalous:false},{name:'Treasury Movement',short:'TREASURY',color:'#00CED1',anomalous:false},{name:'Yield Deposit',short:'YIELD DEP',color:'#7FFF00',anomalous:false},{name:'Margin Repayment',short:'MARGIN REP',color:'#DC143C',anomalous:false}];
     const BP=[{sym:'BTC/USDT',base:'BTC',price:104500},{sym:'ETH/USDT',base:'ETH',price:3850},{sym:'SOL/USDT',base:'SOL',price:178},{sym:'BNB/USDT',base:'BNB',price:615},{sym:'XRP/USDT',base:'XRP',price:2.45}];
@@ -5983,7 +5955,7 @@
     window.qAddProject = function () {
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6000,7 +5972,7 @@
         QS.projects.push({
           id: "qp-" + Date.now(),
           name: n.trim(),
-          pages: ["Pagina 1"],
+          pages: ["Página 1"],
         });
         QS.canvasData[newIdx + "-0"] = [];
         QS.drawings[newIdx + "-0"] = [];
@@ -6050,7 +6022,7 @@
       var newPage = 0;
       if (!QS.projects.length) {
         QS.projects = [
-          { id: "qp-" + Date.now(), name: "Proyecto 1", pages: ["Pagina 1"] },
+          { id: "qp-" + Date.now(), name: "Proyecto 1", pages: ["Página 1"] },
         ];
         QS.canvasData["0-0"] = [];
         QS.drawings["0-0"] = [];
@@ -6062,7 +6034,7 @@
     function qAddPage(projIdx) {
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6091,13 +6063,13 @@
       var prevPage = QS.activePage;
       if (!QS.projects.length) {
         QS.projects = [
-          { id: "qp-" + Date.now(), name: "Proyecto 1", pages: ["Pagina 1"] },
+          { id: "qp-" + Date.now(), name: "Proyecto 1", pages: ["Página 1"] },
         ];
         QS.canvasData["0-0"] = QS.canvasData["0-0"] || [];
         QS.drawings["0-0"] = QS.drawings["0-0"] || [];
       }
       QS.projects.forEach(function (project) {
-        if (!project.pages.length) project.pages.push("Pagina 1");
+        if (!project.pages.length) project.pages.push("Página 1");
       });
       QS.activeProj = Math.min(
         QS.activeProj,
@@ -6135,7 +6107,7 @@
         ?.addEventListener("click", function () {
           if (!window.isMembershipPlanReady)
             return window.showPlanPopup(
-              "Cargando tu plan. Intentalo de nuevo en un momento.",
+              "Cargando tu plan. Inténtalo de nuevo en un momento.",
             );
           if (window.userPlan === "normal")
             return window.showPlanPopup(
@@ -6157,7 +6129,7 @@
         ?.addEventListener("click", function () {
           if (!window.isMembershipPlanReady)
             return window.showPlanPopup(
-              "Cargando tu plan. Intentalo de nuevo en un momento.",
+              "Cargando tu plan. Inténtalo de nuevo en un momento.",
             );
           if (window.userPlan === "normal")
             return window.showPlanPopup(
@@ -6175,7 +6147,7 @@
             try {
               var data = JSON.parse(ev.target.result);
               if (!Array.isArray(data.projects) || !data.canvasData)
-                throw new Error("Formato invalido");
+                throw new Error("Formato inválido");
               QS.projects = data.projects;
               QS.canvasData = data.canvasData || {};
               QS.drawings = data.drawings || {};
@@ -6308,7 +6280,7 @@
       if (!QS.drawMode) return;
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6557,7 +6529,7 @@ function qEndDraw() {
     function qSetDrawMode(mode) {
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6584,7 +6556,7 @@ function qEndDraw() {
     function qToggleDrawPanel() {
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6609,7 +6581,7 @@ function qEndDraw() {
      window.qSelectDrawColor = function (color) {
       if (!window.isMembershipPlanReady) {
         window.showPlanPopup(
-          "Cargando tu plan. Intentalo de nuevo en un momento.",
+          "Cargando tu plan. Inténtalo de nuevo en un momento.",
         );
         return;
       }
@@ -6682,7 +6654,7 @@ function qEndDraw() {
         ?.addEventListener("input", function (e) {
           if (!window.isMembershipPlanReady)
             return window.showPlanPopup(
-              "Cargando tu plan. Intentalo de nuevo en un momento.",
+              "Cargando tu plan. Inténtalo de nuevo en un momento.",
             );
           if (!qIsPremiumBrush())
             return window.showPlanPopup(
@@ -6695,7 +6667,7 @@ document.querySelectorAll("#quantis-drawing-tools-panel .q-draw-color-toggle").f
          btn.addEventListener("click", function () {
            if (!window.isMembershipPlanReady)
              return window.showPlanPopup(
-               "Cargando tu plan. Intentalo de nuevo en un momento.",
+               "Cargando tu plan. Inténtalo de nuevo en un momento.",
              );
            if (!qIsPremiumBrush())
              return window.showPlanPopup(
@@ -6719,7 +6691,7 @@ document.querySelectorAll("#quantis-drawing-tools-panel .q-draw-color-toggle").f
 document.getElementById("q-draw-custom-color")?.addEventListener("input", function (e) {
             if (!window.isMembershipPlanReady)
               return window.showPlanPopup(
-                "Cargando tu plan. Intentalo de nuevo en un momento.",
+                "Cargando tu plan. Inténtalo de nuevo en un momento.",
               );
             if (!qIsPremiumBrush())
               return window.showPlanPopup(
