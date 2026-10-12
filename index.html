@@ -5387,14 +5387,38 @@
         qSaveWorkspace();
       };
 
-      // FASE 4 — DESHACER / REHACER
+      // FASE 4 — DESHACER / REHACER (snapshot doble: trazos + bloques)
+      function qSnapshotNow(key) {
+        return JSON.stringify({ d: qNormalizeDrawingPaths(key), c: QS.canvasData[key] || [] });
+      }
       function qPushUndo() {
         var key = qWorkspaceKey();
         if (!QS.undoStack[key]) QS.undoStack[key] = [];
-        var snapshot = JSON.stringify(qNormalizeDrawingPaths(key));
-        QS.undoStack[key].push(snapshot);
-        if (QS.undoStack[key].length > 50) QS.undoStack[key].shift();
+        if (!QS.redoStack[key]) QS.redoStack[key] = [];
+        var snapshot = qSnapshotNow(key);
+        var stack = QS.undoStack[key];
+        // No empujar si es idéntico al tope (evita entradas basura)
+        if (stack.length > 0 && stack[stack.length - 1] === snapshot) return;
+        stack.push(snapshot);
+        // Tope ~8 MB por clave (strings JS UTF-16: ~2 bytes/caracter), descartando los más viejos
+        var bytes = 0, i;
+        for (i = 0; i < stack.length; i++) bytes += stack[i].length * 2;
+        while (stack.length > 1 && bytes > 8388608) { bytes -= stack[0].length * 2; stack.shift(); }
+        if (stack.length > 50) stack.shift();
         QS.redoStack[key] = [];
+      }
+      function qRestoreSnapshot(key, snapshot) {
+        var s = null;
+        try { s = JSON.parse(snapshot); } catch (e) { return; }
+        var d = Array.isArray(s) ? s : (s.d || []);
+        var c = Array.isArray(s) ? (QS.canvasData[key] || []) : (s.c || []);
+        QS.drawings[key] = d;
+        QS.canvasData[key] = c;
+        qRebuildBlocksFromData(key);
+        qRedrawCanvas();
+        qClearSelection();
+        qSavePage();
+        qSaveWorkspace();
       }
 
       window.qUndo = function () {
@@ -5407,12 +5431,9 @@
         if (QS.drawMode === "select" && QS.isDraggingSelection) return;
         var snapshot = QS.undoStack[key].pop();
         if (!QS.redoStack[key]) QS.redoStack[key] = [];
-        QS.redoStack[key].push(JSON.stringify(qNormalizeDrawingPaths(key)));
-        QS.drawings[key] = JSON.parse(snapshot);
-        qRedrawCanvas();
-        qClearSelection();
+        QS.redoStack[key].push(qSnapshotNow(key));
+        qRestoreSnapshot(key, snapshot);
         qUpdateDrawingControls();
-        qSaveWorkspace();
       };
 
       window.qRedo = function () {
@@ -5425,12 +5446,9 @@
         if (QS.drawMode === "select" && QS.isDraggingSelection) return;
         var snapshot = QS.redoStack[key].pop();
         if (!QS.undoStack[key]) QS.undoStack[key] = [];
-        QS.undoStack[key].push(JSON.stringify(qNormalizeDrawingPaths(key)));
-        QS.drawings[key] = JSON.parse(snapshot);
-        qRedrawCanvas();
-        qClearSelection();
+        QS.undoStack[key].push(qSnapshotNow(key));
+        qRestoreSnapshot(key, snapshot);
         qUpdateDrawingControls();
-        qSaveWorkspace();
       };
 
       function qIsPathSelected(path) {
@@ -5818,14 +5836,12 @@
       qPersistWorkspace();
     }
 
-    function qLoadPage(projIdx, pageIdx, skipCurrentSave) {
-      if (!skipCurrentSave) qSavePage();
-      QS.activeProj = projIdx;
-      QS.activePage = pageIdx;
+    // Reconstruye los bloques del DOM desde canvasData (no guarda por su cuenta).
+    function qRebuildBlocksFromData(key) {
+      if (!QD.canvas) return;
       QD.canvas.querySelectorAll(".q-canvas-el").forEach(function (el) {
         el.remove();
       });
-      var key = projIdx + "-" + pageIdx;
       var data = QS.canvasData[key] || [];
       data.forEach(function (el) {
         if (el.type === "text")
@@ -5842,6 +5858,13 @@
             el.h,
           );
       });
+    }
+
+    function qLoadPage(projIdx, pageIdx, skipCurrentSave) {
+      if (!skipCurrentSave) qSavePage();
+      QS.activeProj = projIdx;
+      QS.activePage = pageIdx;
+      qRebuildBlocksFromData(projIdx + "-" + pageIdx);
       qLoadDrawing();
       qRenderProjects();
       qPersistWorkspace();
@@ -6303,6 +6326,8 @@
         return;
       }
       QS.isDrawing = true;
+      QS.eraseGesturePushed = false;
+      QS.selDragPushed = false;
         if (QS.drawMode === "select") {
         QS.isSelecting = true;
         QS.marqueeStart = { x: p.x, y: p.y };
@@ -6361,6 +6386,7 @@
           origin: { x: p.x, y: p.y },
         };
       } else {
+        qPushUndo();
         QS.activePath = {
           id: qNextDrawId(),
           mode: QS.drawMode,
@@ -6382,6 +6408,7 @@ function qMoveDraw(e) {
           if (QS.isDraggingSelection && QS.selectedPaths.length > 0 && QS.selectionDragStart) {
             var dx = (p.x - QS.selectionDragStart.x) / QS.zoom;
             var dy = (p.y - QS.selectionDragStart.y) / QS.zoom;
+            if ((dx !== 0 || dy !== 0) && !QS.selDragPushed) { QS.selDragPushed = true; qPushUndo(); }
             QS.selectionDragStart = { x: p.x, y: p.y };
             QS.selectedPaths.forEach(function(path) {
               path.points.forEach(function(pt) {
@@ -6444,7 +6471,10 @@ function qMoveDraw(e) {
               var maxY = Math.max(path.points[0].y, path.points[1].y) + eraseRadius;
               if (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY) hit = true;
             }
-            if (hit) { drawings.splice(i, 1); changed = true; }
+            if (hit) {
+              if (!QS.eraseGesturePushed) { QS.eraseGesturePushed = true; qPushUndo(); }
+              drawings.splice(i, 1); changed = true;
+            }
           }
           if (changed) { qRedrawCanvas(); qSaveWorkspace(); }
           return;
@@ -6471,6 +6501,8 @@ function qMoveDraw(e) {
 function qEndDraw() {
         if (!QS.isDrawing) return;
         QS.isDrawing = false;
+        QS.eraseGesturePushed = false;
+        QS.selDragPushed = false;
         if (QS.drawMode === "select") {
           QS.isSelecting = false;
           QS.isDraggingSelection = false;
@@ -6494,7 +6526,6 @@ function qEndDraw() {
             });
             qUpdateSelectionVisual();
           } else if (QS.selectionDragStart) {
-            qPushUndo();
             qUpdateSelectionVisual();
           }
           QS.marqueeStart = null;
@@ -6504,7 +6535,6 @@ function qEndDraw() {
           return;
         }
         if (QS.drawMode === "eraser") {
-          qPushUndo();
           qRedrawCanvas();
           qSaveWorkspace();
           QS.activePath = null;
@@ -6623,10 +6653,7 @@ function qEndDraw() {
       window.addEventListener("mousemove", qMoveDraw);
       window.addEventListener("mouseup", qEndDraw);
 
-       document
-         .getElementById("q-draw-close")
-         ?.addEventListener("click", qCloseDrawPanel);
-       document
+        document
          .getElementById("q-draw-select")
          ?.addEventListener("click", function () { qSetDrawMode("select"); });
        document
@@ -6853,11 +6880,15 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       desc.className = "q-block-desc";
       desc.value = descVal || "";
       desc.placeholder = "Añadir descripción...";
-      // Guarda al salir del campo de descripción
-      desc.addEventListener("blur", qSavePage);
-      // También guarda al escribir (debounced)
+      // Guarda al salir del campo de descripción (resetea la sesión de edición)
+      desc.addEventListener("blur", function () {
+        blk._qEditSnap = false;
+        qSavePage();
+      });
+      // También guarda al escribir (debounced); UNA entrada de historial por sesión
       var _descTimer;
       desc.addEventListener("input", function () {
+        if (!blk._qEditSnap) { blk._qEditSnap = true; qPushUndo(); }
         clearTimeout(_descTimer);
         _descTimer = setTimeout(qSavePage, 800);
       });
@@ -6867,6 +6898,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       del.className = "q-block-del";
       del.innerHTML = '<i class="fa-solid fa-xmark"></i>';
       del.onclick = function () {
+        qPushUndo();
         blk.remove();
         qSavePage();
       };
@@ -6886,9 +6918,11 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         blk.style.zIndex = "40";
         var sx = e.clientX,
           sy = e.clientY;
+        var dragPushed = false;
         var onMove = function (me) {
           var dx = (me.clientX - sx) / QS.zoom;
           var dy = (me.clientY - sy) / QS.zoom;
+          if ((dx !== 0 || dy !== 0) && !dragPushed) { dragPushed = true; qPushUndo(); }
           blk.style.left = parseFloat(blk.style.left) + dx + "px";
           blk.style.top = parseFloat(blk.style.top) + dy + "px";
           sx = me.clientX;
@@ -6908,6 +6942,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
     }
 
     function qCreateText(x, y) {
+      qPushUndo();
       qRecreateText(x, y, "", "Escribe algo aquí...", false);
       qSavePage();
     }
@@ -6927,14 +6962,16 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
 
       var _inputTimer;
 
-      // Handler de input: guarda con debounce mientras el usuario escribe
+      // Handler de input: UNA entrada de historial por sesión + guardado debounce
       function onInput() {
+        if (!blk._qEditSnap) { blk._qEditSnap = true; qPushUndo(); }
         clearTimeout(_inputTimer);
         _inputTimer = setTimeout(qSavePage, 800);
       }
 
-      // Handler de blur: detecta URL y guarda
+      // Handler de blur: resetea la sesión de edición, detecta URL y guarda
       function onBlur() {
+        blk._qEditSnap = false;
         var t = textNode.innerText.trim();
         if (qIsURL(t)) {
           qMakeLink(textNode, t, activateEditing);
@@ -7089,6 +7126,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         e.target.value = "";
         return;
       }
+      qPushUndo();
       if (file.type.startsWith("image/")) {
         var reader = new FileReader();
         reader.onload = function (ev) {
