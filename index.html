@@ -112,6 +112,7 @@
     html.anim-on #dominon-config-dropdown.open,
     html.anim-on #quantis-config-dropdown.open,
     html.anim-on #miniPlanPopup.open,
+    html.anim-on #trialContactPopup.open,
     html.anim-on #perf-panel.open,
     html.anim-on #plansModal.open,
     html.anim-on #plansModal.open .plans-card,
@@ -839,9 +840,28 @@
     #plansModal,
     #dominon-config-dropdown,
     #quantis-config-dropdown,
-    #miniPlanPopup {
+    #miniPlanPopup,
+    #trialContactPopup {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    #trialContactPopup {
+      position: fixed;
+      display: none;
+      z-index: 100002;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      color: var(--float-text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--float-shadow);
+      font-size: 0.86rem;
+      max-width: 260px;
+    }
+    #trialContactPopup.open { display: block; }
+    #trialContactPopup p { margin: 4px 0; }
+    #trialContactDiscord { cursor: pointer; font-weight: 600; }
+    #trialContactDiscord.copied { color: var(--color-highlight); }
+    .trial-contact-btn { padding: 6px 9px; }
     .icon-square-btn {
       width: 32px;
       height: 32px;
@@ -2341,6 +2361,9 @@
           <button id="openPlansBtn" class="glow-button" title="Planes">
             <i class="fa-solid fa-gem"></i> PLANES
           </button>
+          <button id="trialContactBtn" class="glow-button trial-contact-btn" type="button" title="Contactame y probá cualquier plan por 24hs">
+            <i class="fa-brands fa-discord"></i>
+          </button>
         </div>
         <div class="top-right">
           <div class="user-info" id="userInfo">
@@ -3127,6 +3150,11 @@
   </div>
 
   <div id="miniPlanPopup"></div>
+
+  <div id="trialContactPopup" aria-hidden="true">
+    <p id="trialContactNotice"></p>
+    <p id="trialContactDiscord" title=""></p>
+  </div>
 
   <div id="musicPanel" class="hidden">
     <div class="music-player-panel">
@@ -4437,7 +4465,12 @@
           projects: 'Proyectos',
           qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NUEVO BLOQUE | CLIC DERECHO: ARCHIVO',
           exportNote: 'Export',
-          importNote: 'Import'
+          importNote: 'Import',
+          trialContactTitle: 'Contactame y probá cualquier plan por 24hs',
+          trialContactNotice: 'Contactame y probá cualquier plan por 24hs',
+          trialContactDiscord: 'Discord: @DANIFU777',
+          trialContactCopyHint: 'Click para copiar',
+          trialContactCopied: '¡Copiado!'
         },
         en: {
           plans: 'PLANS',
@@ -4450,7 +4483,12 @@
           projects: 'Projects',
           qHint: 'SCROLL: ZOOM | DRAG: PAN | CLICK: NEW BLOCK | RIGHT-CLICK: FILE',
           exportNote: 'Export',
-          importNote: 'Import'
+          importNote: 'Import',
+          trialContactTitle: 'Contact me and try any plan for 24 hours',
+          trialContactNotice: 'Contact me and try any plan for 24 hours',
+          trialContactDiscord: 'Discord: @DANIFU777',
+          trialContactCopyHint: 'Click to copy',
+          trialContactCopied: 'Copied!'
         }
       };
 
@@ -4486,6 +4524,15 @@
         document.querySelectorAll('#dominonLangToggle,#quantisLangToggle').forEach(function(toggle) {
           toggle.textContent = window.currentLang.toUpperCase();
         });
+        setText('#trialContactNotice', L.trialContactNotice);
+        setText('#trialContactDiscord', L.trialContactDiscord);
+        var trialBtn = document.getElementById('trialContactBtn');
+        if (trialBtn) {
+          trialBtn.title = L.trialContactTitle;
+          trialBtn.setAttribute('aria-label', L.trialContactTitle);
+        }
+        var trialDiscord = document.getElementById('trialContactDiscord');
+        if (trialDiscord) trialDiscord.title = L.trialContactCopyHint;
       };
 
       window.setGlobalLanguage = function(lang, source) {
@@ -4523,7 +4570,66 @@
           window.setGlobalLanguage(window.currentLang === 'en' ? 'es' : 'en');
         });
         document.getElementById('openPlansBtn')?.addEventListener('click', function() {
+          document.getElementById('trialContactPopup')?.classList.remove('open');
           document.getElementById('plansModal')?.classList.add('open');
+        });
+        function copyTrialContactText(text, done) {
+          function fallback() {
+            try {
+              var ta = document.createElement('textarea');
+              ta.value = text;
+              ta.style.position = 'fixed';
+              ta.style.opacity = '0';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+              done(true);
+            } catch (e) { done(false); }
+          }
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+              navigator.clipboard.writeText(text).then(function() { done(true); }, function() { fallback(); });
+            } else {
+              fallback();
+            }
+          } catch (e) { fallback(); }
+        }
+        document.getElementById('trialContactBtn')?.addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeConfigDropdowns();
+          var popup = document.getElementById('trialContactPopup');
+          if (!popup) return;
+          var willOpen = !popup.classList.contains('open');
+          popup.classList.toggle('open');
+          if (willOpen) {
+            try {
+              var btn = document.getElementById('trialContactBtn');
+              var r = btn ? btn.getBoundingClientRect() : null;
+              var left = r ? r.left : 18, top = r ? (r.bottom + 8) : 60;
+              popup.style.left = left + 'px';
+              popup.style.top = top + 'px';
+              var w = popup.offsetWidth || 260;
+              if (left + w > window.innerWidth - 8) {
+                left = Math.max(8, window.innerWidth - w - 8);
+                popup.style.left = left + 'px';
+              }
+            } catch (err) {}
+          }
+        });
+        document.getElementById('trialContactDiscord')?.addEventListener('click', function() {
+          var el = document.getElementById('trialContactDiscord');
+          copyTrialContactText('@DANIFU777', function() {
+            if (!el) return;
+            var L = (window.currentLang === 'en') ? I18N.en : I18N.es;
+            el.classList.add('copied');
+            el.textContent = L.trialContactCopied;
+            setTimeout(function() {
+              var L2 = (window.currentLang === 'en') ? I18N.en : I18N.es;
+              el.classList.remove('copied');
+              el.textContent = L2.trialContactDiscord;
+            }, 1200);
+          });
         });
         document.getElementById('closePlansBtn')?.addEventListener('click', function() {
           document.getElementById('plansModal')?.classList.remove('open');
@@ -4539,6 +4645,9 @@
         document.addEventListener('click', function(e) {
           if (!e.target.closest('#dominon-config-dropdown,#quantis-config-dropdown,#dominonConfigBtn,#quantisConfigBtn')) {
             closeConfigDropdowns();
+          }
+          if (!e.target.closest('#trialContactPopup,#trialContactBtn')) {
+            document.getElementById('trialContactPopup')?.classList.remove('open');
           }
         });
         window.applyGlobalStaticLanguage();
@@ -4653,7 +4762,8 @@
         '#plansModal',
         '#dominon-config-dropdown',
         '#quantis-config-dropdown',
-        '#miniPlanPopup'
+        '#miniPlanPopup',
+        '#trialContactPopup'
       ];
       floatingElements.forEach(selector => {
         const el = document.querySelector(selector);
@@ -6598,8 +6708,6 @@ function qEndDraw() {
          var cc = document.getElementById("q-draw-custom-color");
          if (cc) cc.value = color;
         window.qUpdateDrawingControls();
-        var panel = document.getElementById("quantis-drawing-tools-panel");
-       if (panel) panel.classList.add("open");
        if (QD.ctxMenu) QD.ctxMenu.style.display = "none";
      };
 
