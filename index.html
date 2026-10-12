@@ -2320,6 +2320,195 @@
       cursor: move;
       user-select: none;
     }
+
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 1) ===== */
+    .orbital-main { position: relative; }
+    .orbital-stage {
+      position: relative;
+      min-height: calc(100vh - 170px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .orbital-clock {
+      text-align: center;
+      border: 1px solid var(--color-border);
+      border-radius: 48px;
+      padding: 36px 56px;
+      background: var(--color-main-bg);
+      max-width: 94%;
+    }
+    .orbital-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: clamp(4rem, 12vw, 8rem);
+      line-height: 1;
+      white-space: nowrap;
+      background: linear-gradient(180deg, #ffffff, #c7c9d1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    #main-dashboard-view.light-theme .orbital-time {
+      background: linear-gradient(180deg, #1f2937, #4b5563);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .orbital-date {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.85;
+    }
+    .rgb-line {
+      width: 80px;
+      height: 2px;
+      border-radius: 2px;
+      margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, var(--color-highlight), transparent);
+      background-size: 200% 100%;
+    }
+    html.anim-on .rgb-line { animation: rgbFlow 3s linear infinite; }
+    @keyframes rgbFlow {
+      from { background-position: 0% 0; }
+      to { background-position: 200% 0; }
+    }
+    .orb-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 1px solid var(--color-highlight);
+      background: var(--color-main-bg);
+      color: var(--color-text);
+      font-size: 22px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease;
+      z-index: 2;
+    }
+    .orbital-stage .orb-icon {
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+    .orb-icon svg { width: 22px; height: 22px; display: block; }
+    html.anim-on .orbital-stage .orb-icon:hover { transform: translate(-50%, calc(-50% - 2px)); }
+    html.anim-on .orbital-bar .orb-icon:hover { transform: translateY(-2px); }
+    .orb-icon.orb-active { background: var(--color-highlight); color: #ffffff; }
+    .orbital-layer { display: none; }
+    .orbital-layer.layer-closed { display: none; }
+    .orbital-layer.layer-open {
+      display: block;
+      position: absolute;
+      inset: 0;
+      overflow: auto;
+      z-index: 5;
+    }
+    html.anim-on .orbital-layer.layer-open { animation: floatIn var(--anim-dur-ui) ease both; }
+    .orbital-stage.mode-layer .orbital-clock,
+    .orbital-stage.mode-layer .orb-icon { display: none; }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 2: fila + pila + vuelo) ===== */
+    .orbital-bar { display: none; }
+    .orbital-main.has-stack .orbital-stage { display: none; }
+    .orbital-main.has-stack .orbital-bar {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      order: 0;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 6px;
+      background: var(--color-main-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    html.anim-on .orbital-main.has-stack .orbital-bar { animation: floatIn var(--anim-dur-ui) ease both; }
+    .orbital-main.has-stack .orbital-layer.layer-open {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      flex-shrink: 0;
+      overflow: visible;
+      z-index: auto;
+    }
+    .orbital-clock.compact {
+      padding: 6px 18px;
+      border-radius: 20px;
+      max-width: none;
+    }
+    .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
+    .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); }
+    .orbital-clock.compact #orbClockDate,
+    .orbital-clock.compact .rgb-line { display: none; }
+    .orbital-layer.layer-open .orb-icon-in-panel {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      transform: none;
+      z-index: 6;
+    }
+    .orbital-layer.layer-open .orb-icon-in-panel svg { width: 16px; height: 16px; }
+    .orbital-main.has-stack .orbital-layer[data-orbital="calculator"].layer-open > .calculator-panel,
+    .orbital-main.has-stack .orbital-layer[data-orbital="pomodoro"].layer-open > .pomodoro-panel {
+      max-width: 340px;
+      margin: 0 auto;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+    }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 3: luz ambiental + flotación) ===== */
+    .orbital-clock { position: relative; z-index: 0; }
+    .orbital-clock::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 54px;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(115deg, var(--color-highlight), transparent 45%, var(--color-highlight) 90%);
+      filter: blur(16px);
+      opacity: 0.32;
+    }
+    html.anim-on .orbital-clock::before { animation: orbGlowPulse 6s ease-in-out infinite; }
+    @keyframes orbGlowPulse {
+      0%, 100% { opacity: 0.24; }
+      50% { opacity: 0.45; }
+    }
+    #main-dashboard-view.light-theme .orbital-clock::before { opacity: 0.18; }
+    .orbital-clock.compact::before { display: none; }
+    .orb-icon-inner { display: inline-flex; }
+    .orb-icon-inner svg { display: block; }
+    html.anim-on .orbital-stage .orb-icon .orb-icon-inner { animation: orbFloat 6s ease-in-out infinite; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 4: pinchos del círculo) ===== */
+    .orbital-stage .orb-icon::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg,
+        var(--color-highlight) 0deg 3deg,
+        transparent 3deg 15deg);
+      -webkit-mask: radial-gradient(circle, transparent 0 27px, #000 28px 31.5px, transparent 32.5px);
+      mask: radial-gradient(circle, transparent 0 27px, #000 28px 31.5px, transparent 32.5px);
+      opacity: 0.32;
+      pointer-events: none;
+      z-index: -1;
+    }
+    html.anim-on .orbital-stage .orb-icon::before { animation: orbSpin 30s linear infinite; }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    .orbital-stage .orb-icon:hover::before { opacity: 0.55; }
+    #main-dashboard-view.light-theme .orbital-stage .orb-icon::before { opacity: 0.22; }
   </style>
 </head>
 <body>
@@ -2351,7 +2540,6 @@
     <div class="container hidden" id="mainApp">
       <div class="top-bar">
         <div class="top-left">
-          <div class="box" id="fecha-hora">Cargando...</div>
           <button id="toggle-view-to-flow" class="glow-button" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW">
             <i class="fa-solid fa-chart-line"></i> DEEP FLOW
           </button>
@@ -2387,7 +2575,12 @@
         </div>
       </div>
 
-      <main class="main">
+      <main class="main orbital-main">
+        <div class="orbital-stage mode-circle" id="orbitalStage">
+          <div class="orbital-clock" id="orbitalClock"></div>
+        <!-- los 5 iconos los crea el JS dentro de orbital-stage -->
+        </div>
+        <div class="orbital-layer layer-closed" data-orbital="trading">
         <div class="chart-panel">
           <div class="chart-header">
             <h2>TradingView</h2>
@@ -2396,7 +2589,9 @@
             src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=1&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
             frameborder="0" allowfullscreen></iframe>
         </div>
+        </div>
 
+        <div class="orbital-layer layer-closed" data-orbital="notepad">
         <div class="notepad-panel">
           <div class="notepad-header-row">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;flex-wrap:wrap;">
@@ -2416,8 +2611,9 @@
             <div class="cloud-loader"></div>
           </div>
         </div>
+        </div>
 
-        <div class="bottom-container">
+        <div class="orbital-layer layer-closed" data-orbital="calculator">
           <div class="calculator-panel">
             <h2>Calculadora</h2>
             <div id="display" class="calc-display">0</div>
@@ -2443,7 +2639,9 @@
               <button class="calc-button equals" onclick="calculate()">=</button>
             </div>
           </div>
+        </div>
 
+        <div class="orbital-layer layer-closed" data-orbital="pomodoro">
           <div class="pomodoro-panel">
             <h2>Pomodoro</h2>
             <div class="pomodoro-display" id="pomo-display">25:00</div>
@@ -2456,6 +2654,7 @@
           </div>
         </div>
 
+        <div class="orbital-layer layer-closed" data-orbital="gemini">
         <section class="gemini-panel" id="geminiAssistantPanel">
           <div class="gemini-layout">
             <aside class="gemini-sidebar" id="geminiSidebar">
@@ -2493,6 +2692,7 @@
             </div>
           </div>
         </section>
+        </div>
       </main>
     </div>
   </div>
@@ -3413,6 +3613,7 @@
         document.getElementById('userAvatar').src = user.photoURL;
 
         window.applyMembershipPlan(await detectUserPlan(user));
+        window.orbRestoreState && window.orbRestoreState();
         window.loadNote(window.activeTab);
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
@@ -4470,7 +4671,13 @@
           trialContactNotice: 'Contactame y probá cualquier plan por 24hs',
           trialContactDiscord: 'Discord: @DANIFU777',
           trialContactCopyHint: 'Click para copiar',
-          trialContactCopied: '¡Copiado!'
+          trialContactCopied: '¡Copiado!',
+          orbTrading: 'TradingView',
+          orbNotepad: 'Bloc de Notas',
+          orbCalculator: 'Calculadora',
+          orbPomodoro: 'Pomodoro',
+          orbGemini: 'Gemini',
+          orbCloseAll: 'Cerrar todo y volver al reloj'
         },
         en: {
           plans: 'PLANS',
@@ -4488,7 +4695,13 @@
           trialContactNotice: 'Contact me and try any plan for 24 hours',
           trialContactDiscord: 'Discord: @DANIFU777',
           trialContactCopyHint: 'Click to copy',
-          trialContactCopied: 'Copied!'
+          trialContactCopied: 'Copied!',
+          orbTrading: 'TradingView',
+          orbNotepad: 'Notepad',
+          orbCalculator: 'Calculator',
+          orbPomodoro: 'Pomodoro',
+          orbGemini: 'Gemini',
+          orbCloseAll: 'Close all and return to the clock'
         }
       };
 
@@ -4533,6 +4746,12 @@
         }
         var trialDiscord = document.getElementById('trialContactDiscord');
         if (trialDiscord) trialDiscord.title = L.trialContactCopyHint;
+        window._orbTitles = {
+          trading: L.orbTrading, notepad: L.orbNotepad,
+          calculator: L.orbCalculator, pomodoro: L.orbPomodoro,
+          gemini: L.orbGemini, closeAll: L.orbCloseAll
+        };
+        if (window.orbApplyTitles) window.orbApplyTitles(window._orbTitles);
       };
 
       window.setGlobalLanguage = function(lang, source) {
@@ -7251,6 +7470,406 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
     }
   })();
 </script>
+
+  <script>
+    // =========================================================
+    // --- DOMINON ORBITAL DASHBOARD (FASE 1) ---
+    // =========================================================
+    (function() {
+      var ORB_LAYERS = [
+        { key: 'trading', title: 'TradingView', icon: '<i class="fa-solid fa-chart-line"></i>' },
+        { key: 'notepad', title: 'Bloc de Notas', icon: '<i class="fa-solid fa-file-pen"></i>' },
+        { key: 'calculator', title: 'Calculadora', icon: '<i class="fa-solid fa-calculator"></i>' },
+        { key: 'pomodoro', title: 'Pomodoro', icon: '<i class="fa-solid fa-stopwatch"></i>' },
+        { key: 'gemini', title: 'Gemini', icon: '<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini"><defs><linearGradient id="geminiGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A8CFF"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><path d="M12 0L13.9 8.1L22 12L13.9 15.9L12 24L10.1 15.9L2 12L10.1 8.1Z" fill="url(#geminiGrad2)"/></svg>' }
+      ];
+      var ES_DAYS = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
+      var ES_MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+      var EN_DAYS = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+      var EN_MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+      var activeLayer = null;
+      var clockTimer = null;
+      var orbOpenStack = [];
+      var orbButtons = {};
+      var orbFlying = {};
+      var orbRestoring = false;
+      var orbSaveTimer = null;
+      function orbStateKey() {
+        try {
+          if (window.storageKeyForUser) return window.storageKeyForUser('danifu_orbital_state_');
+        } catch (e) {}
+        return 'danifu_orbital_state_guest';
+      }
+      function orbValidKey(k) {
+        for (var i = 0; i < ORB_LAYERS.length; i++) {
+          if (ORB_LAYERS[i].key === k) return true;
+        }
+        return false;
+      }
+      function orbSaveState() {
+        try {
+          if (orbSaveTimer) clearTimeout(orbSaveTimer);
+          orbSaveTimer = setTimeout(function() {
+            orbSaveTimer = null;
+            try {
+              var valid = [];
+              for (var i = 0; i < orbOpenStack.length; i++) {
+                var k = orbOpenStack[i];
+                if (orbValidKey(k) && valid.indexOf(k) === -1) valid.push(k);
+              }
+              localStorage.setItem(orbStateKey(), JSON.stringify({ stack: valid, t: Date.now() }));
+            } catch (e) {}
+          }, 300);
+        } catch (e) {}
+      }
+      window.orbRestoreState = function() {
+        var keys = null;
+        try {
+          var raw = localStorage.getItem(orbStateKey());
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          if (!data || !Array.isArray(data.stack)) return;
+          keys = [];
+          for (var i = 0; i < data.stack.length; i++) {
+            if (orbValidKey(data.stack[i]) && keys.indexOf(data.stack[i]) === -1) keys.push(data.stack[i]);
+          }
+        } catch (e) { return; }
+        if (!keys.length) return;
+        if (!orbStage() || !document.getElementById('orbitalClock')) return;
+        orbRestoring = true;
+        try {
+          for (var j = 0; j < keys.length; j++) orbOpenLayer(keys[j]);
+          orbRenderBar();
+          orbRenumberOrders();
+          if (orbOpenStack.length) {
+            orbSetStackMode(true);
+            var main = orbMain();
+            if (main) { try { main.scrollTop = 0; } catch (e) {} }
+          }
+        } catch (e) {}
+        orbRestoring = false;
+      };
+
+      function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+      function orbTickClock() {
+        var t = document.getElementById('orbClockTime');
+        var d = document.getElementById('orbClockDate');
+        if (!t && !d) return;
+        var now = new Date();
+        if (t) t.textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
+        if (d) {
+          var en = false;
+          try { en = (window.currentLang === 'en'); } catch (e) {}
+          var days = en ? EN_DAYS : ES_DAYS;
+          var months = en ? EN_MONTHS : ES_MONTHS;
+          d.textContent = days[now.getDay()] + ', ' + pad2(now.getDate()) + ' · ' + months[now.getMonth()] + ' · ' + now.getFullYear();
+        }
+      }
+      window.orbClockStop = function() {
+        if (clockTimer) { try { clearInterval(clockTimer); } catch (e) {} clockTimer = null; }
+      };
+
+      function orbStage() { return document.getElementById('orbitalStage'); }
+
+      function orbLayoutIcons() {
+        var st = orbStage();
+        if (!st) return;
+        var w = st.clientWidth, h = st.clientHeight;
+        if (!w || !h) return;
+        var clock = document.getElementById('orbitalClock');
+        var cw = 0;
+        try { cw = clock ? clock.offsetWidth : 0; } catch (e) {}
+        // Elipse contenida en el stage: evita solape con el reloj y salidas del viewport
+        var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 56));
+        var ry = Math.min(h / 2 - 44, Math.max(160, h * 0.33));
+        if (rx < 120) rx = 120;
+        if (ry < 100) ry = 100;
+        var cx = w / 2, cy = h / 2;
+        var btns = st.querySelectorAll('.orb-icon');
+        for (var i = 0; i < btns.length; i++) {
+          var a = (-90 + i * 72) * Math.PI / 180;
+          btns[i].style.left = (cx + rx * Math.cos(a)) + 'px';
+          btns[i].style.top = (cy + ry * Math.sin(a)) + 'px';
+        }
+      }
+
+      function orbMain() {
+        var st = orbStage();
+        return st ? st.parentNode : null;
+      }
+      function orbLayerEl(key) {
+        return document.querySelector('#main-dashboard-view .orbital-layer[data-orbital="' + key + '"]');
+      }
+      function orbIsAnimOn() {
+        try { return !document.documentElement.classList.contains('anim-off'); }
+        catch (e) { return true; }
+      }
+      function orbEnsureBar() {
+        var main = orbMain();
+        if (!main) return null;
+        var bar = document.getElementById('orbitalBar');
+        if (!bar) {
+          bar = document.createElement('div');
+          bar.className = 'orbital-bar';
+          bar.id = 'orbitalBar';
+          main.insertBefore(bar, main.firstChild);
+        }
+        return bar;
+      }
+      function orbRenumberOrders() {
+        for (var i = 0; i < orbOpenStack.length; i++) {
+          var el = orbLayerEl(orbOpenStack[i]);
+          if (el) el.style.order = String(i + 1);
+        }
+      }
+      function orbRenderBar() {
+        var bar = orbEnsureBar();
+        if (!bar) return;
+        while (bar.firstChild) bar.removeChild(bar.firstChild);
+        var stacked = orbOpenStack.length > 0;
+        for (var i = 0; i < ORB_LAYERS.length; i++) {
+          if (i === 2 && stacked) {
+            var clock = document.getElementById('orbitalClock');
+            if (clock) bar.appendChild(clock);
+          }
+          var k = ORB_LAYERS[i].key;
+          if (!orbFlying[k] && orbButtons[k]) bar.appendChild(orbButtons[k]);
+        }
+      }
+      function orbSetStackMode(on) {
+        var main = orbMain();
+        if (main) main.classList.toggle('has-stack', !!on);
+        var clock = document.getElementById('orbitalClock');
+        if (clock) clock.classList.toggle('compact', !!on);
+      }
+      function orbRect(el) { try { return el.getBoundingClientRect(); } catch (e) { return null; } }
+      function orbFlipPlay(btn, r1, r2) {
+        if (!r1 || !r2 || !r1.width || !r2.width) return;
+        var dx = (r1.left + r1.width / 2) - (r2.left + r2.width / 2);
+        var dy = (r1.top + r1.height / 2) - (r2.top + r2.height / 2);
+        var s = r1.width / r2.width;
+        try {
+          btn.style.transition = 'none';
+          btn.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')';
+          void btn.offsetWidth;
+          btn.style.transition = '';
+          btn.style.transform = '';
+        } catch (e) {
+          try { btn.style.transform = ''; btn.style.transition = ''; } catch (e2) {}
+        }
+      }
+      function orbFlyIcon(key, toPanel) {
+        var btn = orbButtons[key];
+        if (!btn) return;
+        if (toPanel) {
+          var layer = orbLayerEl(key);
+          if (!layer) return;
+          orbFlying[key] = true;
+          if (!orbIsAnimOn()) {
+            layer.appendChild(btn);
+            btn.classList.add('orb-icon-in-panel');
+            return;
+          }
+          var r1 = orbRect(btn);
+          layer.appendChild(btn);
+          btn.classList.add('orb-icon-in-panel');
+          orbFlipPlay(btn, r1, orbRect(btn));
+        } else {
+          orbFlying[key] = false;
+          if (!orbIsAnimOn()) {
+            btn.classList.remove('orb-icon-in-panel');
+            btn.style.transform = '';
+            btn.style.transition = '';
+            orbRenderBar();
+            return;
+          }
+          var q1 = orbRect(btn);
+          btn.classList.remove('orb-icon-in-panel');
+          orbRenderBar();
+          orbFlipPlay(btn, q1, orbRect(btn));
+        }
+      }
+
+      function orbOpenLayer(key) {
+        if (!orbValidKey(key)) return;
+        if (orbOpenStack.indexOf(key) !== -1) return;
+        var silent = orbRestoring;
+        var first = orbOpenStack.length === 0;
+        orbOpenStack.push(key);
+        var el = orbLayerEl(key);
+        if (el) {
+          el.classList.remove('layer-closed');
+          el.classList.add('layer-open');
+        }
+        orbRenumberOrders();
+        if (first) {
+          orbSetStackMode(true);
+          if (!silent) orbRenderBar();
+        }
+        if (silent) {
+          var btn0 = orbButtons[key];
+          var layer0 = orbLayerEl(key);
+          if (btn0) {
+            orbFlying[key] = true;
+            if (layer0) layer0.appendChild(btn0);
+            btn0.classList.add('orb-icon-in-panel');
+            try { btn0.style.transform = ''; btn0.style.transition = ''; } catch (e) {}
+          }
+        } else {
+          orbFlyIcon(key, true);
+        }
+        var btn = orbButtons[key];
+        if (btn) btn.classList.add('orb-active');
+        activeLayer = key;
+        if (!silent) orbSaveState();
+      }
+
+      function orbCloseOne(key) {
+        var idx = orbOpenStack.indexOf(key);
+        if (idx === -1) return;
+        orbOpenStack.splice(idx, 1);
+        var el = orbLayerEl(key);
+        if (el) {
+          el.classList.remove('layer-open');
+          el.classList.add('layer-closed');
+          el.style.order = '';
+        }
+        var btn = orbButtons[key];
+        if (btn) btn.classList.remove('orb-active');
+        if (orbOpenStack.length === 0) orbCloseAllLayers();
+        else {
+          orbFlyIcon(key, false);
+          orbRenumberOrders();
+          if (activeLayer === key) activeLayer = orbOpenStack[orbOpenStack.length - 1];
+          orbSaveState();
+        }
+      }
+
+      function orbCloseAllLayers() {
+        var keys = orbOpenStack.slice();
+        for (var i = 0; i < keys.length; i++) {
+          var el = orbLayerEl(keys[i]);
+          if (el) {
+            el.classList.remove('layer-open');
+            el.classList.add('layer-closed');
+            el.style.order = '';
+          }
+          var btn = orbButtons[keys[i]];
+          if (btn) {
+            btn.classList.remove('orb-active');
+            btn.classList.remove('orb-icon-in-panel');
+            try { btn.style.transform = ''; btn.style.transition = ''; } catch (e) {}
+          }
+        }
+        orbOpenStack = [];
+        orbFlying = {};
+        activeLayer = null;
+        var st = orbStage();
+        var clock = document.getElementById('orbitalClock');
+        if (st && clock && clock.parentNode !== st) st.insertBefore(clock, st.firstChild);
+        for (var m = 0; m < ORB_LAYERS.length; m++) {
+          var ib = orbButtons[ORB_LAYERS[m].key];
+          if (ib && st && ib.parentNode !== st) {
+            ib.classList.remove('orb-icon-in-panel');
+            try { ib.style.transform = ''; ib.style.transition = ''; } catch (e) {}
+            st.appendChild(ib);
+          }
+        }
+        orbSetStackMode(false);
+        if (st) {
+          st.classList.remove('mode-layer');
+          st.classList.add('mode-circle');
+        }
+        orbLayoutIcons();
+        orbSaveState();
+      }
+
+      function orbToggleLayer(key) {
+        if (orbOpenStack.indexOf(key) !== -1) orbCloseOne(key);
+        else orbOpenLayer(key);
+      }
+
+      function orbBuildIcons() {
+        var st = orbStage();
+        if (!st || st.querySelector('.orb-icon')) return;
+        for (var i = 0; i < ORB_LAYERS.length; i++) {
+          (function(def, idx) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'orb-icon';
+            b.setAttribute('data-orbital', def.key);
+            b.title = def.title;
+            var inner = document.createElement('span');
+            inner.className = 'orb-icon-inner';
+            inner.innerHTML = def.icon;
+            inner.style.animationDelay = (idx * 0.75) + 's';
+            b.appendChild(inner);
+            b.addEventListener('click', function() { orbToggleLayer(def.key); });
+            st.appendChild(b);
+            orbButtons[def.key] = b;
+          })(ORB_LAYERS[i], i);
+        }
+      }
+
+      function orbApplyTitles(map) {
+        try {
+          if (!map) return;
+          for (var k in orbButtons) {
+            if (!Object.prototype.hasOwnProperty.call(orbButtons, k)) continue;
+            if (map[k] && orbButtons[k]) orbButtons[k].title = map[k];
+          }
+          var clock = document.getElementById('orbitalClock');
+          if (clock && map.closeAll) {
+            clock.title = map.closeAll;
+            clock.setAttribute('aria-label', map.closeAll);
+          }
+        } catch (e) {}
+      }
+      window.orbApplyTitles = orbApplyTitles;
+
+      function orbInit() {
+        var st = orbStage();
+        if (!st) return;
+        var clock = document.getElementById('orbitalClock');
+        if (clock && !clock.firstChild) {
+          clock.innerHTML = '<div class="orbital-time" id="orbClockTime">00:00:00</div>' +
+            '<div class="orbital-date" id="orbClockDate"></div>' +
+            '<div class="rgb-line"></div>';
+        }
+        orbBuildIcons();
+        var clock0 = document.getElementById('orbitalClock');
+        if (clock0 && !clock0._orbBound) {
+          clock0._orbBound = true;
+          clock0.title = 'Cerrar todo';
+          clock0.setAttribute('role', 'button');
+          clock0.addEventListener('click', function() {
+            if (orbOpenStack.length) orbCloseAllLayers();
+          });
+        }
+        orbTickClock();
+        try { if (clockTimer) clearInterval(clockTimer); } catch (e) {}
+        clockTimer = setInterval(orbTickClock, 1000);
+        orbLayoutIcons();
+        setTimeout(orbLayoutIcons, 600);
+        window.addEventListener('resize', orbLayoutIcons);
+        window.addEventListener('load', orbLayoutIcons);
+        document.addEventListener('keydown', function(e) {
+          if (orbOpenStack.length === 0) return;
+          if (!e || e.key !== 'Escape') return;
+          var tag = e.target && e.target.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+          if (e.target && e.target.isContentEditable) return;
+          orbCloseOne(orbOpenStack[orbOpenStack.length - 1]);
+        });
+        try { window.orbRestoreState(); } catch (e) {}
+        try { if (window._orbTitles) orbApplyTitles(window._orbTitles); } catch (e) {}
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', orbInit);
+      else orbInit();
+    })();
+  </script>
 
   <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
   <script>
