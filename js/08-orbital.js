@@ -8,7 +8,7 @@
         { key: 'notepad', title: 'Bloc de Notas', icon: '<i class="fa-solid fa-file-pen"></i>' },
         { key: 'calculator', title: 'Calculadora', icon: '<i class="fa-solid fa-calculator"></i>' },
         { key: 'pomodoro', title: 'Pomodoro', icon: '<i class="fa-solid fa-stopwatch"></i>' },
-        { key: 'gemini', title: 'Gemini', icon: '<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini"><defs><linearGradient id="geminiGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A8CFF"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><path d="M12 0L13.9 8.1L22 12L13.9 15.9L12 24L10.1 15.9L2 12L10.1 8.1Z" fill="url(#geminiGrad2)"/></svg>' }
+        { key: 'gemini', title: 'Gemini', icon: '<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini"><defs><linearGradient id="geminiGrad2" x1="0[...]
       ];
       var ES_DAYS = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
       var ES_MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
@@ -83,16 +83,18 @@
       function orbTickClock() {
         var t = document.getElementById('orbClockTime');
         var d = document.getElementById('orbClockDate');
-        if (!t && !d) {
-          var clockEl = document.getElementById('orbitalClock');
-          if (clockEl && !clockEl.firstChild) {
+        var clockEl = document.getElementById('orbitalClock');
+        // Si falta cualquiera de las partes (tiempo o fecha), aseguramos que existan
+        if (!t || !d) {
+          if (clockEl) {
             clockEl.innerHTML = '<div class="orbital-time" id="orbClockTime">00:00:00</div>' +
               '<div class="orbital-date" id="orbClockDate"></div>' +
               '<div class="rgb-line"></div>';
             t = document.getElementById('orbClockTime');
             d = document.getElementById('orbClockDate');
+          } else {
+            return;
           }
-          if (!t && !d) return;
         }
         var now = new Date();
         if (t) t.textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
@@ -225,17 +227,23 @@
         if (toPanel) {
           var layer = orbLayerEl(key);
           if (!layer) return;
-          orbFlying[key] = true;
+          // Instead of moving the icon into the panel (where it would scroll with content),
+          // keep the icon visible in the top orbital bar so it stays fixed when scrolling.
+          var bar = orbEnsureBar();
+          // Mark as not flying so orbRenderBar includes it in the bar
+          orbFlying[key] = false;
           if (!orbIsAnimOn()) {
-            layer.appendChild(btn);
+            if (bar && btn.parentNode !== bar) bar.appendChild(btn);
             btn.style.left = ''; btn.style.top = '';
-            btn.classList.add('orb-icon-in-panel');
+            btn.classList.remove('orb-icon-in-panel');
+            orbRenderBar();
             return;
           }
           var r1 = orbRect(btn);
-          layer.appendChild(btn);
+          if (bar && btn.parentNode !== bar) bar.appendChild(btn);
           btn.style.left = ''; btn.style.top = '';
-          btn.classList.add('orb-icon-in-panel');
+          btn.classList.remove('orb-icon-in-panel');
+          orbRenderBar();
           orbFlipPlay(btn, r1, orbRect(btn));
         } else {
           orbFlying[key] = false;
@@ -268,15 +276,16 @@
         orbRenumberOrders();
         if (first) {
           orbSetStackMode(true);
-          orbFlying[key] = true;
+          // keep orbFlying false so icons remain in the top bar and don't get appended into the panels
+          orbFlying[key] = false;
           if (!silent) orbRenderBar();
         }
         if (silent) {
           var btn0 = orbButtons[key];
           var layer0 = orbLayerEl(key);
           if (btn0) {
-            orbFlying[key] = true;
-            if (layer0) layer0.appendChild(btn0);
+            orbFlying[key] = false;
+            if (layer0 && btn0.parentNode !== layer0) layer0.appendChild(btn0);
             btn0.classList.add('orb-icon-in-panel');
             btn0.style.left = ''; btn0.style.top = '';
             try { btn0.style.transform = ''; btn0.style.transition = ''; } catch (e) {}
