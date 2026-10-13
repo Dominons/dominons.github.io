@@ -275,8 +275,15 @@
 
     function qGetPathBoundingBox(path) {
       if (!path.points || !path.points.length) return null;
-      // Expandir por el grosor visible para que el marquee coincida con lo dibujado
       var half = (path.size || 8) / 2;
+
+      if (path.mode === "circle" && path.points.length >= 2) {
+        var cx = path.points[0].x, cy = path.points[0].y;
+        var px = path.points[1].x, py = path.points[1].y;
+        var r = Math.hypot(px - cx, py - cy);
+        return { x: cx - r - half, y: cy - r - half, w: (r + half) * 2, h: (r + half) * 2 };
+      }
+
       var minX = path.points[0].x - half, maxX = path.points[0].x + half;
       var minY = path.points[0].y - half, maxY = path.points[0].y + half;
       for (var i = 1; i < path.points.length; i++) {
@@ -482,13 +489,17 @@
     function qTogglePathSelection(path, shiftKey) {
       var idx = QS.selectedPaths.indexOf(path);
       if (idx !== -1) {
-        QS.selectedPaths.splice(idx, 1);
+        // Si ya está seleccionado y NO se usa Shift, lo dejamos seleccionado para poder arrastrarlo.
+        // Solo se deselecciona si se usa Shift explícitamente para quitarlo de la selección.
+        if (shiftKey) {
+          QS.selectedPaths.splice(idx, 1);
+        }
       } else {
         if (!shiftKey) QS.selectedPaths = [];
         QS.selectedPaths.push(path);
       }
-       qUpdateSelectionVisual();
-     }
+      qUpdateSelectionVisual();
+    }
 
      function qSetSelectionBorder() {
        var b = 2 / Math.max(0.1, QS.zoom);
@@ -1397,8 +1408,14 @@
           }
         }
         if (clickedPath) {
+          var wasSelected = QS.selectedPaths.indexOf(clickedPath) !== -1;
           qTogglePathSelection(clickedPath, e.shiftKey);
-          if (QS.selectedPaths.length > 0) {
+          // Si ya estaba seleccionado (y no se deseleccionó con Shift), arrastrar de inmediato
+          if (wasSelected && QS.selectedPaths.indexOf(clickedPath) !== -1) {
+            QS.selectionDragStart = { x: p.x, y: p.y };
+            QS.isDraggingSelection = true;
+            QS.isSelecting = false;
+          } else if (QS.selectedPaths.length > 0) {
             QS.selectionDragStart = { x: p.x, y: p.y };
             QS.isDraggingSelection = true;
             QS.isSelecting = false;
