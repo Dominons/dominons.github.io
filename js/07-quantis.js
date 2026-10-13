@@ -247,14 +247,41 @@
     function qHitTestPath(path, px, py, margin) {
       margin = margin || 0;
       var threshold = (path.size || 8) / 2 + 1 + margin;
-      // Formas cerradas: seleccionar por ÁREA (toda la figura, incluido el interior)
-      if (path.mode === "rectangle" || path.mode === "square" || path.mode === "circle") {
-        var bb = qGetPathBoundingBox(path);
-        if (bb) {
-          var pad = threshold;
-          return px >= bb.x - pad && px <= bb.x + bb.w + pad && py >= bb.y - pad && py <= bb.y + bb.h + pad;
-        }
+
+      // Círculo: verificar contacto con el borde (perímetro), no con el interior
+      if (path.mode === "circle" && path.points.length >= 2) {
+        var cx = path.points[0].x, cy = path.points[0].y;
+        var px_edge = path.points[1].x, py_edge = path.points[1].y;
+        var r = Math.hypot(px_edge - cx, py_edge - cy);
+        var distFromCenter = Math.hypot(px - cx, py - cy);
+        return Math.abs(distFromCenter - r) <= threshold;
       }
+
+      // Rectángulo y Cuadrado: verificar contacto con los 4 segmentos del borde, no el interior
+      if (path.mode === "rectangle" || path.mode === "square") {
+        var p0 = path.points[0], p1 = path.points[1];
+        var x = Math.min(p0.x, p1.x), y = Math.min(p0.y, p1.y);
+        var w = Math.abs(p1.x - p0.x), h = Math.abs(p1.y - p0.y);
+        var side = path.mode === "square" ? Math.max(w, h) : w;
+        h = path.mode === "square" ? side : h;
+
+        var rectPts = [
+          { x: x, y: y }, { x: x + side, y: y },
+          { x: x + side, y: y + h }, { x: x, y: y + h }, { x: x, y: y }
+        ];
+
+        for (var i = 0; i < rectPts.length - 1; i++) {
+          var ax = rectPts[i].x, ay = rectPts[i].y;
+          var bx = rectPts[i+1].x, by = rectPts[i+1].y;
+          var dx = bx - ax, dy = by - ay;
+          var len2 = dx*dx + dy*dy;
+          var t = len2 !== 0 ? Math.max(0, Math.min(1, ((px-ax)*dx + (py-ay)*dy) / len2)) : 0;
+          var cx = ax + t*dx, cy = ay + t*dy;
+          if (Math.hypot(px-cx, py-cy) <= threshold) return true;
+        }
+        return false;
+      }
+
       // Líneas y pincel: contacto con el trazo visible
       for (var i = 0; i < path.points.length; i++) {
         if (Math.hypot(path.points[i].x - px, path.points[i].y - py) <= threshold) return true;
@@ -1402,7 +1429,7 @@
         var clickedPath = null;
         var paths = qNormalizeDrawingPaths(qWorkspaceKey());
         for (var i = paths.length - 1; i >= 0; i--) {
-          if (qHitTestPath(paths[i], p.x, p.y, 6)) {
+          if (qHitTestPath(paths[i], p.x, p.y, 0)) {
             clickedPath = paths[i];
             break;
           }
