@@ -2116,6 +2116,18 @@
       font-family: 'JetBrains Mono', monospace;
     }
     #quantis-drawing-tools-panel.open { display: block; }
+    #q-eraser-cursor {
+      position: fixed;
+      left: 0;
+      top: 0;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      pointer-events: none;
+      display: none;
+      z-index: 90000;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+    }
     #quantis-drawing-tools-panel .q-draw-header {
       display: flex;
       align-items: center;
