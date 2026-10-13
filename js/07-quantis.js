@@ -245,8 +245,10 @@
 
     // ---- SELECTION HELPERS ----
     function qHitTestPath(path, px, py, margin) {
-      margin = margin || 6;
-      var threshold = (path.size || 8) + margin;
+      // Contacto exacto: mitad del grosor visible + 1px de gracia en canvas
+      // (antes usaba size completo + 6 = área 3× más grande que lo visible)
+      margin = margin || 0;
+      var threshold = (path.size || 8) / 2 + 1 + margin;
       for (var i = 0; i < path.points.length; i++) {
         if (Math.hypot(path.points[i].x - px, path.points[i].y - py) <= threshold) return true;
       }
@@ -271,8 +273,10 @@
 
     function qGetPathBoundingBox(path) {
       if (!path.points || !path.points.length) return null;
-      var minX = path.points[0].x, maxX = path.points[0].x;
-      var minY = path.points[0].y, maxY = path.points[0].y;
+      // Expandir por el grosor visible para que el marquee coincida con lo dibujado
+      var half = (path.size || 8) / 2;
+      var minX = path.points[0].x - half, maxX = path.points[0].x + half;
+      var minY = path.points[0].y - half, maxY = path.points[0].y + half;
       for (var i = 1; i < path.points.length; i++) {
         var p = path.points[i];
         if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
@@ -1534,7 +1538,10 @@
       try {
         if (QS.drawMode !== "eraser" || !e || e.clientX === undefined) { qHideEraserRing(); return; }
         var el = qEraserRingEl();
-        var d = Math.max(6, QS.drawSize * 2 * Math.max(0.1, QS.zoom));
+        // El anillo muestra el área real de borrado: radio del borrador + mitad
+        // del grosor del trazo (para trazos de 8px = +4). Sin píxeles extra.
+        var r = QS.drawSize + 4;
+        var d = Math.max(6, r * 2 * Math.max(0.1, QS.zoom));
         el.style.width = d + "px";
         el.style.height = d + "px";
         el.style.left = e.clientX + "px";
@@ -1612,9 +1619,9 @@ function qMoveDraw(e) {
           for (var i = drawings.length - 1; i >= 0; i--) {
             var path = drawings[i];
             if (!path.points || path.points.length === 0) continue;
-            // Contacto borde a borde: radio del borrador + mitad del grosor visible
-            // del trazo + 2px de pantalla de gracia (independiente del zoom)
-            var tol = eraseRadius + (path.size || 8) / 2 + 2 / zoomE;
+            // Contacto exacto: radio del borrador + mitad del grosor visible.
+            // Sin píxeles de gracia: el anillo muestra exactamente lo que borra.
+            var tol = eraseRadius + (path.size || 8) / 2;
             var bb = qGetPathBoundingBox(path);
             if (bb && (p.x < bb.x - tol || p.x > bb.x + bb.w + tol || p.y < bb.y - tol || p.y > bb.y + bb.h + tol)) continue;
             var brushLike = !path.mode || path.mode === "pencil";
