@@ -2389,7 +2389,7 @@
       cursor: pointer;
       user-select: none;
       flex-shrink: 0;
-      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease;
+      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease, left var(--anim-dur-ui) ease, top var(--anim-dur-ui) ease;
       z-index: 2;
     }
     .orbital-stage .orb-icon {
@@ -2441,11 +2441,12 @@
       padding: 6px 18px;
       border-radius: 20px;
       max-width: none;
+      transition: padding var(--anim-dur-ui) ease, border-radius var(--anim-dur-ui) ease, max-width var(--anim-dur-ui) ease;
     }
     .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
-    .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); }
+    .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); transition: font-size var(--anim-dur-ui) ease; }
     .orbital-clock.compact .rgb-line { display: none; }
-    .orbital-clock.compact #orbClockDate { font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; }
+    .orbital-clock.compact #orbClockDate { display: block; font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; transition: font-size var(--anim-dur-ui) ease, margin-top var(--anim-dur-ui) ease, letter-spacing var(--anim-dur-ui) ease; }
     .orbital-layer.layer-open .orb-icon-in-panel {
       position: absolute;
       top: 8px;
