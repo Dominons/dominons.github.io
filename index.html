@@ -2445,12 +2445,7 @@
     .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
     .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); }
     .orbital-clock.compact .rgb-line { display: none; }
-    .orbital-clock.compact .orbital-date {
-      margin-top: 2px;
-      font-size: 0.55rem;
-      letter-spacing: 1px;
-      opacity: 0.7;
-    }
+    .orbital-clock.compact #orbClockDate { font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; }
     .orbital-layer.layer-open .orb-icon-in-panel {
       position: absolute;
       top: 8px;
@@ -7499,6 +7494,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       var orbFlying = {};
       var orbRestoring = false;
       var orbSaveTimer = null;
+      var orbLayoutSig = '';
       function orbStateKey() {
         try {
           if (window.storageKeyForUser) return window.storageKeyForUser('danifu_orbital_state_');
@@ -7582,17 +7578,24 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         if (!st) return;
         var w = st.clientWidth, h = st.clientHeight;
         if (!w || !h) return;
+        var btns = st.querySelectorAll('.orb-icon');
         var clock = document.getElementById('orbitalClock');
         var cw = 0;
         try { cw = clock ? clock.offsetWidth : 0; } catch (e) {}
+        // Un solo paso: si nada cambió (tamaño, reloj, cantidad), no se reescribe nada
+        var sig = w + 'x' + h + 'x' + cw + 'x' + btns.length;
+        if (sig === orbLayoutSig) return;
+        orbLayoutSig = sig;
         // Elipse contenida en el stage: evita solape con el reloj y salidas del viewport
         var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 56));
         var ry = Math.min(h / 2 - 44, Math.max(160, h * 0.33));
         if (rx < 120) rx = 120;
         if (ry < 100) ry = 100;
         var cx = w / 2, cy = h / 2;
-        var btns = st.querySelectorAll('.orb-icon');
         for (var i = 0; i < btns.length; i++) {
+          // Nunca escribir left/top en iconos fuera del stage (p.ej. volados a un
+          // panel): su posición la controla su clase; además se limpia al volar
+          if (btns[i].parentNode !== st) continue;
           var a = (-90 + i * 72) * Math.PI / 180;
           btns[i].style.left = (cx + rx * Math.cos(a)) + 'px';
           btns[i].style.top = (cy + ry * Math.sin(a)) + 'px';
@@ -7704,6 +7707,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       function orbOpenLayer(key) {
         if (!orbValidKey(key)) return;
         if (orbOpenStack.indexOf(key) !== -1) return;
+        orbLayoutSig = '';
         var silent = orbRestoring;
         var first = orbOpenStack.length === 0;
         orbOpenStack.push(key);
@@ -7740,6 +7744,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       function orbCloseOne(key) {
         var idx = orbOpenStack.indexOf(key);
         if (idx === -1) return;
+        orbLayoutSig = '';
         orbOpenStack.splice(idx, 1);
         var el = orbLayerEl(key);
         if (el) {
@@ -7759,6 +7764,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
       }
 
       function orbCloseAllLayers() {
+        orbLayoutSig = '';
         var keys = orbOpenStack.slice();
         for (var i = 0; i < keys.length; i++) {
           var el = orbLayerEl(keys[i]);
