@@ -88,17 +88,8 @@
           var oldZoom = QS.zoom;
           var factor = e.ctrlKey ? 0.01 : 0.0015;
           var newZoom = oldZoom * (1 - e.deltaY * factor);
-          var bounds = qGetCanvasBounds();
-          var minZoom = Math.max(
-            0.2,
-            quantisViewport.clientWidth / bounds.size,
-          );
-          var minZoomY = Math.max(
-            0.2,
-            quantisViewport.clientHeight / bounds.size,
-          );
-          minZoom = Math.max(minZoom, minZoomY);
-          var maxZoom = 3.0;
+          var minZoom = 0.05;
+          var maxZoom = 8.0;
           QS.zoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
           if (QS.zoom === oldZoom) return;
           var canvasX = (mouseX - QS.panX) / oldZoom;
@@ -213,9 +204,15 @@
     }
 
     function qClampPan() {
+      if (!QD.viewport) return;
       var bounds = qGetCanvasBounds();
-      var maxPanX = (bounds.size * QS.zoom) / 2;
-      var maxPanY = (bounds.size * QS.zoom) / 2;
+      var vw = QD.viewport.clientWidth || 800;
+      var vh = QD.viewport.clientHeight || 600;
+      // Margen generoso: se puede ver todo el lienzo más la zona exterior
+      // sin que la vista se bloquee en los bordes (el dibujo sigue limitado
+      // por qIsWithinBounds, eso no se toca)
+      var maxPanX = bounds.size * QS.zoom + vw;
+      var maxPanY = bounds.size * QS.zoom + vh;
       QS.panX = Math.max(-maxPanX, Math.min(maxPanX, QS.panX));
       QS.panY = Math.max(-maxPanY, Math.min(maxPanY, QS.panY));
     }
@@ -1473,20 +1470,28 @@ function qMoveDraw(e) {
         if (QS.drawMode === "eraser") {
           var drawings = qNormalizeDrawingPaths(qWorkspaceKey());
           var eraseRadius = QS.drawSize;
+          var zoom = Math.max(0.1, QS.zoom);
           var changed = false;
+          var k, ax, ay, bx, by, dx, dy, tt, cx, cy;
           for (var i = drawings.length - 1; i >= 0; i--) {
             var path = drawings[i];
             if (!path.points || path.points.length === 0) continue;
+            // Contacto borde a borde: radio del borrador + mitad del grosor visible
+            // del trazo + 2px de pantalla de gracia (independiente del zoom)
+            var tol = eraseRadius + (path.size || 8) / 2 + 2 / zoom;
             var hit = false;
             for (var j = 0; j < path.points.length; j++) {
-              if (Math.hypot(path.points[j].x - p.x, path.points[j].y - p.y) <= eraseRadius + (path.size || 8)) { hit = true; break; }
+              if (Math.hypot(path.points[j].x - p.x, path.points[j].y - p.y) <= tol) { hit = true; break; }
             }
-            if (!hit && path.points.length >= 2) {
-              var minX = Math.min(path.points[0].x, path.points[1].x) - eraseRadius;
-              var maxX = Math.max(path.points[0].x, path.points[1].x) + eraseRadius;
-              var minY = Math.min(path.points[0].y, path.points[1].y) - eraseRadius;
-              var maxY = Math.max(path.points[0].y, path.points[1].y) + eraseRadius;
-              if (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY) hit = true;
+            for (var s = 0; !hit && s < path.points.length - 1; s++) {
+              ax = path.points[s].x; ay = path.points[s].y;
+              bx = path.points[s + 1].x; by = path.points[s + 1].y;
+              dx = bx - ax; dy = by - ay;
+              if (dx === 0 && dy === 0) continue;
+              tt = ((p.x - ax) * dx + (p.y - ay) * dy) / (dx * dx + dy * dy);
+              if (tt < 0) tt = 0; else if (tt > 1) tt = 1;
+              cx = ax + tt * dx; cy = ay + tt * dy;
+              if (Math.hypot(p.x - cx, p.y - cy) <= tol) { hit = true; break; }
             }
             if (hit) {
               if (!QS.eraseGesturePushed) { QS.eraseGesturePushed = true; qPushUndo(); }
