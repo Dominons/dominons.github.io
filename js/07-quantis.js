@@ -1716,6 +1716,171 @@ function qMoveDraw(e) {
         qStrokeLiveSegment(QS.activePath, lastPoint, p);
       }
 
+    // Convierte cualquier trazo en una polilínea para poder recortarlo
+    function qPathToPolyline(path) {
+      var pts = path.points;
+      if (!pts || !pts.length) return [];
+
+      if (path.mode === "circle" && pts.length >= 2) {
+        var cx = pts[0].x, cy = pts[0].y;
+        var r = Math.hypot(pts[1].x - cx, pts[1].y - cy);
+        var out = [];
+        for (var a = 0; a <= 360; a += 3) {
+          var rad = a * Math.PI / 180;
+          out.push({ x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) });
+        }
+        return out;
+      }
+
+      if ((path.mode === "rectangle" || path.mode === "square") && pts.length >= 2) {
+        var p0 = pts[0], p1 = pts[1];
+        var x = Math.min(p0.x, p1.x), y = Math.min(p0.y, p1.y);
+        var w = Math.abs(p1.x - p0.x), h = Math.abs(p1.y - p0.y);
+        if (path.mode === "square") { w = Math.max(w, h); h = w; }
+        return [
+          { x: x, y: y }, { x: x + w, y: y }, { x: x + w, y: y + h },
+          { x: x, y: y + h }, { x: x, y: y }
+        ];
+      }
+
+      if (path.mode === "lineh" && pts.length >= 2) {
+        return [{ x: pts[0].x, y: pts[0].y }, { x: pts[1].x, y: pts[0].y }];
+      }
+      if (path.mode === "linev" && pts.length >= 2) {
+        return [{ x: pts[0].x, y: pts[0].y }, { x: pts[0].x, y: pts[1].y }];
+      }
+      if (path.mode === "line" && pts.length >= 2) {
+        return [{ x: pts[0].x, y: pts[0].y }, { x: pts[1].x, y: pts[1].y }];
+      }
+
+      return pts.map(function (p) { return { x: p.x, y: p.y }; });
+    }
+
+    // Liang-Barsky: recorta el segmento a->b contra el rectángulo R {x0,y0,x1,y1}.
+    // Devuelve [t0, t1] con la parte visible, o null si no cruza.
+    function qClipSegmentToRect(a, b, R) {
+      var dx = b.x - a.x, dy = b.y - a.y;
+      var p = [-dx, dx, -dy, dy];
+      var q = [a.x - R.x0, R.x1 - a.x, a.y - R.y0, R.y1 - a.y];
+      var t0 = 0, t1 = 1;
+      for (var i = 0; i < 4; i++) {
+        if (p[i] === 0) {
+          if (q[i] < 0) return null;
+          continue;
+        }
+        var r = q[i] / p[i];
+        if (p[i] < 0) {
+          if (r > t1) return null;
+          if (r > t0) t0 = r;
+        } else {
+          if (r < t0) return null;
+          if (r < t1) t1 = r;
+        }
+      }
+      return [t0, t1];
+    }
+
+    // Parte la polilínea en tramos consecutivos { inside: bool, pts: [...] }
+    // según estén dentro o fuera del rectángulo R. Mantiene el orden original.
+    function qSplitPolylineByRect(pts, R) {
+      var runs = [];
+
+      function push(inside, p) {
+        var last = runs[runs.length - 1];
+        if (!last || last.inside !== inside) {
+          runs.push({ inside: inside, pts: [{ x: p.x, y: p.y }] });
+          return;
+        }
+        var lp = last.pts[last.pts.length - 1];
+        if (lp.x !== p.x || lp.y !== p.y) last.pts.push({ x: p.x, y: p.y });
+      }
+
+      function isIn(p) {
+        return p.x >= R.x0 && p.x <= R.x1 && p.y >= R.y0 && p.y <= R.y1;
+      }
+
+      if (pts.length === 1) {
+        push(isIn(pts[0]), pts[0]);
+        return runs;
+      }
+
+      for (var i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1];
+        var c = qClipSegmentToRect(a, b, R);
+        if (!c) {
+          push(false, a);
+          push(false, b);
+          continue;
+        }
+        var t0 = c[0], t1 = c[1];
+        var p0 = { x: a.x + (b.x - a.x) * t0, y: a.y + (b.y - a.y) * t0 };
+        var p1 = { x: a.x + (b.x - a.x) * t1, y: a.y + (b.y - a.y) * t1 };
+        if (t0 > 0) { push(false, a); push(false, p0); }
+        push(true, p0);
+        push(true, p1);
+        if (t1 < 1) { push(false, p1); push(false, b); }
+      }
+
+      // Descarta tramos de un solo punto (no se pueden dibujar)
+      return runs.filter(function (r) { return r.pts.length >= 2; });
+    }
+
+    // Aplica el marquee R sobre QS.drawings del espacio de trabajo actual.
+    // additive = true cuando se usa Shift.
+    function qCutDrawingsByRect(R, additive) {
+      var key = qWorkspaceKey();
+      var drawings = qNormalizeDrawingPaths(key);
+      var next = [];
+      var hits = [];
+      var changed = false;
+
+      drawings.forEach(function (path) {
+        var runs = qSplitPolylineByRect(qPathToPolyline(path), R);
+        var hasIn = runs.some(function (r) { return r.inside; });
+        var hasOut = runs.some(function (r) { return !r.inside; });
+
+        if (!hasIn) {
+          next.push(path);
+          return;
+        }
+        if (!hasOut) {
+          // Totalmente dentro: se conserva tal cual (círculo sigue siendo círculo)
+          next.push(path);
+          hits.push(path);
+          return;
+        }
+
+        // Parcialmente dentro: se parte en pedazos
+        changed = true;
+        runs.forEach(function (run) {
+          var piece = {
+            id: qNextDrawId(),
+            mode: "pencil",
+            color: path.color,
+            size: path.size,
+            points: run.pts
+          };
+          next.push(piece);
+          if (run.inside) hits.push(piece);
+        });
+      });
+
+      if (changed) qPushUndo();
+      QS.drawings[key] = next;
+
+      var keep = additive
+        ? QS.selectedPaths.filter(function (p) { return next.indexOf(p) !== -1; })
+        : [];
+      hits.forEach(function (p) {
+        if (keep.indexOf(p) === -1) keep.push(p);
+      });
+      QS.selectedPaths = keep;
+
+      qRedrawCanvas();
+      qUpdateSelectionVisual();
+      qSaveWorkspace();
+    }
+
 function qEndDraw() {
         if (!QS.isDrawing) return;
         QS.isDrawing = false;
@@ -1728,22 +1893,16 @@ function qEndDraw() {
           var marqueeEl = document.getElementById("q-selection-marquee");
           if (marqueeEl) marqueeEl.style.display = "none";
           if (QS.marqueeStart && QS.marqueeEnd && !QS.selectionDragStart) {
-            var paths = qNormalizeDrawingPaths(qWorkspaceKey());
-            var marqueeLeft = Math.min(QS.marqueeStart.x, QS.marqueeEnd.x);
-            var marqueeTop = Math.min(QS.marqueeStart.y, QS.marqueeEnd.y);
-            var marqueeRight = Math.max(QS.marqueeStart.x, QS.marqueeEnd.x);
-            var marqueeBottom = Math.max(QS.marqueeStart.y, QS.marqueeEnd.y);
-            if (!QS.marqueeShift) {
+            var mx0 = Math.min(QS.marqueeStart.x, QS.marqueeEnd.x);
+            var my0 = Math.min(QS.marqueeStart.y, QS.marqueeEnd.y);
+            var mx1 = Math.max(QS.marqueeStart.x, QS.marqueeEnd.x);
+            var my1 = Math.max(QS.marqueeStart.y, QS.marqueeEnd.y);
+            if (mx1 - mx0 >= 2 || my1 - my0 >= 2) {
+              qCutDrawingsByRect({ x0: mx0, y0: my0, x1: mx1, y1: my1 }, QS.marqueeShift);
+            } else if (!QS.marqueeShift) {
               QS.selectedPaths = [];
+              qUpdateSelectionVisual();
             }
-            paths.forEach(function(path) {
-              var pb = qGetPathBoundingBox(path);
-              if (!pb) return;
-              if (pb.x < marqueeRight && pb.x + pb.w > marqueeLeft && pb.y < marqueeBottom && pb.y + pb.h > marqueeTop) {
-                QS.selectedPaths.push(path);
-              }
-            });
-            qUpdateSelectionVisual();
           } else if (QS.selectionDragStart) {
             qUpdateSelectionVisual();
           }
