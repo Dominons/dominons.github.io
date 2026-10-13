@@ -2329,6 +2329,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: visible;
     }
     .orbital-clock {
       text-align: center;
@@ -2337,6 +2338,7 @@
       padding: 24px 44px;
       background: var(--color-main-bg);
       max-width: 94%;
+      min-width: min(380px, 92%);
     }
     .orbital-time {
       font-family: 'JetBrains Mono', monospace;
@@ -2362,6 +2364,10 @@
       text-transform: uppercase;
       color: var(--color-text);
       opacity: 0.85;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
     .rgb-line {
       width: 80px;
@@ -2389,15 +2395,14 @@
       cursor: pointer;
       user-select: none;
       flex-shrink: 0;
-      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease, left var(--anim-dur-ui) ease, top var(--anim-dur-ui) ease;
+      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease;
       z-index: 2;
     }
     .orbital-stage .orb-icon {
       position: absolute;
-      transform: translate(-50%, -50%);
     }
     .orb-icon svg { width: 22px; height: 22px; display: block; }
-    html.anim-on .orbital-stage .orb-icon:hover { transform: translate(-50%, calc(-50% - 2px)); }
+    html.anim-on .orbital-stage .orb-icon:hover { transform: translateY(-2px); }
     html.anim-on .orbital-bar .orb-icon:hover { transform: translateY(-2px); }
     .orb-icon.orb-active { background: var(--color-highlight); color: #ffffff; }
     .orbital-layer { display: none; }
@@ -2441,6 +2446,7 @@
       padding: 6px 18px;
       border-radius: 20px;
       max-width: none;
+      min-width: min(260px, 80vw);
       transition: padding var(--anim-dur-ui) ease, border-radius var(--anim-dur-ui) ease, max-width var(--anim-dur-ui) ease;
     }
     .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
@@ -7581,26 +7587,27 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         var w = st.clientWidth, h = st.clientHeight;
         if (!w || !h) return;
         var btns = st.querySelectorAll('.orb-icon');
-        var clock = document.getElementById('orbitalClock');
-        var cw = 0;
-        try { cw = clock ? clock.offsetWidth : 0; } catch (e) {}
-        // Un solo paso: si nada cambió (tamaño, reloj, cantidad), no se reescribe nada
-        var sig = w + 'x' + h + 'x' + cw + 'x' + btns.length;
+        // Un solo paso: si nada cambió (tamaño del stage, cantidad), no se reescribe nada.
+        // El radio sale SOLO del stage (nunca del texto del reloj) para no recalcular
+        // cuando cambia la fecha o el idioma.
+        var sig = w + 'x' + h + 'x' + btns.length;
         if (sig === orbLayoutSig) return;
         orbLayoutSig = sig;
-        // Elipse contenida en el stage: evita solape con el reloj y salidas del viewport
-        var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 56));
-        var ry = Math.min(h / 2 - 44, Math.max(160, h * 0.33));
+        // Elipse contenida en el stage, con aire extra respecto al reloj
+        var rx = Math.min(w / 2 - 44, Math.max(260, w * 0.32));
+        var ry = Math.min(h / 2 - 44, Math.max(200, h * 0.36));
         if (rx < 120) rx = 120;
         if (ry < 100) ry = 100;
-        var cx = w / 2, cy = h / 2;
+        // Los botones del círculo miden 64px fijos: se resta la mitad para centrar
+        // sin usar translate(-50%,-50%), que conflictuaba con el FLIP y el hover
+        var cx = w / 2, cy = h / 2, half = 32;
         for (var i = 0; i < btns.length; i++) {
           // Nunca escribir left/top en iconos fuera del stage (p.ej. volados a un
           // panel): su posición la controla su clase; además se limpia al volar
           if (btns[i].parentNode !== st) continue;
           var a = (-90 + i * 72) * Math.PI / 180;
-          btns[i].style.left = (cx + rx * Math.cos(a)) + 'px';
-          btns[i].style.top = (cy + ry * Math.sin(a)) + 'px';
+          btns[i].style.left = (cx + rx * Math.cos(a) - half) + 'px';
+          btns[i].style.top = (cy + ry * Math.sin(a) - half) + 'px';
         }
       }
 
