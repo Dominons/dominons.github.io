@@ -83,7 +83,17 @@
       function orbTickClock() {
         var t = document.getElementById('orbClockTime');
         var d = document.getElementById('orbClockDate');
-        if (!t && !d) return;
+        if (!t && !d) {
+          var clockEl = document.getElementById('orbitalClock');
+          if (clockEl && !clockEl.firstChild) {
+            clockEl.innerHTML = '<div class="orbital-time" id="orbClockTime">00:00:00</div>' +
+              '<div class="orbital-date" id="orbClockDate"></div>' +
+              '<div class="rgb-line"></div>';
+            t = document.getElementById('orbClockTime');
+            d = document.getElementById('orbClockDate');
+          }
+          if (!t && !d) return;
+        }
         var now = new Date();
         if (t) t.textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
         if (d) {
@@ -177,6 +187,14 @@
         for (var j = 0; j <= visible.length; j++) {
           if (j === insertAt && clock) bar.appendChild(clock);
           if (j < visible.length) bar.appendChild(visible[j]);
+        }
+        if (stacked && clock) {
+          if (clock.parentNode !== bar) { try { bar.appendChild(clock); } catch (e) {} }
+          var cr = null;
+          try { cr = clock.getBoundingClientRect(); } catch (e) {}
+          if (!cr || cr.width < 50 || cr.height < 10) {
+            try { console.warn('[orbital] reloj en barra con rect anómalo:', cr && cr.width, cr && cr.height); } catch (e) {}
+          }
         }
       }
       function orbSetStackMode(on) {
