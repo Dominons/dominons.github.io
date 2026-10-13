@@ -103,6 +103,15 @@
 
       qLoadWorkspace();
       qApplyCanvasSize();
+      if (QS._restoredView) {
+        try {
+          if (isFinite(QS._restoredView.zoom)) QS.zoom = Math.min(8, Math.max(0.05, QS._restoredView.zoom));
+          if (isFinite(QS._restoredView.panX)) QS.panX = QS._restoredView.panX;
+          if (isFinite(QS._restoredView.panY)) QS.panY = QS._restoredView.panY;
+        } catch (e) {}
+        QS._restoredView = null;
+        qUpdateTransform();
+      }
       qRenderProjects();
       qLoadPage(QS.activeProj, QS.activePage, true);
       qSetupCanvas();
@@ -142,14 +151,13 @@
 
     // ---- AUTO-SAVE ----
     function qSetupAutoSave() {
-      // Guarda cada 30 segundos si Quantis está visible y hay sesión iniciada
+      // Guarda cada 30 segundos si Quantis está visible (siempre en local;
+      // la nube sigue con su propio gate dentro de qSaveWorkspace)
       setInterval(function () {
         var view = document.getElementById("quantis-view");
         if (
           view &&
-          !view.classList.contains("hidden-view") &&
-          window.auth &&
-          window.auth.currentUser
+          !view.classList.contains("hidden-view")
         ) {
           qSavePage();
         }
@@ -158,22 +166,18 @@
       // Guarda al cambiar de pestaña o minimizar ventana
       document.addEventListener("visibilitychange", function () {
         if (
-          document.visibilityState === "hidden" &&
-          window.auth &&
-          window.auth.currentUser
+          document.visibilityState === "hidden"
         ) {
           qSavePage();
           window.qFlushCloudSave?.();
         }
       });
 
-      // Guarda antes de cerrar el navegador (solo con sesión activa, para no
-      // volcar el workspace del usuario en la clave 'guest' al hacer logout)
+      // Guarda antes de cerrar el navegador (en local siempre; la clave se
+      // elige por usuario actual, así no se mezcla con otras cuentas)
       window.addEventListener("beforeunload", function () {
-        if (window.auth && window.auth.currentUser) {
-          qSavePage();
-          window.qFlushCloudSave?.();
-        }
+        qSavePage();
+        window.qFlushCloudSave?.();
       });
     }
 
@@ -689,17 +693,26 @@
     // =========================================================
     function qPersistWorkspace() {
       try {
-        localStorage.setItem(
-          quantisStorageKey(),
-          JSON.stringify({
+        var payload = {
             uid: qCurrentUid(),
             projects: QS.projects,
             canvasData: QS.canvasData,
             drawings: QS.drawings,
             activeProj: QS.activeProj,
             activePage: QS.activePage,
-          }),
+          };
+        try {
+          payload.view = { zoom: QS.zoom, panX: QS.panX, panY: QS.panY };
+        } catch (vErr) {}
+        localStorage.setItem(
+          quantisStorageKey(),
+          JSON.stringify(payload),
         );
+        // Espejo global solo para guest: red de seguridad si la clave por
+        // usuario no existe al recargar (nunca pisa datos de una cuenta).
+        try {
+          if (qCurrentUid() === "guest") localStorage.setItem("quantis_local_data", JSON.stringify(payload));
+        } catch (gErr) {}
       } catch (error) {
         console.warn("No se pudo guardar Quantis localmente:", error);
       }
@@ -757,6 +770,21 @@
             }
           } catch (migErr) {}
         }
+        if (!raw && qCurrentUid() === "guest") {
+          // Sin clave propia y sin sesión: adoptar el espejo global si es
+          // compatible (solo guest o sin uid), y reescribirlo en la clave
+          // del usuario actual. Las cuentas con clave propia no se tocan.
+          try {
+            var graw = localStorage.getItem("quantis_local_data");
+            if (graw) {
+              var gdata = JSON.parse(graw);
+              if (gdata && (!gdata.uid || gdata.uid === "guest" || gdata.uid === qCurrentUid())) {
+                raw = graw;
+                try { localStorage.setItem(quantisStorageKey(), graw); } catch (wErr2) {}
+              }
+            }
+          } catch (gErr) {}
+        }
         if (!raw) return;
         var data = JSON.parse(raw);
         // ELIMINADO: if (data.uid && data.uid !== qCurrentUid()) return;
@@ -784,6 +812,13 @@
               : 0,
           ),
         );
+        // Vista guardada (zoom/pan) para restaurar la misma vista tras recargar
+        QS._restoredView = null;
+        try {
+          if (data.view && isFinite(data.view.zoom) && isFinite(data.view.panX) && isFinite(data.view.panY)) {
+            QS._restoredView = { zoom: data.view.zoom, panX: data.view.panX, panY: data.view.panY };
+          }
+        } catch (vErr) {}
       } catch (error) {
         console.warn("No se pudo cargar Quantis local:", error);
       }
@@ -1413,6 +1448,107 @@
       }
     }
 
+    // Borrador por subdivisión: devuelve los tramos que quedan FUERA del
+    // círculo (null = sin contacto, [] = borrado total). Solo se usa en
+    // trazos de pincel; las formas usan borrado completo al contacto.
+    function qEraseSplitPoints(pts, cx, cy, r) {
+      if (!pts || !pts.length) return null;
+      var r2 = r * r;
+      function inside(pt) { var dx = pt.x - cx, dy = pt.y - cy; return dx * dx + dy * dy <= r2; }
+      function lerp(A, B, t) { return { x: A.x + (B.x - A.x) * t, y: A.y + (B.y - A.y) * t }; }
+      function crossTs(A, B) {
+        var dx = B.x - A.x, dy = B.y - A.y;
+        var fx = A.x - cx, fy = A.y - cy;
+        var a = dx * dx + dy * dy;
+        if (a === 0) return [];
+        var b = 2 * (fx * dx + fy * dy), c = fx * fx + fy * fy - r2;
+        var disc = b * b - 4 * a * c;
+        if (disc <= 0) return [];
+        var sq = Math.sqrt(disc), out = [];
+        var t1 = (-b - sq) / (2 * a), t2 = (-b + sq) / (2 * a);
+        if (t1 > 0 && t1 < 1) out.push(t1);
+        if (t2 > 0 && t2 < 1 && t2 !== t1) out.push(t2);
+        return out;
+      }
+      var anyHit = false, h, s2;
+      for (h = 0; h < pts.length; h++) { if (inside(pts[h])) { anyHit = true; break; } }
+      for (s2 = 0; !anyHit && s2 < pts.length - 1; s2++) {
+        if (crossTs(pts[s2], pts[s2 + 1]).length) { anyHit = true; break; }
+      }
+      if (!anyHit) return null;
+      var runs = [], cur = [];
+      function flush() { if (cur.length >= 2) runs.push(cur); cur = []; }
+      var prevIn = inside(pts[0]);
+      if (!prevIn) cur.push({ x: pts[0].x, y: pts[0].y });
+      for (var i = 0; i < pts.length - 1; i++) {
+        var A = pts[i], B = pts[i + 1], bIn = inside(B);
+        if (!prevIn && !bIn) {
+          var tt = crossTs(A, B);
+          if (tt.length === 2) { cur.push(lerp(A, B, tt[0])); flush(); cur.push(lerp(A, B, tt[1])); }
+          else cur.push({ x: B.x, y: B.y });
+        } else if (prevIn && !bIn) {
+          var te = crossTs(A, B);
+          if (te.length) cur.push(lerp(A, B, te[te.length - 1]));
+          else cur = [];
+        } else if (!prevIn && bIn) {
+          var tn = crossTs(A, B);
+          if (tn.length) cur.push(lerp(A, B, tn[0]));
+          flush();
+        }
+        prevIn = bIn;
+      }
+      flush();
+      return runs;
+    }
+
+    // Contacto real (punto o segmento) con un círculo: para formas completas.
+    function qPathHitsCircle(path, px, py, tol) {
+      var pts = path.points, j, ax, ay, bx, by, dx, dy, tt, cx, cy;
+      for (j = 0; j < pts.length; j++) {
+        if (Math.hypot(pts[j].x - px, pts[j].y - py) <= tol) return true;
+      }
+      for (var s = 0; s < pts.length - 1; s++) {
+        ax = pts[s].x; ay = pts[s].y; bx = pts[s + 1].x; by = pts[s + 1].y;
+        dx = bx - ax; dy = by - ay;
+        if (dx === 0 && dy === 0) continue;
+        tt = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy);
+        if (tt < 0) tt = 0; else if (tt > 1) tt = 1;
+        cx = ax + tt * dx; cy = ay + tt * dy;
+        if (Math.hypot(px - cx, py - cy) <= tol) return true;
+      }
+      return false;
+    }
+
+    // Anillo visible del borrador: muestra la zona real de borrado.
+    function qEraserRingEl() {
+      var el = document.getElementById("q-eraser-cursor");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "q-eraser-cursor";
+        el.style.display = "none";
+        document.body.appendChild(el);
+      }
+      return el;
+    }
+    function qShowEraserRing(e) {
+      try {
+        if (QS.drawMode !== "eraser" || !e || e.clientX === undefined) { qHideEraserRing(); return; }
+        var el = qEraserRingEl();
+        var d = Math.max(6, QS.drawSize * 2 * Math.max(0.1, QS.zoom));
+        el.style.width = d + "px";
+        el.style.height = d + "px";
+        el.style.left = e.clientX + "px";
+        el.style.top = e.clientY + "px";
+        el.style.display = "block";
+      } catch (err) {}
+    }
+    function qHideEraserRing() {
+      try {
+        var el = document.getElementById("q-eraser-cursor");
+        if (el) el.style.display = "none";
+      } catch (err) {}
+    }
+
 function qMoveDraw(e) {
         if (!QS.isDrawing || !QS.drawMode) return;
         e.preventDefault();
@@ -1468,32 +1604,39 @@ function qMoveDraw(e) {
           return;
         }
         if (QS.drawMode === "eraser") {
+          qShowEraserRing(e);
           var drawings = qNormalizeDrawingPaths(qWorkspaceKey());
           var eraseRadius = QS.drawSize;
-          var zoom = Math.max(0.1, QS.zoom);
+          var zoomE = Math.max(0.1, QS.zoom);
           var changed = false;
-          var k, ax, ay, bx, by, dx, dy, tt, cx, cy;
           for (var i = drawings.length - 1; i >= 0; i--) {
             var path = drawings[i];
             if (!path.points || path.points.length === 0) continue;
             // Contacto borde a borde: radio del borrador + mitad del grosor visible
             // del trazo + 2px de pantalla de gracia (independiente del zoom)
-            var tol = eraseRadius + (path.size || 8) / 2 + 2 / zoom;
-            var hit = false;
-            for (var j = 0; j < path.points.length; j++) {
-              if (Math.hypot(path.points[j].x - p.x, path.points[j].y - p.y) <= tol) { hit = true; break; }
-            }
-            for (var s = 0; !hit && s < path.points.length - 1; s++) {
-              ax = path.points[s].x; ay = path.points[s].y;
-              bx = path.points[s + 1].x; by = path.points[s + 1].y;
-              dx = bx - ax; dy = by - ay;
-              if (dx === 0 && dy === 0) continue;
-              tt = ((p.x - ax) * dx + (p.y - ay) * dy) / (dx * dx + dy * dy);
-              if (tt < 0) tt = 0; else if (tt > 1) tt = 1;
-              cx = ax + tt * dx; cy = ay + tt * dy;
-              if (Math.hypot(p.x - cx, p.y - cy) <= tol) { hit = true; break; }
-            }
-            if (hit) {
+            var tol = eraseRadius + (path.size || 8) / 2 + 2 / zoomE;
+            var bb = qGetPathBoundingBox(path);
+            if (bb && (p.x < bb.x - tol || p.x > bb.x + bb.w + tol || p.y < bb.y - tol || p.y > bb.y + bb.h + tol)) continue;
+            var brushLike = !path.mode || path.mode === "pencil";
+            if (brushLike) {
+              // Borrado parcial: solo se corta lo que toca el anillo
+              var runs = qEraseSplitPoints(path.points, p.x, p.y, tol);
+              if (runs === null) continue;
+              if (!QS.eraseGesturePushed) { QS.eraseGesturePushed = true; qPushUndo(); }
+              if (!runs.length) {
+                drawings.splice(i, 1);
+              } else {
+                var fresh = [];
+                for (var q = 0; q < runs.length; q++) {
+                  var piece = { id: q === 0 ? path.id : qNextDrawId(), mode: path.mode, color: path.color, size: path.size, points: runs[q] };
+                  if (q === 0 && path.origin) piece.origin = { x: path.origin.x, y: path.origin.y };
+                  else if (runs[q].length) piece.origin = { x: runs[q][0].x, y: runs[q][0].y };
+                  fresh.push(piece);
+                }
+                drawings.splice.apply(drawings, [i, 1].concat(fresh));
+              }
+              changed = true;
+            } else if (qPathHitsCircle(path, p.x, p.y, tol)) {
               if (!QS.eraseGesturePushed) { QS.eraseGesturePushed = true; qPushUndo(); }
               drawings.splice(i, 1); changed = true;
             }
@@ -1525,6 +1668,7 @@ function qEndDraw() {
         QS.isDrawing = false;
         QS.eraseGesturePushed = false;
         QS.selDragPushed = false;
+        qHideEraserRing();
         if (QS.drawMode === "select") {
           QS.isSelecting = false;
           QS.isDraggingSelection = false;
@@ -1601,6 +1745,7 @@ function qEndDraw() {
       if (!QS.drawMode) {
         qClearSelection();
       }
+      qHideEraserRing();
     }
 
     function qToggleDrawPanel() {
@@ -1670,6 +1815,11 @@ function qEndDraw() {
           }
         });
         QD.viewport.addEventListener("mousedown", qBeginDraw);
+        QD.viewport.addEventListener("mousemove", function (e) {
+          if (QS.drawMode === "eraser") qShowEraserRing(e);
+          else qHideEraserRing();
+        });
+        QD.viewport.addEventListener("mouseleave", function () { qHideEraserRing(); });
       window.addEventListener("mousemove", qMoveDraw);
       window.addEventListener("mouseup", qEndDraw);
 
@@ -1777,8 +1927,14 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
             pDrag = true;
             pSX = e.clientX;
             pSY = e.clientY;
-            pLX = panel.offsetLeft;
-            pLY = panel.offsetTop;
+            var r0 = panel.getBoundingClientRect();
+            pLX = r0.left;
+            pLY = r0.top;
+            panel.style.transform = "none";
+            panel.style.left = pLX + "px";
+            panel.style.top = pLY + "px";
+            panel.style.right = "auto";
+            panel.style.bottom = "auto";
             e.preventDefault();
           });
           document.addEventListener("mousemove", function (e) {
@@ -1787,7 +1943,24 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
             panel.style.top = pLY + e.clientY - pSY + "px";
           });
           document.addEventListener("mouseup", function () {
+            if (!pDrag) return;
             pDrag = false;
+            // Dock magnético a los 4 bordes si se suelta cerca (28px)
+            try {
+              var r = panel.getBoundingClientRect();
+              var vw = window.innerWidth, vh = window.innerHeight, thr = 28, m = 8;
+              var dL = r.left, dR = vw - r.right, dT = r.top, dB = vh - r.bottom;
+              var best = Math.min(dL, dR, dT, dB);
+              if (best <= thr) {
+                panel.style.transform = "none";
+                if (best === dL) panel.style.left = m + "px";
+                else if (best === dR) panel.style.left = Math.max(m, vw - r.width - m) + "px";
+                else if (best === dT) panel.style.top = m + "px";
+                else panel.style.top = Math.max(m, vh - r.height - m) + "px";
+                panel.style.right = "auto";
+                panel.style.bottom = "auto";
+              }
+            } catch (e) {}
           });
         }
 
