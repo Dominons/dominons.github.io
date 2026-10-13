@@ -2443,6 +2443,10 @@
       z-index: auto;
     }
     .orbital-clock.compact {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      flex-shrink: 0;
       padding: 6px 18px;
       border-radius: 20px;
       max-width: none;
@@ -7651,6 +7655,9 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         }
         var stacked = orbOpenStack.length > 0;
         var clock = stacked ? document.getElementById('orbitalClock') : null;
+        if (clock && stacked && !clock.classList.contains('compact')) {
+          try { clock.classList.add('compact'); } catch (e) {}
+        }
         var insertAt = Math.ceil(visible.length / 2);
         for (var j = 0; j <= visible.length; j++) {
           if (j === insertAt && clock) bar.appendChild(clock);
