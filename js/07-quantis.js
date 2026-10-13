@@ -245,10 +245,17 @@
 
     // ---- SELECTION HELPERS ----
     function qHitTestPath(path, px, py, margin) {
-      // Contacto exacto: mitad del grosor visible + 1px de gracia en canvas
-      // (antes usaba size completo + 6 = área 3× más grande que lo visible)
       margin = margin || 0;
       var threshold = (path.size || 8) / 2 + 1 + margin;
+      // Formas cerradas: seleccionar por ÁREA (toda la figura, incluido el interior)
+      if (path.mode === "rectangle" || path.mode === "square" || path.mode === "circle") {
+        var bb = qGetPathBoundingBox(path);
+        if (bb) {
+          var pad = threshold;
+          return px >= bb.x - pad && px <= bb.x + bb.w + pad && py >= bb.y - pad && py <= bb.y + bb.h + pad;
+        }
+      }
+      // Líneas y pincel: contacto con el trazo visible
       for (var i = 0; i < path.points.length; i++) {
         if (Math.hypot(path.points[i].x - px, path.points[i].y - py) <= threshold) return true;
       }
@@ -262,11 +269,6 @@
           var cx = ax + t*dx, cy = ay + t*dy;
           if (Math.hypot(px-cx, py-cy) <= threshold) return true;
         }
-      }
-      if (path.mode === "circle" && path.points.length >= 2) {
-        var cx0 = path.points[0].x, cy0 = path.points[0].y;
-        var r = Math.hypot(path.points[1].x - cx0, path.points[1].y - cy0);
-        if (Math.abs(Math.hypot(px-cx0, py-cy0) - r) <= threshold) return true;
       }
       return false;
     }
