@@ -2446,7 +2446,8 @@
     .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
     .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); transition: font-size var(--anim-dur-ui) ease; }
     .orbital-clock.compact .rgb-line { display: none; }
-    .orbital-clock.compact #orbClockDate { display: block; font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; transition: font-size var(--anim-dur-ui) ease, margin-top var(--anim-dur-ui) ease, letter-spacing var(--anim-dur-ui) ease; }
+    .orbital-clock.compact #orbClockDate { display: block !important; font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; transition: font-size var(--anim-dur-ui) ease, margin-top var(--anim-dur-ui) ease, letter-spacing var(--anim-dur-ui) ease; opacity: 1; visibility: visible; }
+.orbital-clock.compact .orbital-date { display: block !important; }
     .orbital-layer.layer-open .orb-icon-in-panel {
       position: absolute;
       top: 8px;
