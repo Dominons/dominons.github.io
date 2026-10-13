@@ -1,0 +1,2903 @@
+    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
+    :root {
+      --color-dark-bg: #1A1A1A;
+      --color-header-bg: #282828;
+      --color-border: #444;
+      --color-highlight: #A855F7;
+      --color-main-bg: #282828;
+      --color-text: #EAEAEA;
+      --color-input-bg: #1F1F1F;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --main-gap: 15px;
+    }
+
+    /* ========== ESTILOS GLOBALES DE SOPORTE SPA ========== */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-dark-bg);
+      color: var(--color-text);
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    /* --- Clases para transiciones suaves de vistas SPA --- */
+    .app-view-transition {
+      transition: opacity var(--anim-dur-view) ease, transform var(--anim-dur-view) ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .view-invisible {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    /* La clase hidden-view sigue ocultando físicamente el elemento cuando termina la animación */
+    .hidden-view {
+      display: none !important;
+    }
+
+       /* --- Botón de navegación: marco violeta suave --- */
+    .glow-button {
+      background: rgba(168, 85, 247, 0.06);
+      border: 1px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: var(--color-text);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: visible;
+      transition: color var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease,
+                  background var(--anim-dur-ui) ease, transform var(--anim-dur-ui) ease;
+    }
+
+    .glow-button:hover {
+      color: #D8B4FE;
+      border-color: rgba(168, 85, 247, 0.9);
+      background: rgba(168, 85, 247, 0.14);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+    }
+
+    /* --- Partículas al cambiar de vista --- */
+    .nav-particle {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      background: radial-gradient(circle, #E9D5FF 0%, #A855F7 60%, transparent 100%);
+      box-shadow: 0 0 6px 1px rgba(168, 85, 247, 0.7);
+    }
+
+    /* ===== SISTEMA DE MODOS DE ANIMACION (html.anim-on / html.anim-off) ===== */
+    /* Solo se animan opacity y transform. NUNCA box-shadow ni filter. */
+    :root {
+      --anim-dur-view: 0.5s;
+      --anim-dur-ui: 0.2s;
+      --float-bg: #111318;
+      --float-text: #e4e4e7;
+      --float-border: rgba(168,85,247,0.34);
+      --float-shadow: 0 14px 36px rgba(255,255,255,0.08);
+    }
+    html.anim-off {
+      --anim-dur-view: 0s;
+      --anim-dur-ui: 0s;
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: scale(0.98) translateY(-4px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
+    /* MODO ANIMADO: apertura de paneles flotantes (display none<->block -> keyframes) */
+    html.anim-on #dominon-config-dropdown.open,
+    html.anim-on #quantis-config-dropdown.open,
+    html.anim-on #miniPlanPopup.open,
+    html.anim-on #trialContactPopup.open,
+    html.anim-on #perf-panel.open,
+    html.anim-on #plansModal.open,
+    html.anim-on #plansModal.open .plans-card,
+    html.anim-on #musicPanel:not(.hidden) { animation: floatIn var(--anim-dur-ui) ease both; }
+    /* MODO ANIMADO: botones con press + micro-lift */
+    html.anim-on .glow-button:hover { transform: translateY(-1px); }
+    html.anim-on .glow-button:active { transform: scale(0.96); }
+    html.anim-on .icon-square-btn:hover { transform: translateY(-1px); }
+    html.anim-on .plan-option:hover { transform: translateY(-2px); }
+    /* MODO ANIMADO: stagger sutil en filas del ledger de Deep Flow */
+    html.anim-on #ledger-body .row { animation: rowIn var(--anim-dur-ui) ease both; }
+    html.anim-on #ledger-body .row:nth-child(2) { animation-delay: 30ms; }
+    html.anim-on #ledger-body .row:nth-child(3) { animation-delay: 60ms; }
+    html.anim-on #ledger-body .row:nth-child(4) { animation-delay: 90ms; }
+    html.anim-on #ledger-body .row:nth-child(5) { animation-delay: 120ms; }
+    html.anim-on #ledger-body .row:nth-child(6) { animation-delay: 150ms; }
+    /* MODO ESTATICO: reset global + anulaciones expresas */
+    html.anim-off *, html.anim-off *::before, html.anim-off *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+    html.anim-off .glow-button:hover {
+      box-shadow: none;
+      color: var(--color-text);
+      border-color: var(--color-highlight);
+      background: rgba(168, 85, 247, 0.06);
+    }
+    html.anim-off .glow-button:active { transform: none; }
+    html.anim-off .icon-square-btn:hover { transform: none; }
+    html.anim-off .plan-option:hover { transform: none; }
+    html.anim-off .nav-particle { display: none; }
+    
+    /* --- Loader de guardado en la nube (Premium) --- */
+    .cloud-loader-wrap {
+      display: none;
+      position: absolute;
+      z-index: 50;
+      padding: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 6px;
+      line-height: 0;
+    }
+    .cloud-loader-wrap.visible {
+      display: block;
+    }
+    .cloud-loader {
+      width: 20px;
+      height: 20px;
+      background: #353535;
+      display: block;
+      position: relative;
+      box-sizing: border-box;
+      animation: rotationBack 1s ease-in-out infinite reverse;
+    }
+    .cloud-loader::before {
+      content: '';
+      box-sizing: border-box;
+      left: 0;
+      top: 0;
+      transform: rotate(45deg);
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #2e2e2e;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+    .cloud-loader::after {
+      content: '';
+      box-sizing: border-box;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: rgb(0, 0, 0);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+    @keyframes rotationBack {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
+    /* Posición del loader en el notepad (esquina superior derecha) */
+    #notepadSaveLoader {
+      top: 8px;
+      right: 8px;
+    }
+    /* Posición del loader en Quantis (cabecera, lado derecho) */
+    #quantisSaveLoader {
+      top: 6px;
+      right: 6px;
+    }
+    /* ========== LOGIN SCREEN (ESTÁTICA EN LA RAÍZ) ========== */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+    }
+    #loginScreen.hidden {
+      display: none !important;
+    }
+
+    /* ===== ESTRELLAS ANIMADAS FONDO LOGIN ===== */
+    .stars-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+      background: radial-gradient(ellipse at bottom, #321b35 0%, #090a0f 100%);
+    }
+
+    #stars {
+      width: 1px;
+      height: 1px;
+      background: transparent;
+      box-shadow: 501px 811px #fff, 1450px 1324px #fff, 1093px 1780px #fff, 1469px 678px #fff, 904px 741px #fff, 1160px 781px #fff, 1841px 1962px #fff, 1630px 1667px #fff, 1788px 676px #fff, 367px 1734px #fff, 1343px 156px #fff, 1283px 1142px #fff, 1062px 378px #fff, 1395px 467px #fff, 1017px 1891px #fff, 137px 1114px #fff, 1767px 1403px #fff, 1543px 11px #fff, 1078px 181px #fff, 1189px 1574px #fff, 1697px 1551px #fff, 439px 472px #fff, 1491px 677px #fff, 1364px 599px #fff, 34px 382px #fff, 1221px 1584px #fff, 1266px 1499px #fff, 169px 1907px #fff, 1219px 1125px #fff, 659px 18px #fff, 1731px 1959px #fff, 332px 1216px #fff, 1913px 788px #fff, 80px 712px #fff, 326px 1605px #fff, 574px 1502px #fff, 473px 1653px #fff, 404px 975px #fff, 322px 1797px #fff, 425px 1321px #fff, 1121px 1797px #fff, 731px 647px #fff, 891px 1584px #fff, 1523px 109px #fff, 1379px 244px #fff, 865px 1064px #fff, 493px 956px #fff, 624px 1380px #fff, 440px 619px #fff, 1630px 767px #fff, 955px 1196px #fff, 62px 729px #fff, 126px 946px #fff, 1256px 896px #fff, 1444px 256px #fff, 661px 1628px #fff, 1078px 1716px #fff, 300px 737px #fff, 1734px 413px #fff, 1296px 129px #fff, 1771px 1678px #fff, 977px 1764px #fff, 1879px 549px #fff, 665px 1531px #fff, 89px 701px #fff, 1084px 1183px #fff, 1597px 1576px #fff, 1354px 1774px #fff, 554px 1471px #fff, 1469px 287px #fff, 887px 106px #fff, 1962px 766px #fff, 638px 805px #fff, 1651px 741px #fff, 1517px 1826px #fff, 24px 1152px #fff, 507px 558px #fff, 1262px 652px #fff, 246px 1048px #fff, 1077px 421px #fff, 1866px 1847px #fff, 1986px 1561px #fff, 704px 632px #fff, 1991px 1875px #fff, 1227px 395px #fff, 45px 1116px #fff, 247px 786px #fff, 890px 607px #fff, 787px 1235px #fff, 557px 524px #fff, 1582px 1285px #fff, 1725px 1366px #fff, 952px 747px #fff, 251px 458px #fff, 1500px 1250px #fff, 1999px 1734px #fff, 1336px 1955px #fff, 1705px 1464px #fff, 728px 697px #fff, 594px 510px #fff, 1345px 1990px #fff, 1919px 1803px #fff, 1117px 966px #fff, 1629px 97px #fff, 1046px 1196px #fff, 810px 1092px #fff, 722px 976px #fff, 406px 18px #fff, 1665px 1860px #fff, 1758px 1628px #fff, 1183px 463px #fff, 564px 239px #fff, 13px 1767px #fff, 1482px 1472px #fff, 1700px 347px #fff, 1362px 244px #fff, 1141px 1708px #fff, 22px 885px #fff, 374px 1309px #fff, 1034px 1037px #fff, 1725px 1086px #fff, 1343px 1921px #fff, 596px 903px #fff, 1061px 478px #fff, 18px 1409px #fff, 729px 1364px #fff, 264px 911px #fff, 677px 1442px #fff, 123px 33px #fff, 1303px 646px #fff, 1945px 792px #fff, 1305px 938px #fff, 918px 1536px #fff, 620px 948px #fff, 183px 646px #fff, 695px 687px #fff, 881px 272px #fff, 1521px 1212px #fff, 1423px 1022px #fff, 1545px 1271px #fff, 1393px 348px #fff, 685px 1910px #fff, 1446px 856px #fff, 73px 1201px #fff, 736px 999px #fff, 673px 796px #fff, 469px 850px #fff, 1912px 142px #fff, 1278px 664px #fff, 184px 1990px #fff, 1173px 1312px #fff, 782px 1879px #fff, 323px 1035px #fff, 611px 908px #fff, 565px 1449px #fff, 748px 1713px #fff, 1047px 490px #fff, 1040px 1872px #fff, 1818px 1659px #fff, 1806px 1327px #fff, 386px 575px #fff, 1550px 463px #fff, 148px 687px #fff, 651px 1683px #fff, 1588px 1194px #fff, 1831px 2px #fff, 581px 876px #fff, 1396px 1743px #fff, 1212px 1810px #fff, 421px 1920px #fff, 658px 1461px #fff, 1859px 1809px #fff, 1456px 388px #fff, 186px 1627px #fff, 1528px 1145px #fff, 171px 97px #fff, 674px 1072px #fff, 676px 1052px #fff, 1165px 1131px #fff, 1088px 781px #fff, 1231px 948px #fff, 330px 257px #fff, 426px 1046px #fff, 549px 652px #fff, 1338px 74px #fff, 1749px 364px #fff, 931px 369px #fff, 383px 1428px #fff, 1558px 389px #fff, 927px 133px #fff, 234px 1888px #fff, 1785px 1617px #fff, 556px 643px #fff, 401px 275px #fff, 406px 1644px #fff, 1253px 1852px #fff, 1599px 883px #fff, 744px 1721px #fff, 524px 1297px #fff, 1226px 1177px #fff, 1679px 55px #fff, 874px 1811px #fff, 838px 790px #fff, 1241px 430px #fff, 1676px 652px #fff, 1191px 568px #fff, 53px 1990px #fff, 1163px 237px #fff, 61px 223px #fff, 592px 456px #fff, 1844px 271px #fff, 1324px 1488px #fff, 1373px 717px #fff, 1822px 709px #fff, 1464px 941px #fff, 1445px 1118px #fff, 991px 1414px #fff, 1964px 1076px #fff, 108px 172px #fff, 641px 1722px #fff, 1539px 427px #fff, 1697px 45px #fff, 1301px 1353px #fff, 1060px 329px #fff, 967px 1396px #fff, 493px 301px #fff, 1228px 1406px #fff, 1211px 1653px #fff, 444px 1822px #fff, 1746px 353px #fff, 1449px 381px #fff, 671px 887px #fff, 650px 138px #fff, 30px 1839px #fff, 1094px 1405px #fff, 273px 796px #fff, 1618px 1964px #fff, 1045px 1849px #fff, 1472px 1155px #fff, 1529px 1312px #fff, 728px 448px #fff, 44px 1908px #fff, 691px 818px #fff, 254px 293px #fff, 1981px 1133px #fff, 1307px 375px #fff, 196px 316px #fff, 1241px 1975px #fff, 1138px 1706px #fff, 1769px 463px #fff, 1768px 1428px #fff, 1730px 590px #fff, 1780px 523px #fff, 1862px 1526px #fff, 1613px 909px #fff, 1266px 1781px #fff, 470px 352px #fff, 699px 1682px #fff, 1002px 614px #fff, 1209px 133px #fff, 1842px 518px #fff, 1422px 1836px #fff, 1720px 1901px #fff, 470px 1788px #fff, 1355px 1387px #fff, 146px 1162px #fff, 933px 80px #fff, 681px 1063px #fff, 313px 1341px #fff, 740px 1498px #fff, 168px 1014px #fff, 345px 1355px #fff, 1498px 1562px #fff, 1626px 1358px #fff, 890px 403px #fff, 663px 562px #fff, 1481px 168px #fff, 22px 719px #fff, 774px 1041px #fff, 1899px 829px #fff, 430px 158px #fff, 430px 361px #fff, 1592px 1334px #fff, 224px 323px #fff, 1639px 1131px #fff, 7px 271px #fff, 1646px 1514px #fff, 1605px 1444px #fff, 1820px 1665px #fff, 1549px 1641px #fff, 1609px 1377px #fff, 486px 1098px #fff, 229px 613px #fff, 542px 1694px #fff, 318px 256px #fff, 1861px 918px #fff, 889px 892px #fff, 442px 1524px #fff, 19px 422px #fff, 1935px 1908px #fff, 828px 109px #fff, 862px 1248px #fff, 1275px 560px #fff, 906px 63px #fff, 337px 1605px #fff, 1691px 918px #fff, 1414px 679px #fff, 1726px 749px #fff, 1540px 1149px #fff, 1337px 1466px #fff, 446px 430px #fff, 676px 1616px #fff, 840px 326px #fff, 976px 977px #fff, 1840px 642px #fff, 1273px 804px #fff, 1071px 928px #fff, 1292px 1675px #fff, 29px 1148px #fff, 1585px 135px #fff, 1007px 563px #fff, 1035px 78px #fff, 1174px 574px #fff, 120px 1304px #fff, 845px 1292px #fff, 861px 540px #fff, 234px 232px #fff, 1940px 1367px #fff, 759px 639px #fff, 1775px 1381px #fff, 906px 372px #fff, 1104px 1165px #fff, 1524px 911px #fff, 1882px 330px #fff, 1389px 700px #fff, 300px 1629px #fff, 220px 1614px #fff, 563px 140px #fff, 1611px 1586px #fff, 793px 1316px #fff, 325px 1070px #fff, 1722px 1462px #fff, 1406px 1120px #fff, 1169px 1768px #fff, 1956px 1053px #fff, 959px 1587px #fff, 585px 1566px #fff, 370px 204px #fff, 1606px 1416px #fff, 443px 1606px #fff, 1499px 1102px #fff, 1943px 105px #fff, 1121px 1594px #fff, 1512px 32px #fff, 871px 1425px #fff, 433px 100px #fff, 294px 1471px #fff, 1688px 1755px #fff, 1666px 591px #fff, 1034px 300px #fff, 734px 1178px #fff, 1342px 313px #fff, 1616px 1590px #fff, 1763px 1472px #fff, 632px 1935px #fff, 1708px 872px #fff, 1871px 915px #fff, 1829px 1020px #fff, 1599px 578px #fff, 42px 585px #fff, 1163px 1382px #fff, 1744px 1272px #fff, 984px 1426px #fff, 1786px 1584px #fff, 1813px 379px #fff, 1867px 1127px #fff, 97px 567px #fff, 626px 988px #fff, 1178px 79px #fff, 1703px 211px #fff, 961px 1785px #fff, 110px 975px #fff, 953px 1941px #fff, 1027px 1790px #fff, 1665px 107px #fff, 11px 964px #fff, 1718px 1147px #fff, 21px 1728px #fff, 1358px 1922px #fff, 872px 65px #fff, 1191px 1635px #fff, 762px 681px #fff, 1519px 1033px #fff, 906px 566px #fff, 1074px 657px #fff, 1093px 415px #fff, 51px 198px #fff, 1075px 1418px #fff, 1547px 1070px #fff, 225px 920px #fff, 850px 1974px #fff, 981px 595px #fff, 1425px 131px #fff, 460px 917px #fff, 56px 495px #fff, 714px 428px #fff, 920px 493px #fff, 470px 1521px #fff, 532px 821px #fff, 1905px 71px #fff, 883px 1501px #fff, 294px 196px #fff, 381px 1999px #fff, 332px 793px #fff, 1246px 408px #fff, 233px 149px #fff, 315px 231px #fff, 1594px 1302px #fff, 696px 1585px #fff, 791px 136px #fff, 479px 199px #fff, 1627px 1413px #fff, 1824px 924px #fff, 1631px 342px #fff, 1251px 1151px #fff, 284px 1781px #fff, 497px 1052px #fff, 204px 1161px #fff, 646px 1499px #fff, 1762px 558px #fff, 854px 1833px #fff, 883px 945px #fff, 44px 982px #fff, 1101px 834px #fff, 515px 1748px #fff, 1578px 1435px #fff, 819px 1258px #fff, 776px 670px #fff, 115px 385px #fff, 1478px 434px #fff, 885px 20px #fff, 192px 1513px #fff, 78px 1129px #fff, 1774px 1105px #fff, 955px 1149px #fff, 1817px 1929px #fff, 1106px 1832px #fff, 1107px 1997px #fff, 94px 23px #fff, 243px 982px #fff, 43px 1972px #fff, 1798px 673px #fff, 1131px 1589px #fff, 841px 14px #fff, 826px 345px #fff, 687px 56px #fff, 1084px 32px #fff, 1887px 1878px #fff, 153px 526px #fff, 1828px 253px #fff, 1947px 1105px #fff, 886px 700px #fff, 1307px 1723px #fff, 1274px 651px #fff, 1530px 837px #fff, 1699px 1637px #fff, 1703px 1331px #fff, 1929px 1557px #fff, 1763px 737px #fff, 1118px 1680px #fff, 1545px 692px #fff, 1462px 1092px #fff, 208px 1667px #fff, 1393px 859px #fff, 186px 1794px #fff, 351px 1199px #fff, 642px 1995px #fff, 1061px 1726px #fff, 1708px 115px #fff, 1233px 1305px #fff, 637px 1786px #fff, 1730px 603px #fff, 75px 1240px #fff, 1704px 1326px #fff, 584px 346px #fff, 438px 1554px #fff, 561px 513px #fff, 1382px 225px #fff, 467px 1674px #fff, 1403px 815px #fff, 1546px 1835px #fff, 127px 1119px #fff, 276px 591px #fff, 688px 1458px #fff, 765px 646px #fff, 474px 984px #fff, 171px 361px #fff, 94px 1480px #fff, 1962px 1666px #fff, 909px 1037px #fff, 1725px 222px #fff, 253px 1355px #fff, 1892px 1901px #fff, 275px 1847px #fff, 28px 1184px #fff, 1725px 1382px #fff, 882px 647px #fff, 1935px 1046px #fff, 10px 344px #fff, 292px 1328px #fff, 127px 1352px #fff, 752px 929px #fff, 1589px 384px #fff, 284px 1829px #fff, 381px 820px #fff, 1229px 1125px #fff, 777px 429px #fff, 1811px 1499px #fff, 1573px 287px #fff, 295px 756px #fff, 389px 616px #fff, 781px 41px #fff, 1092px 333px #fff, 794px 1588px #fff, 386px 1847px #fff, 1802px 710px #fff, 662px 60px #fff, 640px 264px #fff, 463px 746px #fff, 1859px 799px #fff, 763px 37px #fff, 639px 396px #fff, 357px 1071px #fff, 1190px 1430px #fff, 1814px 257px #fff, 1382px 235px #fff, 606px 1304px #fff, 1939px 1470px #fff, 1124px 349px #fff, 307px 1567px #fff, 310px 1323px #fff, 1145px 922px #fff, 1196px 1922px #fff, 1647px 544px #fff, 788px 1337px #fff, 257px 632px #fff, 1413px 414px #fff, 590px 620px #fff, 582px 794px #fff, 1702px 1481px #fff, 1055px 53px #fff, 157px 346px #fff, 50px 1901px #fff, 1038px 1369px #fff, 796px 1941px #fff, 215px 194px #fff, 1567px 1538px #fff, 367px 800px #fff, 1044px 489px #fff, 1109px 1712px #fff, 524px 327px #fff, 525px 1252px #fff, 1475px 1240px #fff, 529px 436px #fff, 795px 834px #fff, 122px 1371px #fff, 79px 482px #fff, 520px 1249px #fff, 336px 1878px #fff, 188px 944px #fff, 325px 1259px #fff, 1491px 1942px #fff, 620px 1054px #fff, 1606px 1153px #fff, 1448px 502px #fff, 53px 1381px #fff, 107px 1670px #fff, 1380px 618px #fff, 967px 1557px #fff, 1116px 1722px #fff, 1174px 1044px #fff, 1805px 717px #fff, 663px 394px #fff, 1848px 1007px #fff, 389px 802px #fff, 49px 392px #fff, 1650px 852px #fff, 1678px 1012px #fff, 335px 1009px #fff, 1818px 1631px #fff, 1568px 742px #fff, 1162px 1991px #fff, 52px 1190px #fff, 1401px 928px #fff, 119px 1549px #fff, 537px 1529px #fff, 2px 1709px #fff, 122px 387px #fff, 543px 2px #fff, 27px 1971px #fff, 507px 1377px #fff, 1362px 1080px #fff, 1031px 1544px #fff, 1631px 1174px #fff, 1603px 312px #fff, 1626px 1422px #fff, 1430px 615px #fff, 1958px 1431px #fff, 1946px 1412px #fff, 1848px 247px #fff, 984px 1808px #fff, 1396px 225px #fff, 319px 717px #fff, 1252px 875px #fff, 1619px 156px #fff, 951px 1971px #fff, 386px 355px #fff, 1406px 1151px #fff, 273px 1538px #fff, 844px 1570px #fff, 947px 151px #fff, 1363px 525px #fff, 209px 307px #fff, 1923px 1718px #fff, 993px 1741px #fff, 1513px 353px #fff, 1353px 61px #fff, 664px 352px #fff, 1382px 359px #fff, 1487px 1707px #fff, 657px 1045px #fff, 1107px 490px #fff, 1834px 1176px #fff, 837px 1438px #fff, 1947px 448px #fff, 1196px 333px #fff, 151px 555px #fff, 18px 992px #fff, 458px 748px #fff, 1801px 890px #fff, 1093px 1012px #fff, 315px 1101px #fff, 194px 323px #fff, 754px 292px #fff, 1737px 7px #fff, 40px 840px #fff, 1170px 805px #fff, 176px 1753px #fff, 805px 1148px #fff, 1578px 1271px #fff, 367px 1494px #fff, 363px 1111px #fff, 1955px 243px #fff, 1451px 1093px #fff, 375px 617px #fff, 1223px 720px #fff, 1178px 13px #fff, 1456px 865px #fff, 1440px 49px #fff, 186px 1569px #fff, 320px 1853px #fff, 300px 539px #fff, 1559px 509px #fff, 1985px 1108px #fff, 1588px 828px #fff, 525px 1432px #fff, 831px 363px #fff, 141px 281px #fff, 1319px 402px #fff, 40px 456px #fff, 1955px 478px #fff, 1758px 818px #fff, 1924px 688px #fff, 1030px 953px #fff, 1982px 210px #fff, 917px 1401px #fff, 1051px 1837px #fff, 1045px 463px #fff, 1744px 573px #fff, 529px 1530px #fff, 542px 469px #fff, 1982px 324px #fff, 1902px 1422px #fff, 1968px 782px #fff, 1666px 1561px #fff, 955px 304px #fff, 323px 778px #fff, 272px 443px #fff, 485px 581px #fff, 1353px 1058px #fff, 1257px 131px #fff, 434px 98px #fff, 1587px 1953px #fff, 1749px 68px #fff, 1984px 839px #fff, 1518px 183px #fff, 1071px 855px #fff, 1662px 1994px #fff, 1111px 106px #fff, 1954px 838px #fff;
+      animation: animStar 50s linear infinite;
+    }
+    #stars:after {
+      content: " ";
+      position: absolute;
+      top: 2000px;
+      width: 1px;
+      height: 1px;
+      background: transparent;
+      box-shadow: 501px 811px #fff, 1450px 1324px #fff, 1093px 1780px #fff, 1469px 678px #fff, 904px 741px #fff, 1160px 781px #fff, 1841px 1962px #fff, 1630px 1667px #fff, 1788px 676px #fff, 367px 1734px #fff, 1343px 156px #fff, 1283px 1142px #fff, 1062px 378px #fff, 1395px 467px #fff, 1017px 1891px #fff, 137px 1114px #fff, 1767px 1403px #fff, 1543px 11px #fff, 1078px 181px #fff, 1189px 1574px #fff, 1697px 1551px #fff, 439px 472px #fff, 1491px 677px #fff, 1364px 599px #fff, 34px 382px #fff, 1221px 1584px #fff, 1266px 1499px #fff, 169px 1907px #fff, 1219px 1125px #fff, 659px 18px #fff, 1731px 1959px #fff, 332px 1216px #fff, 1913px 788px #fff, 80px 712px #fff, 326px 1605px #fff, 574px 1502px #fff, 473px 1653px #fff, 404px 975px #fff, 322px 1797px #fff, 425px 1321px #fff, 1121px 1797px #fff, 731px 647px #fff, 891px 1584px #fff, 1523px 109px #fff, 1379px 244px #fff, 865px 1064px #fff, 493px 956px #fff, 624px 1380px #fff, 440px 619px #fff, 1630px 767px #fff, 955px 1196px #fff, 62px 729px #fff, 126px 946px #fff, 1256px 896px #fff, 1444px 256px #fff, 661px 1628px #fff, 1078px 1716px #fff, 300px 737px #fff, 1734px 413px #fff, 1296px 129px #fff, 1771px 1678px #fff, 977px 1764px #fff, 1879px 549px #fff, 665px 1531px #fff, 89px 701px #fff, 1084px 1183px #fff, 1597px 1576px #fff, 1354px 1774px #fff, 554px 1471px #fff, 1469px 287px #fff, 887px 106px #fff, 1962px 766px #fff, 638px 805px #fff, 1651px 741px #fff, 1517px 1826px #fff, 24px 1152px #fff, 507px 558px #fff, 1262px 652px #fff, 246px 1048px #fff, 1077px 421px #fff, 1866px 1847px #fff, 1986px 1561px #fff, 704px 632px #fff, 1991px 1875px #fff, 1227px 395px #fff, 45px 1116px #fff, 247px 786px #fff, 890px 607px #fff, 787px 1235px #fff, 557px 524px #fff, 1582px 1285px #fff, 1725px 1366px #fff, 952px 747px #fff, 251px 458px #fff, 1500px 1250px #fff, 1999px 1734px #fff, 1336px 1955px #fff, 1705px 1464px #fff, 728px 697px #fff, 594px 510px #fff, 1345px 1990px #fff, 1919px 1803px #fff, 1117px 966px #fff, 1629px 97px #fff, 1046px 1196px #fff, 810px 1092px #fff, 722px 976px #fff, 406px 18px #fff, 1665px 1860px #fff, 1758px 1628px #fff, 1183px 463px #fff, 564px 239px #fff, 13px 1767px #fff, 1482px 1472px #fff, 1700px 347px #fff, 1362px 244px #fff, 1141px 1708px #fff, 22px 885px #fff, 374px 1309px #fff, 1034px 1037px #fff, 1725px 1086px #fff, 1343px 1921px #fff, 596px 903px #fff, 1061px 478px #fff, 18px 1409px #fff, 729px 1364px #fff, 264px 911px #fff, 677px 1442px #fff, 123px 33px #fff, 1303px 646px #fff, 1945px 792px #fff, 1305px 938px #fff, 918px 1536px #fff, 620px 948px #fff, 183px 646px #fff, 695px 687px #fff, 881px 272px #fff, 1521px 1212px #fff, 1423px 1022px #fff, 1545px 1271px #fff, 1393px 348px #fff, 685px 1910px #fff, 1446px 856px #fff, 73px 1201px #fff, 736px 999px #fff, 673px 796px #fff, 469px 850px #fff, 1912px 142px #fff, 1278px 664px #fff, 184px 1990px #fff, 1173px 1312px #fff, 782px 1879px #fff, 323px 1035px #fff, 611px 908px #fff, 565px 1449px #fff, 748px 1713px #fff, 1047px 490px #fff, 1040px 1872px #fff, 1818px 1659px #fff, 1806px 1327px #fff, 386px 575px #fff, 1550px 463px #fff, 148px 687px #fff, 651px 1683px #fff, 1588px 1194px #fff, 1831px 2px #fff, 581px 876px #fff, 1396px 1743px #fff, 1212px 1810px #fff, 421px 1920px #fff, 658px 1461px #fff, 1859px 1809px #fff, 1456px 388px #fff, 186px 1627px #fff, 1528px 1145px #fff, 171px 97px #fff, 674px 1072px #fff, 676px 1052px #fff, 1165px 1131px #fff, 1088px 781px #fff, 1231px 948px #fff, 330px 257px #fff, 426px 1046px #fff, 549px 652px #fff, 1338px 74px #fff, 1749px 364px #fff, 931px 369px #fff, 383px 1428px #fff, 1558px 389px #fff, 927px 133px #fff, 234px 1888px #fff, 1785px 1617px #fff, 556px 643px #fff, 401px 275px #fff, 406px 1644px #fff, 1253px 1852px #fff, 1599px 883px #fff, 744px 1721px #fff, 524px 1297px #fff, 1226px 1177px #fff, 1679px 55px #fff, 874px 1811px #fff, 838px 790px #fff, 1241px 430px #fff, 1676px 652px #fff, 1191px 568px #fff, 53px 1990px #fff, 1163px 237px #fff, 61px 223px #fff, 592px 456px #fff, 1844px 271px #fff, 1324px 1488px #fff, 1373px 717px #fff, 1822px 709px #fff, 1464px 941px #fff, 1445px 1118px #fff, 991px 1414px #fff, 1964px 1076px #fff, 108px 172px #fff, 641px 1722px #fff, 1539px 427px #fff, 1697px 45px #fff, 1301px 1353px #fff, 1060px 329px #fff, 967px 1396px #fff, 493px 301px #fff, 1228px 1406px #fff, 1211px 1653px #fff, 444px 1822px #fff, 1746px 353px #fff, 1449px 381px #fff, 671px 887px #fff, 650px 138px #fff, 30px 1839px #fff, 1094px 1405px #fff, 273px 796px #fff, 1618px 1964px #fff, 1045px 1849px #fff, 1472px 1155px #fff, 1529px 1312px #fff, 728px 448px #fff, 44px 1908px #fff, 691px 818px #fff, 254px 293px #fff, 1981px 1133px #fff, 1307px 375px #fff, 196px 316px #fff, 1241px 1975px #fff, 1138px 1706px #fff, 1769px 463px #fff, 1768px 1428px #fff, 1730px 590px #fff, 1780px 523px #fff, 1862px 1526px #fff, 1613px 909px #fff, 1266px 1781px #fff, 470px 352px #fff, 699px 1682px #fff, 1002px 614px #fff, 1209px 133px #fff, 1842px 518px #fff, 1422px 1836px #fff, 1720px 1901px #fff, 470px 1788px #fff, 1355px 1387px #fff, 146px 1162px #fff, 933px 80px #fff, 681px 1063px #fff, 313px 1341px #fff, 740px 1498px #fff, 168px 1014px #fff, 345px 1355px #fff, 1498px 1562px #fff, 1626px 1358px #fff, 890px 403px #fff, 663px 562px #fff, 1481px 168px #fff, 22px 719px #fff, 774px 1041px #fff, 1899px 829px #fff, 430px 158px #fff, 430px 361px #fff, 1592px 1334px #fff, 224px 323px #fff, 1639px 1131px #fff, 7px 271px #fff, 1646px 1514px #fff, 1605px 1444px #fff, 1820px 1665px #fff, 1549px 1641px #fff, 1609px 1377px #fff, 486px 1098px #fff, 229px 613px #fff, 542px 1694px #fff, 318px 256px #fff, 1861px 918px #fff, 889px 892px #fff, 442px 1524px #fff, 19px 422px #fff, 1935px 1908px #fff, 828px 109px #fff, 862px 1248px #fff, 1275px 560px #fff, 906px 63px #fff, 337px 1605px #fff, 1691px 918px #fff, 1414px 679px #fff, 1726px 749px #fff, 1540px 1149px #fff, 1337px 1466px #fff, 446px 430px #fff, 676px 1616px #fff, 840px 326px #fff, 976px 977px #fff, 1840px 642px #fff, 1273px 804px #fff, 1071px 928px #fff, 1292px 1675px #fff, 29px 1148px #fff, 1585px 135px #fff, 1007px 563px #fff, 1035px 78px #fff, 1174px 574px #fff, 120px 1304px #fff, 845px 1292px #fff, 861px 540px #fff, 234px 232px #fff, 1940px 1367px #fff, 759px 639px #fff, 1775px 1381px #fff, 906px 372px #fff, 1104px 1165px #fff, 1524px 911px #fff, 1882px 330px #fff, 1389px 700px #fff, 300px 1629px #fff, 220px 1614px #fff, 563px 140px #fff, 1611px 1586px #fff, 793px 1316px #fff, 325px 1070px #fff, 1722px 1462px #fff, 1406px 1120px #fff, 1169px 1768px #fff, 1956px 1053px #fff, 959px 1587px #fff, 585px 1566px #fff, 370px 204px #fff, 1606px 1416px #fff, 443px 1606px #fff, 1499px 1102px #fff, 1943px 105px #fff, 1121px 1594px #fff, 1512px 32px #fff, 871px 1425px #fff, 433px 100px #fff, 294px 1471px #fff, 1688px 1755px #fff, 1666px 591px #fff, 1034px 300px #fff, 734px 1178px #fff, 1342px 313px #fff, 1616px 1590px #fff, 1763px 1472px #fff, 632px 1935px #fff, 1708px 872px #fff, 1871px 915px #fff, 1829px 1020px #fff, 1599px 578px #fff, 42px 585px #fff, 1163px 1382px #fff, 1744px 1272px #fff, 984px 1426px #fff, 1786px 1584px #fff, 1813px 379px #fff, 1867px 1127px #fff, 97px 567px #fff, 626px 988px #fff, 1178px 79px #fff, 1703px 211px #fff, 961px 1785px #fff, 110px 975px #fff, 953px 1941px #fff, 1027px 1790px #fff, 1665px 107px #fff, 11px 964px #fff, 1718px 1147px #fff, 21px 1728px #fff, 1358px 1922px #fff, 872px 65px #fff, 1191px 1635px #fff, 762px 681px #fff, 1519px 1033px #fff, 906px 566px #fff, 1074px 657px #fff, 1093px 415px #fff, 51px 198px #fff, 1075px 1418px #fff, 1547px 1070px #fff, 225px 920px #fff, 850px 1974px #fff, 981px 595px #fff, 1425px 131px #fff, 460px 917px #fff, 56px 495px #fff, 714px 428px #fff, 920px 493px #fff, 470px 1521px #fff, 532px 821px #fff, 1905px 71px #fff, 883px 1501px #fff, 294px 196px #fff, 381px 1999px #fff, 332px 793px #fff, 1246px 408px #fff, 233px 149px #fff, 315px 231px #fff, 1594px 1302px #fff, 696px 1585px #fff, 791px 136px #fff, 479px 199px #fff, 1627px 1413px #fff, 1824px 924px #fff, 1631px 342px #fff, 1251px 1151px #fff, 284px 1781px #fff, 497px 1052px #fff, 204px 1161px #fff, 646px 1499px #fff, 1762px 558px #fff, 854px 1833px #fff, 883px 945px #fff, 44px 982px #fff, 1101px 834px #fff, 515px 1748px #fff, 1578px 1435px #fff, 819px 1258px #fff, 776px 670px #fff, 115px 385px #fff, 1478px 434px #fff, 885px 20px #fff, 192px 1513px #fff, 78px 1129px #fff, 1774px 1105px #fff, 955px 1149px #fff, 1817px 1929px #fff, 1106px 1832px #fff, 1107px 1997px #fff, 94px 23px #fff, 243px 982px #fff, 43px 1972px #fff, 1798px 673px #fff, 1131px 1589px #fff, 841px 14px #fff, 826px 345px #fff, 687px 56px #fff, 1084px 32px #fff, 1887px 1878px #fff, 153px 526px #fff, 1828px 253px #fff, 1947px 1105px #fff, 886px 700px #fff, 1307px 1723px #fff, 1274px 651px #fff, 1530px 837px #fff, 1699px 1637px #fff, 1703px 1331px #fff, 1929px 1557px #fff, 1763px 737px #fff, 1118px 1680px #fff, 1545px 692px #fff, 1462px 1092px #fff, 208px 1667px #fff, 1393px 859px #fff, 186px 1794px #fff, 351px 1199px #fff, 642px 1995px #fff, 1061px 1726px #fff, 1708px 115px #fff, 1233px 1305px #fff, 637px 1786px #fff, 1730px 603px #fff, 75px 1240px #fff, 1704px 1326px #fff, 584px 346px #fff, 438px 1554px #fff, 561px 513px #fff, 1382px 225px #fff, 467px 1674px #fff, 1403px 815px #fff, 1546px 1835px #fff, 127px 1119px #fff, 276px 591px #fff, 688px 1458px #fff, 765px 646px #fff, 474px 984px #fff, 171px 361px #fff, 94px 1480px #fff, 1962px 1666px #fff, 909px 1037px #fff, 1725px 222px #fff, 253px 1355px #fff, 1892px 1901px #fff, 275px 1847px #fff, 28px 1184px #fff, 1725px 1382px #fff, 882px 647px #fff, 1935px 1046px #fff, 10px 344px #fff, 292px 1328px #fff, 127px 1352px #fff, 752px 929px #fff, 1589px 384px #fff, 284px 1829px #fff, 381px 820px #fff, 1229px 1125px #fff, 777px 429px #fff, 1811px 1499px #fff, 1573px 287px #fff, 295px 756px #fff, 389px 616px #fff, 781px 41px #fff, 1092px 333px #fff, 794px 1588px #fff, 386px 1847px #fff, 1802px 710px #fff, 662px 60px #fff, 640px 264px #fff, 463px 746px #fff, 1859px 799px #fff, 763px 37px #fff, 639px 396px #fff, 357px 1071px #fff, 1190px 1430px #fff, 1814px 257px #fff, 1382px 235px #fff, 606px 1304px #fff, 1939px 1470px #fff, 1124px 349px #fff, 307px 1567px #fff, 310px 1323px #fff, 1145px 922px #fff, 1196px 1922px #fff, 1647px 544px #fff, 788px 1337px #fff, 257px 632px #fff, 1413px 414px #fff, 590px 620px #fff, 582px 794px #fff, 1702px 1481px #fff, 1055px 53px #fff, 157px 346px #fff, 50px 1901px #fff, 1038px 1369px #fff, 796px 1941px #fff, 215px 194px #fff, 1567px 1538px #fff, 367px 800px #fff, 1044px 489px #fff, 1109px 1712px #fff, 524px 327px #fff, 525px 1252px #fff, 1475px 1240px #fff, 529px 436px #fff, 795px 834px #fff, 122px 1371px #fff, 79px 482px #fff, 520px 1249px #fff, 336px 1878px #fff, 188px 944px #fff, 325px 1259px #fff, 1491px 1942px #fff, 620px 1054px #fff, 1606px 1153px #fff, 1448px 502px #fff, 53px 1381px #fff, 107px 1670px #fff, 1380px 618px #fff, 967px 1557px #fff, 1116px 1722px #fff, 1174px 1044px #fff, 1805px 717px #fff, 663px 394px #fff, 1848px 1007px #fff, 389px 802px #fff, 49px 392px #fff, 1650px 852px #fff, 1678px 1012px #fff, 335px 1009px #fff, 1818px 1631px #fff, 1568px 742px #fff, 1162px 1991px #fff, 52px 1190px #fff, 1401px 928px #fff, 119px 1549px #fff, 537px 1529px #fff, 2px 1709px #fff, 122px 387px #fff, 543px 2px #fff, 27px 1971px #fff, 507px 1377px #fff, 1362px 1080px #fff, 1031px 1544px #fff, 1631px 1174px #fff, 1603px 312px #fff, 1626px 1422px #fff, 1430px 615px #fff, 1958px 1431px #fff, 1946px 1412px #fff, 1848px 247px #fff, 984px 1808px #fff, 1396px 225px #fff, 319px 717px #fff, 1252px 875px #fff, 1619px 156px #fff, 951px 1971px #fff, 386px 355px #fff, 1406px 1151px #fff, 273px 1538px #fff, 844px 1570px #fff, 947px 151px #fff, 1363px 525px #fff, 209px 307px #fff, 1923px 1718px #fff, 993px 1741px #fff, 1513px 353px #fff, 1353px 61px #fff, 664px 352px #fff, 1382px 359px #fff, 1487px 1707px #fff, 657px 1045px #fff, 1107px 490px #fff, 1834px 1176px #fff, 837px 1438px #fff, 1947px 448px #fff, 1196px 333px #fff, 151px 555px #fff, 18px 992px #fff, 458px 748px #fff, 1801px 890px #fff, 1093px 1012px #fff, 315px 1101px #fff, 194px 323px #fff, 754px 292px #fff, 1737px 7px #fff, 40px 840px #fff, 1170px 805px #fff, 176px 1753px #fff, 805px 1148px #fff, 1578px 1271px #fff, 367px 1494px #fff, 363px 1111px #fff, 1955px 243px #fff, 1451px 1093px #fff, 375px 617px #fff, 1223px 720px #fff, 1178px 13px #fff, 1456px 865px #fff, 1440px 49px #fff, 186px 1569px #fff, 320px 1853px #fff, 300px 539px #fff, 1559px 509px #fff, 1985px 1108px #fff, 1588px 828px #fff, 525px 1432px #fff, 831px 363px #fff, 141px 281px #fff, 1319px 402px #fff, 40px 456px #fff, 1955px 478px #fff, 1758px 818px #fff, 1924px 688px #fff, 1030px 953px #fff, 1982px 210px #fff, 917px 1401px #fff, 1051px 1837px #fff, 1045px 463px #fff, 1744px 573px #fff, 529px 1530px #fff, 542px 469px #fff, 1982px 324px #fff, 1902px 1422px #fff, 1968px 782px #fff, 1666px 1561px #fff, 955px 304px #fff, 323px 778px #fff, 272px 443px #fff, 485px 581px #fff, 1353px 1058px #fff, 1257px 131px #fff, 434px 98px #fff, 1587px 1953px #fff, 1749px 68px #fff, 1984px 839px #fff, 1518px 183px #fff, 1071px 855px #fff, 1662px 1994px #fff, 1111px 106px #fff, 1954px 838px #fff;
+      animation: animStar 50s linear infinite;
+    }
+
+    #stars2 {
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      box-shadow: 1925px 1320px #fff, 693px 1778px #fff, 1016px 711px #fff, 1171px 563px #fff, 661px 1919px #fff, 1610px 44px #fff, 1275px 140px #fff, 1208px 1802px #fff, 1473px 1587px #fff, 11px 1117px #fff, 853px 1757px #fff, 1149px 937px #fff, 1353px 428px #fff, 270px 279px #fff, 258px 1404px #fff, 417px 1188px #fff, 286px 561px #fff, 393px 1765px #fff, 147px 881px #fff, 666px 1097px #fff, 1425px 1278px #fff, 806px 156px #fff, 1252px 561px #fff, 218px 52px #fff, 1371px 1980px #fff, 171px 745px #fff, 1424px 89px #fff, 137px 244px #fff, 939px 1922px #fff, 137px 1080px #fff, 1757px 50px #fff, 904px 536px #fff, 1938px 1001px #fff, 1172px 440px #fff, 72px 1475px #fff, 102px 121px #fff, 804px 1671px #fff, 1314px 270px #fff, 440px 1341px #fff, 1216px 511px #fff, 1061px 1523px #fff, 97px 274px #fff, 704px 1318px #fff, 52px 1872px #fff, 1962px 296px #fff, 111px 289px #fff, 1157px 1236px #fff, 1347px 1451px #fff, 820px 286px #fff, 1389px 1169px #fff, 644px 841px #fff, 1286px 522px #fff, 955px 659px #fff, 428px 1805px #fff, 237px 557px #fff, 1689px 1058px #fff, 636px 1882px #fff, 1349px 1664px #fff, 1548px 432px #fff, 1841px 504px #fff, 302px 252px #fff, 827px 1765px #fff, 620px 123px #fff, 207px 748px #fff, 1454px 1234px #fff, 1967px 1790px #fff, 542px 33px #fff, 742px 1214px #fff, 255px 1402px #fff, 74px 1772px #fff, 699px 475px #fff, 980px 1253px #fff, 534px 1676px #fff, 909px 202px #fff, 1498px 1251px #fff, 1796px 120px #fff, 1409px 1263px #fff, 1627px 995px #fff, 969px 710px #fff, 1674px 676px #fff, 1832px 759px #fff, 1623px 563px #fff, 251px 1790px #fff, 96px 1688px #fff, 886px 239px #fff, 778px 150px #fff, 1767px 430px #fff, 765px 1259px #fff, 1189px 877px #fff, 444px 1629px #fff, 1560px 324px #fff, 1952px 1097px #fff, 712px 1173px #fff, 541px 911px #fff, 827px 1420px #fff, 1233px 285px #fff, 784px 546px #fff, 645px 285px #fff, 1273px 1255px #fff, 1821px 174px #fff, 221px 1795px #fff, 1004px 456px #fff, 1298px 941px #fff, 274px 387px #fff, 174px 376px #fff, 1491px 258px #fff, 1489px 1946px #fff, 1134px 1382px #fff, 1289px 1145px #fff, 464px 358px #fff, 1249px 1842px #fff, 1665px 831px #fff, 1982px 84px #fff, 541px 774px #fff, 1994px 523px #fff, 762px 1644px #fff, 1730px 867px #fff, 1951px 1287px #fff, 911px 1691px #fff, 1454px 725px #fff, 1287px 1940px #fff, 70px 564px #fff, 1980px 638px #fff, 1674px 1774px #fff, 1720px 116px #fff, 1747px 182px #fff, 1040px 450px #fff, 1795px 375px #fff, 857px 1471px #fff, 1326px 1730px #fff, 915px 274px #fff, 1224px 358px #fff, 1808px 60px #fff, 43px 1870px #fff, 1810px 1536px #fff, 1564px 1719px #fff, 731px 1388px #fff, 1953px 1967px #fff, 1744px 1119px #fff, 794px 1384px #fff, 959px 714px #fff, 18px 1932px #fff, 1358px 1437px #fff, 355px 939px #fff, 1355px 1648px #fff, 608px 719px #fff, 383px 758px #fff, 1164px 1681px #fff, 1045px 253px #fff, 424px 1279px #fff, 1899px 359px #fff, 379px 488px #fff, 214px 465px #fff, 179px 905px #fff, 830px 1993px #fff, 448px 1077px #fff, 1880px 1354px #fff, 1973px 347px #fff, 745px 1025px #fff, 788px 1007px #fff, 1377px 883px #fff, 6px 290px #fff, 1312px 407px #fff, 1398px 622px #fff, 1405px 339px #fff, 1198px 1709px #fff, 988px 1226px #fff, 87px 1459px #fff, 1113px 1698px #fff, 997px 732px #fff, 708px 331px #fff, 1876px 1112px #fff, 1729px 1797px #fff, 719px 703px #fff, 1295px 522px #fff, 758px 1061px #fff, 1309px 1014px #fff, 1327px 1365px #fff, 854px 1317px #fff, 531px 1001px #fff, 1751px 1040px #fff, 1354px 190px #fff, 800px 1538px #fff, 88px 1455px #fff, 668px 39px #fff, 1379px 41px #fff, 892px 524px #fff, 54px 649px #fff, 1289px 730px #fff, 727px 488px #fff, 181px 842px #fff, 1230px 64px #fff, 3px 857px #fff, 292px 1201px #fff, 1343px 673px #fff, 1096px 1412px #fff, 1520px 292px #fff, 104px 1683px #fff, 934px 1387px #fff, 314px 739px #fff;
+      animation: animStar 100s linear infinite;
+    }
+    #stars2:after {
+      content: " ";
+      position: absolute;
+      top: 2000px;
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      box-shadow: 1925px 1320px #fff, 693px 1778px #fff, 1016px 711px #fff, 1171px 563px #fff, 661px 1919px #fff, 1610px 44px #fff, 1275px 140px #fff, 1208px 1802px #fff, 1473px 1587px #fff, 11px 1117px #fff, 853px 1757px #fff, 1149px 937px #fff, 1353px 428px #fff, 270px 279px #fff, 258px 1404px #fff, 417px 1188px #fff, 286px 561px #fff, 393px 1765px #fff, 147px 881px #fff, 666px 1097px #fff, 1425px 1278px #fff, 806px 156px #fff, 1252px 561px #fff, 218px 52px #fff, 1371px 1980px #fff, 171px 745px #fff, 1424px 89px #fff, 137px 244px #fff, 939px 1922px #fff, 137px 1080px #fff, 1757px 50px #fff, 904px 536px #fff, 1938px 1001px #fff, 1172px 440px #fff, 72px 1475px #fff, 102px 121px #fff, 804px 1671px #fff, 1314px 270px #fff, 440px 1341px #fff, 1216px 511px #fff, 1061px 1523px #fff, 97px 274px #fff, 704px 1318px #fff, 52px 1872px #fff, 1962px 296px #fff, 111px 289px #fff, 1157px 1236px #fff, 1347px 1451px #fff, 820px 286px #fff, 1389px 1169px #fff, 644px 841px #fff, 1286px 522px #fff, 955px 659px #fff, 428px 1805px #fff, 237px 557px #fff, 1689px 1058px #fff, 636px 1882px #fff, 1349px 1664px #fff, 1548px 432px #fff, 1841px 504px #fff, 302px 252px #fff, 827px 1765px #fff, 620px 123px #fff, 207px 748px #fff, 1454px 1234px #fff, 1967px 1790px #fff, 542px 33px #fff, 742px 1214px #fff, 255px 1402px #fff, 74px 1772px #fff, 699px 475px #fff, 980px 1253px #fff, 534px 1676px #fff, 909px 202px #fff, 1498px 1251px #fff, 1796px 120px #fff, 1409px 1263px #fff, 1627px 995px #fff, 969px 710px #fff, 1674px 676px #fff, 1832px 759px #fff, 1623px 563px #fff, 251px 1790px #fff, 96px 1688px #fff, 886px 239px #fff, 778px 150px #fff, 1767px 430px #fff, 765px 1259px #fff, 1189px 877px #fff, 444px 1629px #fff, 1560px 324px #fff, 1952px 1097px #fff, 712px 1173px #fff, 541px 911px #fff, 827px 1420px #fff, 1233px 285px #fff, 784px 546px #fff, 645px 285px #fff, 1273px 1255px #fff, 1821px 174px #fff, 221px 1795px #fff, 1004px 456px #fff, 1298px 941px #fff, 274px 387px #fff, 174px 376px #fff, 1491px 258px #fff, 1489px 1946px #fff, 1134px 1382px #fff, 1289px 1145px #fff, 464px 358px #fff, 1249px 1842px #fff, 1665px 831px #fff, 1982px 84px #fff, 541px 774px #fff, 1994px 523px #fff, 762px 1644px #fff, 1730px 867px #fff, 1951px 1287px #fff, 911px 1691px #fff, 1454px 725px #fff, 1287px 1940px #fff, 70px 564px #fff, 1980px 638px #fff, 1674px 1774px #fff, 1720px 116px #fff, 1747px 182px #fff, 1040px 450px #fff, 1795px 375px #fff, 857px 1471px #fff, 1326px 1730px #fff, 915px 274px #fff, 1224px 358px #fff, 1808px 60px #fff, 43px 1870px #fff, 1810px 1536px #fff, 1564px 1719px #fff, 731px 1388px #fff, 1953px 1967px #fff, 1744px 1119px #fff, 794px 1384px #fff, 959px 714px #fff, 18px 1932px #fff, 1358px 1437px #fff, 355px 939px #fff, 1355px 1648px #fff, 608px 719px #fff, 383px 758px #fff, 1164px 1681px #fff, 1045px 253px #fff, 424px 1279px #fff, 1899px 359px #fff, 379px 488px #fff, 214px 465px #fff, 179px 905px #fff, 830px 1993px #fff, 448px 1077px #fff, 1880px 1354px #fff, 1973px 347px #fff, 745px 1025px #fff, 788px 1007px #fff, 1377px 883px #fff, 6px 290px #fff, 1312px 407px #fff, 1398px 622px #fff, 1405px 339px #fff, 1198px 1709px #fff, 988px 1226px #fff, 87px 1459px #fff, 1113px 1698px #fff, 997px 732px #fff, 708px 331px #fff, 1876px 1112px #fff, 1729px 1797px #fff, 719px 703px #fff, 1295px 522px #fff, 758px 1061px #fff, 1309px 1014px #fff, 1327px 1365px #fff, 854px 1317px #fff, 531px 1001px #fff, 1751px 1040px #fff, 1354px 190px #fff, 800px 1538px #fff, 88px 1455px #fff, 668px 39px #fff, 1379px 41px #fff, 892px 524px #fff, 54px 649px #fff, 1289px 730px #fff, 727px 488px #fff, 181px 842px #fff, 1230px 64px #fff, 3px 857px #fff, 292px 1201px #fff, 1343px 673px #fff, 1096px 1412px #fff, 1520px 292px #fff, 104px 1683px #fff, 934px 1387px #fff, 314px 739px #fff;
+    }
+
+    #stars3 {
+      width: 3px;
+      height: 3px;
+      background: transparent;
+      box-shadow: 200px 981px #fff, 1731px 521px #fff, 132px 1039px #fff, 1888px 1547px #fff, 899px 1226px #fff, 1887px 580px #fff, 1548px 1092px #fff, 1626px 689px #fff, 254px 1072px #fff, 1684px 1211px #fff, 672px 1267px #fff, 939px 668px #fff, 1969px 645px #fff, 1126px 983px #fff, 457px 568px #fff, 476px 876px #fff, 829px 1896px #fff, 1364px 1846px #fff, 1507px 1120px #fff, 936px 1948px #fff, 1833px 832px #fff, 1424px 285px #fff, 1377px 1596px #fff, 432px 153px #fff, 1348px 1410px #fff, 1529px 954px #fff, 1102px 387px #fff, 264px 297px #fff, 811px 977px #fff, 1931px 673px #fff, 1734px 978px #fff, 1772px 1567px #fff, 1197px 1400px #fff, 764px 282px #fff, 1103px 822px #fff, 872px 1803px #fff, 1057px 1763px #fff, 52px 1299px #fff, 1312px 1236px #fff, 235px 1082px #fff, 299px 1086px #fff, 1017px 1602px #fff, 1950px 626px #fff, 1306px 132px #fff, 1358px 1618px #fff, 1873px 1718px #fff, 1447px 940px #fff, 1888px 1195px #fff, 1704px 1765px #fff, 872px 1357px #fff, 1555px 1120px #fff, 250px 1415px #fff, 450px 415px #fff, 492px 901px #fff, 170px 1641px #fff, 56px 1129px #fff, 627px 1514px #fff, 1221px 500px #fff, 324px 1895px #fff, 1397px 1775px #fff, 1966px 598px #fff, 1550px 763px #fff, 326px 1605px #fff, 261px 969px #fff, 890px 281px #fff, 736px 544px #fff, 589px 1262px #fff, 1581px 368px #fff, 1900px 1132px #fff, 1914px 585px #fff, 1864px 1517px #fff, 241px 217px #fff, 859px 787px #fff, 996px 1729px #fff, 741px 121px #fff, 418px 414px #fff, 142px 967px #fff, 387px 896px #fff, 703px 562px #fff, 968px 1136px #fff, 1682px 332px #fff, 1287px 846px #fff, 256px 1427px #fff, 1885px 432px #fff, 1739px 174px #fff, 160px 193px #fff, 1206px 1567px #fff, 935px 1632px #fff, 1404px 1744px #fff, 137px 501px #fff, 1347px 1477px #fff, 1932px 1769px #fff, 1257px 426px #fff, 1818px 132px #fff, 1438px 852px #fff, 1474px 171px #fff, 1384px 661px #fff, 429px 438px #fff, 1011px 1510px #fff, 1763px 1222px #fff, 1201px 1705px #fff, 1066px 523px #fff, 667px 385px #fff, 1223px 519px #fff, 1693px 1935px #fff, 743px 977px #fff, 1111px 1550px #fff, 415px 1097px #fff, 184px 1231px #fff, 476px 254px #fff, 182px 1127px #fff, 644px 757px #fff, 1808px 243px #fff, 768px 1182px #fff, 1682px 1082px #fff, 1227px 1972px #fff, 767px 1419px #fff, 1978px 1908px #fff, 1851px 1295px #fff, 1301px 811px #fff, 988px 1206px #fff, 1116px 1921px #fff, 111px 268px #fff, 1655px 725px #fff, 1058px 401px #fff, 904px 1252px #fff, 566px 1465px #fff, 828px 892px #fff, 1022px 77px #fff, 610px 1233px #fff, 1969px 1933px #fff, 417px 764px #fff, 1344px 1628px #fff, 973px 445px #fff, 1550px 1899px #fff, 1918px 1576px #fff, 635px 1940px #fff, 1612px 68px #fff, 1348px 1644px #fff, 1159px 1281px #fff, 172px 913px #fff, 242px 1952px #fff, 1557px 1827px #fff, 935px 372px #fff, 1418px 1112px #fff, 924px 1071px #fff, 1956px 50px #fff, 1112px 1142px #fff, 1011px 1973px #fff, 685px 1768px #fff, 1476px 663px #fff, 573px 1106px #fff, 1109px 1145px #fff, 1443px 1366px #fff, 908px 977px #fff, 132px 1954px #fff, 1015px 837px #fff, 1382px 648px #fff, 617px 382px #fff, 1751px 534px #fff, 1658px 1244px #fff, 1934px 1907px #fff, 375px 534px #fff, 1221px 569px #fff, 1867px 1916px #fff, 743px 1275px #fff, 1945px 783px #fff, 1028px 180px #fff, 1774px 1172px #fff, 607px 556px #fff, 1911px 1911px #fff, 1423px 334px #fff, 1802px 639px #fff, 1738px 1125px #fff, 1941px 849px #fff, 467px 1018px #fff, 1252px 1459px #fff, 715px 997px #fff, 677px 1298px #fff, 546px 864px #fff, 1928px 1080px #fff, 271px 539px #fff, 1447px 1185px #fff, 66px 484px #fff, 1496px 1447px #fff, 1853px 1944px #fff, 1913px 740px #fff, 1389px 1043px #fff, 973px 904px #fff, 69px 1446px #fff, 418px 321px #fff, 1560px 1007px #fff, 1134px 1382px #fff, 1936px 883px #fff, 1459px 1226px #fff, 153px 1779px #fff, 196px 29px #fff, 1728px 1473px #fff, 1053px 509px #fff, 1023px 1330px #fff, 111px 243px #fff, 1998px 1496px #fff, 829px 5px #fff, 1638px 731px #fff, 1885px 479px #fff, 705px 1744px #fff, 431px 97px #fff, 1721px 1218px #fff, 734px 1277px #fff, 41px 364px #fff, 73px 1257px #fff, 373px 1624px #fff, 581px 783px #fff, 1340px 1953px #fff, 729px 1941px #fff, 941px 1260px #fff, 1504px 710px #fff, 1317px 25px #fff, 1923px 1620px #fff, 1893px 697px #fff, 1623px 817px #fff, 1442px 1711px #fff, 127px 436px #fff, 346px 69px #fff, 1403px 1698px #fff, 761px 1614px #fff, 1331px 1245px #fff, 719px 1452px #fff, 1653px 731px #fff, 1975px 1685px #fff, 1819px 929px #fff, 281px 1519px #fff, 1612px 637px #fff, 467px 623px #fff, 1597px 875px #fff, 691px 455px #fff, 544px 1700px #fff, 1786px 1937px #fff, 1464px 1908px #fff, 1733px 1618px #fff, 1583px 1812px #fff, 1137px 1947px #fff, 843px 867px #fff, 70px 596px #fff, 470px 1386px #fff, 67px 567px #fff, 1068px 1651px #fff, 965px 1161px #fff, 939px 637px #fff, 1745px 1541px #fff, 559px 1172px #fff, 494px 1175px #fff, 736px 1296px #fff, 1932px 351px #fff, 561px 543px #fff, 242px 623px #fff, 1520px 1311px #fff, 494px 1700px #fff, 371px 1652px #fff, 376px 834px #fff, 693px 945px #fff, 1556px 919px #fff, 1366px 877px #fff, 1411px 1904px #fff, 763px 654px #fff, 445px 1272px #fff, 1373px 1789px #fff, 1647px 1092px #fff, 981px 988px #fff, 327px 1921px #fff, 186px 434px #fff, 1545px 1460px #fff, 799px 407px #fff, 889px 1088px #fff, 1539px 379px #fff, 196px 460px #fff, 1342px 1929px #fff, 1774px 1806px #fff, 570px 1528px #fff, 421px 697px #fff, 1555px 817px #fff, 1442px 1516px #fff, 1785px 1378px #fff, 608px 1842px #fff, 1131px 1131px #fff, 1011px 239px #fff, 1161px 1415px #fff, 1969px 738px #fff, 764px 196px #fff, 1686px 1725px #fff, 1597px 1219px #fff, 1445px 625px #fff, 605px 1228px #fff, 1028px 1265px #fff, 1115px 823px #fff, 764px 772px #fff, 1568px 652px #fff, 584px 1777px #fff, 369px 1988px #fff, 1925px 1699px #fff, 1158px 1603px #fff, 672px 792px #fff, 1085px 1628px #fff, 24px 1160px #fff, 599px 56px #fff, 637px 1px #fff, 992px 938px #fff, 1218px 598px #fff, 1757px 1528px #fff, 1963px 767px #fff, 1439px 799px #fff, 728px 1176px #fff, 667px 1715px #fff, 628px 1987px #fff, 1081px 1059px #fff, 1910px 1577px #fff, 1222px 1927px #fff, 1746px 638px #fff, 919px 396px #fff, 435px 1167px #fff, 1483px 1065px #fff, 1932px 1399px #fff, 1309px 1645px #fff, 1961px 1501px #fff, 1626px 78px #fff, 1930px 1650px #fff, 416px 654px #fff, 881px 187px #fff, 1241px 1782px #fff, 1203px 490px #fff, 1705px 502px #fff, 358px 710px #fff, 1232px 1781px #fff, 1014px 1490px #fff, 231px 786px #fff, 872px 531px #fff, 606px 1108px #fff, 40px 24px #fff, 1067px 1639px #fff, 1069px 1712px #fff, 1666px 1379px #fff, 1224px 1998px #fff, 1559px 1840px #fff, 811px 918px #fff, 1967px 455px #fff, 292px 697px #fff, 1146px 239px #fff, 1913px 1481px #fff, 1049px 1120px #fff, 1975px 742px #fff, 581px 1988px #fff, 818px 1855px #fff, 1958px 1763px #fff, 1749px 1865px #fff, 548px 1440px #fff, 1540px 1747px #fff, 1124px 1176px #fff, 1386px 449px #fff, 1377px 1910px #fff, 1011px 732px #fff, 678px 869px #fff, 421px 744px #fff, 1223px 1481px #fff, 153px 1498px #fff, 1777px 1644px #fff, 1743px 1162px #fff, 369px 896px #fff, 637px 915px #fff, 1980px 1269px #fff, 1103px 368px #fff, 1275px 1479px #fff, 172px 1667px #fff, 1473px 958px #fff, 965px 368px #fff, 1581px 1192px #fff, 434px 343px #fff, 1955px 1321px #fff, 1038px 1034px #fff, 1920px 1201px #fff, 67px 492px #fff, 1252px 1084px #fff, 408px 1322px #fff, 35px 574px #fff, 262px 279px #fff, 1911px 1751px #fff, 861px 868px #fff, 1317px 1992px #fff, 857px 628px #fff, 972px 1285px #fff, 785px 1137px #fff, 1850px 49px #fff, 611px 411px #fff, 56px 1346px #fff, 1608px 1012px #fff, 1933px 1845px #fff, 878px 686px #fff, 1979px 1705px #fff, 401px 1509px #fff, 1558px 1714px #fff, 925px 729px #fff, 1766px 1px #fff, 917px 584px #fff, 376px 1315px #fff, 1893px 1407px #fff, 1914px 469px #fff, 737px 67px #fff, 592px 713px #fff, 1775px 1655px #fff, 338px 1827px #fff, 1941px 1736px #fff, 1645px 592px #fff, 1622px 790px #fff, 1616px 1205px #fff, 1909px 1408px #fff, 1627px 991px #fff, 1914px 1822px #fff, 903px 49px #fff, 1913px 436px #fff, 1037px 556px #fff, 1939px 1663px #fff, 1238px 1620px #fff, 1276px 575px #fff, 951px 1503px #fff, 1939px 665px #fff, 1276px 472px #fff, 1219px 639px #fff, 1480px 1568px #fff, 929px 1033px #fff, 1765px 1802px #fff, 166px 1471px #fff, 1066px 1672px #fff, 822px 1728px #fff, 927px 494px #fff, 803px 1537px #fff, 107px 1061px #fff, 1922px 1800px #fff, 1823px 1231px #fff, 1803px 170px #fff, 1744px 1779px #fff, 489px 1991px #fff, 529px 293px #fff, 422px 347px #fff, 1996px 442px #fff, 1676px 278px #fff, 1956px 243px #fff, 1070px 1472px #fff, 1572px 78px #fff, 1415px 609px #fff, 369px 1962px #fff, 912px 1944px #fff, 50px 1689px #fff, 911px 1489px #fff, 727px 1311px #fff, 1190px 283px #fff, 1131px 625px #fff, 1980px 691px #fff, 846px 1265px #fff, 711px 681px #fff, 1918px 1666px #fff, 612px 686px #fff, 1328px 75px #fff, 297px 335px #fff, 1081px 1502px #fff, 1915px 1022px #fff, 735px 1386px #fff, 1461px 744px #fff, 1665px 1946px #fff, 38px 1193px #fff, 140px 1253px #fff, 331px 1639px #fff, 1158px 1580px #fff, 1588px 259px #fff, 1300px 509px #fff, 1353px 1888px #fff, 456px 532px #fff, 635px 1577px #fff, 744px 1920px #fff, 1858px 1359px #fff, 1274px 1469px #fff, 68px 872px #fff, 1971px 723px #fff, 968px 773px #fff, 1393px 1900px #fff, 1709px 1416px #fff, 1949px 683px #fff, 482px 392px #fff, 542px 253px #fff, 941px 946px #fff, 1472px 1344px #fff, 1200px 1590px #fff, 1246px 775px #fff, 193px 1118px #fff, 1074px 1710px #fff, 658px 1921px #fff, 1857px 1681px #fff, 875px 23px #fff, 338px 607px #fff, 1110px 262px #fff, 758px 1964px #fff, 1895px 1678px #fff, 972px 1254px #fff, 1952px 1215px #fff, 1289px 123px #fff, 513px 1069px #fff, 582px 239px #fff, 1819px 1322px #fff, 984px 1808px #fff, 57px 603px #fff, 644px 278px #fff, 309px 1159px #fff, 328px 1938px #fff, 1389px 1437px #fff, 1680px 534px #fff, 440px 165px #fff, 545px 392px #fff, 191px 946px #fff, 1910px 1184px #fff, 1177px 457px #fff, 1491px 730px #fff, 1838px 786px #fff, 1917px 118px #fff, 1774px 1105px #fff, 1945px 1946px #fff, 713px 1574px #fff, 1532px 1127px #fff, 911px 1280px #fff, 637px 728px #fff, 1019px 689px #fff, 1190px 1242px #fff, 1192px 181px #fff, 1100px 80px #fff, 508px 477px #fff, 359px 411px #fff, 857px 1589px #fff, 1427px 710px #fff, 1286px 1138px #fff, 1942px 1931px #fff, 739px 183px #fff, 1773px 183px #fff, 1663px 1598px #fff, 758px 296px #fff, 882px 559px #fff, 1019px 630px #fff, 1538px 267px #fff, 1648px 1023px #fff, 1563px 1767px #fff, 760px 451px #fff, 752px 1699px #fff, 1918px 1614px #fff, 1446px 1965px #fff, 1033px 753px #fff, 1111px 120px #fff, 1557px 1081px #fff, 1061px 75px #fff, 1859px 674px #fff, 925px 149px #fff, 1027px 1165px #fff, 803px 1371px #fff, 660px 508px #fff, 1095px 1534px #fff, 405px 532px #fff, 1459px 636px #fff, 123px 295px #fff, 1663px 684px #fff, 573px 1215px #fff, 1159px 1727px #fff, 460px 1976px #fff, 199px 1199px #fff, 1637px 1501px #fff, 1109px 442px #fff, 259px 558px #fff, 710px 116px #fff, 352px 1958px #fff, 807px 1744px #fff, 119px 1217px #fff, 1825px 1017px #fff, 993px 1741px #fff, 1513px 353px #fff, 1353px 61px #fff, 664px 352px #fff, 1382px 359px #fff, 1487px 1707px #fff, 657px 1045px #fff, 1107px 490px #fff, 1834px 1176px #fff, 837px 1438px #fff, 1947px 448px #fff, 1196px 333px #fff, 151px 555px #fff, 18px 992px #fff, 458px 748px #fff, 1801px 890px #fff, 1093px 1012px #fff, 315px 1101px #fff, 194px 323px #fff, 754px 292px #fff, 1737px 7px #fff, 40px 840px #fff, 1170px 805px #fff, 176px 1753px #fff, 805px 1148px #fff, 1578px 1271px #fff, 367px 1494px #fff, 363px 1111px #fff, 1955px 243px #fff, 1451px 1093px #fff, 375px 617px #fff, 1223px 720px #fff, 1178px 13px #fff, 1456px 865px #fff, 1440px 49px #fff, 186px 1569px #fff, 320px 1853px #fff, 300px 539px #fff, 1559px 509px #fff, 1985px 1108px #fff, 1588px 828px #fff, 525px 1432px #fff, 831px 363px #fff, 141px 281px #fff, 1319px 402px #fff, 40px 456px #fff, 1955px 478px #fff, 1758px 818px #fff, 1924px 688px #fff, 1030px 953px #fff, 1982px 210px #fff, 917px 1401px #fff, 1051px 1837px #fff, 1045px 463px #fff, 1744px 573px #fff, 529px 1530px #fff, 542px 469px #fff, 1982px 324px #fff, 1902px 1422px #fff, 1968px 782px #fff, 1666px 1561px #fff, 955px 304px #fff, 323px 778px #fff, 272px 443px #fff, 485px 581px #fff, 1353px 1058px #fff, 1257px 131px #fff, 434px 98px #fff, 1587px 1953px #fff, 1749px 68px #fff, 1984px 839px #fff, 1518px 183px #fff, 1071px 855px #fff, 1662px 1994px #fff, 1111px 106px #fff, 1954px 838px #fff;
+      animation: animStar 150s linear infinite;
+    }
+    #stars3:after {
+      content: " ";
+      position: absolute;
+      top: 2000px;
+      width: 3px;
+      height: 3px;
+      background: transparent;
+      box-shadow: 200px 981px #fff, 1731px 521px #fff, 132px 1039px #fff, 1888px 1547px #fff, 899px 1226px #fff, 1887px 580px #fff, 1548px 1092px #fff, 1626px 689px #fff, 254px 1072px #fff, 1684px 1211px #fff, 672px 1267px #fff, 939px 668px #fff, 1969px 645px #fff, 1126px 983px #fff, 457px 568px #fff, 476px 876px #fff, 829px 1896px #fff, 1364px 1846px #fff, 1507px 1120px #fff, 936px 1948px #fff, 1833px 832px #fff, 1424px 285px #fff, 1377px 1596px #fff, 432px 153px #fff, 1348px 1410px #fff, 1529px 954px #fff, 1102px 387px #fff, 264px 297px #fff, 811px 977px #fff, 1931px 673px #fff, 1734px 978px #fff, 1772px 1567px #fff, 1197px 1400px #fff, 764px 282px #fff, 1103px 822px #fff, 872px 1803px #fff, 1057px 1763px #fff, 52px 1299px #fff, 1312px 1236px #fff, 235px 1082px #fff, 299px 1086px #fff, 1017px 1602px #fff, 1950px 626px #fff, 1306px 132px #fff, 1358px 1618px #fff, 1873px 1718px #fff, 1447px 940px #fff, 1888px 1195px #fff, 1704px 1765px #fff, 872px 1357px #fff, 1555px 1120px #fff, 250px 1415px #fff, 450px 415px #fff, 492px 901px #fff, 170px 1641px #fff, 56px 1129px #fff, 627px 1514px #fff, 1221px 500px #fff, 324px 1895px #fff, 1397px 1775px #fff, 1966px 598px #fff, 1550px 763px #fff, 326px 1605px #fff, 261px 969px #fff, 890px 281px #fff, 736px 544px #fff, 589px 1262px #fff, 1581px 368px #fff, 1900px 1132px #fff, 1914px 585px #fff, 1864px 1517px #fff, 241px 217px #fff, 859px 787px #fff, 996px 1729px #fff, 741px 121px #fff, 418px 414px #fff, 142px 967px #fff, 387px 896px #fff, 703px 562px #fff, 968px 1136px #fff, 1682px 332px #fff, 1287px 846px #fff, 256px 1427px #fff, 1885px 432px #fff, 1739px 174px #fff, 160px 193px #fff, 1206px 1567px #fff, 935px 1632px #fff, 1404px 1744px #fff, 137px 501px #fff, 1347px 1477px #fff, 1932px 1769px #fff, 1257px 426px #fff, 1818px 132px #fff, 1438px 852px #fff, 1474px 171px #fff, 1384px 661px #fff, 429px 438px #fff, 1011px 1510px #fff, 1763px 1222px #fff, 1201px 1705px #fff, 1066px 523px #fff, 667px 385px #fff, 1223px 519px #fff, 1693px 1935px #fff, 743px 977px #fff, 1111px 1550px #fff, 415px 1097px #fff, 184px 1231px #fff, 476px 254px #fff, 182px 1127px #fff, 644px 757px #fff, 1808px 243px #fff, 768px 1182px #fff, 1682px 1082px #fff, 1227px 1972px #fff, 767px 1419px #fff, 1978px 1908px #fff, 1851px 1295px #fff, 1301px 811px #fff, 988px 1206px #fff, 1116px 1921px #fff, 111px 268px #fff, 1655px 725px #fff, 1058px 401px #fff, 904px 1252px #fff, 566px 1465px #fff, 828px 892px #fff, 1022px 77px #fff, 610px 1233px #fff, 1969px 1933px #fff, 417px 764px #fff, 1344px 1628px #fff, 973px 445px #fff, 1550px 1899px #fff, 1918px 1576px #fff, 635px 1940px #fff, 1612px 68px #fff, 1348px 1644px #fff, 1159px 1281px #fff, 172px 913px #fff, 242px 1952px #fff, 1557px 1827px #fff, 935px 372px #fff, 1418px 1112px #fff, 924px 1071px #fff, 1956px 50px #fff, 1112px 1142px #fff, 1011px 1973px #fff, 685px 1768px #fff, 1476px 663px #fff, 573px 1106px #fff, 1109px 1145px #fff, 1443px 1366px #fff, 908px 977px #fff, 132px 1954px #fff, 1015px 837px #fff, 1382px 648px #fff, 617px 382px #fff, 1751px 534px #fff, 1658px 1244px #fff, 1934px 1907px #fff, 375px 534px #fff, 1221px 569px #fff, 1867px 1916px #fff, 743px 1275px #fff, 1945px 783px #fff, 1028px 180px #fff, 1774px 1172px #fff, 607px 556px #fff, 1911px 1911px #fff, 1423px 334px #fff, 1802px 639px #fff, 1738px 1125px #fff, 1941px 849px #fff, 467px 1018px #fff, 1252px 1459px #fff, 715px 997px #fff, 677px 1298px #fff, 546px 864px #fff, 1928px 1080px #fff, 271px 539px #fff, 1447px 1185px #fff, 66px 484px #fff, 1496px 1447px #fff, 1853px 1944px #fff, 1913px 740px #fff, 1389px 1043px #fff, 973px 904px #fff, 69px 1446px #fff, 418px 321px #fff, 1560px 1007px #fff, 1134px 1382px #fff, 1936px 883px #fff, 1459px 1226px #fff, 153px 1779px #fff, 196px 29px #fff, 1728px 1473px #fff, 1053px 509px #fff, 1023px 1330px #fff, 111px 243px #fff, 1998px 1496px #fff, 829px 5px #fff, 1638px 731px #fff, 1885px 479px #fff, 705px 1744px #fff, 431px 97px #fff, 1721px 1218px #fff, 734px 1277px #fff, 41px 364px #fff, 73px 1257px #fff, 373px 1624px #fff, 581px 783px #fff, 1340px 1953px #fff, 729px 1941px #fff, 941px 1260px #fff, 1504px 710px #fff, 1317px 25px #fff, 1923px 1620px #fff, 1893px 697px #fff, 1623px 817px #fff, 1442px 1711px #fff, 127px 436px #fff, 346px 69px #fff, 1403px 1698px #fff, 761px 1614px #fff, 1331px 1245px #fff, 719px 1452px #fff, 1653px 731px #fff, 1975px 1685px #fff, 1819px 929px #fff, 281px 1519px #fff, 1612px 637px #fff, 467px 623px #fff, 1597px 875px #fff, 691px 455px #fff, 544px 1700px #fff, 1786px 1937px #fff, 1464px 1908px #fff, 1733px 1618px #fff, 1583px 1812px #fff, 1137px 1947px #fff, 843px 867px #fff, 70px 596px #fff, 470px 1386px #fff, 67px 567px #fff, 1068px 1651px #fff, 965px 1161px #fff, 939px 637px #fff, 1745px 1541px #fff, 559px 1172px #fff, 494px 1175px #fff, 736px 1296px #fff, 1932px 351px #fff, 561px 543px #fff, 242px 623px #fff, 1520px 1311px #fff, 494px 1700px #fff, 371px 1652px #fff, 376px 834px #fff, 693px 945px #fff, 1556px 919px #fff, 1366px 877px #fff, 1411px 1904px #fff, 763px 654px #fff, 445px 1272px #fff, 1373px 1789px #fff, 1647px 1092px #fff, 981px 988px #fff, 327px 1921px #fff, 186px 434px #fff, 1545px 1460px #fff, 799px 407px #fff, 889px 1088px #fff, 1539px 379px #fff, 196px 460px #fff, 1342px 1929px #fff, 1774px 1806px #fff, 570px 1528px #fff, 421px 697px #fff, 1555px 817px #fff, 1442px 1516px #fff, 1785px 1378px #fff, 608px 1842px #fff, 1131px 1131px #fff, 1011px 239px #fff, 1161px 1415px #fff, 1969px 738px #fff, 764px 196px #fff, 1686px 1725px #fff, 1597px 1219px #fff, 1445px 625px #fff, 605px 1228px #fff, 1028px 1265px #fff, 1115px 823px #fff, 764px 772px #fff, 1568px 652px #fff, 584px 1777px #fff, 369px 1988px #fff, 1925px 1699px #fff, 1158px 1603px #fff, 672px 792px #fff, 1085px 1628px #fff, 24px 1160px #fff, 599px 56px #fff, 637px 1px #fff, 992px 938px #fff, 1218px 598px #fff, 1757px 1528px #fff, 1963px 767px #fff, 1439px 799px #fff, 728px 1176px #fff, 667px 1715px #fff, 628px 1987px #fff, 1081px 1059px #fff, 1910px 1577px #fff, 1222px 1927px #fff, 1746px 638px #fff, 919px 396px #fff, 435px 1167px #fff, 1483px 1065px #fff, 1932px 1399px #fff, 1309px 1645px #fff, 1961px 1501px #fff, 1626px 78px #fff, 1930px 1650px #fff, 416px 654px #fff, 881px 187px #fff, 1241px 1782px #fff, 1203px 490px #fff, 1705px 502px #fff, 358px 710px #fff, 1232px 1781px #fff, 1014px 1490px #fff, 231px 786px #fff, 872px 531px #fff, 606px 1108px #fff, 40px 24px #fff, 1067px 1639px #fff, 1069px 1712px #fff, 1666px 1379px #fff, 1224px 1998px #fff, 1559px 1840px #fff, 811px 918px #fff, 1967px 455px #fff, 292px 697px #fff, 1146px 239px #fff, 1913px 1481px #fff, 1049px 1120px #fff, 1975px 742px #fff, 581px 1988px #fff, 818px 1855px #fff, 1958px 1763px #fff, 1749px 1865px #fff, 548px 1440px #fff, 1540px 1747px #fff, 1124px 1176px #fff, 1386px 449px #fff, 1377px 1910px #fff, 1011px 732px #fff, 678px 869px #fff, 421px 744px #fff, 1223px 1481px #fff, 153px 1498px #fff, 1777px 1644px #fff, 1743px 1162px #fff, 369px 896px #fff, 637px 915px #fff, 1980px 1269px #fff, 1103px 368px #fff, 1275px 1479px #fff, 172px 1667px #fff, 1473px 958px #fff, 965px 368px #fff, 1581px 1192px #fff, 434px 343px #fff, 1955px 1321px #fff, 1038px 1034px #fff, 1920px 1201px #fff, 67px 492px #fff, 1252px 1084px #fff, 408px 1322px #fff, 35px 574px #fff, 262px 279px #fff, 1911px 1751px #fff, 861px 868px #fff, 1317px 1992px #fff, 857px 628px #fff, 972px 1285px #fff, 785px 1137px #fff, 1850px 49px #fff, 611px 411px #fff, 56px 1346px #fff, 1608px 1012px #fff, 1933px 1845px #fff, 878px 686px #fff, 1979px 1705px #fff, 401px 1509px #fff, 1558px 1714px #fff, 925px 729px #fff, 1766px 1px #fff, 917px 584px #fff, 376px 1315px #fff, 1893px 1407px #fff, 1914px 469px #fff, 737px 67px #fff, 592px 713px #fff, 1775px 1655px #fff, 338px 1827px #fff, 1941px 1736px #fff, 1645px 592px #fff, 1622px 790px #fff, 1616px 1205px #fff, 1909px 1408px #fff, 1627px 991px #fff, 1914px 1822px #fff, 903px 49px #fff, 1913px 436px #fff, 1037px 556px #fff, 1939px 1663px #fff, 1238px 1620px #fff, 1276px 575px #fff, 951px 1503px #fff, 1939px 665px #fff, 1276px 472px #fff, 1219px 639px #fff, 1480px 1568px #fff, 929px 1033px #fff, 1765px 1802px #fff, 166px 1471px #fff, 1066px 1672px #fff, 822px 1728px #fff, 927px 494px #fff, 803px 1537px #fff, 107px 1061px #fff, 1922px 1800px #fff, 1823px 1231px #fff, 1803px 170px #fff, 1744px 1779px #fff, 489px 1991px #fff, 529px 293px #fff, 422px 347px #fff, 1996px 442px #fff, 1676px 278px #fff, 1956px 243px #fff, 1070px 1472px #fff, 1572px 78px #fff, 1415px 609px #fff, 369px 1962px #fff, 912px 1944px #fff, 50px 1689px #fff, 911px 1489px #fff, 727px 1311px #fff, 1190px 283px #fff, 1131px 625px #fff, 1980px 691px #fff;
+      animation: animStar 150s linear infinite;
+    }
+
+    @keyframes animStar {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-2000px); }
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 2;
+      background: #1F1F1F;
+      border: 3px solid #A855F7;
+      border-radius: 15px;
+      padding: 50px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+    }
+    .google-button {
+      background: white;
+      color: #333;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1em;
+    }
+    .google-button:hover {
+      background: #f0f0f0;
+    }
+    .google-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW) ========== */
+        #main-dashboard-view {
+      --color-dark-bg: #0D0D0D;
+      --color-header-bg: #151515;
+      --color-border: #2E2E2E;
+      --color-highlight: #A855F7;
+      --color-main-bg: #151515;
+      --color-text: #EAEAEA;
+      --color-input-bg: #0D0D0D;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.6);
+      --main-gap: 15px;
+      width: 100%;
+      height: 100vh;
+      background: var(--color-dark-bg);
+      color: var(--color-text);
+    }
+    #main-dashboard-view.light-theme {
+      --color-dark-bg: #f3f4f6;
+      --color-header-bg: #ffffff;
+      --color-border: #e5e7eb;
+      --color-highlight: #1f2937;
+      --color-main-bg: #ffffff;
+      --color-text: #1f2937;
+      --color-input-bg: #ffffff;
+      --shadow-light: 0 0 8px rgba(15, 23, 42, 0.12);
+    }
+    #main-dashboard-view.light-theme #notepad {
+      background: #ffffff !important;
+      color: #1f2937 !important;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .calc-button {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .calc-button.operator {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+    #main-dashboard-view.light-theme .calc-button.equals {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .calc-button.clear {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .calc-display {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .pomo-btn {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .pomo-btn.active {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .custom-time-input {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .tab-btn {
+      background: #f9fafb;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .tab-btn.active {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    #main-dashboard-view.light-theme .music-btn {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.light-theme .song-display {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+    #main-dashboard-view.black-theme {
+      --color-dark-bg: #1A1A1A;
+      --color-header-bg: #282828;
+      --color-border: #444444;
+      --color-highlight: #9CA3AF;
+      --color-main-bg: #282828;
+      --color-text: #EAEAEA;
+      --color-input-bg: #1F1F1F;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+    #main-dashboard-view.purple-theme {
+      --color-highlight: #A855F7;
+    }
+    #main-dashboard-view.green-theme {
+      --color-highlight: #39FF14;
+    }
+    #main-dashboard-view.red-theme {
+      --color-highlight: #FF3131;
+    }
+    #main-dashboard-view.blue-theme {
+      --color-highlight: #00AEEF;
+    }
+    #main-dashboard-view.green-theme .tab-btn.active,
+    #main-dashboard-view.green-theme .calc-button.equals,
+    #main-dashboard-view.green-theme .pomo-btn.active,
+    #main-dashboard-view.red-theme .tab-btn.active,
+    #main-dashboard-view.red-theme .calc-button.equals,
+    #main-dashboard-view.red-theme .pomo-btn.active,
+    #main-dashboard-view.blue-theme .tab-btn.active,
+    #main-dashboard-view.blue-theme .calc-button.equals,
+    #main-dashboard-view.blue-theme .pomo-btn.active {
+      color: #000000;
+    }
+    #main-dashboard-view .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+    #main-dashboard-view .container.hidden {
+      display: none !important;
+    }
+    #main-dashboard-view .top-bar {
+      grid-column: 1 / span 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 15px;
+      background: var(--color-header-bg);
+      border-bottom: 2px solid var(--color-highlight);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    #main-dashboard-view .top-left,
+    #main-dashboard-view .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+        #main-dashboard-view .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background: var(--color-input-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      font-size: 0.85em;
+    }
+
+    #main-dashboard-view .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--color-highlight);
+      object-fit: cover;
+    }
+
+    #main-dashboard-view .user-name {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--color-text);
+    }
+    #main-dashboard-view .logout-btn {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 15px;
+      font-size: 0.8em;
+      transition: background 0.2s;
+    }
+    #main-dashboard-view .logout-btn:hover {
+      background: #b91c1c;
+    }
+    #main-dashboard-view .box {
+      border: 1px solid var(--color-border);
+      padding: 4px 10px;
+      background: var(--color-input-bg);
+      border-radius: 4px;
+      box-shadow: var(--shadow-light);
+      transition: background 0.3s ease;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+
+    #main-dashboard-view .main {
+      grid-column: 1 / -1;
+      background: var(--color-main-bg);
+      padding: var(--main-gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--main-gap);
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #main-dashboard-view .main::-webkit-scrollbar { width: 0; height: 0; }
+    #main-dashboard-view .main::-webkit-scrollbar-track { background: transparent; }
+    #main-dashboard-view .main::-webkit-scrollbar-thumb { background: transparent; }
+    #main-dashboard-view .chart-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      height: calc(100vh - 140px);
+      min-height: 500px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: relative;
+    }
+    #main-dashboard-view .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    #main-dashboard-view .chart-header h2 {
+      color: var(--color-highlight);
+      margin: 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 5px;
+      font-size: 1.2em;
+    }
+    #main-dashboard-view .chart-iframe {
+      width: 100%;
+      height: calc(100% - 35px);
+      border: none;
+      display: block;
+    }
+    #main-dashboard-view .notepad-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow-light);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      min-height: 200px;
+      position: relative;
+    }
+    #main-dashboard-view .notepad-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 8px;
+    }
+    #main-dashboard-view .notepad-header-row h2 {
+      color: var(--color-highlight);
+      margin: 0;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .notepad-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    #main-dashboard-view .tab-btn {
+      background: var(--color-input-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.75em;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex: 0 1 auto;
+    }
+    #main-dashboard-view .tab-btn:hover {
+      background: #444;
+    }
+    #main-dashboard-view .tab-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    #main-dashboard-view #notepad {
+      background: #0D0D0D;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 10px;
+      border-radius: 4px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.95em;
+      resize: none;
+      flex-grow: 1;
+    }
+    #main-dashboard-view #notepad::placeholder {
+      color: #666;
+    }
+    #main-dashboard-view #notepad:focus {
+      outline: none;
+      border-color: var(--color-highlight);
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    }
+    #main-dashboard-view .bottom-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--main-gap);
+      flex-shrink: 0;
+      height: auto;
+    }
+    #main-dashboard-view .calculator-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+    }
+    #main-dashboard-view .calculator-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 6px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 4px;
+      font-size: 1em;
+    }
+    #main-dashboard-view .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+    #main-dashboard-view .calc-display {
+      grid-column: 1 / -1;
+      background: var(--color-input-bg);
+      color: var(--color-highlight);
+      border: 2px solid var(--color-highlight);
+      text-align: right;
+      padding: 10px;
+      margin-bottom: 6px;
+      font-size: 1.5em;
+      font-weight: bold;
+      overflow: hidden;
+      min-height: 32px;
+      border-radius: 4px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    #main-dashboard-view .calc-button {
+      background: var(--color-input-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 10px 0;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.1s;
+    }
+    #main-dashboard-view .calc-button:active {
+      background: var(--color-border);
+      transform: scale(0.95);
+    }
+    #main-dashboard-view .calc-button:hover {
+      border-color: var(--color-highlight);
+    }
+    #main-dashboard-view .calc-button.equals {
+      grid-column: 4 / span 1;
+      grid-row: 5 / span 1;
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .calc-button.equals:hover {
+      background: #8b3ed9;
+    }
+    #main-dashboard-view .calc-button.zero {
+      grid-column: 1 / span 2;
+    }
+    #main-dashboard-view .calc-button.operator {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    #main-dashboard-view .calc-button.operator:hover {
+      filter: brightness(0.95);
+    }
+    #main-dashboard-view .calc-button.clear {
+      background: #DC2626;
+      color: white;
+      font-weight: bold;
+    }
+    #main-dashboard-view .calc-button.clear:hover {
+      filter: brightness(0.9);
+    }
+    #main-dashboard-view .pomodoro-panel {
+      background: var(--color-input-bg);
+      border: 2px solid var(--color-highlight);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #main-dashboard-view .pomodoro-panel h2 {
+      color: var(--color-highlight);
+      margin: 0 0 6px 0;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 4px;
+      font-size: 1em;
+    }
+    #main-dashboard-view .pomodoro-display {
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--color-highlight);
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      margin: 8px 0;
+    }
+    #main-dashboard-view .pomodoro-controls {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    #main-dashboard-view .pomo-btn {
+      background: var(--color-input-bg);
+      color: #ddd;
+      border: 1px solid #555;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.8em;
+      transition: background 0.2s;
+      flex: 1;
+      min-width: 55px;
+    }
+    #main-dashboard-view .pomo-btn:hover {
+      background: #444;
+    }
+    #main-dashboard-view .pomo-btn.active {
+      background: var(--color-highlight);
+      color: var(--color-dark-bg);
+      font-weight: bold;
+    }
+    #main-dashboard-view .custom-time-input {
+      background: #0D0D0D;
+      color: var(--color-highlight);
+      border: 1px solid var(--color-highlight);
+      padding: 5px 6px;
+      border-radius: 4px;
+      width: 50px;
+      font-size: 0.8em;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+    #main-dashboard-view .custom-time-input::placeholder {
+      color: #777;
+    }
+    #main-dashboard-view .music-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+    }
+    #main-dashboard-view .theme-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    #main-dashboard-view .theme-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #main-dashboard-view .theme-btn:hover {
+      transform: scale(1.15);
+    }
+    #main-dashboard-view .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    #main-dashboard-view .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+
+    /* ========== PLANES, CONFIGURACION GLOBAL Y CONTROLES COMPARTIDOS ========== */
+    #plansModal,
+    #dominon-config-dropdown,
+    #quantis-config-dropdown,
+    #miniPlanPopup,
+    #trialContactPopup {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    #trialContactPopup {
+      position: fixed;
+      display: none;
+      z-index: 100002;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      color: var(--float-text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--float-shadow);
+      font-size: 0.86rem;
+      max-width: 260px;
+    }
+    #trialContactPopup.open { display: block; }
+    #trialContactPopup p { margin: 4px 0; }
+    #trialContactDiscord { cursor: pointer; font-weight: 600; }
+    #trialContactDiscord.copied { color: var(--color-highlight); }
+    .trial-contact-btn { padding: 6px 9px; }
+    .icon-square-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid var(--color-highlight);
+      background: var(--color-input-bg);
+      color: var(--color-highlight);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .icon-square-btn:hover {
+      background: rgba(168,85,247,0.14);
+    }
+    #plansModal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      background: rgba(0,0,0,0.58);
+      padding: 18px;
+    }
+    #plansModal.open { display: flex; }
+    .plans-card {
+      width: min(940px, 96vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      border-radius: 8px;
+      box-shadow: var(--float-shadow);
+      color: var(--float-text);
+      padding: 20px;
+    }
+    .plans-card .plan-option { background: var(--float-bg); border-color: var(--float-border); }
+    .plans-card .plan-option h3,
+    .plans-card .plan-option ul,
+    .plans-card .plan-contact-card,
+    .plans-card .plans-close { color: var(--float-text); }
+    .plans-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .plans-header h2 {
+      margin: 0;
+      color: #A855F7;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+    .plans-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: #e4e4e7;
+      cursor: pointer;
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .plan-option {
+      background: #181a20;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+      min-height: 230px;
+    }
+    .plan-option:hover {
+      border-color: #A855F7;
+    }
+    .plan-option h3 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    .plan-price {
+      color: #A855F7;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .plan-option ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #c4c4cc;
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+    .plan-contact-card {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(168,85,247,0.08);
+      border: 1px solid rgba(168,85,247,0.25);
+      color: #e4e4e7;
+    }
+    .plan-contact-card.open { display: block; }
+    .plan-contact-card p { margin: 6px 0; }
+    #dominon-config-dropdown,
+    #quantis-config-dropdown {
+      position: fixed;
+      top: 58px;
+      right: 18px;
+      width: 186px;
+      display: none;
+      z-index: 99990;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      border-radius: 8px;
+      box-shadow: var(--float-shadow);
+      padding: 12px;
+      color: var(--float-text);
+    }
+    #dominon-config-dropdown.open,
+    #quantis-config-dropdown.open { display: block; }
+    .config-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: #71717a;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+    }
+    .config-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    #dominon-config-dropdown .theme-btn,
+    #quantis-config-dropdown .theme-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+    }
+    #dominon-config-dropdown .theme-btn.black,
+    #quantis-config-dropdown .theme-btn.black { background: #000000; border-color: #FFFFFF; }
+    #dominon-config-dropdown .theme-btn.white,
+    #quantis-config-dropdown .theme-btn.white { background: #FFFFFF; border-color: #FFFFFF; }
+    #dominon-config-dropdown .theme-btn.purple { background: #A855F7; border-color: #A855F7; }
+    #dominon-config-dropdown .theme-btn.green { background: #39FF14; border-color: #39FF14; }
+    #dominon-config-dropdown .theme-btn.red { background: #FF3131; border-color: #FF3131; }
+    #dominon-config-dropdown .theme-btn.blue { background: #00AEEF; border-color: #00AEEF; }
+    .language-toggle {
+      border: 1px solid rgba(168,85,247,0.45);
+      background: var(--float-bg, #1f1f26);
+      color: var(--float-text, #e4e4e7);
+      border-radius: 999px;
+      padding: 5px 10px;
+      min-width: 64px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    #perf-panel {
+      position: fixed;
+      top: 58px;
+      right: 214px;
+      width: 238px;
+      display: none;
+      z-index: 99991;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      border-radius: 8px;
+      box-shadow: var(--float-shadow);
+      padding: 12px;
+      color: var(--float-text);
+      font-size: 12px;
+    }
+    #perf-panel.open { display: block; }
+    .perf-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: #a855f7;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .perf-title button { background: none; border: none; color: #71717a; cursor: pointer; font-size: 12px; }
+    .perf-est { color: #71717a; font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .perf-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1f1f26; }
+    .perf-row b { color: var(--float-text); }
+    .perf-sub { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #71717a; margin: 2px 0 6px; text-transform: uppercase; }
+    .perf-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 6px; }
+    .perf-table th { text-align: left; font-size: 10px; color: #71717a; font-weight: 800; padding: 2px 4px 4px 0; border-bottom: 1px solid #2a2a33; }
+    .perf-table th:nth-child(2), .perf-table th:nth-child(3) { text-align: right; }
+    .perf-table td { padding: 2px 4px 2px 0; border-bottom: 1px solid #1f1f26; color: var(--float-text); }
+    .perf-table td:nth-child(2), .perf-table td:nth-child(3) { text-align: right; color: var(--float-text); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .perf-toggles { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .perf-toggles label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .perf-toggles input { accent-color: #A855F7; }
+    #dominon-config-dropdown, #quantis-config-dropdown, #miniPlanPopup { cursor: move; touch-action: none; }
+    #musicPanel .music-drag-handle { touch-action: none; }
+    #dominon-config-dropdown button, #quantis-config-dropdown button, #miniPlanPopup button,
+    #dominon-config-dropdown input, #quantis-config-dropdown input, #dominon-config-dropdown label { cursor: pointer; }
+    .notepad-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .notepad-file-btn,
+    .q-tool-btn {
+      background: var(--color-input-bg, #22242c);
+      color: var(--color-text, #d4d4d8);
+      border: 1px solid rgba(168,85,247,0.3);
+      border-radius: 4px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 0.78rem;
+    }
+    .notepad-file-btn:hover,
+    .q-tool-btn:hover {
+      border-color: #A855F7;
+      color: #fff;
+    }
+    #miniPlanPopup {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: none;
+      z-index: 100001;
+      background: var(--float-bg);
+      border: 1px solid var(--float-border);
+      color: var(--float-text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--float-shadow);
+      font-size: 0.86rem;
+    }
+    #miniPlanPopup.open { display: block; }
+    .gemini-panel {
+      margin-top: var(--main-gap);
+      background: var(--color-main-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-light);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      flex-shrink: 0;
+      width: 100%;
+    }
+    .gemini-layout {
+      display: flex;
+      min-height: 420px;
+      height: 480px;
+      flex-shrink: 0;
+    }
+    .gemini-sidebar {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      background: #0f0f0f;
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.22s ease, min-width 0.22s ease;
+      flex-shrink: 0;
+    }
+    .gemini-sidebar.open {
+      width: 220px;
+      min-width: 220px;
+    }
+    .gemini-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 10px;
+      border-bottom: 1px solid #222;
+      font-size: 0.8em;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: 0.4px;
+    }
+    .gemini-sidebar-header button {
+      background: var(--color-highlight);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .gemini-sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .gemini-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82em;
+      color: var(--color-text);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .gemini-sidebar-item:hover { background: #1a1a1a; }
+    .gemini-sidebar-item.active { background: #1e1e1e; border-color: var(--color-highlight); color: #fff; }
+    .gemini-sidebar-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+    .gemini-sidebar-item .gemini-rename-btn {
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .gemini-sidebar-item:hover .gemini-rename-btn,
+    .gemini-sidebar-item.active .gemini-rename-btn { opacity: 1; }
+    .gemini-sidebar-item .gemini-rename-btn:hover { background: #2a2a2a; color: #fff; }
+    .gemini-sidebar-footer {
+      padding: 8px;
+      border-top: 1px solid #222;
+      display: flex;
+      gap: 6px;
+    }
+    .gemini-sidebar-footer button {
+      flex: 1;
+      background: #1a1a1a;
+      color: var(--color-text);
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      font-size: 0.75em;
+    }
+    .gemini-sidebar-footer button:hover { background: #222; }
+    .gemini-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--color-main-bg);
+    }
+    .gemini-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    .gemini-sidebar-toggle {
+      background: #1a1a1a;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .gemini-sidebar-toggle:hover { background: #222; }
+    .gemini-topbar-title { font-size: 0.85em; font-weight: 700; color: var(--color-text); display: flex; align-items: center; gap: 6px; }
+    .gemini-history {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 14px 12px;
+      line-height: 1.5;
+      background: transparent;
+    }
+    .gemini-settings,
+    .gemini-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 0 10px 10px;
+      flex-shrink: 0;
+    }
+    .gemini-settings { padding-top: 8px; }
+    .gemini-settings input,
+    .gemini-input-row textarea {
+      flex: 1 1 240px;
+      background: var(--color-input-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 9px;
+    }
+    .gemini-input-row textarea {
+      min-height: 52px;
+      max-height: 120px;
+      resize: vertical;
+    }
+    .gemini-btn {
+      background: var(--color-highlight);
+      color: #ffffff;
+      border: 1px solid var(--color-highlight);
+      border-radius: 4px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    #main-dashboard-view.green-theme .gemini-btn,
+    #main-dashboard-view.red-theme .gemini-btn,
+    #main-dashboard-view.blue-theme .gemini-btn {
+      color: #000000;
+    }
+    @media (max-width: 760px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      #dominon-config-dropdown,
+      #quantis-config-dropdown { right: 10px; top: 96px; }
+    }
+
+    @media (max-width: 1024px) {
+      #main-dashboard-view .top-right { gap: 6px; }
+      #main-dashboard-view .theme-btn { width: 20px; height: 20px; }
+      #main-dashboard-view .user-name { max-width: 80px; }
+    }
+    @media (max-width: 768px) {
+      #main-dashboard-view .main { height: auto; min-height: calc(100vh - 100px); overflow-y: visible; }
+      #main-dashboard-view .top-bar { flex-direction: column; align-items: flex-start; padding: 8px 10px; }
+      #main-dashboard-view .top-left, #main-dashboard-view .top-right { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      #main-dashboard-view .theme-buttons { flex-wrap: wrap; gap: 5px; }
+      #main-dashboard-view .theme-btn { width: 18px; height: 18px; }
+      #main-dashboard-view .chart-panel { height: 70vh; min-height: 400px; }
+      #main-dashboard-view .bottom-container { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      #main-dashboard-view { --main-gap: 10px; }
+      #main-dashboard-view .top-bar { padding: 6px 8px; gap: 4px; }
+      #main-dashboard-view .top-right { gap: 5px; }
+      #main-dashboard-view .user-name { display: none; }
+      #main-dashboard-view .chart-panel { height: 60vh; min-height: 350px; }
+      #main-dashboard-view .tab-btn { font-size: 0.7em; padding: 3px 6px; flex-shrink: 0; }
+      #main-dashboard-view .calc-button { padding: 8px 0; font-size: 0.85em; }
+      #main-dashboard-view .calc-display { font-size: 1.2em; padding: 8px; }
+      #main-dashboard-view .pomodoro-display { font-size: 1.6em; }
+      #main-dashboard-view .theme-btn { width: 16px; height: 16px; }
+    }
+    #main-dashboard-view .music-btn {
+      background: #333;
+      color: var(--color-text);
+      border: 1px solid #555;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85em;
+      transition: background 0.2s;
+    }
+    #main-dashboard-view .music-btn:hover {
+      background: var(--color-highlight);
+    }
+        #main-dashboard-view .song-display {
+      background: #0D0D0D;
+      border: 1px solid var(--color-border);
+      padding: 6px 12px;
+      border-radius: 4px;
+      padding: 6px 12px;
+      max-width: 180px;
+      overflow: hidden;
+    }
+
+    #main-dashboard-view .song-marquee {
+      display: block;
+      color: var(--color-highlight);
+      font-size: 0.85em;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    /* ========== PREVENCIN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
+    #deep-flow-view {
+      --fs: 1;
+      position: absolute;
+      inset: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      color: #c8c8d0;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 300;
+      font-size: calc(11px * var(--fs));
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      z-index: 5;
+    }
+    #deep-flow-view::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 240, 255, 0.012) 2px, rgba(0, 240, 255, 0.012) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar {
+      width: 5px;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar-track {
+      background: #06000e;
+    }
+    #deep-flow-view #ledger-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 240, 255, 0.2);
+      border-radius: 3px;
+    }
+    #deep-flow-view #hdr {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 8px;
+      gap: 6px;
+      background: #050008;
+      border-bottom: 1px solid transparent;
+      border-image: linear-gradient(90deg, #00F0FF 0%, #FF007F 40%, #39FF14 70%, transparent 100%) 1;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    #deep-flow-view #status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FF3131;
+      box-shadow: 0 0 6px #FF3131;
+      flex-shrink: 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    #deep-flow-view #status-dot.live {
+      background: #39FF14;
+      box-shadow: 0 0 6px #39FF14;
+    }
+    #deep-flow-view #hdr-brand {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: calc(12px * var(--fs));
+      color: #00F0FF;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 25px rgba(0, 240, 255, 0.3);
+      background: rgba(0, 240, 255, 0.06);
+      padding: 2px 10px;
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2), inset 0 0 8px rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      white-space: nowrap;
+    }
+    #deep-flow-view .ctrl-btn {
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: #00F0FF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 1px 5px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    #deep-flow-view .ctrl-btn:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: rgba(0, 240, 255, 0.5);
+    }
+    #deep-flow-view .ctrl-btn.muted {
+      color: #444;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    #deep-flow-view #stream-toggle {
+      border-color: #00F0FF;
+      color: #00F0FF;
+      text-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
+    }
+    #deep-flow-view #stream-toggle.binance-active {
+      border-color: #F0B90B;
+      color: #F0B90B;
+      text-shadow: 0 0 6px rgba(240, 185, 11, 0.5);
+      box-shadow: 0 0 8px rgba(240, 185, 11, 0.15);
+    }
+    #deep-flow-view #hdr-spacer {
+      flex: 1;
+    }
+        #deep-flow-view #demo-badge {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: #6a6a7a;
+      border: 1px solid rgba(154, 154, 170, 0.3);
+      border-radius: 3px;
+      padding: 1px 5px;
+      opacity: 0.75;
+      cursor: help;
+    }
+
+    #deep-flow-view #hdr-conn-status {
+      color: #FF3131;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      font-size: 9px;
+      display: none;
+      text-shadow: 0 0 8px rgba(255, 49, 49, 0.4);
+    }
+    #deep-flow-view #hdr-date,
+    #deep-flow-view #hdr-clock {
+      font-size: calc(10px * var(--fs));
+      color: #6a6a7a;
+      white-space: nowrap;
+    }
+    #deep-flow-view #hdr-clock {
+      color: #00F0FF;
+      opacity: 0.7;
+    }
+    #deep-flow-view .ticker-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 7px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 2px solid #00F0FF;
+      border-radius: 0 3px 3px 0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .ticker-chip.eth-chip {
+      border-left-color: #627EEA;
+    }
+    #deep-flow-view .ticker-chip.gas-chip {
+      border-left-color: #FF8C00;
+    }
+    #deep-flow-view .ticker-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #888;
+      letter-spacing: 0.5px;
+    }
+    #deep-flow-view .ticker-price {
+      font-size: calc(11px * var(--fs));
+      font-weight: 500;
+      color: #e0e0e8;
+    }
+    #deep-flow-view .ticker-change {
+      font-size: 9px;
+      font-weight: 400;
+    }
+    #deep-flow-view .ticker-change.pos {
+      color: #39FF14;
+    }
+    #deep-flow-view .ticker-change.neg {
+      color: #FF3131;
+    }
+    #deep-flow-view .gas-unit {
+      font-size: 8px;
+      color: #FF8C00;
+      opacity: 0.7;
+    }
+    #deep-flow-view #dashboard {
+      display: flex;
+      height: calc(100vh - 36px);
+    }
+    #deep-flow-view #sidebar {
+      width: 230px;
+      min-width: 230px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px;
+      background: #06000e;
+      border-right: 1px solid rgba(0, 240, 255, 0.08);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .sidebar-layer {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    #deep-flow-view .sidebar-layer.active {
+      display: flex;
+    }
+    #deep-flow-view .corner-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px 8px;
+      background: #090112;
+      border: 1px solid rgba(0, 240, 255, 0.06);
+      border-radius: 3px;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.02), inset 0 0 8px rgba(0, 240, 255, 0.01);
+    }
+    #deep-flow-view .block-label {
+      font-size: 7px;
+      font-weight: 700;
+      color: #00F0FF;
+      letter-spacing: 1.2px;
+      opacity: 0.65;
+      margin-bottom: 3px;
+    }
+    #deep-flow-view .block-value {
+      font-size: calc(15px * var(--fs));
+      font-weight: 700;
+      color: #f0f0f5;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    #deep-flow-view .block-sub {
+      font-size: 8px;
+      color: #6a6a7a;
+      margin-bottom: 3px;
+    }
+    #deep-flow-view .block-sub.pos {
+      color: #39FF14;
+    }
+    #deep-flow-view .block-sub.neg {
+      color: #FF3131;
+    }
+    #deep-flow-view .block-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #deep-flow-view .block-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease, background-color 0.4s ease;
+    }
+    #deep-flow-view .ratio-bar {
+      display: flex;
+      height: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 2px;
+    }
+    #deep-flow-view .ratio-buy {
+      background: #39FF14;
+      transition: width 0.4s ease;
+    }
+    #deep-flow-view .ratio-sell {
+      background: #FF3131;
+      transition: width 0.4s ease;
+    }
+    #deep-flow-view .ratio-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 7px;
+      font-weight: 500;
+    }
+    #deep-flow-view .ratio-buy-label {
+      color: #39FF14;
+    }
+    #deep-flow-view .ratio-sell-label {
+      color: #FF3131;
+    }
+    #deep-flow-view .hot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    #deep-flow-view .hot-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 8px;
+    }
+    #deep-flow-view .hot-rank {
+      color: #555;
+      width: 12px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    #deep-flow-view .hot-name {
+      color: #a0a0b0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #deep-flow-view .hot-gas {
+      color: #FF8C00;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .bn-vivid-block {
+      border: 1px solid rgba(240, 185, 11, 0.3);
+      background: linear-gradient(135deg, #090112 0%, #10081a 100%);
+    }
+    #deep-flow-view .bn-vivid-block .block-label {
+      color: #00F0FF;
+      opacity: 1;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 4px rgba(0, 240, 255, 0.4);
+    }
+    #deep-flow-view .bn-vivid-block .block-value {
+      color: #F0B90B;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(240, 185, 11, 0.6);
+      font-size: calc(16px * var(--fs));
+    }
+    #deep-flow-view #ledger-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: #000;
+    }
+    #deep-flow-view #ledger-header {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      background: #0a0014;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+      flex-shrink: 0;
+    }
+    #deep-flow-view #ledger-header > span {
+      font-size: 8px;
+      font-weight: 700;
+      color: #00F0FF;
+      letter-spacing: 1.2px;
+      opacity: 0.6;
+    }
+    #deep-flow-view .sort-header {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    #deep-flow-view .sort-header:hover {
+      opacity: 1 !important;
+    }
+    #deep-flow-view .sort-arrow {
+      font-size: 7px;
+      color: #00F0FF;
+      opacity: 0.9;
+    }
+    #deep-flow-view .col-value {
+      width: 100px;
+      text-align: right;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-asset {
+      width: 65px;
+      text-align: center;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-action {
+      width: 100px;
+      text-align: center;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-flow {
+      flex: 1;
+      padding-left: 8px;
+      transition: width 0.2s;
+    }
+    #deep-flow-view .col-time {
+      width: 60px;
+      text-align: right;
+    }
+    #deep-flow-view .binance-mode .col-value {
+      width: auto;
+      flex: 1;
+    }
+    #deep-flow-view .binance-mode .col-asset {
+      width: 85px;
+    }
+    #deep-flow-view .binance-mode .col-action {
+      width: 115px;
+    }
+    #deep-flow-view .binance-mode .col-flow {
+      width: 95px;
+      flex: none;
+      padding-left: 8px;
+    }
+    #deep-flow-view #macro-filters {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 22px;
+      padding: 0 8px;
+      background: #030008;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.04);
+      flex-shrink: 0;
+    }
+    #deep-flow-view .mf-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #444;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      padding: 2px 7px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .mf-btn:hover {
+      color: #777;
+      border-color: rgba(0, 240, 255, 0.2);
+    }
+    #deep-flow-view .mf-btn.active {
+      color: #00F0FF;
+      border-color: rgba(0, 240, 255, 0.4);
+      background: rgba(0, 240, 255, 0.06);
+    }
+    #deep-flow-view #filter-bar {
+      width: 100%;
+      height: 22px;
+      background: #030008;
+      border: none;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+      color: #c0c0cc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(10px * var(--fs));
+      padding: 0 8px;
+      outline: none;
+      flex-shrink: 0;
+      transition: border-bottom-color 0.2s;
+    }
+    #deep-flow-view #filter-bar:focus {
+      border-bottom-color: rgba(0, 240, 255, 0.3);
+    }
+    #deep-flow-view #filter-bar::placeholder {
+      color: #2a2a3a;
+      letter-spacing: 1.5px;
+      font-size: 9px;
+    }
+    #deep-flow-view #ledger-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      contain: strict;
+    }
+    #deep-flow-view .scroll-sentinel {
+      height: 1px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .no-results {
+      padding: 30px 10px;
+      color: #333;
+      text-align: center;
+      font-size: calc(10px * var(--fs));
+      letter-spacing: 1px;
+    }
+    #deep-flow-view #ledger-body .row {
+      display: flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      border-left: 2px solid transparent;
+      cursor: pointer;
+    }
+    #deep-flow-view #ledger-body .row:hover {
+      background: rgba(0, 240, 255, 0.05);
+    }
+    #deep-flow-view #ledger-body .row.active {
+      background: rgba(0, 240, 255, 0.08);
+      border-left-color: #00F0FF;
+    }
+    #deep-flow-view #ledger-body .row.live-new {
+      border-left-color: #39FF14;
+    }
+    #deep-flow-view #ledger-body .row.live-new.anomaly {
+      border-left-color: #FF007F;
+    }
+    #deep-flow-view .rv {
+      text-align: right;
+      width: 100px;
+      font-weight: 500;
+      color: #e0e0e8;
+      flex-shrink: 0;
+      transition: width 0.2s, flex 0.2s;
+    }
+    #deep-flow-view .rv.anomaly {
+      color: #FF007F;
+      text-shadow: 0 0 6px rgba(255, 0, 127, 0.3);
+    }
+    #deep-flow-view .binance-mode .rv {
+      width: auto;
+      flex: 1;
+    }
+    #deep-flow-view .token-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
+    }
+    #deep-flow-view .token-icon {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      color: #000;
+      flex-shrink: 0;
+    }
+    #deep-flow-view .token-ticker {
+      font-size: calc(9px * var(--fs));
+      font-weight: 500;
+      color: #d0d0d8;
+    }
+    #deep-flow-view .action-tag {
+      display: inline-block;
+      padding: 0 4px;
+      border-left: 2px solid;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 94px;
+      line-height: 1.6;
+    }
+    #deep-flow-view #ledger-body .rf {
+      flex: 1;
+      padding-left: 8px;
+      color: #5a5a6e;
+      font-size: calc(10px * var(--fs));
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: width 0.2s, flex 0.2s;
+    }
+    #deep-flow-view .binance-mode .rf {
+      width: 95px;
+      flex: none;
+    }
+    #deep-flow-view #ledger-body .rt {
+      text-align: right;
+      width: 60px;
+      color: #7a7a8e;
+      font-size: calc(10px * var(--fs));
+      flex-shrink: 0;
+    }
+    #deep-flow-view .submenu {
+      display: none;
+      margin-left: 14px;
+      padding: 6px 10px;
+      background: rgba(9, 1, 18, 0.9);
+      border-left: 2px solid rgba(0, 240, 255, 0.2);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    }
+    #deep-flow-view .submenu.open {
+      display: block;
+    }
+    #deep-flow-view .sub-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 2px 0;
+      font-size: calc(10px * var(--fs));
+    }
+    #deep-flow-view .sub-label {
+      color: #5a5a6e;
+      min-width: 72px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    #deep-flow-view .sub-val {
+      color: #c0c0cc;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+    #deep-flow-view .sub-val.deep-meta {
+      color: #d0d0dd;
+      font-size: calc(9.5px * var(--fs));
+    }
+    #deep-flow-view .hash-clickable {
+      color: #00F0FF;
+      cursor: pointer;
+      text-decoration: none;
+      user-select: none;
+    }
+    #deep-flow-view .hash-clickable:hover {
+      text-decoration: underline;
+    }
+    #deep-flow-view .sub-analysis {
+      margin-top: 5px;
+      padding: 5px 8px;
+      border-left: 2px solid rgba(255, 215, 0, 0.5);
+      background: rgba(255, 215, 0, 0.025);
+      border-radius: 0 2px 2px 0;
+    }
+    #deep-flow-view .sub-analysis-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: #FFD700;
+      letter-spacing: 0.8px;
+      margin-bottom: 3px;
+      opacity: 0.85;
+    }
+    #deep-flow-view .sub-analysis-text {
+      font-size: calc(9.5px * var(--fs));
+      line-height: 1.55;
+      color: #9a9aaa;
+      font-weight: 300;
+    }
+    #deep-flow-view .loading {
+      opacity: 0.3;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3 }
+      50% { opacity: 0.6 }
+    }
+    @media(max-width: 700px) {
+      #deep-flow-view #sidebar { display: none; }
+    }
+
+    /* ========== REPRODUCTOR FLOTANTE UNIFICADO EN LA RAZ ========== */
+    #musicPanel {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background: var(--float-bg);
+      color: var(--float-text);
+      border: 2px solid var(--color-highlight);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 10000;
+      box-shadow: var(--float-shadow);
+      min-width: 280px;
+    }
+    #musicPanel.hidden {
+      display: none !important;
+    }
+    .music-player-panel {
+      position: relative !important;
+      top: 0 !important;
+      right: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      min-width: auto !important;
+    }
+    .player-header {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 0.8em;
+      color: var(--color-highlight);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .progress-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7em;
+      color: #AAA;
+      margin-bottom: 6px;
+    }
+    .progress-bar-container {
+      margin-bottom: 12px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .volume-control i {
+      color: var(--color-highlight);
+      font-size: 0.85em;
+    }
+    .volume-slider {
+      flex: 1;
+      height: 4px;
+      accent-color: var(--color-highlight);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .music-dropzone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed var(--color-highlight);
+      border-radius: 8px;
+      padding: 12px 10px;
+      margin-bottom: 12px;
+      color: var(--color-text);
+      font-size: 0.8em;
+      cursor: pointer;
+      background: rgba(168, 85, 247, 0.06);
+      text-align: center;
+    }
+    .music-dropzone.hidden { display: none !important; }
+    .music-dropzone.dragover { background: rgba(168, 85, 247, 0.18); border-style: solid; }
+    .music-dropzone.reject { border-color: #ef4444; color: #ef4444; }
+    .music-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* ===== Floating Drawing Tools Panel ===== */
+    #quantis-drawing-tools-panel {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      background: var(--quantis-surface-bg, #111318);
+      border: 2px solid var(--quantis-accent, #A855F7);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(168,85,247,0.3);
+      padding: 12px;
+      min-width: 200px;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #quantis-drawing-tools-panel.open { display: block; }
+    #quantis-drawing-tools-panel .q-draw-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--quantis-accent, #A855F7);
+      margin-bottom: 10px;
+      cursor: move;
+      user-select: none;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(168,85,247,0.15);
+    }
+    #quantis-drawing-tools-panel .q-draw-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    #quantis-drawing-tools-panel .q-draw-row label {
+      font-size: 9px;
+      color: var(--quantis-muted, #71717a);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn {
+      background: transparent;
+      border: 1px solid rgba(168,85,247,0.3);
+      color: var(--quantis-muted, #71717a);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn:hover {
+      border-color: var(--quantis-accent, #A855F7);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-btn.active {
+      border-color: var(--quantis-accent, #A855F7);
+      background: rgba(168,85,247,0.18);
+      color: #fff;
+    }
+    #quantis-drawing-tools-panel .q-draw-size {
+      width: 100%;
+      accent-color: var(--quantis-accent, #A855F7);
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--quantis-faint, #52525b);
+      cursor: pointer;
+    }
+    #quantis-drawing-tools-panel .q-draw-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+    #quantis-drawing-tools-panel #q-draw-custom-color {
+      width: 22px; height: 22px; border: 2px solid var(--quantis-faint, #52525b); border-radius: 50%; cursor: pointer; padding: 0; background: none;
+    }
+    #quantis-drawing-tools-panel #q-draw-custom-color::-webkit-color-swatch-wrapper { padding: 2px; }
+    #quantis-drawing-tools-panel #q-draw-custom-color::-webkit-color-swatch { border-radius: 50%; border: none; }
+
+    /* ===== Neon Borders ===== */
+    #dominon-config-dropdown.open,
+    #quantis-config-dropdown.open {
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5), 0 0 15px color-mix(in srgb, var(--color-highlight) 25%, transparent), 0 0 30px color-mix(in srgb, var(--color-highlight) 10%, transparent);
+    }
+    #musicPanel {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px color-mix(in srgb, var(--color-highlight) 25%, transparent), 0 0 30px color-mix(in srgb, var(--color-highlight) 10%, transparent);
+    }
+
+    /* ===== Notepad Scrollbar ===== */
+    #notepad::-webkit-scrollbar {
+      width: 8px;
+    }
+    #notepad::-webkit-scrollbar-track {
+      background: #0D0D0D;
+    }
+    #notepad::-webkit-scrollbar-thumb {
+      background: var(--color-highlight);
+      border-radius: 4px;
+    }
+
+    /* ===== Gemini Key Toggle ===== */
+    #geminiKeyIcon {
+      cursor: pointer;
+      font-size: 0.85em;
+      background: none;
+      border: none;
+      color: var(--color-highlight);
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    #geminiKeyIcon:hover {
+      background: rgba(168,85,247,0.12);
+    }
+    #geminiKeyRow {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #geminiKeyRow.hidden {
+      display: none !important;
+    }
+
+    /* ===== Gemini Chat Bubbles ===== */
+    .gemini-message {
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.9em;
+      line-height: 1.5;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .gemini-message.gemini-user {
+      align-self: flex-end;
+      background: var(--color-highlight);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .gemini-message.gemini-assistant {
+      align-self: flex-start;
+      background: #000000;
+      color: #EAEAEA;
+      border: 1px solid #1a1a1a;
+      border-bottom-left-radius: 4px;
+    }
+    #main-dashboard-view.light-theme .gemini-message.gemini-assistant {
+      background: #0a0a0a;
+      color: #EAEAEA;
+      border-color: #222;
+    }
+    .gemini-thinking {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.85;
+    }
+    .gemini-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(168,85,247,0.25);
+      border-top-color: var(--color-highlight);
+      border-radius: 50%;
+      animation: geminiSpin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes geminiSpin { to { transform: rotate(360deg); } }
+
+    /* ===== Gemini Tab Bar ===== */
+    .gemini-tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .gemini-tab-bar .g-tab {
+      background: var(--color-input-bg, #1F1F1F);
+      color: var(--color-text, #EAEAEA);
+      border: 1px solid var(--color-border, #444);
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.75em;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .gemini-tab-bar .g-tab:hover {
+      background: #444;
+    }
+    .gemini-tab-bar .g-tab.active {
+      background: var(--color-highlight, #A855F7);
+      color: var(--color-dark-bg, #1A1A1A);
+      font-weight: bold;
+    }
+    .gemini-tab-bar .g-tab.add-tab {
+      background: #1F1F1F;
+      border-color: var(--color-highlight);
+      color: var(--color-highlight);
+    }
+
+    /* ===== Music Panel Drag Handle ===== */
+    #musicPanel .music-drag-handle {
+      cursor: move;
+      user-select: none;
+    }
+
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 1) ===== */
+    .orbital-main { position: relative; }
+    .orbital-stage {
+      position: relative;
+      min-height: calc(100vh - 170px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+    }
+    .orbital-clock {
+      text-align: center;
+      border: 1px solid var(--color-border);
+      border-radius: 48px;
+      padding: 24px 44px;
+      background: var(--color-main-bg);
+      max-width: 94%;
+      min-width: min(380px, 92%);
+    }
+    .orbital-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 1;
+      white-space: nowrap;
+      background: linear-gradient(180deg, #ffffff, #c7c9d1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    #main-dashboard-view.light-theme .orbital-time {
+      background: linear-gradient(180deg, #1f2937, #4b5563);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .orbital-date {
+      margin-top: 6px;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.85;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .rgb-line {
+      width: 80px;
+      height: 2px;
+      border-radius: 2px;
+      margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, var(--color-highlight), transparent);
+      background-size: 200% 100%;
+    }
+    html.anim-on .rgb-line { animation: rgbFlow 3s linear infinite; }
+    @keyframes rgbFlow {
+      from { background-position: 0% 0; }
+      to { background-position: 200% 0; }
+    }
+    .orb-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 1px solid var(--color-highlight);
+      background: var(--color-main-bg);
+      color: var(--color-text);
+      font-size: 22px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      transition: transform var(--anim-dur-ui) ease, border-color var(--anim-dur-ui) ease, background var(--anim-dur-ui) ease;
+      z-index: 2;
+    }
+    .orbital-stage .orb-icon {
+      position: absolute;
+    }
+    .orb-icon svg { width: 22px; height: 22px; display: block; }
+    html.anim-on .orbital-stage .orb-icon:hover { transform: translateY(-2px); }
+    html.anim-on .orbital-bar .orb-icon:hover { transform: translateY(-2px); }
+    .orb-icon.orb-active { background: var(--color-highlight); color: #ffffff; }
+    .orbital-layer { display: none; }
+    .orbital-layer.layer-closed { display: none; }
+    .orbital-layer.layer-open {
+      display: block;
+      position: absolute;
+      inset: 0;
+      overflow: auto;
+      z-index: 5;
+    }
+    html.anim-on .orbital-layer.layer-open { animation: floatIn var(--anim-dur-ui) ease both; }
+    .orbital-stage.mode-layer .orbital-clock,
+    .orbital-stage.mode-layer .orb-icon { display: none; }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 2: fila + pila + vuelo) ===== */
+    .orbital-bar { display: none; }
+    .orbital-main.has-stack .orbital-stage { display: none; }
+    .orbital-main.has-stack .orbital-bar {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      order: 0;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 6px;
+      background: var(--color-main-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    html.anim-on .orbital-main.has-stack .orbital-bar { animation: floatIn var(--anim-dur-ui) ease both; }
+    .orbital-main.has-stack .orbital-layer.layer-open {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      flex-shrink: 0;
+      overflow: visible;
+      z-index: auto;
+    }
+    .orbital-clock.compact {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      flex-shrink: 0;
+      padding: 6px 18px;
+      border-radius: 20px;
+      max-width: none;
+      min-width: min(260px, 80vw);
+      transition: padding var(--anim-dur-ui) ease, border-radius var(--anim-dur-ui) ease, max-width var(--anim-dur-ui) ease;
+    }
+    .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
+    .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); transition: font-size var(--anim-dur-ui) ease; }
+    .orbital-clock.compact .rgb-line { display: none; }
+    .orbital-clock.compact #orbClockDate { display: block !important; font-size: 0.62rem; margin-top: 3px; letter-spacing: 1px; transition: font-size var(--anim-dur-ui) ease, margin-top var(--anim-dur-ui) ease, letter-spacing var(--anim-dur-ui) ease; opacity: 1; visibility: visible; }
+.orbital-clock.compact .orbital-date { display: block !important; }
+    .orbital-layer.layer-open .orb-icon-in-panel {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      transform: none;
+      z-index: 6;
+    }
+    .orbital-layer.layer-open .orb-icon-in-panel svg { width: 16px; height: 16px; }
+    .orbital-main.has-stack .orbital-layer[data-orbital="calculator"].layer-open > .calculator-panel,
+    .orbital-main.has-stack .orbital-layer[data-orbital="pomodoro"].layer-open > .pomodoro-panel {
+      max-width: 340px;
+      margin: 0 auto;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+    }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 3: luz ambiental + flotación) ===== */
+    .orbital-clock { position: relative; z-index: 0; }
+    .orbital-clock::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 54px;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(115deg, var(--color-highlight), transparent 45%, var(--color-highlight) 90%);
+      filter: blur(16px);
+      opacity: 0.32;
+    }
+    html.anim-on .orbital-clock::before { animation: orbGlowPulse 6s ease-in-out infinite; }
+    @keyframes orbGlowPulse {
+      0%, 100% { opacity: 0.24; }
+      50% { opacity: 0.45; }
+    }
+    #main-dashboard-view.light-theme .orbital-clock::before { opacity: 0.18; }
+    .orbital-clock.compact::before { display: none; }
+    .orb-icon-inner { display: inline-flex; }
+    .orb-icon-inner svg { display: block; }
+    html.anim-on .orbital-stage .orb-icon .orb-icon-inner { animation: orbFloat 6s ease-in-out infinite; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    /* ===== DOMINON ORBITAL DASHBOARD (FASE 4: pinchos del círculo) ===== */
+    .orbital-stage .orb-icon::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg,
+        var(--color-highlight) 0deg 3deg,
+        transparent 3deg 15deg);
+      -webkit-mask: radial-gradient(circle, transparent 0 34px, #000 35px 38.5px, transparent 39.5px);
+      mask: radial-gradient(circle, transparent 0 34px, #000 35px 38.5px, transparent 39.5px);
+      opacity: 0.32;
+      pointer-events: none;
+      z-index: -1;
+    }
+    html.anim-on .orbital-stage .orb-icon::before { animation: orbSpin 30s linear infinite; }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    .orbital-stage .orb-icon:hover::before { opacity: 0.55; }
+    #main-dashboard-view.light-theme .orbital-stage .orb-icon::before { opacity: 0.22; }
+
+    /* ===== QUANTIS VIEW - SCOPED STYLES (bloque 2, preserva orden de cascada) ===== */
+      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
+      #quantis-view {
+        --quantis-bg: #0b0c10;
+        --quantis-header-bg: #111318;
+        --quantis-sidebar-bg: #0e0f14;
+        --quantis-surface-bg: #111318;
+        --quantis-text: #e4e4e7;
+        --quantis-muted: #71717a;
+        --quantis-faint: #52525b;
+        --quantis-border: rgba(168,85,247,0.2);
+        --quantis-grid-dot: rgba(168,85,247,0.07);
+        --quantis-shadow: rgba(0,0,0,0.5);
+        --quantis-accent: #A855F7;
+        --quantis-boundary: rgba(255, 255, 255, 0.25);
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--quantis-bg);
+        color: var(--quantis-text);
+        font-family: 'JetBrains Mono', monospace;
+        overflow: hidden;
+      }
+      #quantis-view.light-theme {
+        --quantis-bg: #f4f4f5;
+        --quantis-header-bg: #ffffff;
+        --quantis-sidebar-bg: #fafafa;
+        --quantis-surface-bg: #ffffff;
+        --quantis-text: #18181b;
+        --quantis-muted: #52525b;
+        --quantis-faint: #71717a;
+        --quantis-border: rgba(168,85,247,0.22);
+        --quantis-grid-dot: rgba(168,85,247,0.14);
+        --quantis-shadow: rgba(15,23,42,0.12);
+        --quantis-boundary: rgba(0, 0, 0, 0.3);
+      }
+      #quantis-view.hidden-view { display: none !important; }
+
+      #quantis-header {
+        height: 48px;
+        background: var(--quantis-header-bg);
+        border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        flex-shrink: 0;
+        z-index: 30;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        position: relative;
+      }
+      #quantis-nav-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #quantis-brand {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 3px;
+        color: var(--quantis-accent);
+        text-shadow: 0 0 8px rgba(168,85,247,0.5);
+        margin-right: 14px;
+        user-select: none;
+      }
+      .q-nav-btn {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.3);
+        color: var(--quantis-muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        padding: 4px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .q-nav-btn:hover {
+        border-color: var(--quantis-accent);
+        color: var(--quantis-accent);
+        background: rgba(168,85,247,0.08);
+        text-shadow: 0 0 4px rgba(168,85,247,0.4);
+      }
+      .q-nav-btn.active-view {
+        background: rgba(168,85,247,0.15);
+        border-color: var(--quantis-accent);
+        color: var(--quantis-accent);
+      }
+      #quantis-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #quantis-clock {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        color: var(--quantis-faint);
+        user-select: none;
+      }
+      #toggleMusicPanelQuantis {
+        background: transparent;
+        border: 1px solid rgba(168,85,247,0.35);
+        color: var(--quantis-accent);
+        font-size: 13px;
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      #toggleMusicPanelQuantis:hover {
+        background: rgba(168,85,247,0.15);
+        box-shadow: 0 0 6px rgba(168,85,247,0.3);
+      }
+      #quantis-tools {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      #quantis-tools .q-tool-btn,
+      #quantis-tools .icon-square-btn {
+        height: 30px;
+        min-width: 30px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+      }
+      #q-brush-size {
+        width: 62px;
+        accent-color: var(--quantis-accent);
+      }
+      .q-color-toggle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid var(--quantis-faint);
+        cursor: pointer;
+      }
+      .q-color-toggle.active { border-color: var(--quantis-accent); box-shadow: 0 0 0 2px rgba(168,85,247,0.18); }
+      .q-color-toggle.black { background:#000; }
+      .q-color-toggle.white { background:#fff; }
+      #quantis-tools .q-tool-btn.active {
+        border-color: var(--quantis-accent);
+        color: #fff;
+        background: rgba(168,85,247,0.18);
+      }
+
+      /* ===== QUANTIS BODY LAYOUT ===== */
+      #quantis-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* Sidebar */
+      #quantis-sidebar {
+        width: 180px;
+        min-width: 180px;
+        background: var(--quantis-sidebar-bg);
+        border-right: 1px solid rgba(168,85,247,0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      #quantis-sidebar-header {
+        padding: 12px 14px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(168,85,247,0.08);
+      }
+      #quantis-sidebar-header span {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--quantis-faint);
+        text-transform: uppercase;
+      }
+      #q-add-project-btn {
+        background: none;
+        border: none;
+        color: var(--quantis-faint);
+        cursor: pointer;
+        font-size: 12px;
+        padding: 2px 4px;
+        border-radius: 3px;
+        transition: color 0.15s;
+      }
+      #q-add-project-btn:hover { color: var(--quantis-accent); }
+      #q-projects-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 10px;
+      }
+      #q-projects-list::-webkit-scrollbar { width: 4px; }
+      #q-projects-list::-webkit-scrollbar-track { background: transparent; }
+      #q-projects-list::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.25); border-radius: 2px; }
+      .q-proj-item { margin-bottom: 12px; }
+      .q-proj-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--quantis-muted);
+        text-transform: uppercase;
+        padding: 2px 4px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+      .q-proj-label:hover { color: var(--quantis-text); }
+      .q-proj-label i { color: #d97706; margin-right: 5px; }
+      .q-page-list { padding-left: 10px; border-left: 1px solid rgba(168,85,247,0.12); }
+      .q-page-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 10px;
+        color: var(--quantis-faint);
+        padding: 4px 6px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background 0.12s;
+      }
+      .q-page-item:hover { background: rgba(168,85,247,0.08); color: var(--quantis-muted); }
+      .q-page-item.active { background: rgba(168,85,247,0.14); color: var(--quantis-accent); border-left: 2px solid var(--quantis-accent); }
+      .q-page-item i { color: var(--quantis-faint); margin-right: 5px; font-size: 9px; }
+      .q-page-del {
+        background: none; border: none; color: var(--quantis-faint); cursor: pointer; font-size: 9px; padding: 0 2px;
+        transition: color 0.12s;
+      }
+      .q-page-del:hover { color: #ef4444; }
+
+      /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
+#quantis-viewport {
+         flex: 1;
+         position: relative;
+         overflow: hidden;
+         background: var(--quantis-bg);
+         background-image: linear-gradient(var(--quantis-grid-dot) 1px, transparent 1px),
+                           linear-gradient(90deg, var(--quantis-grid-dot) 1px, transparent 1px);
+         background-size: 30px 30px;
+         cursor: grab;
+       }
+#quantis-canvas-container {
+          position: absolute;
+          width: 8000px;
+          height: 8000px;
+          top: 0;
+          left: 0;
+          transform-origin: 0 0;
+          background: transparent;
+          border: 3px solid var(--quantis-boundary);
+        }
+      #quantis-viewport.grabbing { cursor: grabbing; }
+      #quantis-drawing-svg {
+        position: absolute;
+        inset: 0;
+        width: 8000px;
+        height: 8000px;
+        pointer-events: none;
+        z-index: 1;
+      }
+      /* Canvas blocks */
+      .q-canvas-el {
+        position: absolute;
+        background: var(--quantis-surface-bg);
+        border: 1px solid var(--quantis-border);
+        border-radius: 4px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        min-width: 160px;
+        user-select: none;
+        will-change: transform;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+        z-index: 5;
+      }
+      .q-canvas-el:hover { border-color: rgba(168,85,247,0.5); }
+      .q-block-desc {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--quantis-faint);
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid transparent;
+        width: 100%;
+        margin-bottom: 6px;
+        outline: none;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .q-block-desc:focus { border-bottom-color: rgba(168,85,247,0.3); color: var(--quantis-muted); }
+      .q-block-desc::placeholder { color: var(--quantis-faint); }
+      .q-block-text {
+        font-size: 11px;
+        color: var(--quantis-muted);
+        line-height: 1.6;
+        outline: none;
+        min-height: 24px;
+        word-break: break-word;
+        white-space: pre-wrap;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .q-block-text a { color: #818cf8; text-decoration: underline; }
+      .q-block-del {
+        position: absolute;
+        top: -8px; right: -8px;
+        background: #7f1d1d;
+        color: white;
+        border: none;
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        font-size: 9px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .q-canvas-el:hover .q-block-del { display: flex; }
+      /* Context menu */
+      #q-context-menu {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        background: var(--quantis-surface-bg);
+        border: 1px solid rgba(168,85,247,0.3);
+        border-radius: 4px;
+        padding: 4px 0;
+        min-width: 160px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      }
+      #q-context-menu button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        background: none;
+        border: none;
+        color: var(--quantis-muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        padding: 7px 14px;
+        cursor: pointer;
+        text-align: left;
+      }
+      #q-context-menu button:hover { background: rgba(168,85,247,0.1); color: var(--quantis-text); }
+      #q-context-menu button i { color: var(--quantis-faint); font-size: 10px; }
+      #q-file-input { display: none; }
+
+      /* Zoom hint */
+      #q-zoom-hint {
+        position: absolute;
+        bottom: 12px;
+        right: 14px;
+        font-size: 9px;
+        letter-spacing: 1px;
+        color: var(--quantis-faint);
+        pointer-events: none;
+        user-select: none;
+      }
+      /* ===== Selection mode styles ===== */
+      #q-selection-marquee {
+        position: absolute;
+        background: rgba(168, 85, 247, 0.08);
+        pointer-events: none;
+        z-index: 10;
+        display: none;
+      }
+      #q-selection-box {
+        position: absolute;
+        pointer-events: none;
+        z-index: 10;
+        display: none;
+        background: rgba(168, 85, 247, 0.06);
+      }
+      #q-selection-box .q-sel-rect {
+        position: absolute;
+        pointer-events: none;
+        background: rgba(168, 85, 247, 0.04);
+      }
