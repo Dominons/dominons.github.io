@@ -39,6 +39,7 @@
     <div class="container hidden" id="mainApp">
       <div class="top-bar">
         <div class="top-left">
+          <div class="box" id="fecha-hora">Cargando...</div>
           <button id="toggle-view-to-flow" class="glow-button" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW">
             <i class="fa-solid fa-chart-line"></i> DEEP FLOW
           </button>
@@ -74,12 +75,7 @@
         </div>
       </div>
 
-      <main class="main orbital-main">
-        <div class="orbital-stage mode-circle" id="orbitalStage">
-          <div class="orbital-clock" id="orbitalClock"></div>
-        <!-- los 5 iconos los crea el JS dentro de orbital-stage -->
-        </div>
-        <div class="orbital-layer layer-closed" data-orbital="trading">
+      <main class="main">
         <div class="chart-panel">
           <div class="chart-header">
             <h2>TradingView</h2>
@@ -88,9 +84,7 @@
             src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=1&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
             frameborder="0" allowfullscreen></iframe>
         </div>
-        </div>
 
-        <div class="orbital-layer layer-closed" data-orbital="notepad">
         <div class="notepad-panel">
           <div class="notepad-header-row">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;flex-wrap:wrap;">
@@ -110,9 +104,8 @@
             <div class="cloud-loader"></div>
           </div>
         </div>
-        </div>
 
-        <div class="orbital-layer layer-closed" data-orbital="calculator">
+        <div class="bottom-container">
           <div class="calculator-panel">
             <h2>Calculadora</h2>
             <div id="display" class="calc-display">0</div>
@@ -138,9 +131,7 @@
               <button class="calc-button equals" onclick="calculate()">=</button>
             </div>
           </div>
-        </div>
 
-        <div class="orbital-layer layer-closed" data-orbital="pomodoro">
           <div class="pomodoro-panel">
             <h2>Pomodoro</h2>
             <div class="pomodoro-display" id="pomo-display">25:00</div>
@@ -153,7 +144,6 @@
           </div>
         </div>
 
-        <div class="orbital-layer layer-closed" data-orbital="gemini">
         <section class="gemini-panel" id="geminiAssistantPanel">
           <div class="gemini-layout">
             <aside class="gemini-sidebar" id="geminiSidebar">
@@ -191,7 +181,6 @@
             </div>
           </div>
         </section>
-        </div>
       </main>
     </div>
   </div>
@@ -519,12 +508,9 @@
   <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
 <script src="js/07-quantis.js"></script>
 
-  <script src="js/08-orbital.js"></script>
-
   <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
-  <script src="js/09-nav-particles.js"></script>
-  <script src="js/10-perf-measure.js"></script>
-  <script src="js/11-perf-panel.js"></script>
+  <script src="js/08-nav-particles.js"></script>
+  <script src="js/09-perf-measure.js"></script>
+  <script src="js/10-perf-panel.js"></script>
 </body>
 </html>
-
