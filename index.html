@@ -2334,14 +2334,14 @@
       text-align: center;
       border: 1px solid var(--color-border);
       border-radius: 48px;
-      padding: 36px 56px;
+      padding: 24px 44px;
       background: var(--color-main-bg);
       max-width: 94%;
     }
     .orbital-time {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: clamp(4rem, 12vw, 8rem);
+      font-size: clamp(3rem, 7vw, 5rem);
       line-height: 1;
       white-space: nowrap;
       background: linear-gradient(180deg, #ffffff, #c7c9d1);
@@ -2356,9 +2356,9 @@
       color: transparent;
     }
     .orbital-date {
-      margin-top: 10px;
-      font-size: 0.8rem;
-      letter-spacing: 3px;
+      margin-top: 6px;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--color-text);
       opacity: 0.85;
@@ -2444,8 +2444,13 @@
     }
     .orbital-main.has-stack .orbital-clock.compact { cursor: pointer; }
     .orbital-clock.compact .orbital-time { font-size: clamp(1.4rem, 4vw, 2rem); }
-    .orbital-clock.compact #orbClockDate,
     .orbital-clock.compact .rgb-line { display: none; }
+    .orbital-clock.compact .orbital-date {
+      margin-top: 2px;
+      font-size: 0.55rem;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
     .orbital-layer.layer-open .orb-icon-in-panel {
       position: absolute;
       top: 8px;
@@ -2499,8 +2504,8 @@
       background: repeating-conic-gradient(from 0deg,
         var(--color-highlight) 0deg 3deg,
         transparent 3deg 15deg);
-      -webkit-mask: radial-gradient(circle, transparent 0 27px, #000 28px 31.5px, transparent 32.5px);
-      mask: radial-gradient(circle, transparent 0 27px, #000 28px 31.5px, transparent 32.5px);
+      -webkit-mask: radial-gradient(circle, transparent 0 34px, #000 35px 38.5px, transparent 39.5px);
+      mask: radial-gradient(circle, transparent 0 34px, #000 35px 38.5px, transparent 39.5px);
       opacity: 0.32;
       pointer-events: none;
       z-index: -1;
@@ -7627,14 +7632,17 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         var bar = orbEnsureBar();
         if (!bar) return;
         while (bar.firstChild) bar.removeChild(bar.firstChild);
-        var stacked = orbOpenStack.length > 0;
+        var visible = [];
         for (var i = 0; i < ORB_LAYERS.length; i++) {
-          if (i === 2 && stacked) {
-            var clock = document.getElementById('orbitalClock');
-            if (clock) bar.appendChild(clock);
-          }
           var k = ORB_LAYERS[i].key;
-          if (!orbFlying[k] && orbButtons[k]) bar.appendChild(orbButtons[k]);
+          if (!orbFlying[k] && orbButtons[k]) visible.push(orbButtons[k]);
+        }
+        var stacked = orbOpenStack.length > 0;
+        var clock = stacked ? document.getElementById('orbitalClock') : null;
+        var insertAt = Math.ceil(visible.length / 2);
+        for (var j = 0; j <= visible.length; j++) {
+          if (j === insertAt && clock) bar.appendChild(clock);
+          if (j < visible.length) bar.appendChild(visible[j]);
         }
       }
       function orbSetStackMode(on) {
@@ -7668,11 +7676,13 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
           orbFlying[key] = true;
           if (!orbIsAnimOn()) {
             layer.appendChild(btn);
+            btn.style.left = ''; btn.style.top = '';
             btn.classList.add('orb-icon-in-panel');
             return;
           }
           var r1 = orbRect(btn);
           layer.appendChild(btn);
+          btn.style.left = ''; btn.style.top = '';
           btn.classList.add('orb-icon-in-panel');
           orbFlipPlay(btn, r1, orbRect(btn));
         } else {
@@ -7705,6 +7715,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
         orbRenumberOrders();
         if (first) {
           orbSetStackMode(true);
+          orbFlying[key] = true;
           if (!silent) orbRenderBar();
         }
         if (silent) {
@@ -7714,6 +7725,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
             orbFlying[key] = true;
             if (layer0) layer0.appendChild(btn0);
             btn0.classList.add('orb-icon-in-panel');
+            btn0.style.left = ''; btn0.style.top = '';
             try { btn0.style.transform = ''; btn0.style.transition = ''; } catch (e) {}
           }
         } else {
@@ -7782,6 +7794,7 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
           st.classList.add('mode-circle');
         }
         orbLayoutIcons();
+        orbTickClock();
         orbSaveState();
       }
 
