@@ -8,7 +8,7 @@
         { key: 'notepad', title: 'Bloc de Notas', icon: '<i class="fa-solid fa-file-pen"></i>' },
         { key: 'calculator', title: 'Calculadora', icon: '<i class="fa-solid fa-calculator"></i>' },
         { key: 'pomodoro', title: 'Pomodoro', icon: '<i class="fa-solid fa-stopwatch"></i>' },
-        { key: 'gemini', title: 'Gemini', icon: '<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini"><defs><linearGradient id="geminiGrad2" x1="0[...]
+        { key: 'gemini', title: 'Gemini', icon: '<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini"><defs><linearGradient id="geminiGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A8CFF"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><path d="M12 0L13.9 8.1L22 12L13.9 15.9L12 24L10.1 15.9L2 12L10.1 8.1Z" fill="url(#geminiGrad2)"/></svg>' }
       ];
       var ES_DAYS = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
       var ES_MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
@@ -84,7 +84,6 @@
         var t = document.getElementById('orbClockTime');
         var d = document.getElementById('orbClockDate');
         var clockEl = document.getElementById('orbitalClock');
-        // Si falta cualquiera de las partes (tiempo o fecha), aseguramos que existan
         if (!t || !d) {
           if (clockEl) {
             clockEl.innerHTML = '<div class="orbital-time" id="orbClockTime">00:00:00</div>' +
@@ -118,23 +117,15 @@
         var w = st.clientWidth, h = st.clientHeight;
         if (!w || !h) return;
         var btns = st.querySelectorAll('.orb-icon');
-        // Un solo paso: si nada cambió (tamaño del stage, cantidad), no se reescribe nada.
-        // El radio sale SOLO del stage (nunca del texto del reloj) para no recalcular
-        // cuando cambia la fecha o el idioma.
         var sig = w + 'x' + h + 'x' + btns.length;
         if (sig === orbLayoutSig) return;
         orbLayoutSig = sig;
-        // Elipse contenida en el stage, con aire extra respecto al reloj
         var rx = Math.min(w / 2 - 44, Math.max(260, w * 0.32));
         var ry = Math.min(h / 2 - 44, Math.max(200, h * 0.36));
         if (rx < 120) rx = 120;
         if (ry < 100) ry = 100;
-        // Los botones del círculo miden 64px fijos: se resta la mitad para centrar
-        // sin usar translate(-50%,-50%), que conflictuaba con el FLIP y el hover
         var cx = w / 2, cy = h / 2, half = 32;
         for (var i = 0; i < btns.length; i++) {
-          // Nunca escribir left/top en iconos fuera del stage (p.ej. volados a un
-          // panel): su posición la controla su clase; además se limpia al volar
           if (btns[i].parentNode !== st) continue;
           var a = (-90 + i * 72) * Math.PI / 180;
           btns[i].style.left = (cx + rx * Math.cos(a) - half) + 'px';
@@ -185,6 +176,11 @@
         if (clock && stacked && !clock.classList.contains('compact')) {
           try { clock.classList.add('compact'); } catch (e) {}
         }
+        if (!visible.length && clock) {
+          bar.appendChild(clock);
+          if (clock && !clock.classList.contains('compact')) clock.classList.add('compact');
+          return;
+        }
         var insertAt = Math.ceil(visible.length / 2);
         for (var j = 0; j <= visible.length; j++) {
           if (j === insertAt && clock) bar.appendChild(clock);
@@ -202,8 +198,17 @@
       function orbSetStackMode(on) {
         var main = orbMain();
         if (main) main.classList.toggle('has-stack', !!on);
+        var st = orbStage();
+        if (st) st.style.display = on ? 'none' : 'block';
+        var bar = document.getElementById('orbitalBar');
+        if (bar) bar.style.display = on ? 'flex' : 'none';
         var clock = document.getElementById('orbitalClock');
         if (clock) clock.classList.toggle('compact', !!on);
+        if (!on && !st) return;
+        if (!on && st && !st.querySelector('.orb-icon')) {
+          orbBuildIcons();
+          orbLayoutIcons();
+        }
       }
       function orbRect(el) { try { return el.getBoundingClientRect(); } catch (e) { return null; } }
       function orbFlipPlay(btn, r1, r2) {
@@ -227,10 +232,7 @@
         if (toPanel) {
           var layer = orbLayerEl(key);
           if (!layer) return;
-          // Instead of moving the icon into the panel (where it would scroll with content),
-          // keep the icon visible in the top orbital bar so it stays fixed when scrolling.
           var bar = orbEnsureBar();
-          // Mark as not flying so orbRenderBar includes it in the bar
           orbFlying[key] = false;
           if (!orbIsAnimOn()) {
             if (bar && btn.parentNode !== bar) bar.appendChild(btn);
@@ -276,7 +278,6 @@
         orbRenumberOrders();
         if (first) {
           orbSetStackMode(true);
-          // keep orbFlying false so icons remain in the top bar and don't get appended into the panels
           orbFlying[key] = false;
           if (!silent) orbRenderBar();
         }
@@ -415,6 +416,7 @@
             '<div class="rgb-line"></div>';
         }
         orbBuildIcons();
+        orbSetStackMode(false);
         var clock0 = document.getElementById('orbitalClock');
         if (clock0 && !clock0._orbBound) {
           clock0._orbBound = true;
