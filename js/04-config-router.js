@@ -1,4 +1,4 @@
-/* 04-config-router.js - configuracion, i18n, planes (extraido verbatim de index.html) */
+/* 04-config-router.js - configuracion, i18n, planes (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- CONFIGURATION & VIEW ROUTER ---
     // =========================================================
@@ -22,13 +22,7 @@
           trialContactNotice: 'Contactame y probá cualquier plan por 24hs',
           trialContactDiscord: 'Discord: @DANIFU777',
           trialContactCopyHint: 'Click para copiar',
-          trialContactCopied: '¡Copiado!',
-          orbTrading: 'TradingView',
-          orbNotepad: 'Bloc de Notas',
-          orbCalculator: 'Calculadora',
-          orbPomodoro: 'Pomodoro',
-          orbGemini: 'Gemini',
-          orbCloseAll: 'Cerrar todo y volver al reloj'
+          trialContactCopied: '¡Copiado!'
         },
         en: {
           plans: 'PLANS',
@@ -46,13 +40,7 @@
           trialContactNotice: 'Contact me and try any plan for 24 hours',
           trialContactDiscord: 'Discord: @DANIFU777',
           trialContactCopyHint: 'Click to copy',
-          trialContactCopied: 'Copied!',
-          orbTrading: 'TradingView',
-          orbNotepad: 'Notepad',
-          orbCalculator: 'Calculator',
-          orbPomodoro: 'Pomodoro',
-          orbGemini: 'Gemini',
-          orbCloseAll: 'Close all and return to the clock'
+          trialContactCopied: 'Copied!'
         }
       };
 
@@ -97,12 +85,6 @@
         }
         var trialDiscord = document.getElementById('trialContactDiscord');
         if (trialDiscord) trialDiscord.title = L.trialContactCopyHint;
-        window._orbTitles = {
-          trading: L.orbTrading, notepad: L.orbNotepad,
-          calculator: L.orbCalculator, pomodoro: L.orbPomodoro,
-          gemini: L.orbGemini, closeAll: L.orbCloseAll
-        };
-        if (window.orbApplyTitles) window.orbApplyTitles(window._orbTitles);
       };
 
       window.setGlobalLanguage = function(lang, source) {

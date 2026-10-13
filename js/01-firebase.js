@@ -1,4 +1,4 @@
-/* 01-firebase.js - modulo Firebase (extraido verbatim de index.html) */
+/* 01-firebase.js - modulo Firebase (extraido verbatim de originalindex.html) */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
@@ -219,7 +219,6 @@
         document.getElementById('userAvatar').src = user.photoURL;
 
         window.applyMembershipPlan(await detectUserPlan(user));
-        window.orbRestoreState && window.orbRestoreState();
         window.loadNote(window.activeTab);
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la

@@ -1,4 +1,4 @@
-/* 06-deepflow.js - terminal Deep Flow (extraido verbatim de index.html) */
+/* 06-deepflow.js - terminal Deep Flow (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- DEEP FLOW CRYPTO TERMINAL ---
     // =========================================================

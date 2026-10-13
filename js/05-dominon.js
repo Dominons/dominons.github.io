@@ -1,4 +1,4 @@
-/* 05-dominon.js - calculadora, temas, pomodoro (extraido verbatim de index.html) */
+/* 05-dominon.js - calculadora, temas, pomodoro (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- DOMINON BUSINESS LOGIC (CALCULATOR, THEMES, POMODORO) ---
     // =========================================================

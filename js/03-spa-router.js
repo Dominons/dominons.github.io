@@ -1,4 +1,4 @@
-/* 03-spa-router.js - router SPA 3 vistas (extraido verbatim de index.html) */
+/* 03-spa-router.js - router SPA 3 vistas (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- SPA ROUTER (3-VIEW SWITCHER) ---
     // =========================================================

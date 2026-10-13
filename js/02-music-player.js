@@ -1,4 +1,4 @@
-/* 02-music-player.js - reproductor de audio local (extraido verbatim de index.html) */
+/* 02-music-player.js - reproductor de audio local (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- LOCAL AUDIO PLAYER (solo memoria, sin guardado) ---
     // =========================================================

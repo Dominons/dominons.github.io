@@ -1,4 +1,4 @@
-/* 07-quantis.js - motor Quantis canvas (extraido verbatim de index.html) */
+/* 07-quantis.js - motor Quantis canvas (extraido verbatim de originalindex.html) */
   (function () {
     // =========================================================
     // --- QUANTIS INFINITE CANVAS ENGINE (BOUNDED, GRID, ZOOM-TO-MOUSE) ---
