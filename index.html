@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es" class="anim-on">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Dominon </title>
+  <link rel="icon" type="image/png" href="Favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- PANTALLA DE AUTENTICACIÓN (FIREBASE) -->
+  <div id="loginScreen">
+    <div class="stars-container">
+      <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
+    </div>
+    <div class="login-container">
+      <h1 style="color: #A855F7; font-size: 3em; margin: 0;">DANIFU777</h1>
+      <p style="color: #EAEAEA; margin-top: 10px;">Dominon</p>
+      <button class="google-button" id="googleSignInBtn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Iniciar sesión con Google
+      </button>
+    </div>
+  </div>
+
+  <!-- VISTA SPA 1: DOMINON DASHBOARD -->
+  <div id="main-dashboard-view" class="app-view-transition">
+    <div class="container hidden" id="mainApp">
+      <div class="top-bar">
+        <div class="top-left">
+          <button id="toggle-view-to-flow" class="glow-button" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW">
+            <i class="fa-solid fa-chart-line"></i> DEEP FLOW
+          </button>
+          <button id="toggle-view-to-quantis" class="glow-button" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas">
+            <i class="fa-solid fa-infinity"></i> QUANTIS
+          </button>
+          <button id="openPlansBtn" class="glow-button" title="Planes">
+            <i class="fa-solid fa-gem"></i> PLANES
+          </button>
+          <button id="trialContactBtn" class="glow-button trial-contact-btn" type="button" title="Contactame y probá cualquier plan por 24hs">
+            <i class="fa-brands fa-discord"></i>
+          </button>
+        </div>
+        <div class="top-right">
+          <div class="user-info" id="userInfo">
+            <img class="user-avatar" id="userAvatar" src="" alt="Avatar">
+            <span class="user-name" id="userName"></span>
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+          <button class="icon-square-btn" id="dominonConfigBtn" title="Configuración">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <div class="music-container">
+            <div class="song-display">
+              <span id="songTitle" class="song-marquee">Arrastrá tus MP3</span>
+            </div>
+            <button class="music-btn" id="toggleMusicPanel" title="Reproductor">
+              <i class="fa-solid fa-music"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <main class="main orbital-main">
+        <div class="orbital-stage mode-circle" id="orbitalStage">
+          <div class="orbital-clock" id="orbitalClock"></div>
+        <!-- los 5 iconos los crea el JS dentro de orbital-stage -->
+        </div>
+        <div class="orbital-layer layer-closed" data-orbital="trading">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <h2>TradingView</h2>
+          </div>
+          <iframe class="chart-iframe" id="tradingViewChart"
+            src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AUSDTARS&interval=D&theme=dark&style=1&locale=es&toolbar_bg=f1f3f6&allow_symbol_change=1&enable_publishing=0&hide_side_toolbar=0&save_image=0&studies=[]&show_popup_button=0&calendar=0&hide_volume=1&amp;no-cache"
+            frameborder="0" allowfullscreen></iframe>
+        </div>
+        </div>
+
+        <div class="orbital-layer layer-closed" data-orbital="notepad">
+        <div class="notepad-panel">
+          <div class="notepad-header-row">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;flex-wrap:wrap;">
+              <h2 id="notepad-title">Bloc de Notas - Nota 1</h2>
+              <div class="notepad-actions" id="notepadActions">
+                <button class="notepad-file-btn" id="exportNoteBtn" type="button"><i class="fa-solid fa-file-export"></i> Export</button>
+                <button class="notepad-file-btn" id="importNoteBtn" type="button"><i class="fa-solid fa-file-import"></i> Import</button>
+                <input type="file" id="importNoteInput" accept=".txt,text/plain" style="display:none;">
+              </div>
+            </div>
+            <div class="notepad-tabs" id="notepad-tabs">
+              <!-- Pestañas dinámicas -->
+            </div>
+          </div>
+          <textarea id="notepad" placeholder="Escribe tus notas aquí..."></textarea>
+          <div id="notepadSaveLoader" class="cloud-loader-wrap" title="Guardando en la nube...">
+            <div class="cloud-loader"></div>
+          </div>
+        </div>
+        </div>
+
+        <div class="orbital-layer layer-closed" data-orbital="calculator">
+          <div class="calculator-panel">
+            <h2>Calculadora</h2>
+            <div id="display" class="calc-display">0</div>
+            <div class="calculator-grid">
+              <button class="calc-button clear" onclick="clearDisplay()">C</button>
+              <button class="calc-button" onclick="backspace()">⌫</button>
+              <button class="calc-button operator" onclick="percentage()">%</button>
+              <button class="calc-button operator" onclick="appendOperator('/')">÷</button>
+              <button class="calc-button" onclick="appendNumber('7')">7</button>
+              <button class="calc-button" onclick="appendNumber('8')">8</button>
+              <button class="calc-button" onclick="appendNumber('9')">9</button>
+              <button class="calc-button operator" onclick="appendOperator('*')">×</button>
+              <button class="calc-button" onclick="appendNumber('4')">4</button>
+              <button class="calc-button" onclick="appendNumber('5')">5</button>
+              <button class="calc-button" onclick="appendNumber('6')">6</button>
+              <button class="calc-button operator" onclick="appendOperator('-')">-</button>
+              <button class="calc-button" onclick="appendNumber('1')">1</button>
+              <button class="calc-button" onclick="appendNumber('2')">2</button>
+              <button class="calc-button" onclick="appendNumber('3')">3</button>
+              <button class="calc-button operator" onclick="appendOperator('+')">+</button>
+              <button class="calc-button zero" onclick="appendNumber('0')">0</button>
+              <button class="calc-button" onclick="appendNumber('.')">.</button>
+              <button class="calc-button equals" onclick="calculate()">=</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="orbital-layer layer-closed" data-orbital="pomodoro">
+          <div class="pomodoro-panel">
+            <h2>Pomodoro</h2>
+            <div class="pomodoro-display" id="pomo-display">25:00</div>
+            <div class="pomodoro-controls">
+              <input type="number" id="custom-min" class="custom-time-input" placeholder="Min" min="1" max="120">
+              <button class="pomo-btn" onclick="setCustomTime()">FIJAR</button>
+              <button class="pomo-btn" id="start-btn" onclick="togglePomodoro()">INICIAR</button>
+              <button class="pomo-btn" onclick="resetPomodoro()">RST</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="orbital-layer layer-closed" data-orbital="gemini">
+        <section class="gemini-panel" id="geminiAssistantPanel">
+          <div class="gemini-layout">
+            <aside class="gemini-sidebar" id="geminiSidebar">
+              <div class="gemini-sidebar-header">
+                <span>Conversaciones</span>
+                <button id="geminiNewChatBtn" title="Nueva conversación"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <div class="gemini-sidebar-list" id="geminiTabBar"></div>
+              <div class="gemini-sidebar-footer">
+                <button id="geminiKeyIcon" title="API Key"><i class="fa-solid fa-key"></i> Key</button>
+                <button id="geminiClearBtn" title="Borrar chat actual"><i class="fa-solid fa-trash-can"></i> Borrar</button>
+              </div>
+            </aside>
+            <div class="gemini-main">
+              <div class="gemini-topbar">
+                <button id="geminiSidebarToggle" class="gemini-sidebar-toggle" title="Conversaciones" style="background:none;border:none;padding:4px;cursor:pointer;display:grid;place-items:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Gemini">
+                    <defs><linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A8CFF"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs>
+                    <path d="M12 0L13.9 8.1L22 12L13.9 15.9L12 24L10.1 15.9L2 12L10.1 8.1Z" fill="url(#geminiGrad)"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="gemini-history" id="geminiChatHistory"></div>
+              <div class="gemini-settings">
+                <div id="geminiKeyRow" class="hidden">
+                  <input type="password" id="geminiApiKeyInput" autocomplete="off" placeholder="Google AI Studio API Key">
+                  <button class="gemini-btn" id="saveGeminiKeyBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                  <button class="gemini-btn" id="deleteGeminiKeyBtn" type="button"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                </div>
+              </div>
+              <div class="gemini-input-row">
+                <textarea id="geminiPromptInput" placeholder="Ask Gemini..."></textarea>
+                <button class="gemini-btn" id="sendGeminiBtn" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
+  <div id="deep-flow-view" class="app-view-transition hidden-view">
+    <header id="hdr">
+            <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span><span id="demo-badge" title="Datos de transacciones simulados con fines demostrativos. Precios reales vía CoinGecko.">DEMO</span>
+      <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
+      <button class="ctrl-btn" id="sound-toggle">SND ON</button>
+      <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
+      <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
+      <button class="glow-button" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
+      <button class="glow-button" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')">QUANTIS</button>
+      <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
+      <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
+      <span id="hdr-date"></span><span id="hdr-clock"></span>
+      <div class="ticker-chip"><span class="ticker-label">BTC</span><span class="ticker-price" id="btc-price">---</span><span class="ticker-change" id="btc-change"></span></div>
+      <div class="ticker-chip eth-chip"><span class="ticker-label">ETH</span><span class="ticker-price" id="eth-price">---</span><span class="ticker-change" id="eth-change"></span></div>
+      <div class="ticker-chip gas-chip"><span class="ticker-label">GAS</span><span class="ticker-price" id="gas-value">--</span><span class="gas-unit">Gwei</span></div>
+    </header>
+    <main id="dashboard">
+      <aside id="sidebar">
+        <div id="sidebar-onchain" class="sidebar-layer active">
+          <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div><div class="block-value" id="vol-value">0</div><div class="block-bar"><div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div><div class="block-value" id="ssr-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div><div class="ratio-bar"><div class="ratio-buy" id="ratio-buy" style="width:50%;"></div><div class="ratio-sell" id="ratio-sell" style="width:50%;"></div></div><div class="ratio-labels"><span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span><span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div><div class="hot-list" id="hot-list"></div></div>
+        </div>
+        <div id="sidebar-binance" class="sidebar-layer">
+          <div class="corner-block"><div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div><div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div><div class="block-sub" id="bn-volume-change"></div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div><div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div><div class="block-bar" style="margin-top:4px;"><div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div></div><div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div></div>
+          <div class="corner-block"><div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div><div class="hot-list" id="bn-pairs-list"></div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">FUTURES OPEN INT.</div><div class="block-value" id="bn-oi-value">$18.4B</div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">TOP FUTURES PAIR</div><div class="block-value">BTC/USDT</div></div>
+          <div class="corner-block bn-vivid-block"><div class="block-label">BTC DOMINANCE</div><div class="block-value" id="btc-dom-value-2">52.4%</div></div>
+        </div>
+      </aside>
+      <section id="ledger-section">
+        <div id="ledger-header">
+          <span class="col-value sort-header" id="sort-value" data-sort="value"><span data-i18n="value">VALUE (USD)</span><span class="sort-arrow" id="arrow-value">&#9660;</span></span>
+          <span class="col-asset" data-i18n="asset">ASSET</span><span class="col-action" data-i18n="action">ACTION</span><span class="col-flow" data-i18n="fromTo">FROM / TO</span>
+          <span class="col-time sort-header" id="sort-time" data-sort="timestamp"><span data-i18n="time">TIME</span><span class="sort-arrow" id="arrow-time"></span></span>
+        </div>
+        <div id="macro-filters">
+          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="swaps" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="yield" data-i18n="yieldOnly">YIELD ONLY</button>
+        </div>
+        <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
+        <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- VISTA SPA 3: QUANTIS CANVAS -->
+  <div id="quantis-view" class="app-view-transition hidden-view">
+
+    <!-- QUANTIS HEADER -->
+    <header id="quantis-header">
+      <div id="quantis-nav-left">
+        <span id="quantis-brand">QUANTIS</span>
+        <button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
+        <button class="glow-button" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
+      </div>
+      <div id="quantis-nav-right">
+        <span id="quantis-clock">00:00:00</span>
+        <div id="quantis-tools">
+          <button class="q-tool-btn" id="q-export-project-btn" type="button"><i class="fa-solid fa-file-export"></i></button>
+          <button class="q-tool-btn" id="q-import-project-btn" type="button"><i class="fa-solid fa-file-import"></i></button>
+          <input type="file" id="q-import-project-input" accept=".json,application/json" style="display:none;">
+          <button class="q-tool-btn" id="q-center-canvas-btn" type="button" title="Centrar Canvas"><i class="fa-solid fa-crosshairs"></i></button>
+        </div>
+        <button class="icon-square-btn" id="quantisConfigBtn" title="Configuración">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <button id="toggleMusicPanelQuantis" title="Reproductor de Música">
+          <i class="fa-solid fa-music"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- QUANTIS BODY -->
+    <div id="quantis-body">
+
+      <!-- SIDEBAR: Proyectos / Páginas -->
+      <aside id="quantis-sidebar">
+        <div id="quantis-sidebar-header">
+          <span>Proyectos</span>
+          <button id="q-add-project-btn" title="Nuevo Proyecto" onclick="qAddProject()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="q-projects-list"></div>
+      </aside>
+
+      <!-- INFINITE CANVAS VIEWPORT -->
+       <main id="quantis-viewport">
+          <div id="quantis-canvas-container">
+            <svg id="quantis-drawing-svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+            <div id="q-selection-marquee"></div>
+            <div id="q-selection-box"></div>
+          </div>
+          <span id="q-zoom-hint">SCROLL: ZOOM &amp; DRAG: PAN &amp; CLICK: NEW BLOCK &amp; RIGHT-CLICK: FILE</span>
+          <div id="quantisSaveLoader" class="cloud-loader-wrap" title="Guardando en la nube...">
+           <div class="cloud-loader"></div>
+         </div>
+       </main>
+
+    </div>
+
+    <!-- CONTEXT MENU -->
+    <div id="q-context-menu">
+  <button onclick="qTriggerFile()"><i class="fa-solid fa-file-arrow-up"></i> Abrir Archivo</button>
+  <button id="q-draw-open-tools" onclick="event.stopPropagation(); qToggleDrawPanel()"><i class="fa-solid fa-paintbrush"></i> Drawing Tools</button>
+  <button onclick="qSelectDrawColor('#000000')"><i class="fa-solid fa-circle" style="color:#000;text-shadow:0 0 1px #888"></i> Negro</button>
+  <button onclick="qSelectDrawColor('#ffffff')"><i class="fa-solid fa-circle" style="color:#fff;text-shadow:0 0 1px #444"></i> Blanco</button>
+  <button onclick="qSetFreeMode()"><i class="fa-solid fa-hand"></i> Modo libre</button>
+  </div>
+    <input type="file" id="q-file-input" onchange="qHandleFile(event)">
+
+  </div>
+  <!-- FIN VISTA SPA 3: QUANTIS -->
+
+  <!-- FLOATING DRAWING TOOLS PANEL -->
+  <div id="quantis-drawing-tools-panel">
+    <div class="q-draw-header" id="q-draw-drag-handle">
+      <span>DRAWING TOOLS</span>
+      <button id="q-draw-close" style="background:none;border:none;color:var(--quantis-faint,#71717a);cursor:pointer;font-size:12px;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-select" title="Select (V)"><i class="fa-solid fa-vector-square"></i> Select</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-pencil" title="Pencil"><i class="fa-solid fa-pencil"></i> Pencil</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-eraser" title="Eraser"><i class="fa-solid fa-eraser"></i> Eraser</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-line" title="Line"><i class="fa-solid fa-grip-lines"></i> Line</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-circle" title="Circle"><i class="fa-regular fa-circle"></i> Circle</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-rect" title="Rectangle"><i class="fa-regular fa-square"></i> Rect</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-lineh" title="Horizontal Line"><i class="fa-solid fa-minus"></i> H-Line</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-linev" title="Vertical Line"><i class="fa-solid fa-arrows-up-down"></i> V-Line</button>
+    </div>
+    <div class="q-draw-row">
+      <label>Color</label>
+      <button class="q-draw-color-toggle" data-color="#A855F7" style="background:#A855F7" title="Violet"></button>
+      <button class="q-draw-color-toggle" data-color="#EC4899" style="background:#EC4899" title="Magenta"></button>
+      <button class="q-draw-color-toggle" data-color="#C4B5FD" style="background:#C4B5FD" title="Lavender"></button>
+      <button class="q-draw-color-toggle" data-color="#EF4444" style="background:#EF4444" title="Red"></button>
+      <button class="q-draw-color-toggle" data-color="#F59E0B" style="background:#F59E0B" title="Amber"></button>
+      <button class="q-draw-color-toggle" data-color="#22C55E" style="background:#22C55E" title="Green"></button>
+      <button class="q-draw-color-toggle" data-color="#22D3EE" style="background:#22D3EE" title="Cyan"></button>
+      <button class="q-draw-color-toggle active" data-color="#000000" style="background:#000000" title="Black"></button>
+      <button class="q-draw-color-toggle" data-color="#FFFFFF" style="background:#FFFFFF" title="White"></button>
+      <input type="color" id="q-draw-custom-color" value="#000000" title="Custom color">
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-undo" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-redo" title="Redo (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i> Redo</button>
+    </div>
+    <div class="q-draw-row">
+      <button class="q-draw-btn q-draw-tool" id="q-draw-copy" title="Copy (Ctrl+C)"><i class="fa-solid fa-copy"></i> Copy</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-paste" title="Paste (Ctrl+V)"><i class="fa-solid fa-paste"></i> Paste</button>
+      <button class="q-draw-btn q-draw-tool" id="q-draw-delete" title="Delete (Del)"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+    <div class="q-draw-row">
+      <label>Thickness</label>
+      <input type="range" class="q-draw-size" id="q-draw-thickness" min="2" max="40" value="8">
+    </div>
+  </div>
+
+  <!-- PANELES FLOTANTES: PLANES, CONFIGURACION Y AVISOS -->
+  <div id="plansModal" aria-hidden="true">
+    <div class="plans-card" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+      <div class="plans-header">
+        <h2 id="plansTitle">Planes de membresia</h2>
+        <button class="plans-close" id="closePlansBtn" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="plans-grid">
+        <button class="plan-option" type="button" data-plan-choice="normal">
+          <h3>Normal</h3>
+          <div class="plan-price">$0</div>
+          <ul>
+            <li>3 paginas de Notepad, local only</li>
+            <li>Quantis: 2 proyectos, 3 paginas/proyecto, canvas 2000x2000px</li>
+            <li>Sin herramientas de dibujo</li>
+            <li>Asistente Gemini: historial local</li>
+          </ul>
+        </button>
+        <button class="plan-option" type="button" data-plan-choice="Extended">
+          <h3>Extended</h3>
+          <div class="plan-price">$5/mo</div>
+          <ul>
+            <li>5 paginas de Notepad, local + export</li>
+            <li>Quantis: 4 proyectos, 7 paginas/proyecto, canvas 4000x4000px</li>
+            <li>Export/Import de workspace</li>
+            <li>Asistente Gemini: historial local</li>
+          </ul>
+        </button>
+        <button class="plan-option" type="button" data-plan-choice="Premium">
+          <h3>Premium</h3>
+          <div class="plan-price">$10/mo</div>
+          <ul>
+            <li>10 paginas de Notepad en cloud</li>
+            <li>Quantis: 10 proyectos, 20 paginas/proyecto, canvas 8000x8000px</li>
+            <li>Drawing Tools y Priority Support</li>
+            <li>Asistente Gemini: historial sincronizado en la nube</li>
+          </ul>
+        </button>
+      </div>
+      <div class="plan-contact-card" id="planContactCard">
+        <strong>Contacto para activar plan</strong>
+        <p>Discord: @DANIFU777</p>
+        <p>Email: danielprooooogamer41@gmail.com</p>
+        <p>GitHub: @daniFU777</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="dominon-config-dropdown" aria-hidden="true">
+    <p class="config-label">Dominon Theme</p>
+    <div class="config-row">
+      <button class="theme-btn black" onclick="setTheme('black', 'dominon')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('white', 'dominon')" title="White"></button>
+      <button class="theme-btn purple" onclick="setTheme('purple', 'dominon')" title="Purple"></button>
+      <button class="theme-btn green" onclick="setTheme('green', 'dominon')" title="Green"></button>
+      <button class="theme-btn red" onclick="setTheme('red', 'dominon')" title="Red"></button>
+      <button class="theme-btn blue" onclick="setTheme('blue', 'dominon')" title="Blue"></button>
+    </div>
+    <p class="config-label">Language</p>
+    <div class="config-row">
+      <button class="language-toggle" id="dominonLangToggle" type="button">ES / EN</button>
+    </div>
+    <p class="config-label">Monitor</p>
+    <div class="config-row">
+      <button class="language-toggle" id="perfToggleBtn" type="button"><i class="fa-solid fa-gauge-high"></i> Rendimiento</button>
+    </div>
+  </div>
+
+  <div id="perf-panel" aria-hidden="true">
+    <p class="perf-title"><span>Rendimiento <span class="perf-est">(estimación)</span></span><button id="perfCloseBtn" type="button" title="Cerrar">✕</button></p>
+    <div class="perf-sub">Top consumidores (JS propio)</div>
+    <table class="perf-table"><thead><tr><th>Módulo</th><th>ms/s</th><th>llam/s</th></tr></thead><tbody id="perfTopBody"><tr><td colspan="3">–</td></tr></tbody></table>
+    <div class="perf-row"><span>Bloqueos &gt;50ms</span><b id="perfLt">–</b></div>
+    <div class="perf-toggles">
+      <label><input type="checkbox" id="perfTglFeed" checked> Feed Deep Flow</label>
+      <label><input type="checkbox" id="perfTglTx" checked> Txs simuladas</label>
+      <label><input type="checkbox" id="perfTglSound" checked> Sonido/radar</label>
+      <label><input type="checkbox" id="perfTglAnim" checked> Modo animado</label>
+    </div>
+  </div>
+
+  <div id="quantis-config-dropdown" aria-hidden="true">
+    <p class="config-label">Quantis Theme</p>
+    <div class="config-row">
+      <button class="theme-btn black" onclick="setTheme('black', 'quantis')" title="Black"></button>
+      <button class="theme-btn white" onclick="setTheme('white', 'quantis')" title="White"></button>
+    </div>
+    <p class="config-label">Language</p>
+    <div class="config-row">
+      <button class="language-toggle" id="quantisLangToggle" type="button">ES / EN</button>
+    </div>
+  </div>
+
+  <div id="miniPlanPopup"></div>
+
+  <div id="trialContactPopup" aria-hidden="true">
+    <p id="trialContactNotice"></p>
+    <p id="trialContactDiscord" title=""></p>
+  </div>
+
+  <div id="musicPanel" class="hidden">
+    <div class="music-player-panel">
+      <div class="player-header music-drag-handle"><i class="fa-solid fa-music"></i> REPRODUCTOR</div>
+
+      <label id="musicDropzone" class="music-dropzone" title="Arrastrá tus MP3 aquí o hacé clic para agregar">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <span>Arrastrá tus MP3 aquí</span>
+        <input type="file" id="musicFileInput" accept="audio/*" multiple hidden>
+      </label>
+
+      <div class="player-controls">
+        <button class="music-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-backward"></i></button>
+        <button class="music-btn" id="playPauseBtn" title="Play/Pausa"><i class="fa-solid fa-play"></i></button>
+        <button class="music-btn" id="nextBtn" title="Siguiente"><i class="fa-solid fa-forward"></i></button>
+        <button class="music-btn" id="repeatBtn" title="Sin repetición"><i class="fa-solid fa-repeat"></i></button>
+        <button class="music-btn" id="clearBtn" title="Limpiar lista"><i class="fa-solid fa-trash"></i></button>
+      </div>
+
+      <div class="progress-time">
+        <span id="current-time">0:00</span>
+        <span id="duration-time">0:00</span>
+      </div>
+
+      <div class="progress-bar-container">
+        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+      </div>
+
+      <div class="volume-control">
+        <i class="fa-solid fa-volume-low"></i>
+        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+        <i class="fa-solid fa-volume-high"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
+  <script type="module" src="js/01-firebase.js"></script>
+
+  <!-- REPRODUCTOR DE AUDIO LOCAL (archivos desde la PC, sin YouTube) -->
+  <script src="js/02-music-player.js"></script>
+
+  <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
+  <script src="js/03-spa-router.js"></script>
+
+  <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
+  <script src="js/04-config-router.js"></script>
+
+  <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
+  <script src="js/05-dominon.js"></script>
+
+  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
+  <script src="js/06-deepflow.js"></script>
+  <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
+<script src="js/07-quantis.js"></script>
+
+  <script src="js/08-orbital.js"></script>
+
+  <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
+  <script src="js/09-nav-particles.js"></script>
+  <script src="js/10-perf-measure.js"></script>
+  <script src="js/11-perf-panel.js"></script>
+</body>
+</html>
+
