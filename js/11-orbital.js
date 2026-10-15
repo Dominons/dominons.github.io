@@ -17,14 +17,32 @@
   var buttons = {};
   var clockTimer = null;
   var accentCache = { v: '', rgb: '168,85,247' };
-  var orbA = [-Math.PI / 2, -Math.PI / 2 + 1.2566, -Math.PI / 2 + 2.5133, -Math.PI / 2 + 3.7699, -Math.PI / 2 + 5.0265];
-  var orbSpd = [1, 1.1, 0.92, 1.06, 0.95];
+  var orbAngle = -Math.PI / 2;
   var lastT = 0;
   var ORBIT_MS = 120000;
-  function orbPos(i, n, t, g) {
-    var breathe = 1 + 0.05 * Math.sin(t * 0.00025 + i * 1.7);
-    return [g.cx + g.rx * breathe * Math.cos(orbA[i % orbA.length]),
-            g.cy + g.ry * breathe * Math.sin(orbA[i % orbA.length])];
+  var orbGeomCache = null;
+  var accentTick = 0;
+  var accentCur = '168,85,247';
+  function orbPos(i, n, g) {
+    var a = orbAngle + i * (Math.PI * 2 / n);
+    return [g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a)];
+  }
+  function orbMeasure() {
+    var st = $('orbitalStage');
+    if (!st) return null;
+    var w = st.clientWidth, h = st.clientHeight;
+    if (!w || !h) return null;
+    var cw = 0, ch = 0;
+    try {
+      var clock = $('orbitalClock');
+      if (clock) { cw = clock.offsetWidth || 0; ch = clock.offsetHeight || 0; }
+    } catch (e) {}
+    var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 72));
+    var ry = Math.min(h / 2 - 44, Math.max(160, ch / 2 + 72));
+    if (rx < 120) rx = 120;
+    if (ry < 100) ry = 100;
+    orbGeomCache = { st: st, w: w, h: h, rx: rx, ry: ry, cx: w / 2, cy: h / 2 };
+    return orbGeomCache;
   }
 
   function $(id) { return document.getElementById(id); }
@@ -183,20 +201,8 @@
   }
 
   function circleGeom() {
-    var st = $('orbitalStage');
-    if (!st) return null;
-    var w = st.clientWidth, h = st.clientHeight;
-    if (!w || !h) return null;
-    var cw = 0, ch = 0;
-    try {
-      var clock = $('orbitalClock');
-      if (clock) { cw = clock.offsetWidth || 0; ch = clock.offsetHeight || 0; }
-    } catch (e) {}
-    var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 72));
-    var ry = Math.min(h / 2 - 44, Math.max(160, ch / 2 + 72));
-    if (rx < 120) rx = 120;
-    if (ry < 100) ry = 100;
-    return { st: st, w: w, h: h, rx: rx, ry: ry, cx: w / 2, cy: h / 2 };
+    if (orbGeomCache) return orbGeomCache;
+    return orbMeasure();
   }
   function clampXY(g, x, y) {
     var m = 36;
@@ -207,19 +213,21 @@
     return [x, y];
   }
   function layoutCircle() {
-    var g = circleGeom();
+    var g = orbMeasure();
     if (!g) return;
     var keys = Object.keys(buttons);
     for (var i = 0; i < keys.length; i++) {
       var b = buttons[keys[i]];
       if (!b || b.parentNode !== g.st) continue;
-      var xy = orbPos(i, keys.length, performance.now(), g);
+      var xy = orbPos(i, keys.length, g);
       var p = clampXY(g, xy[0], xy[1]);
       setXY(b, p[0], p[1]);
     }
   }
 
   var tick = 0;
+  var frameCount = 0;
+  var cvCtx = null, cvW = 0, cvH = 0;
   function frame(now) {
     try {
       if (document.hidden) return;
@@ -232,26 +240,34 @@
         if (g) {
           if (lastT) {
             var dt = Math.min(100, Math.max(0, tms - lastT));
-            for (var s = 0; s < orbA.length; s++) {
-              orbA[s] += (dt / ORBIT_MS) * Math.PI * 2 * orbSpd[s % orbSpd.length];
-            }
+            orbAngle += (dt / ORBIT_MS) * Math.PI * 2;
           }
           lastT = tms;
           var keys = Object.keys(buttons);
           for (var i = 0; i < keys.length; i++) {
             var b = buttons[keys[i]];
             if (!b || b.parentNode !== g.st) continue;
-            var xy2 = orbPos(i, keys.length, tms, g);
+            var xy2 = orbPos(i, keys.length, g);
             var p = clampXY(g, xy2[0], xy2[1]);
             setXY(b, p[0], p[1]);
           }
         }
       }
+      frameCount++;
+      if (frameCount % 60 === 0) {
+        try { orbMeasure(); } catch (e) {}
+        if (isAnimOn()) { try { accentCur = accentRgb(); } catch (e) {} }
+      }
       if (!isAnimOn()) return;
       if (stacked) return;
-      var s = sizeCanvas();
-      if (!s) return;
-      var ctx = s.ctx, w = s.w, h = s.h;
+      if (frameCount % 30 === 0) {
+        try {
+          var sc = sizeCanvas();
+          if (sc) { cvCtx = sc.ctx; cvW = sc.w; cvH = sc.h; }
+        } catch (e) {}
+      }
+      if (!cvCtx) return;
+      var ctx = cvCtx, w = cvW, h = cvH;
       ctx.clearRect(0, 0, w, h);
       ensureStars();
       var t = tms / 1000, k, p2;
@@ -264,18 +280,16 @@
         ctx.fill();
       }
       var keys2 = Object.keys(buttons);
-      if (tick % 3 === 0 && particles.length < 140 && keys2.length) {
-        var bk = buttons[keys2[(tick / 3) % keys2.length | 0]];
-        if (bk) {
-          var r = bk.getBoundingClientRect(), sr = g.st.getBoundingClientRect();
-          particles.push({
-            x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2,
-            vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-            life: 1
-          });
-        }
+      if (tick % 3 === 0 && particles.length < 140 && keys2.length && g) {
+        var bi = (tick / 3) % keys2.length | 0;
+        var ba2 = orbAngle + bi * (Math.PI * 2 / keys2.length);
+        particles.push({
+          x: g.cx + g.rx * Math.cos(ba2), y: g.cy + g.ry * Math.sin(ba2),
+          vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+          life: 1
+        });
       }
-      var rgb = accentRgb();
+      var rgb = accentCur;
       for (k = particles.length - 1; k >= 0; k--) {
         p2 = particles[k];
         p2.x += p2.vx; p2.y += p2.vy; p2.life -= 0.02;
