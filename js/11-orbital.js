@@ -235,6 +235,7 @@
   function frame(now) {
     try {
       if (document.hidden) return;
+      if (!isAnimOn()) return;
       // Reloj propio en ms: el ticker de GSAP pasa segundos y rAF milisegundos.
       // Usar el argumento tal cual congelaba la órbita (dt siempre 0).
       var tms = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
@@ -262,7 +263,6 @@
         try { orbMeasure(); } catch (e) {}
         if (isAnimOn()) { try { accentCur = accentRgb(); } catch (e) {} }
       }
-      if (!isAnimOn()) return;
       if (stacked) return;
       if (frameCount % 30 === 0) {
         try {
