@@ -2806,7 +2806,7 @@
       height: 72px;
       border-radius: 50%;
       border: none;
-      background: var(--color-main-bg);
+      background: transparent;
       color: var(--color-text);
       font-size: 24px;
       display: grid;
@@ -2853,6 +2853,7 @@
       flex-wrap: wrap;
       gap: 10px;
       padding: 10px 6px;
+      margin-bottom: 14px;
     }
     #main-dashboard-view .main.orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; }
