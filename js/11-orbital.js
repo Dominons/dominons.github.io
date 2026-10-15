@@ -1,5 +1,6 @@
-/* 11-orbital.js - dashboard orbital de Dominon: reloj central, 5 iconos en orbita, paneles por capas */
+/* 11-orbital.js - dashboard orbital de Dominon: reloj central, 5 iconos en orbita, paneles por capas (con GSAP + fallback) */
 (function() {
+  var G = (typeof window.gsap !== 'undefined') ? window.gsap : null;
   var ORB_LAYERS = [
     { key: 'trading', title: 'TradingView', icon: '<i class="fa-solid fa-chart-line"></i>' },
     { key: 'notepad', title: 'Bloc de Notas', icon: '<i class="fa-solid fa-pen-to-square"></i>' },
@@ -16,6 +17,9 @@
   var buttons = {};
   var clockTimer = null;
   var accentCache = { v: '', rgb: '168,85,247' };
+  var orbAngle = -Math.PI / 2;
+  var lastT = 0;
+  var ORBIT_MS = 120000;
 
   function $(id) { return document.getElementById(id); }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
@@ -25,6 +29,22 @@
   }
   function layerEl(key) {
     return document.querySelector('#main-dashboard-view .orbital-layer[data-orbital="' + key + '"]');
+  }
+  function setXY(el, x, y) {
+    if (G) {
+      try { G.set(el, { x: x, y: y, xPercent: -50, yPercent: -50 }); return; }
+      catch (e) {}
+    }
+    try { el.style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-50%,-50%)'; }
+    catch (e) {}
+  }
+  function clearXY(el) {
+    if (G) {
+      try { G.set(el, { clearProps: 'transform,left,top' }); return; }
+      catch (e) {}
+    }
+    try { el.style.transform = ''; el.style.left = ''; el.style.top = ''; }
+    catch (e) {}
   }
   function accentRgb() {
     try {
@@ -81,22 +101,20 @@
   function refresh() {
     var main = document.querySelector('#main-dashboard-view .orbital-main');
     var layers = document.querySelectorAll('#main-dashboard-view .orbital-layer');
-    var openCount = 0, lastKey = null;
+    var openCount = 0;
     for (var i = 0; i < layers.length; i++) {
       var isOpen = openStack.indexOf(layers[i].getAttribute('data-orbital')) !== -1;
       layers[i].classList.toggle('open', isOpen);
       layers[i].classList.toggle('solo', isOpen && openStack.length === 1);
-      if (isOpen) { openCount++; lastKey = layers[i].getAttribute('data-orbital'); }
+      if (isOpen) openCount++;
     }
     if (main) main.classList.toggle('has-open', openCount > 0);
     for (var k in buttons) {
       if (!Object.prototype.hasOwnProperty.call(buttons, k)) continue;
       buttons[k].classList.toggle('orb-active', openStack.indexOf(k) !== -1);
-      if (openCount > 0) {
-        try { buttons[k].style.transform = ''; } catch (e) {}
-      }
+      if (openCount > 0) clearXY(buttons[k]);
     }
-    if (openCount === 0) layoutCircle(performance.now());
+    if (openCount === 0) layoutCircle();
   }
 
   function toggleLayer(key) {
@@ -146,36 +164,58 @@
     }
   }
 
-  var ORBIT_MS = 120000;
-  function layoutCircle(now) {
+  function circleGeom() {
     var st = $('orbitalStage');
-    if (!st) return;
+    if (!st) return null;
     var w = st.clientWidth, h = st.clientHeight;
-    if (!w || !h) return;
-    var r = Math.max(150, Math.min(w, h) * 0.36);
-    var cx = w / 2, cy = h / 2;
-    var base = (now / ORBIT_MS) * Math.PI * 2;
+    if (!w || !h) return null;
+    var r = Math.max(140, Math.min(w, h) * 0.36);
+    return { st: st, w: w, h: h, r: r, cx: w / 2, cy: h / 2 };
+  }
+  function clampXY(g, x, y) {
+    var m = 36;
+    if (x < m) x = m;
+    if (x > g.w - m) x = g.w - m;
+    if (y < m) y = m;
+    if (y > g.h - m) y = g.h - m;
+    return [x, y];
+  }
+  function layoutCircle() {
+    var g = circleGeom();
+    if (!g) return;
     var keys = Object.keys(buttons);
     for (var i = 0; i < keys.length; i++) {
       var b = buttons[keys[i]];
-      if (!b || b.parentNode !== st) continue;
-      var a = base + i * (Math.PI * 2 / keys.length) - Math.PI / 2;
-      var x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
-      b.style.left = '50%';
-      b.style.top = '50%';
-      b.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%)';
+      if (!b || b.parentNode !== g.st) continue;
+      var a = orbAngle + i * (Math.PI * 2 / keys.length);
+      var p = clampXY(g, g.cx + g.r * Math.cos(a), g.cy + g.r * Math.sin(a));
+      setXY(b, p[0], p[1]);
     }
   }
 
   var tick = 0;
-  function loop(now) {
-    requestAnimationFrame(loop);
+  function frame(now) {
     try {
       if (document.hidden) return;
-      var st = $('orbitalStage');
-      if (!st) return;
       var stacked = openStack.length > 0;
-      if (!stacked) layoutCircle(now);
+      if (!stacked) {
+        var g = circleGeom();
+        if (g) {
+          if (lastT) {
+            var dt = Math.min(100, Math.max(0, now - lastT));
+            orbAngle += (dt / ORBIT_MS) * Math.PI * 2;
+          }
+          lastT = now;
+          var keys = Object.keys(buttons);
+          for (var i = 0; i < keys.length; i++) {
+            var b = buttons[keys[i]];
+            if (!b || b.parentNode !== g.st) continue;
+            var a = orbAngle + i * (Math.PI * 2 / keys.length);
+            var p = clampXY(g, g.cx + g.r * Math.cos(a), g.cy + g.r * Math.sin(a));
+            setXY(b, p[0], p[1]);
+          }
+        }
+      }
       if (!isAnimOn()) return;
       if (stacked) return;
       var s = sizeCanvas();
@@ -183,20 +223,20 @@
       var ctx = s.ctx, w = s.w, h = s.h;
       ctx.clearRect(0, 0, w, h);
       ensureStars();
-      var t = now / 1000, i, p;
+      var t = now / 1000, k, p2;
       ctx.fillStyle = '#ffffff';
-      for (i = 0; i < stars.length; i++) {
-        p = stars[i];
-        ctx.globalAlpha = 0.15 + 0.55 * Math.abs(Math.sin(t * p.sp + p.ph));
+      for (k = 0; k < stars.length; k++) {
+        p2 = stars[k];
+        ctx.globalAlpha = 0.15 + 0.55 * Math.abs(Math.sin(t * p2.sp + p2.ph));
         ctx.beginPath();
-        ctx.arc(p.x * w, p.y * h, p.r, 0, 6.29);
+        ctx.arc(p2.x * w, p2.y * h, p2.r, 0, 6.29);
         ctx.fill();
       }
-      var keys = Object.keys(buttons);
-      if (tick % 3 === 0 && particles.length < 140 && keys.length) {
-        var bk = buttons[keys[(tick / 3) % keys.length | 0]];
+      var keys2 = Object.keys(buttons);
+      if (tick % 3 === 0 && particles.length < 140 && keys2.length) {
+        var bk = buttons[keys2[(tick / 3) % keys2.length | 0]];
         if (bk) {
-          var r = bk.getBoundingClientRect(), sr = st.getBoundingClientRect();
+          var r = bk.getBoundingClientRect(), sr = g.st.getBoundingClientRect();
           particles.push({
             x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2,
             vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
@@ -205,19 +245,30 @@
         }
       }
       var rgb = accentRgb();
-      for (i = particles.length - 1; i >= 0; i--) {
-        p = particles[i];
-        p.x += p.vx; p.y += p.vy; p.life -= 0.02;
-        if (p.life <= 0) { particles.splice(i, 1); continue; }
-        ctx.globalAlpha = Math.max(0, p.life) * 0.7;
+      for (k = particles.length - 1; k >= 0; k--) {
+        p2 = particles[k];
+        p2.x += p2.vx; p2.y += p2.vy; p2.life -= 0.02;
+        if (p2.life <= 0) { particles.splice(k, 1); continue; }
+        ctx.globalAlpha = Math.max(0, p2.life) * 0.7;
         ctx.fillStyle = 'rgba(' + rgb + ',1)';
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.6 * p.life + 0.4, 0, 6.29);
+        ctx.arc(p2.x, p2.y, 1.6 * p2.life + 0.4, 0, 6.29);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
       tick++;
     } catch (e) {}
+  }
+  function loop(now) {
+    if (G) {
+      try { G.ticker.add(frame); return; }
+      catch (e) {}
+    }
+    requestAnimationFrame(function step(t) {
+      lastT = t;
+      frame(t);
+      requestAnimationFrame(step);
+    });
   }
 
   function init() {
@@ -225,7 +276,7 @@
     tickClock();
     try { if (clockTimer) clearInterval(clockTimer); } catch (e) {}
     clockTimer = setInterval(tickClock, 1000);
-    layoutCircle(performance.now());
+    layoutCircle();
     document.addEventListener('keydown', function(e) {
       if (!e || e.key !== 'Escape') return;
       if (openStack.length === 0) return;
@@ -237,9 +288,15 @@
     window.addEventListener('resize', function() {
       var s = sizeCanvas();
       if (s) { stars = []; }
-      layoutCircle(performance.now());
+      layoutCircle();
     });
-    requestAnimationFrame(loop);
+    lastT = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    if (G) {
+      try { G.ticker.add(frame); }
+      catch (e) { loop(lastT); }
+    } else {
+      loop(lastT);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
