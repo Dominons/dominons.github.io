@@ -115,6 +115,16 @@
       if (openCount > 0) clearXY(buttons[k]);
     }
     if (openCount === 0) layoutCircle();
+    else {
+      try {
+        var st2 = $('orbitalStage');
+        var nIcons = st2 ? st2.querySelectorAll('.orb-icon').length : -1;
+        var hasClock = !!(st2 && st2.querySelector('#orbitalClock'));
+        if ((nIcons !== 5 || !hasClock) && console && console.warn) {
+          console.warn('[orbital] barra incompleta: iconos=' + nIcons + ' reloj=' + hasClock);
+        }
+      } catch (e) {}
+    }
   }
 
   function toggleLayer(key) {
@@ -280,6 +290,8 @@
   }
 
   function init() {
+    window.__orbitalBuild = '2026-10-15-gsap-bar-check';
+    try { if (console && console.info) console.info('[orbital] build 2026-10-15-gsap-bar-check'); } catch (e) {}
     buildAll();
     tickClock();
     try { if (clockTimer) clearInterval(clockTimer); } catch (e) {}
