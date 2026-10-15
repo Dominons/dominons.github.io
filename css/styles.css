@@ -2777,8 +2777,8 @@
     }
     .orb-icon {
       position: absolute;
-      left: 50%;
-      top: 50%;
+      left: 0;
+      top: 0;
       width: 64px;
       height: 64px;
       border-radius: 50%;
@@ -2791,6 +2791,9 @@
       cursor: pointer;
       user-select: none;
       z-index: 2;
+      transition: border-color var(--anim-dur-ui, 0.2s) ease, background var(--anim-dur-ui, 0.2s) ease;
+    }
+    .orbital-main.has-open .orb-icon {
       transition: transform var(--anim-dur-ui, 0.2s) ease, border-color var(--anim-dur-ui, 0.2s) ease, background var(--anim-dur-ui, 0.2s) ease;
     }
     .orb-icon svg { width: 22px; height: 22px; display: block; }
