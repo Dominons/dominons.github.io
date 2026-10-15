@@ -169,8 +169,16 @@
     if (!st) return null;
     var w = st.clientWidth, h = st.clientHeight;
     if (!w || !h) return null;
-    var r = Math.max(140, Math.min(w, h) * 0.36);
-    return { st: st, w: w, h: h, r: r, cx: w / 2, cy: h / 2 };
+    var cw = 0, ch = 0;
+    try {
+      var clock = $('orbitalClock');
+      if (clock) { cw = clock.offsetWidth || 0; ch = clock.offsetHeight || 0; }
+    } catch (e) {}
+    var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 72));
+    var ry = Math.min(h / 2 - 44, Math.max(160, ch / 2 + 72));
+    if (rx < 120) rx = 120;
+    if (ry < 100) ry = 100;
+    return { st: st, w: w, h: h, rx: rx, ry: ry, cx: w / 2, cy: h / 2 };
   }
   function clampXY(g, x, y) {
     var m = 36;
@@ -188,7 +196,7 @@
       var b = buttons[keys[i]];
       if (!b || b.parentNode !== g.st) continue;
       var a = orbAngle + i * (Math.PI * 2 / keys.length);
-      var p = clampXY(g, g.cx + g.r * Math.cos(a), g.cy + g.r * Math.sin(a));
+      var p = clampXY(g, g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a));
       setXY(b, p[0], p[1]);
     }
   }
@@ -211,7 +219,7 @@
             var b = buttons[keys[i]];
             if (!b || b.parentNode !== g.st) continue;
             var a = orbAngle + i * (Math.PI * 2 / keys.length);
-            var p = clampXY(g, g.cx + g.r * Math.cos(a), g.cy + g.r * Math.sin(a));
+            var p = clampXY(g, g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a));
             setXY(b, p[0], p[1]);
           }
         }
