@@ -2721,9 +2721,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      overflow: visible;
       flex-shrink: 0;
     }
+    html.anim-off .orbital-clock { box-shadow: none; }
+    html.anim-off .orbital-time { text-shadow: none; }
     .orbital-stars {
       position: absolute;
       inset: 0;
