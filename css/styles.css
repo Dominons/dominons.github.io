@@ -2779,13 +2779,13 @@
       position: absolute;
       left: 0;
       top: 0;
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       border: 1px solid var(--color-highlight);
       background: var(--color-main-bg);
       color: var(--color-text);
-      font-size: 22px;
+      font-size: 24px;
       display: grid;
       place-items: center;
       cursor: pointer;
@@ -2800,16 +2800,19 @@
     .orb-icon::before {
       content: '';
       position: absolute;
-      inset: -11px;
-      border-radius: 50%;
+      inset: -10px;
+      border-radius: 48% 52% 55% 45% / 50% 46% 54% 50%;
+      border: 2px solid var(--color-highlight);
       pointer-events: none;
-      background: repeating-conic-gradient(from 0deg, var(--color-highlight) 0deg 3deg, transparent 3deg 15deg);
-      -webkit-mask: radial-gradient(circle, transparent 0 33px, #000 34px 37.5px, transparent 38.5px);
-      mask: radial-gradient(circle, transparent 0 33px, #000 34px 37.5px, transparent 38.5px);
-      opacity: 0.32;
+      opacity: 0.5;
       z-index: -1;
     }
-    html.anim-on .orb-icon::before { animation: orbSpin 28s linear infinite; }
+    html.anim-on .orb-icon::before { animation: orbWobble 7s ease-in-out infinite, orbSpin 26s linear infinite; }
+    @keyframes orbWobble {
+      0%, 100% { border-radius: 48% 52% 55% 45% / 50% 46% 54% 50%; }
+      33% { border-radius: 55% 45% 46% 54% / 46% 55% 45% 54%; }
+      66% { border-radius: 45% 55% 52% 48% / 54% 46% 54% 46%; }
+    }
     @keyframes orbSpin { to { transform: rotate(360deg); } }
     html.anim-on .orbital-main.has-open .orb-icon:hover { transform: translateY(-2px); }
     .orbital-stage .orb-icon:hover { border-color: var(--color-highlight); }
@@ -2837,15 +2840,22 @@
       border-radius: 20px;
       cursor: pointer;
       max-width: none;
+      order: 2;
     }
     .orbital-main.has-open .orbital-time { font-size: 1.3rem; }
-    .orbital-main.has-open .orbital-date { font-size: 0.6rem; letter-spacing: 2px; margin-top: 2px; }
+    .orbital-main.has-open .orbital-date { font-size: 0.52rem; letter-spacing: 1px; margin-top: 2px; }
+    @keyframes orbBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    html.anim-on .orbital-main.has-open .orb-icon { animation: orbBob 3.4s ease-in-out infinite; }
+    html.anim-on .orbital-main.has-open .orbital-clock { animation: floatIn var(--anim-dur-ui, 0.2s) ease both, orbBob 3.4s ease-in-out 0.9s infinite; }
     .orbital-main.has-open .orbital-clock .rgb-line { display: none; }
     .orbital-main.has-open .orb-icon {
       position: static;
-      width: 48px;
-      height: 48px;
-      font-size: 18px;
+      width: 52px;
+      height: 52px;
+      font-size: 19px;
     }
     .orbital-main.has-open .orb-icon svg { width: 18px; height: 18px; }
     .orbital-main.has-open .orb-icon::before { display: none; }
