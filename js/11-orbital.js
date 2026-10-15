@@ -223,22 +223,25 @@
   function frame(now) {
     try {
       if (document.hidden) return;
+      // Reloj propio en ms: el ticker de GSAP pasa segundos y rAF milisegundos.
+      // Usar el argumento tal cual congelaba la órbita (dt siempre 0).
+      var tms = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
       var stacked = openStack.length > 0;
       if (!stacked) {
         var g = circleGeom();
         if (g) {
           if (lastT) {
-            var dt = Math.min(100, Math.max(0, now - lastT));
+            var dt = Math.min(100, Math.max(0, tms - lastT));
             for (var s = 0; s < orbA.length; s++) {
               orbA[s] += (dt / ORBIT_MS) * Math.PI * 2 * orbSpd[s % orbSpd.length];
             }
           }
-          lastT = now;
+          lastT = tms;
           var keys = Object.keys(buttons);
           for (var i = 0; i < keys.length; i++) {
             var b = buttons[keys[i]];
             if (!b || b.parentNode !== g.st) continue;
-            var xy2 = orbPos(i, keys.length, now, g);
+            var xy2 = orbPos(i, keys.length, tms, g);
             var p = clampXY(g, xy2[0], xy2[1]);
             setXY(b, p[0], p[1]);
           }
@@ -251,7 +254,7 @@
       var ctx = s.ctx, w = s.w, h = s.h;
       ctx.clearRect(0, 0, w, h);
       ensureStars();
-      var t = now / 1000, k, p2;
+      var t = tms / 1000, k, p2;
       ctx.fillStyle = '#ffffff';
       for (k = 0; k < stars.length; k++) {
         p2 = stars[k];
