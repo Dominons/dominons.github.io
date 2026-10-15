@@ -180,9 +180,10 @@
   var particles = [];
   var stars = [];
   function sizeCanvas() {
-    var cv = $('orbitalStars'), st = $('orbitalStage');
-    if (!cv || !st) return null;
-    var w = st.clientWidth, h = st.clientHeight;
+    var cv = $('orbitalStars');
+    var main = document.querySelector('#main-dashboard-view .orbital-main');
+    if (!cv || !main) return null;
+    var w = main.clientWidth, h = main.clientHeight;
     if (!w || !h) return null;
     var dpr = Math.min(2, window.devicePixelRatio || 1);
     if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
@@ -191,11 +192,14 @@
     }
     var ctx = cv.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { ctx: ctx, w: w, h: h };
+    var st = $('orbitalStage');
+    var ox = 0, oy = 0;
+    try { if (st) { ox = st.offsetLeft || 0; oy = st.offsetTop || 0; } } catch (e) {}
+    return { ctx: ctx, w: w, h: h, main: main, ox: ox, oy: oy };
   }
   function ensureStars() {
     if (stars.length) return;
-    for (var i = 0; i < 90; i++) {
+    for (var i = 0; i < 60; i++) {
       stars.push({ x: Math.random(), y: Math.random(), r: 0.4 + Math.random() * 1.1, ph: Math.random() * 6.28, sp: 0.5 + Math.random() * 1.5 });
     }
   }
@@ -227,7 +231,7 @@
 
   var tick = 0;
   var frameCount = 0;
-  var cvCtx = null, cvW = 0, cvH = 0;
+  var cvCtx = null, cvW = 0, cvH = 0, cvOX = 0, cvOY = 0;
   function frame(now) {
     try {
       if (document.hidden) return;
@@ -263,7 +267,7 @@
       if (frameCount % 30 === 0) {
         try {
           var sc = sizeCanvas();
-          if (sc) { cvCtx = sc.ctx; cvW = sc.w; cvH = sc.h; }
+          if (sc) { cvCtx = sc.ctx; cvW = sc.w; cvH = sc.h; cvOX = sc.ox || 0; cvOY = sc.oy || 0; }
         } catch (e) {}
       }
       if (!cvCtx) return;
@@ -280,11 +284,11 @@
         ctx.fill();
       }
       var keys2 = Object.keys(buttons);
-      if (tick % 3 === 0 && particles.length < 140 && keys2.length && g) {
-        var bi = (tick / 3) % keys2.length | 0;
+      if (tick % 6 === 0 && particles.length < 80 && keys2.length && g) {
+        var bi = (tick / 6) % keys2.length | 0;
         var ba2 = orbAngle + bi * (Math.PI * 2 / keys2.length);
         particles.push({
-          x: g.cx + g.rx * Math.cos(ba2), y: g.cy + g.ry * Math.sin(ba2),
+          x: cvOX + g.cx + g.rx * Math.cos(ba2), y: cvOY + g.cy + g.ry * Math.sin(ba2),
           vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
           life: 1
         });
