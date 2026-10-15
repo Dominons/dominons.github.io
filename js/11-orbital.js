@@ -216,9 +216,10 @@
     if (y > g.h - m) y = g.h - m;
     return [x, y];
   }
+  var orbPlaced = false;
   function layoutCircle() {
     var g = orbMeasure();
-    if (!g) return;
+    if (!g) return false;
     var keys = Object.keys(buttons);
     for (var i = 0; i < keys.length; i++) {
       var b = buttons[keys[i]];
@@ -227,6 +228,8 @@
       var p = clampXY(g, xy[0], xy[1]);
       setXY(b, p[0], p[1]);
     }
+    orbPlaced = true;
+    return true;
   }
 
   var tick = 0;
@@ -235,7 +238,10 @@
   function frame(now) {
     try {
       if (document.hidden) return;
-      if (!isAnimOn()) return;
+      if (!isAnimOn()) {
+        if (!orbPlaced) layoutCircle();
+        return;
+      }
       // Reloj propio en ms: el ticker de GSAP pasa segundos y rAF milisegundos.
       // Usar el argumento tal cual congelaba la órbita (dt siempre 0).
       var tms = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
@@ -341,6 +347,7 @@
       if (s) { stars = []; }
       layoutCircle();
     });
+    window.addEventListener('load', function() { layoutCircle(); });
     lastT = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
     if (G) {
       try { G.ticker.add(frame); }
