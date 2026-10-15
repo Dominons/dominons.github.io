@@ -2828,9 +2828,10 @@
       gap: 10px;
       padding: 10px 6px;
     }
-    .orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
-    .orbital-main.has-open .orbital-stage { grid-column: 1 / -1; }
-    .orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; }
+    #main-dashboard-view .main.orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; }
     .orbital-main.has-open .orbital-clock {
       padding: 6px 18px;
       border-radius: 20px;
