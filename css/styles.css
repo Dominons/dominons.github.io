@@ -2734,31 +2734,54 @@
     html.anim-off .orbital-stars { display: none; }
     .orbital-clock {
       text-align: center;
-      border: 1px solid var(--color-border);
-      border-radius: 32px;
-      padding: 20px 34px;
-      background: var(--color-main-bg);
+      width: min(58vmin, 400px);
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid color-mix(in srgb, var(--color-highlight) 70%, transparent);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--color-highlight) 26%, transparent), transparent 62%),
+        repeating-linear-gradient(45deg, transparent 0 4px, rgba(0,0,0,.28) 4px 8px),
+        var(--color-main-bg);
+      box-shadow:
+        0 0 31px 2px color-mix(in srgb, var(--color-highlight) 55%, transparent),
+        inset 0 0 31px 2px color-mix(in srgb, var(--color-highlight) 45%, transparent);
       position: relative;
       z-index: 2;
       max-width: 94%;
     }
+    #main-dashboard-view.light-theme .orbital-clock {
+      background:
+        radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--color-highlight) 20%, transparent), transparent 62%),
+        repeating-linear-gradient(45deg, transparent 0 4px, rgba(0,0,0,.07) 4px 8px),
+        var(--color-main-bg);
+    }
     .orbital-time {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-size: clamp(1.6rem, 5vmin, 2.6rem);
       line-height: 1;
       white-space: nowrap;
-      background: linear-gradient(180deg, #ffffff, #c7c9d1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: #ffffff;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--color-highlight),
+        0 0 35px var(--color-highlight),
+        0 0 50px var(--color-highlight);
     }
     #main-dashboard-view.light-theme .orbital-time {
-      background: linear-gradient(180deg, #1f2937, #4b5563);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      background: none;
+      -webkit-background-clip: border-box;
+      background-clip: border-box;
+      color: #1f2937;
+      text-shadow: 0 0 12px color-mix(in srgb, var(--color-highlight) 55%, transparent);
     }
+    .orbital-clock .rgb-line { display: none; }
     .orbital-date {
       margin-top: 10px;
       font-size: 0.78rem;
@@ -2782,7 +2805,7 @@
       width: 72px;
       height: 72px;
       border-radius: 50%;
-      border: 1px solid var(--color-highlight);
+      border: none;
       background: var(--color-main-bg);
       color: var(--color-text);
       font-size: 24px;
@@ -2836,8 +2859,14 @@
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; }
     .orbital-main.has-open .orbital-clock {
+      width: auto;
+      aspect-ratio: auto;
+      min-width: min(260px, 80vw);
       padding: 6px 18px;
       border-radius: 20px;
+      border: 1px solid var(--color-border);
+      background: var(--color-main-bg);
+      box-shadow: none;
       cursor: pointer;
       max-width: none;
       order: 2;
@@ -2856,6 +2885,7 @@
       width: 52px;
       height: 52px;
       font-size: 19px;
+      border: 1px solid var(--color-highlight);
     }
     .orbital-main.has-open .orb-icon svg { width: 18px; height: 18px; }
     .orbital-main.has-open .orb-icon::before { display: none; }
