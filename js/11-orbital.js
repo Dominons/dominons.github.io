@@ -17,9 +17,15 @@
   var buttons = {};
   var clockTimer = null;
   var accentCache = { v: '', rgb: '168,85,247' };
-  var orbAngle = -Math.PI / 2;
+  var orbA = [-Math.PI / 2, -Math.PI / 2 + 1.2566, -Math.PI / 2 + 2.5133, -Math.PI / 2 + 3.7699, -Math.PI / 2 + 5.0265];
+  var orbSpd = [1, 1.1, 0.92, 1.06, 0.95];
   var lastT = 0;
   var ORBIT_MS = 120000;
+  function orbPos(i, n, t, g) {
+    var breathe = 1 + 0.05 * Math.sin(t * 0.00025 + i * 1.7);
+    return [g.cx + g.rx * breathe * Math.cos(orbA[i % orbA.length]),
+            g.cy + g.ry * breathe * Math.sin(orbA[i % orbA.length])];
+  }
 
   function $(id) { return document.getElementById(id); }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
@@ -84,17 +90,19 @@
         '<div class="rgb-line"></div>';
     }
     for (var i = 0; i < ORB_LAYERS.length; i++) {
-      (function(def) {
+      (function(def, idx) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'orb-icon';
         b.setAttribute('data-orbital', def.key);
         b.title = def.title;
         b.innerHTML = def.icon;
+        b.style.order = idx >= 2 ? idx + 1 : idx;
+        b.style.animationDelay = (idx * 0.45) + 's';
         b.addEventListener('click', function() { toggleLayer(def.key); });
         st.appendChild(b);
         buttons[def.key] = b;
-      })(ORB_LAYERS[i]);
+      })(ORB_LAYERS[i], i);
     }
   }
 
@@ -205,8 +213,8 @@
     for (var i = 0; i < keys.length; i++) {
       var b = buttons[keys[i]];
       if (!b || b.parentNode !== g.st) continue;
-      var a = orbAngle + i * (Math.PI * 2 / keys.length);
-      var p = clampXY(g, g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a));
+      var xy = orbPos(i, keys.length, performance.now(), g);
+      var p = clampXY(g, xy[0], xy[1]);
       setXY(b, p[0], p[1]);
     }
   }
@@ -221,15 +229,17 @@
         if (g) {
           if (lastT) {
             var dt = Math.min(100, Math.max(0, now - lastT));
-            orbAngle += (dt / ORBIT_MS) * Math.PI * 2;
+            for (var s = 0; s < orbA.length; s++) {
+              orbA[s] += (dt / ORBIT_MS) * Math.PI * 2 * orbSpd[s % orbSpd.length];
+            }
           }
           lastT = now;
           var keys = Object.keys(buttons);
           for (var i = 0; i < keys.length; i++) {
             var b = buttons[keys[i]];
             if (!b || b.parentNode !== g.st) continue;
-            var a = orbAngle + i * (Math.PI * 2 / keys.length);
-            var p = clampXY(g, g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a));
+            var xy2 = orbPos(i, keys.length, now, g);
+            var p = clampXY(g, xy2[0], xy2[1]);
             setXY(b, p[0], p[1]);
           }
         }
