@@ -11,7 +11,7 @@ Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis c
 ---
 
 ## Descripción general
-Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos: combina un dashboard con widgets (TradingView), un terminal "Deep‑Flow" con métricas on‑chain/mercado, un canvas infinito llamado "Quantis" para diagramas y proyectos visuales, un bloc de notas con persistencia local y en la nube (planes) y un asistente conversacional integrado con Google AI (Gemini). Ideal para demos, prototipos y como base para un producto SaaS ligero.
+Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos: combina un dashboard con widgets (TradingView), un terminal "Deep‑Flow" con métricas on‑chain, un canvas infinito llamado "Quantis" para diagramas y proyectos visuales, un bloc de notas con persistencia local y en la nube (planes) y un asistente conversacional integrado con Google AI (Gemini). Ideal para demos, prototipos y como base para un producto SaaS ligero.
 
 Principales casos de uso:
 - Monitorización y demo de métricas crypto (simuladas + fuentes públicas).
@@ -144,7 +144,9 @@ https://dominons.github.io
 ---
 
 ## Licencia
-Aún no existe un archivo `LICENSE` en el repo (ver sección de optimizaciones). Se recomienda MIT para facilitar adopción. Añade un `LICENSE` con el texto MIT si deseas permitir reuso amplio.
+Este proyecto se distribuye bajo la Licencia MIT. Consulta el archivo `LICENSE` en la raíz para el texto completo.
+
+Copyright (c) 2026 DANIFU777
 
 ---
 
@@ -159,4 +161,3 @@ Aún no existe un archivo `LICENSE` en el repo (ver sección de optimizaciones).
 - Google Generative Language API: https://developers.generativeai.google
 - GSAP: https://greensock.com/gsap
 - TradingView widget docs
-
