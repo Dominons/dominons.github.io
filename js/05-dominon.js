@@ -53,7 +53,7 @@
     function applyDominonTheme(themeName) {
       var view = document.getElementById('main-dashboard-view');
       if (!view) return;
-      var colors = { purple: '#A855F7', green: '#39FF14', red: '#FF3131', blue: '#00AEEF', light: '#1f2937', black: '#6B7280' };
+      var colors = { purple: '#A855F7', green: '#00FF87', red: '#FF3366', blue: '#00D8FF', light: '#1f2937', black: '#94A3B8' };
       view.classList.remove('black-theme', 'light-theme', 'purple-theme', 'green-theme', 'red-theme', 'blue-theme');
       view.classList.add(themeName + '-theme');
       view.style.setProperty('--color-highlight', colors[themeName] || colors.black);
