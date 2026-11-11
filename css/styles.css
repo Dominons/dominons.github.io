@@ -232,7 +232,7 @@
       height: 100%;
       overflow: hidden;
       z-index: 1;
-      background: radial-gradient(ellipse at bottom, #321b35 0%, #090a0f 100%);
+      background: radial-gradient(ellipse at bottom, #1E1233 0%, #080A0F 100%);
     }
 
     #stars {
@@ -428,17 +428,50 @@
       --color-input-bg: #0B0E14;
       --shadow-light: 0 4px 14px rgba(0, 0, 0, 0.6);
     }
+    /* --- TEMAS COMPLETOS 60-30-10 PARA DOMINON --- */
     #main-dashboard-view.purple-theme {
+      --color-dark-bg: #0C0A14;
+      --color-input-bg: #0C0A14;
+      --color-header-bg: #151024;
+      --color-main-bg: #151024;
+      --color-card-bg: #1C1530;
+      --color-border: #312352;
       --color-highlight: #A855F7;
+      --color-text: #F3EEFA;
+      --shadow-light: 0 4px 18px rgba(0, 0, 0, 0.7);
     }
     #main-dashboard-view.green-theme {
-      --color-highlight: #39FF14;
+      --color-dark-bg: #06110B;
+      --color-input-bg: #06110B;
+      --color-header-bg: #0C1E14;
+      --color-main-bg: #0C1E14;
+      --color-card-bg: #12291C;
+      --color-border: #1B432C;
+      --color-highlight: #00FF87;
+      --color-text: #EAFDF3;
+      --shadow-light: 0 4px 18px rgba(0, 0, 0, 0.7);
     }
     #main-dashboard-view.red-theme {
-      --color-highlight: #FF3131;
+      --color-dark-bg: #12080A;
+      --color-input-bg: #12080A;
+      --color-header-bg: #1F0D11;
+      --color-main-bg: #1F0D11;
+      --color-card-bg: #2C1217;
+      --color-border: #4D1A23;
+      --color-highlight: #FF3366;
+      --color-text: #FDECEF;
+      --shadow-light: 0 4px 18px rgba(0, 0, 0, 0.7);
     }
     #main-dashboard-view.blue-theme {
-      --color-highlight: #00AEEF;
+      --color-dark-bg: #070F1A;
+      --color-input-bg: #070F1A;
+      --color-header-bg: #0E1B2D;
+      --color-main-bg: #0E1B2D;
+      --color-card-bg: #14253E;
+      --color-border: #1C3B63;
+      --color-highlight: #00D8FF;
+      --color-text: #ECF7FF;
+      --shadow-light: 0 4px 18px rgba(0, 0, 0, 0.7);
     }
     #main-dashboard-view.green-theme .tab-btn.active,
     #main-dashboard-view.green-theme .calc-button.equals,
@@ -631,15 +664,17 @@
       flex: 0 1 auto;
     }
     #main-dashboard-view .tab-btn:hover {
-      background: #444;
+      background: var(--color-border);
+      border-color: var(--color-highlight);
     }
     #main-dashboard-view .tab-btn.active {
       background: var(--color-highlight);
-      color: var(--color-dark-bg);
+      color: #000000;
+      border-color: var(--color-highlight);
       font-weight: bold;
     }
     #main-dashboard-view #notepad {
-      background: #0D0D0D;
+      background: var(--color-input-bg);
       color: var(--color-text);
       border: 1px solid var(--color-border);
       padding: 10px;
@@ -655,7 +690,7 @@
     #main-dashboard-view #notepad:focus {
       outline: none;
       border-color: var(--color-highlight);
-      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
     }
     #main-dashboard-view .bottom-container {
       display: grid;
@@ -723,32 +758,38 @@
       grid-column: 4 / span 1;
       grid-row: 5 / span 1;
       background: var(--color-highlight);
-      color: var(--color-dark-bg);
+      color: #000000;
+      border-color: var(--color-highlight);
       font-weight: bold;
       font-size: 1.1em;
     }
     #main-dashboard-view .calc-button.equals:hover {
-      background: #8b3ed9;
+      filter: brightness(1.15);
+      box-shadow: 0 0 10px var(--color-highlight);
     }
     #main-dashboard-view .calc-button.zero {
       grid-column: 1 / span 2;
     }
     #main-dashboard-view .calc-button.operator {
       background: var(--color-highlight);
-      color: var(--color-dark-bg);
+      color: #000000;
+      border-color: var(--color-highlight);
       font-weight: bold;
       font-size: 1.1em;
     }
     #main-dashboard-view .calc-button.operator:hover {
-      filter: brightness(0.95);
+      filter: brightness(1.15);
+      box-shadow: 0 0 10px var(--color-highlight);
     }
     #main-dashboard-view .calc-button.clear {
-      background: #DC2626;
+      background: #EF4444;
+      border-color: #EF4444;
       color: white;
       font-weight: bold;
     }
     #main-dashboard-view .calc-button.clear:hover {
-      filter: brightness(0.9);
+      filter: brightness(1.15);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
     }
     #main-dashboard-view .pomodoro-panel {
       background: var(--color-input-bg);
@@ -774,7 +815,7 @@
       font-family: monospace;
       letter-spacing: 2px;
       text-align: center;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 0 12px var(--color-highlight);
       margin: 8px 0;
     }
     #main-dashboard-view .pomodoro-controls {
@@ -785,26 +826,29 @@
     }
     #main-dashboard-view .pomo-btn {
       background: var(--color-input-bg);
-      color: #ddd;
-      border: 1px solid #555;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
       padding: 6px 10px;
       cursor: pointer;
       border-radius: 4px;
       font-size: 0.8em;
-      transition: background 0.2s;
+      transition: all 0.2s;
       flex: 1;
       min-width: 55px;
     }
     #main-dashboard-view .pomo-btn:hover {
-      background: #444;
+      background: var(--color-border);
+      border-color: var(--color-highlight);
     }
     #main-dashboard-view .pomo-btn.active {
       background: var(--color-highlight);
-      color: var(--color-dark-bg);
+      color: #000000;
+      border-color: var(--color-highlight);
       font-weight: bold;
+      box-shadow: 0 0 10px var(--color-highlight);
     }
     #main-dashboard-view .custom-time-input {
-      background: #0D0D0D;
+      background: var(--color-input-bg);
       color: var(--color-highlight);
       border: 1px solid var(--color-highlight);
       padding: 5px 6px;
@@ -1350,11 +1394,10 @@
       background: var(--color-highlight);
     }
         #main-dashboard-view .song-display {
-      background: #0D0D0D;
+      background: var(--color-input-bg);
       border: 1px solid var(--color-border);
       padding: 6px 12px;
       border-radius: 4px;
-      padding: 6px 12px;
       max-width: 180px;
       overflow: hidden;
     }
@@ -1370,16 +1413,23 @@
       max-width: 160px;
     }
 
-    /* ========== PREVENCIN CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
+    /* ========== PREVENCION CONTRA COLISIONES DE CSS (AISLAMIENTO DATOS) ========== */
     #deep-flow-view {
       --fs: 1;
+      /* Regla 60-30-10 para Deep Flow */
+      --df-bg-dominant: #06080E;       /* 60% Dominante */
+      --df-bg-structural: #0E131F;     /* 30% Estructural */
+      --df-border-structural: #1B2438;
+      --df-text-read: #DCE5F5;
+      --df-accent-conversion: #00F0FF; /* 10% Acento Clic */
+      --df-accent-secondary: #FF007F;
       position: absolute;
       inset: 0;
       height: 100vh;
       width: 100%;
       overflow: hidden;
-      background: #000;
-      color: #c8c8d0;
+      background: var(--df-bg-dominant);
+      color: var(--df-text-read);
       font-family: 'JetBrains Mono', monospace;
       font-weight: 300;
       font-size: calc(11px * var(--fs));
@@ -2309,9 +2359,9 @@
       padding-bottom: 2px;
     }
     .gemini-tab-bar .g-tab {
-      background: var(--color-input-bg, #1F1F1F);
-      color: var(--color-text, #EAEAEA);
-      border: 1px solid var(--color-border, #444);
+      background: var(--color-input-bg, #0B0E14);
+      color: var(--color-text, #F1F5F9);
+      border: 1px solid var(--color-border, #252F42);
       padding: 4px 10px;
       cursor: pointer;
       border-radius: 4px;
@@ -2320,15 +2370,17 @@
       white-space: nowrap;
     }
     .gemini-tab-bar .g-tab:hover {
-      background: #444;
+      background: var(--color-border);
+      border-color: var(--color-highlight);
     }
     .gemini-tab-bar .g-tab.active {
       background: var(--color-highlight, #A855F7);
-      color: var(--color-dark-bg, #1A1A1A);
+      color: #000000;
+      border-color: var(--color-highlight);
       font-weight: bold;
     }
     .gemini-tab-bar .g-tab.add-tab {
-      background: #1F1F1F;
+      background: var(--color-input-bg);
       border-color: var(--color-highlight);
       color: var(--color-highlight);
     }
@@ -2340,20 +2392,23 @@
     }
 
     /* ===== QUANTIS VIEW - SCOPED STYLES (bloque 2, preserva orden de cascada) ===== */
-      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
+      /* ===== QUANTIS VIEW — SCOPED STYLES (REGLA 60-30-10) ===== */
       #quantis-view {
-        --quantis-bg: #0b0c10;
-        --quantis-header-bg: #111318;
-        --quantis-sidebar-bg: #0e0f14;
-        --quantis-surface-bg: #111318;
-        --quantis-text: #e4e4e7;
-        --quantis-muted: #71717a;
-        --quantis-faint: #52525b;
-        --quantis-border: rgba(168,85,247,0.2);
-        --quantis-grid-dot: rgba(168,85,247,0.07);
-        --quantis-shadow: rgba(0,0,0,0.5);
+        /* 60% Dominante (Lienzo infinito) */
+        --quantis-bg: #07090E;
+        /* 30% Estructural (Headers, sidebars, tarjetas de bloques, texto) */
+        --quantis-header-bg: #0E131E;
+        --quantis-sidebar-bg: #0A0D15;
+        --quantis-surface-bg: #111726;
+        --quantis-text: #F1F5F9;
+        --quantis-muted: #94A3B8;
+        --quantis-faint: #64748B;
+        --quantis-border: rgba(168, 85, 247, 0.3);
+        --quantis-grid-dot: rgba(168, 85, 247, 0.12);
+        --quantis-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        /* 10% Acento de Conversión (Llamativo, acciones, selector) */
         --quantis-accent: #A855F7;
-        --quantis-boundary: rgba(255, 255, 255, 0.25);
+        --quantis-boundary: rgba(168, 85, 247, 0.5);
         width: 100%;
         height: 100vh;
         display: flex;
