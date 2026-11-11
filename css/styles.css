@@ -1,13 +1,23 @@
-    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
+    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO - REGLA 60-30-10) ========== */
     :root {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444;
+      /* 60% Dominante (Lienzo / Fondo general) */
+      --color-dark-bg: #0B0E14;
+      --color-input-bg: #0B0E14;
+
+      /* 30% Estructural (Contenedores, jerarquía visual, bordes y lectura) */
+      --color-header-bg: #141923;
+      --color-main-bg: #141923;
+      --color-card-bg: #1A212E;
+      --color-border: #252F42;
+      --color-text: #F1F5F9;
+      --color-text-muted: #94A3B8;
+
+      /* 10% Acento de Conversión (El Clic / Interacción llamativa) */
       --color-highlight: #A855F7;
-      --color-main-bg: #282828;
-      --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --color-highlight-hover: #C084FC;
+      --color-highlight-glow: rgba(168, 85, 247, 0.4);
+
+      --shadow-light: 0 4px 14px rgba(0, 0, 0, 0.6);
       --main-gap: 15px;
     }
 
@@ -315,16 +325,22 @@
       height: 20px;
     }
 
-    /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW) ========== */
+    /* ========== ESTILOS DE VISTA: DOMINON (MAIN APP VIEW - REGLA 60-30-10) ========== */
         #main-dashboard-view {
-      --color-dark-bg: #0D0D0D;
-      --color-header-bg: #151515;
-      --color-border: #2E2E2E;
+      /* 60% Dominante */
+      --color-dark-bg: #0B0E14;
+      --color-input-bg: #0B0E14;
+
+      /* 30% Estructural */
+      --color-header-bg: #141923;
+      --color-main-bg: #141923;
+      --color-card-bg: #1A212E;
+      --color-border: #252F42;
+      --color-text: #F1F5F9;
+
+      /* 10% Acento de Conversión */
       --color-highlight: #A855F7;
-      --color-main-bg: #151515;
-      --color-text: #EAEAEA;
-      --color-input-bg: #0D0D0D;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.6);
+      --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.7);
       --main-gap: 15px;
       width: 100%;
       height: 100vh;
@@ -402,14 +418,15 @@
       border-color: #d1d5db;
     }
     #main-dashboard-view.black-theme {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444444;
-      --color-highlight: #9CA3AF;
-      --color-main-bg: #282828;
-      --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --color-dark-bg: #0B0E14;
+      --color-header-bg: #141923;
+      --color-border: #252F42;
+      --color-highlight: #94A3B8;
+      --color-main-bg: #141923;
+      --color-card-bg: #1A212E;
+      --color-text: #F1F5F9;
+      --color-input-bg: #0B0E14;
+      --shadow-light: 0 4px 14px rgba(0, 0, 0, 0.6);
     }
     #main-dashboard-view.purple-theme {
       --color-highlight: #A855F7;
