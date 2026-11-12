@@ -2934,6 +2934,69 @@
   --acc-music:   #34D399;  /* Reproductor */
   --acc-ink:     #0B0B0B;  /* texto sobre acento */
 }
+
+/* Ajustes acotados para widgets pequeños. */
+@media (min-width: 701px) {
+  /* Una herramienta pequeña sola no ocupa toda la pantalla. */
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="calculator"],
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] {
+    flex: 0 0 auto;
+    align-self: center;
+    width: 320px;
+    height: auto;
+  }
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="calculator"] > .calculator-panel {
+    width: 320px;
+    height: 320px;
+    flex: 0 0 auto;
+  }
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] > .pomodoro-panel {
+    width: 320px;
+    height: 170px;
+    flex: 0 0 auto;
+  }
+
+  /* Calculadora y Pomodoro solos: widgets compactos uno junto al otro. */
+  #main-dashboard-view .main.orbital-main.has-open:has(.orbital-layer[data-orbital="calculator"].open):has(.orbital-layer[data-orbital="pomodoro"].open):not(:has(.orbital-layer[data-orbital="trading"].open, .orbital-layer[data-orbital="notepad"].open, .orbital-layer[data-orbital="gemini"].open)) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  #main-dashboard-view .main.orbital-main.has-open:has(.orbital-layer[data-orbital="calculator"].open):has(.orbital-layer[data-orbital="pomodoro"].open):not(:has(.orbital-layer[data-orbital="trading"].open, .orbital-layer[data-orbital="notepad"].open, .orbital-layer[data-orbital="gemini"].open)) .orbital-stage {
+    flex-basis: 100%;
+  }
+  #main-dashboard-view .main.orbital-main.has-open:has(.orbital-layer[data-orbital="calculator"].open):has(.orbital-layer[data-orbital="pomodoro"].open):not(:has(.orbital-layer[data-orbital="trading"].open, .orbital-layer[data-orbital="notepad"].open, .orbital-layer[data-orbital="gemini"].open)) .orbital-layer.open {
+    width: 320px;
+    margin: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open:has(.orbital-layer[data-orbital="calculator"].open):has(.orbital-layer[data-orbital="pomodoro"].open):not(:has(.orbital-layer[data-orbital="trading"].open, .orbital-layer[data-orbital="notepad"].open, .orbital-layer[data-orbital="gemini"].open)) .calculator-panel {
+    height: 320px;
+  }
+  #main-dashboard-view .main.orbital-main.has-open:has(.orbital-layer[data-orbital="calculator"].open):has(.orbital-layer[data-orbital="pomodoro"].open):not(:has(.orbital-layer[data-orbital="trading"].open, .orbital-layer[data-orbital="notepad"].open, .orbital-layer[data-orbital="gemini"].open)) .pomodoro-panel {
+    height: 170px;
+  }
+
+  /* Una grande con ambas pequeñas: filas distintas, sin superposición. */
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
+    grid-template-rows: auto auto auto;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] {
+    grid-row: 2;
+    align-self: start;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] {
+    grid-row: 3;
+    align-self: start;
+    margin-top: 12px;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] .calculator-panel {
+    height: 310px;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
+    height: 170px;
+  }
+}
 #main-dashboard-view.light-theme {
   --acc-chart:#7C3AED; --acc-notepad:#0891B2; --acc-calc:#B45309;
   --acc-pomo:#BE123C;  --acc-gemini:#BE185D; --acc-music:#047857;
@@ -3205,6 +3268,28 @@
   #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
     height: auto;
     min-height: 0;
+  }
+}
+
+/* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande. */
+@media (min-width: 701px) {
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
+    grid-template-rows: auto auto auto !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] {
+    grid-row: 2 !important;
+    align-self: start;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] {
+    grid-row: 3 !important;
+    align-self: start;
+    margin-top: 12px !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] .calculator-panel {
+    height: 310px !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
+    height: 170px !important;
   }
 }
 
