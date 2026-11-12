@@ -2857,10 +2857,16 @@
       padding: 10px 6px;
       margin-bottom: 14px;
     }
-    #main-dashboard-view .main.orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; }
+    #main-dashboard-view .main.orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0, 1fr); align-items: start; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; grid-row: 1; align-self: start; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; grid-row: 2; display: flex; flex-direction: column; align-self: stretch; min-height: 0; }
+    /* Panel único: rellena todo el alto disponible, sin pasarse de la ventana */
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo > * { flex-grow: 1; min-height: 0; }
+    /* Varios paneles: compactos por contenido (solo el gráfico se ajusta al alto disponible) */
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) > * { flex-grow: 0; max-height: 100%; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open .chart-panel { height: auto; min-height: 0; flex: 1; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-panel { margin-top: 0; }
     .orbital-main.has-open .orbital-clock {
       width: auto;
       aspect-ratio: auto;
@@ -2898,6 +2904,9 @@
       .orbital-stage { min-height: 52vh; }
       .orb-icon { width: 56px; height: 56px; font-size: 20px; }
       .orbital-clock { padding: 20px 28px; }
+      /* Móvil: .main tiene altura automática, así que el gráfico usa viewport como referencia */
+      #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open .chart-panel { flex: 0 0 auto; height: 58vh; min-height: 320px; }
+      #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .notepad-panel { min-height: 52vh; }
     }
 
 /* ===== PALETA MULTI-ACENTO POR PANEL (DOMINON) ===== */
