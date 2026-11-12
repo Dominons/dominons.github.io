@@ -2857,11 +2857,12 @@
       padding: 10px 6px;
       margin-bottom: 14px;
     }
-    #main-dashboard-view .main.orbital-main.has-open { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0, 1fr); align-items: start; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; grid-row: 1; align-self: start; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; grid-row: 2; display: flex; flex-direction: column; align-self: stretch; min-height: 0; }
-    /* Panel único: rellena todo el alto disponible, sin pasarse de la ventana */
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; display: flex; flex-direction: column; align-self: stretch; height: calc(100vh - 84px); min-height: 0; }
+    #main-dashboard-view .main.orbital-main.has-open { display: flex; flex-direction: column; align-items: stretch; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-stage { width: 100%; flex-shrink: 0; align-self: center; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin: 0 0 12px 0; display: none; flex-direction: column; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.open { display: flex; }
+    /* Panel único: expandido en alto */
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { flex-grow: 1; height: calc(100vh - 110px); min-height: 0; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo > * { flex-grow: 1; min-height: 0; height: 100%; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .notepad-panel { height: 100%; display: flex; flex-direction: column; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo #notepad { flex-grow: 1; height: auto; min-height: 0; }
@@ -2871,6 +2872,14 @@
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-chat-history { flex-grow: 1; height: auto; min-height: 0; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .calculator-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .pomodoro-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+
+    /* Varios paneles: se apilan verticalmente uno debajo del otro, cada uno con su alto natural y ordenado */
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) { height: auto; flex-grow: 0; flex-shrink: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .chart-panel { height: 480px; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .notepad-panel { height: 320px; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .calculator-panel { height: auto; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .pomodoro-panel { height: auto; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .gemini-panel { height: 380px; }
     .orbital-main.has-open .orbital-clock {
       width: auto;
       aspect-ratio: auto;
