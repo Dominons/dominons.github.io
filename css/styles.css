@@ -1,4 +1,4 @@
-    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
+﻿    /* ========== VARIABLES GLOBALES (DOMINON POR DEFECTO) ========== */
     :root {
       --color-dark-bg: #1A1A1A;
       --color-header-bg: #282828;
@@ -2899,3 +2899,99 @@
       .orb-icon { width: 56px; height: 56px; font-size: 20px; }
       .orbital-clock { padding: 20px 28px; }
     }
+
+/* ===== PALETA MULTI-ACENTO POR PANEL (DOMINON) ===== */
+:root { --acc-music: #34D399; }
+
+#main-dashboard-view {
+  --acc-chart:   #A855F7;  /* TradingView */
+  --acc-notepad: #22D3EE;  /* Bloc de notas */
+  --acc-calc:    #F59E0B;  /* Calculadora */
+  --acc-pomo:    #F43F5E;  /* Pomodoro */
+  --acc-gemini:  #EC4899;  /* Gemini */
+  --acc-music:   #34D399;  /* Reproductor */
+  --acc-ink:     #0B0B0B;  /* texto sobre acento */
+}
+#main-dashboard-view.light-theme {
+  --acc-chart:#7C3AED; --acc-notepad:#0891B2; --acc-calc:#B45309;
+  --acc-pomo:#BE123C;  --acc-gemini:#BE185D; --acc-music:#047857;
+  --acc-ink:#FFFFFF;
+}
+#main-dashboard-view.black-theme {
+  --acc-chart:#9CA3AF; --acc-notepad:#7DD3FC; --acc-calc:#FCD34D;
+  --acc-pomo:#FCA5A5;  --acc-gemini:#F0ABFC; --acc-music:#86EFAC;
+}
+#main-dashboard-view.green-theme {
+  --acc-chart:#39FF14; --acc-notepad:#00E5FF; --acc-calc:#C6FF00;
+  --acc-pomo:#FF9F1C;  --acc-gemini:#7CFFCB; --acc-music:#A3FF12;
+}
+#main-dashboard-view.red-theme {
+  --acc-chart:#FF3131; --acc-notepad:#FF8A00; --acc-calc:#FFD166;
+  --acc-pomo:#FF4D9D;  --acc-gemini:#FF6B6B; --acc-music:#FFA3A3;
+}
+#main-dashboard-view.blue-theme {
+  --acc-chart:#00AEEF; --acc-notepad:#7C4DFF; --acc-calc:#00E5C0;
+  --acc-pomo:#4DABFF;  --acc-gemini:#FF6EC7; --acc-music:#22D3EE;
+}
+
+/* --- TradingView --- */
+#main-dashboard-view .chart-panel { border-color: var(--acc-chart); }
+#main-dashboard-view .chart-header h2 { color: var(--acc-chart); border-bottom-color: color-mix(in srgb, var(--acc-chart) 35%, transparent); }
+
+/* --- Bloc de notas --- */
+#main-dashboard-view .notepad-panel { border-color: var(--acc-notepad); }
+#main-dashboard-view .notepad-header-row h2 { color: var(--acc-notepad); }
+#main-dashboard-view .notepad-header-row { border-bottom-color: color-mix(in srgb, var(--acc-notepad) 30%, transparent); }
+#main-dashboard-view #notepad:focus { border-color: var(--acc-notepad); box-shadow: 0 0 8px color-mix(in srgb, var(--acc-notepad) 35%, transparent); }
+#main-dashboard-view .tab-btn.active { background: var(--acc-notepad); border-color: var(--acc-notepad); color: var(--acc-ink); }
+#main-dashboard-view #notepad::-webkit-scrollbar-thumb { background: var(--acc-notepad); }
+
+/* --- Calculadora --- */
+#main-dashboard-view .calculator-panel { border-color: var(--acc-calc); }
+#main-dashboard-view .calculator-panel h2 { color: var(--acc-calc); border-bottom-color: color-mix(in srgb, var(--acc-calc) 35%, transparent); }
+#main-dashboard-view .calc-display { color: var(--acc-calc); border-color: var(--acc-calc); }
+#main-dashboard-view .calc-button:hover { border-color: var(--acc-calc); }
+#main-dashboard-view .calc-button.operator,
+#main-dashboard-view .calc-button.equals { background: var(--acc-calc); color: var(--acc-ink); }
+#main-dashboard-view .calc-button.equals:hover { background: var(--acc-calc); filter: brightness(1.12); }
+
+/* --- Pomodoro --- */
+#main-dashboard-view .pomodoro-panel { border-color: var(--acc-pomo); }
+#main-dashboard-view .pomodoro-panel h2 { color: var(--acc-pomo); border-bottom-color: color-mix(in srgb, var(--acc-pomo) 35%, transparent); }
+#main-dashboard-view .pomodoro-display { color: var(--acc-pomo); }
+#main-dashboard-view .pomo-btn.active { background: var(--acc-pomo); border-color: var(--acc-pomo); color: var(--acc-ink); }
+#main-dashboard-view .custom-time-input { color: var(--acc-pomo); border-color: var(--acc-pomo); }
+
+/* --- Gemini --- */
+#main-dashboard-view .gemini-panel { border-color: var(--acc-gemini); }
+#main-dashboard-view .gemini-btn { background: var(--acc-gemini); border-color: var(--acc-gemini); color: var(--acc-ink); }
+#main-dashboard-view .gemini-topbar-title { color: var(--acc-gemini); }
+#main-dashboard-view .gemini-sidebar-item.active { border-color: var(--acc-gemini); }
+#main-dashboard-view .gemini-tab-bar .g-tab.active { background: var(--acc-gemini); color: var(--acc-ink); }
+#main-dashboard-view .gemini-message.gemini-user { background: var(--acc-gemini); color: var(--acc-ink); }
+#main-dashboard-view .gemini-spinner { border-top-color: var(--acc-gemini); }
+
+/* Fix especificidad: temas verde/rojo/azul forzaban color negro */
+#main-dashboard-view.green-theme .calc-button.equals,
+#main-dashboard-view.red-theme   .calc-button.equals,
+#main-dashboard-view.blue-theme  .calc-button.equals,
+#main-dashboard-view.green-theme .pomo-btn.active,
+#main-dashboard-view.red-theme   .pomo-btn.active,
+#main-dashboard-view.blue-theme  .pomo-btn.active,
+#main-dashboard-view.green-theme .tab-btn.active,
+#main-dashboard-view.red-theme   .tab-btn.active,
+#main-dashboard-view.blue-theme  .tab-btn.active,
+#main-dashboard-view.green-theme .gemini-btn,
+#main-dashboard-view.red-theme   .gemini-btn,
+#main-dashboard-view.blue-theme  .gemini-btn { color: var(--acc-ink); }
+
+/* --- Iconos orbitales: cada uno con el color de su panel --- */
+#main-dashboard-view .orb-icon[data-orbital="trading"]    { --color-highlight: var(--acc-chart); }
+#main-dashboard-view .orb-icon[data-orbital="notepad"]    { --color-highlight: var(--acc-notepad); }
+#main-dashboard-view .orb-icon[data-orbital="calculator"] { --color-highlight: var(--acc-calc); }
+#main-dashboard-view .orb-icon[data-orbital="pomodoro"]   { --color-highlight: var(--acc-pomo); }
+#main-dashboard-view .orb-icon[data-orbital="gemini"]     { --color-highlight: var(--acc-gemini); }
+#main-dashboard-view .orb-icon.orb-active { color: var(--acc-ink); }
+
+/* --- Reproductor flotante (vive fuera de la vista) --- */
+#musicPanel { --color-highlight: var(--acc-music, #34D399); border-color: var(--acc-music, #34D399); }
