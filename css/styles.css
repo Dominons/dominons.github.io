@@ -2861,12 +2861,16 @@
     #main-dashboard-view .main.orbital-main.has-open .orbital-stage { grid-column: 1 / -1; grid-row: 1; align-self: start; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open { width: 100%; max-width: 100%; margin-left: 0; margin-right: 0; min-width: 0; grid-row: 2; display: flex; flex-direction: column; align-self: stretch; min-height: 0; }
     /* Panel único: rellena todo el alto disponible, sin pasarse de la ventana */
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo > * { flex-grow: 1; min-height: 0; }
-    /* Varios paneles: compactos por contenido (solo el gráfico se ajusta al alto disponible) */
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) > * { flex-grow: 0; max-height: 100%; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open .chart-panel { height: auto; min-height: 0; flex: 1; }
-    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-panel { margin-top: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo { grid-column: 1 / -1; display: flex; flex-direction: column; align-self: stretch; height: calc(100vh - 84px); min-height: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo > * { flex-grow: 1; min-height: 0; height: 100%; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .notepad-panel { height: 100%; display: flex; flex-direction: column; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo #notepad { flex-grow: 1; height: auto; min-height: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .chart-panel { height: 100% !important; min-height: 0; flex: 1; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .chart-iframe { height: calc(100% - 35px) !important; min-height: 0; flex: 1; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-panel { height: 100%; display: flex; flex-direction: column; margin-top: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-chat-history { flex-grow: 1; height: auto; min-height: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .calculator-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .pomodoro-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
     .orbital-main.has-open .orbital-clock {
       width: auto;
       aspect-ratio: auto;
