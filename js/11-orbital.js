@@ -128,13 +128,23 @@
     var main = document.querySelector('#main-dashboard-view .orbital-main');
     var layers = document.querySelectorAll('#main-dashboard-view .orbital-layer');
     var openCount = 0;
+    var largeCount = 0;
+    var smallCount = 0;
     for (var i = 0; i < layers.length; i++) {
       var isOpen = openStack.indexOf(layers[i].getAttribute('data-orbital')) !== -1;
       layers[i].classList.toggle('open', isOpen);
       layers[i].classList.toggle('solo', isOpen && openStack.length === 1);
-      if (isOpen) openCount++;
+      if (isOpen) {
+        openCount++;
+        if (['trading', 'notepad', 'gemini'].indexOf(layers[i].getAttribute('data-orbital')) !== -1) largeCount++;
+        if (['calculator', 'pomodoro'].indexOf(layers[i].getAttribute('data-orbital')) !== -1) smallCount++;
+      }
     }
-    if (main) main.classList.toggle('has-open', openCount > 0);
+    if (main) {
+      main.classList.toggle('has-open', openCount > 0);
+      main.classList.toggle('layout-large-small', largeCount === 1 && smallCount > 0);
+      main.classList.toggle('layout-multiple-large', largeCount > 1);
+    }
     for (var k in buttons) {
       if (!Object.prototype.hasOwnProperty.call(buttons, k)) continue;
       buttons[k].classList.toggle('orb-active', openStack.indexOf(k) !== -1);
