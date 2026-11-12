@@ -3017,3 +3017,239 @@
 
 /* --- Reproductor flotante (vive fuera de la vista) --- */
 #musicPanel { --color-highlight: var(--acc-music, #34D399); border-color: var(--acc-music, #34D399); }
+
+/* ===== ACOPLAMIENTO DE HERRAMIENTAS =====
+   Grandes: trading, notepad y Gemini.
+   Pequeñas: calculadora y Pomodoro. */
+@media (min-width: 701px) {
+  /* Estado calculado por 11-orbital.js: evita depender del orden del DOM. */
+  #main-dashboard-view .main.orbital-main.has-open.layout-multiple-large {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-multiple-large .orbital-layer.open {
+    grid-column: auto;
+    grid-row: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 12px;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-stage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="trading"],
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="notepad"],
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="gemini"] {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    margin: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] {
+    grid-column: 2;
+    grid-row: 3;
+    width: 100%;
+    margin: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] .calculator-panel,
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
+    height: auto;
+    min-height: 0;
+  }
+
+  /* Estado base para varias herramientas: una debajo de otra. */
+  #main-dashboard-view .main.orbital-main.has-open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open .orbital-stage {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 auto;
+    margin: 0 0 12px;
+  }
+
+  /* Una grande + pequeñas: grande a la izquierda, pequeñas a la derecha. */
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-stage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-layer.open[data-orbital="trading"],
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-layer.open[data-orbital="notepad"],
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-layer.open[data-orbital="gemini"] {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-layer.open[data-orbital="calculator"],
+  #main-dashboard-view .main.orbital-main.has-open:has(
+    .orbital-layer[data-orbital="trading"].open,
+    .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="gemini"].open
+  ):has(
+    .orbital-layer[data-orbital="calculator"].open,
+    .orbital-layer[data-orbital="pomodoro"].open
+  ):not(:has(
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="notepad"].open,
+    .orbital-layer[data-orbital="trading"].open ~ .orbital-layer[data-orbital="gemini"].open,
+    .orbital-layer[data-orbital="notepad"].open ~ .orbital-layer[data-orbital="gemini"].open
+  )) .orbital-layer.open[data-orbital="pomodoro"] {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  /* Las pequeñas se mantienen compactas en el lateral. */
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open[data-orbital="calculator"] .calculator-panel,
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
+    height: auto;
+    min-height: 0;
+  }
+}
+
+/* Overrides finales del layout calculado por JS. */
+@media (min-width: 701px) {
+  #main-dashboard-view .main.orbital-main.has-open.layout-multiple-large {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-multiple-large .orbital-layer.open {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    margin: 0 0 12px !important;
+  }
+
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 330px !important;
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-stage {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="trading"],
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="notepad"],
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="gemini"] {
+    grid-column: 1 !important;
+    grid-row: 2 / span 2 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
