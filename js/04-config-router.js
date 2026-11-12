@@ -109,24 +109,6 @@
       }
 
       document.addEventListener('DOMContentLoaded', function() {
-        var animationToggle = document.getElementById('animToggleBtn');
-        var animationsEnabled = localStorage.getItem('danifu_anim_enabled') !== 'false';
-        document.documentElement.classList.toggle('anim-on', animationsEnabled);
-        document.documentElement.classList.toggle('anim-off', !animationsEnabled);
-        if (animationToggle) {
-          animationToggle.innerHTML = animationsEnabled
-            ? '<i class="fa-solid fa-wand-magic-sparkles"></i> Animaciones: ON'
-            : '<i class="fa-solid fa-wand-magic-sparkles"></i> Animaciones: OFF';
-          animationToggle.addEventListener('click', function() {
-            animationsEnabled = !animationsEnabled;
-            localStorage.setItem('danifu_anim_enabled', String(animationsEnabled));
-            document.documentElement.classList.toggle('anim-on', animationsEnabled);
-            document.documentElement.classList.toggle('anim-off', !animationsEnabled);
-            animationToggle.innerHTML = animationsEnabled
-              ? '<i class="fa-solid fa-wand-magic-sparkles"></i> Animaciones: ON'
-              : '<i class="fa-solid fa-wand-magic-sparkles"></i> Animaciones: OFF';
-          });
-        }
         document.getElementById('dominonConfigBtn')?.addEventListener('click', function(e) {
           toggleConfig('dominon-config-dropdown', e);
         });

@@ -37,8 +37,8 @@
       var clock = $('orbitalClock');
       if (clock) { cw = clock.offsetWidth || 0; ch = clock.offsetHeight || 0; }
     } catch (e) {}
-    var rx = Math.min(w / 2 - 54, Math.max(220, cw / 2 + 104));
-    var ry = Math.min(h / 2 - 54, Math.max(180, ch / 2 + 104));
+    var rx = Math.min(w / 2 - 44, Math.max(200, cw / 2 + 72));
+    var ry = Math.min(h / 2 - 44, Math.max(160, ch / 2 + 72));
     if (rx < 120) rx = 120;
     if (ry < 100) ry = 100;
     orbGeomCache = { st: st, w: w, h: h, rx: rx, ry: ry, cx: w / 2, cy: h / 2 };
@@ -144,7 +144,6 @@
       main.classList.toggle('has-open', openCount > 0);
       main.classList.toggle('layout-large-small', largeCount === 1 && smallCount > 0);
       main.classList.toggle('layout-multiple-large', largeCount > 1);
-      main.classList.toggle('layout-small-only', largeCount === 0 && smallCount > 0);
     }
     for (var k in buttons) {
       if (!Object.prototype.hasOwnProperty.call(buttons, k)) continue;
