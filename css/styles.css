@@ -3271,10 +3271,10 @@
   }
 }
 
-/* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande. */
+/* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande, sin hueco vertical extra. */
 @media (min-width: 701px) {
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
-    grid-template-rows: auto auto auto !important;
+    grid-template-rows: auto auto minmax(0, 1fr) !important;
   }
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] {
     grid-row: 2 !important;
@@ -3283,13 +3283,13 @@
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] {
     grid-row: 3 !important;
     align-self: start;
-    margin-top: 12px !important;
+    margin-top: 0 !important;
   }
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="calculator"] .calculator-panel {
-    height: 310px !important;
+    height: auto !important;
   }
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small .orbital-layer.open[data-orbital="pomodoro"] .pomodoro-panel {
-    height: 170px !important;
+    height: auto !important;
   }
 }
 
