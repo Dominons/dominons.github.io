@@ -219,7 +219,11 @@
         document.getElementById('userAvatar').src = user.photoURL;
 
         window.applyMembershipPlan(await detectUserPlan(user));
-        window.loadNote(window.activeTab);
+        if (typeof window.switchTab === 'function') {
+          window.switchTab(window.activeTab, { skipSave: true });
+        } else {
+          window.loadNote(window.activeTab);
+        }
         // Recarga el workspace de Quantis con el UID real del usuario:
         // en la carga inicial qInit() corre antes de que Firebase resuelva la
         // sesión, así que aquí se asegura que cada usuario vea su propio proyecto.
@@ -235,6 +239,7 @@
 
     document.getElementById('googleSignInBtn').onclick = () => signInWithPopup(auth, provider);
     document.getElementById('logoutBtn').onclick = async () => {
+      await flushDirtyNotesToCloud();
       await signOut(auth);
       window.location.reload();
     };
@@ -249,59 +254,150 @@
         localStorage.setItem(storageKeyForUser('danifu_active_tab_'), window.activeTab);
     }
     
-    let saveTimeout;
-    
-    window.loadNote = async function(tabNum) {
-       const notepadEl = document.getElementById('notepad');
-       if (!notepadEl) return;
-       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
-          notepadEl.value = localStorage.getItem(storageKeyForUser('notepad_page_') + '_' + tabNum) || "";
-          return;
-       }
-       try {
-          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tabNum);
-          const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists()) {
-             notepadEl.value = docSnap.data().content || "";
-          } else {
-             notepadEl.value = "";
+    let cloudSaveTimeout;
+    const CLOUD_AUTOSAVE_DELAY_MS = 30000;
+    const dirtyNoteTabs = new Set();
+    let isNotepadHydrated = false;
+
+    function noteCacheKey(tabNum) {
+      return storageKeyForUser('notepad_page_') + '_' + String(tabNum);
+    }
+
+    function updateNotepadHeader(tabNum) {
+      const targetTab = String(tabNum || window.activeTab || '1');
+      const notepadTitle = document.getElementById('notepad-title');
+      if (notepadTitle) {
+        notepadTitle.innerText = (window.currentLang === 'en' ? "Notepad - Note " : "Bloc de Notas - Nota ") + targetTab;
+      }
+      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+      const activeBtn = document.getElementById('btn-tab-' + targetTab);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function saveNoteToCache(tabNum, content) {
+      const targetTab = String(tabNum || window.activeTab || '1');
+      try {
+        localStorage.setItem(noteCacheKey(targetTab), content);
+      } catch (e) {
+        console.warn("No se pudo guardar la nota en cache local:", e);
+      }
+    }
+
+    async function flushDirtyNotesToCloud() {
+      clearTimeout(cloudSaveTimeout);
+      if (!window.isPremiumPlan() || !window.auth || !window.auth.currentUser) return;
+      if (dirtyNoteTabs.size === 0) return;
+
+      const tabsToSync = Array.from(dirtyNoteTabs);
+      window.showCloudLoader('notepadSaveLoader');
+      try {
+        await Promise.all(tabsToSync.map(async function(tab) {
+          const content = localStorage.getItem(noteCacheKey(tab)) || "";
+          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + tab);
+          await setDoc(userDocRef, { content: content, updatedAt: Date.now() }, { merge: true });
+          if ((localStorage.getItem(noteCacheKey(tab)) || "") === content) {
+            dirtyNoteTabs.delete(tab);
           }
-       } catch (error) {
-          console.error("Error cargando nota:", error);
-          notepadEl.value = "";
-       }
+        }));
+      } catch (error) {
+        console.error("Error guardando notas en la nube:", error);
+      } finally {
+        window.hideCloudLoader('notepadSaveLoader');
+      }
+    }
+
+    function scheduleCloudNoteSync() {
+      if (!window.isPremiumPlan() || !window.auth || !window.auth.currentUser) return;
+      clearTimeout(cloudSaveTimeout);
+      cloudSaveTimeout = setTimeout(function() {
+        flushDirtyNotesToCloud();
+      }, CLOUD_AUTOSAVE_DELAY_MS);
+    }
+
+    window.loadNote = async function(tabNum) {
+      const notepadEl = document.getElementById('notepad');
+      if (!notepadEl) return;
+      const targetTab = String(tabNum || window.activeTab || '1');
+
+      const cached = localStorage.getItem(noteCacheKey(targetTab));
+      notepadEl.value = cached !== null ? cached : "";
+      isNotepadHydrated = true;
+
+      if (!window.isPremiumPlan() || !window.auth || !window.auth.currentUser) {
+        return;
+      }
+      if (dirtyNoteTabs.has(targetTab)) {
+        return;
+      }
+
+      try {
+        const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + targetTab);
+        const docSnap = await getDoc(userDocRef);
+        if (String(window.activeTab) !== targetTab || dirtyNoteTabs.has(targetTab)) return;
+        if (docSnap.exists()) {
+          const cloudContent = docSnap.data().content || "";
+          if (cloudContent !== notepadEl.value) {
+            notepadEl.value = cloudContent;
+            saveNoteToCache(targetTab, cloudContent);
+          }
+        }
+      } catch (error) {
+        console.error("Error cargando nota desde la nube:", error);
+      }
     };
 
-    window.saveCurrentNote = async function() {
-       const notepadEl = document.getElementById('notepad');
-       if (!notepadEl) return;
-       if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
-          localStorage.setItem(storageKeyForUser('notepad_page_') + '_' + window.activeTab, notepadEl.value);
-          return;
-       }
-       window.showCloudLoader('notepadSaveLoader');
-       try {
-          const userDocRef = doc(window.db, "users", window.auth.currentUser.uid, "notas", "pagina-" + window.activeTab);
-          await setDoc(userDocRef, { content: notepadEl.value }, { merge: true });
-       } catch (error) {
-          console.error("Error guardando nota:", error);
-       } finally {
-          window.hideCloudLoader('notepadSaveLoader');
-       }
+    window.saveCurrentNote = async function(options) {
+      const notepadEl = document.getElementById('notepad');
+      if (!notepadEl || !isNotepadHydrated) return;
+      const targetTab = String((options && options.tabNum) || window.activeTab || '1');
+      const content = (options && typeof options.content === 'string') ? options.content : notepadEl.value;
+
+      saveNoteToCache(targetTab, content);
+
+      if (window.isPremiumPlan() && window.auth && window.auth.currentUser) {
+        dirtyNoteTabs.add(targetTab);
+        if (options && options.immediateCloud) {
+          await flushDirtyNotesToCloud();
+        } else {
+          scheduleCloudNoteSync();
+        }
+      }
     };
 
     const notepadEl = document.getElementById('notepad');
     if (notepadEl) {
-        notepadEl.addEventListener('input', function() {
-           if (window.getPlanLimits().saveNotepad === 'local' || !window.auth || !window.auth.currentUser) {
-              window.saveCurrentNote();
-           } else {
-              window.pulseCloudLoader('notepadSaveLoader');
-              clearTimeout(saveTimeout);
-              saveTimeout = setTimeout(window.saveCurrentNote, 800);
-           }
-        });
+      notepadEl.addEventListener('input', function() {
+        const currentTab = String(window.activeTab || '1');
+        isNotepadHydrated = true;
+        saveNoteToCache(currentTab, notepadEl.value);
+        if (window.isPremiumPlan() && window.auth && window.auth.currentUser) {
+          dirtyNoteTabs.add(currentTab);
+          scheduleCloudNoteSync();
+        }
+      });
     }
+
+    function flushNotepadOnExit() {
+      const notepadEl = document.getElementById('notepad');
+      if (notepadEl && isNotepadHydrated) {
+        const currentTab = String(window.activeTab || '1');
+        saveNoteToCache(currentTab, notepadEl.value);
+        if (window.isPremiumPlan() && window.auth && window.auth.currentUser) {
+          dirtyNoteTabs.add(currentTab);
+        }
+      }
+      if (dirtyNoteTabs.size > 0 && window.isPremiumPlan() && window.auth && window.auth.currentUser) {
+        flushDirtyNotesToCloud();
+      }
+    }
+
+    window.addEventListener('pagehide', flushNotepadOnExit);
+    window.addEventListener('beforeunload', flushNotepadOnExit);
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'hidden') {
+        flushNotepadOnExit();
+      }
+    });
 
     window.renderTabs = function() {
       const tabsContainer = document.getElementById('notepad-tabs');
@@ -385,18 +481,17 @@
       e.target.value = '';
     });
 
-    window.switchTab = function(tabNum) {
-      window.saveCurrentNote();
+    window.switchTab = function(tabNum, options) {
+      const prevTab = String(window.activeTab || '1');
+      if (!(options && options.skipSave) && isNotepadHydrated) {
+        const notepadEl = document.getElementById('notepad');
+        if (notepadEl) {
+          saveNoteToCache(prevTab, notepadEl.value);
+        }
+      }
       window.activeTab = String(tabNum);
       localStorage.setItem(storageKeyForUser('danifu_active_tab_'), window.activeTab);
-      
-      var notepadTitle = document.getElementById('notepad-title');
-      if (notepadTitle) notepadTitle.innerText = (window.currentLang === 'en' ? "Notepad - Note " : "Bloc de Notas - Nota ") + window.activeTab;
-      
-      document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-      var activeBtn = document.getElementById('btn-tab-' + window.activeTab);
-      if (activeBtn) activeBtn.classList.add('active');
-      
+      updateNotepadHeader(window.activeTab);
       window.loadNote(window.activeTab);
     };
     window.maxPages = window.getPlanLimits ? window.getPlanLimits().maxNotepadPages : 3;
