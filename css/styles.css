@@ -111,13 +111,6 @@
     html.anim-on .glow-button:active { transform: scale(0.96); }
     html.anim-on .icon-square-btn:hover { transform: translateY(-1px); }
     html.anim-on .plan-option:hover { transform: translateY(-2px); }
-    /* MODO ANIMADO: stagger sutil en filas del ledger de Deep Flow */
-    html.anim-on #ledger-body .row { animation: rowIn var(--anim-dur-ui) ease both; }
-    html.anim-on #ledger-body .row:nth-child(2) { animation-delay: 30ms; }
-    html.anim-on #ledger-body .row:nth-child(3) { animation-delay: 60ms; }
-    html.anim-on #ledger-body .row:nth-child(4) { animation-delay: 90ms; }
-    html.anim-on #ledger-body .row:nth-child(5) { animation-delay: 120ms; }
-    html.anim-on #ledger-body .row:nth-child(6) { animation-delay: 150ms; }
     /* MODO ESTATICO: reset global + anulaciones expresas */
     html.anim-off *, html.anim-off *::before, html.anim-off *::after {
       transition: none !important;
@@ -2323,7 +2316,7 @@
     }
 
     /* ===== QUANTIS VIEW - SCOPED STYLES (bloque 2, preserva orden de cascada) ===== */
-      /* ===== QUANTIS VIEW — SCOPED STYLES (no bleeding into Dominon or Deep Flow) ===== */
+      /* ===== QUANTIS VIEW — SCOPED STYLES ===== */
       #quantis-view {
         --quantis-bg: #0b0c10;
         --quantis-header-bg: #111318;
