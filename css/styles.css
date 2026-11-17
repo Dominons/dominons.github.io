@@ -395,14 +395,14 @@
       border-color: #d1d5db;
     }
     #main-dashboard-view.black-theme {
-      --color-dark-bg: #1A1A1A;
-      --color-header-bg: #282828;
-      --color-border: #444444;
-      --color-highlight: #9CA3AF;
-      --color-main-bg: #282828;
-      --color-text: #EAEAEA;
-      --color-input-bg: #1F1F1F;
-      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.5);
+      --color-dark-bg: #050607;
+      --color-header-bg: #090a0c;
+      --color-border: #191b20;
+      --color-highlight: #756b80;
+      --color-main-bg: #090a0c;
+      --color-text: #d5d5d8;
+      --color-input-bg: #070809;
+      --shadow-light: 0 0 8px rgba(0, 0, 0, 0.82);
     }
     #main-dashboard-view.purple-theme {
       --color-highlight: #A855F7;
@@ -2820,7 +2820,7 @@
       transition: border-color var(--anim-dur-ui, 0.2s) ease, background var(--anim-dur-ui, 0.2s) ease, box-shadow var(--anim-dur-ui, 0.2s) ease;
     }
     .orbital-main.has-open .orb-icon {
-      transition: transform var(--anim-dur-ui, 0.2s) ease, border-color var(--anim-dur-ui, 0.2s) ease, background var(--anim-dur-ui, 0.2s) ease, box-shadow var(--anim-dur-ui, 0.2s) ease;
+      transition: border-color var(--anim-dur-ui, 0.2s) ease, background var(--anim-dur-ui, 0.2s) ease, box-shadow var(--anim-dur-ui, 0.2s) ease;
     }
     .orb-icon svg { width: 22px; height: 22px; display: block; }
     .orb-icon::before {
@@ -2914,8 +2914,8 @@
     .orbital-main.has-open .orbital-time { font-size: 1.3rem; }
     .orbital-main.has-open .orbital-date { font-size: 0.52rem; letter-spacing: 1px; margin-top: 2px; }
     @keyframes orbBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -3px; }
     }
     html.anim-on .orbital-main.has-open .orb-icon { animation: orbBob 3.4s ease-in-out infinite; }
     html.anim-on .orbital-main.has-open .orbital-clock { animation: floatIn var(--anim-dur-ui, 0.2s) ease both, orbBob 3.4s ease-in-out 0.9s infinite; }
@@ -3021,8 +3021,9 @@
   --acc-ink:#FFFFFF;
 }
 #main-dashboard-view.black-theme {
-  --acc-chart:#9CA3AF; --acc-notepad:#7DD3FC; --acc-calc:#FCD34D;
-  --acc-pomo:#FCA5A5;  --acc-gemini:#F0ABFC; --acc-music:#86EFAC;
+  --acc-chart:#858b96; --acc-notepad:#4f7c8c; --acc-calc:#8a7138;
+  --acc-pomo:#874b51;  --acc-gemini:#81528a; --acc-music:#4f765d;
+  --acc-ink:#f0f0f2;
 }
 #main-dashboard-view.green-theme {
   --acc-chart:#39FF14; --acc-notepad:#00E5FF; --acc-calc:#C6FF00;
