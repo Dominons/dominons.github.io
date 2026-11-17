@@ -3290,6 +3290,48 @@
   }
 }
 
+/* ===== DOMINON DIALOG + KANBAN ===== */
+.dominon-dialog-backdrop { position:fixed; inset:0; z-index:10000; display:none; place-items:center; padding:18px; background:rgba(0,0,0,.68); backdrop-filter:blur(5px); }
+.dominon-dialog-backdrop.open { display:grid; }
+.dominon-dialog { width:min(480px,100%); padding:22px; border:1px solid var(--color-highlight,#a855f7); border-radius:14px; background:var(--color-main-bg,#0b0c0f); color:var(--color-text,#eee); box-shadow:0 24px 70px #0009; }
+.dominon-dialog h2 { margin:0 0 18px; font:700 18px Orbitron,sans-serif; }
+#dominon-dialog-fields { display:grid; gap:14px; }
+#dominon-dialog-fields label { display:grid; gap:7px; color:var(--color-text,#eee); font-size:12px; }
+#dominon-dialog-fields input,#dominon-dialog-fields textarea,#dominon-dialog-fields select { width:100%; padding:10px 12px; border:1px solid var(--color-border,#333); border-radius:8px; background:var(--color-input-bg,#08090b); color:var(--color-text,#eee); font:inherit; }
+#dominon-dialog-fields textarea { min-height:90px; resize:vertical; }
+.dominon-dialog-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+.dominon-dialog-actions button { padding:9px 14px; border:1px solid var(--color-border,#333); border-radius:8px; background:transparent; color:inherit; }
+.dominon-dialog-actions .dialog-save { border-color:var(--color-highlight,#a855f7); background:var(--color-highlight,#a855f7); color:#fff; }
+#kanban-view { --kb-bg:#090a0d; --kb-card:#111318; --kb-border:#272a33; --kb-text:#e5e7eb; --kb-muted:#959aa5; display:flex; flex-direction:column; width:100%; height:100vh; overflow:auto; background:var(--kb-bg); color:var(--kb-text); font-family:'JetBrains Mono',monospace; }
+#kanban-view.light-theme { --kb-bg:#f3f4f6; --kb-card:#fff; --kb-border:#d8dbe2; --kb-text:#20232a; --kb-muted:#69707d; }
+.kanban-header { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:12px 24px; border-bottom:1px solid var(--kb-border); background:var(--kb-card); }
+.kanban-brand { color:#c084fc; font:700 18px Orbitron,sans-serif; letter-spacing:2px; }
+.kanban-header nav { display:flex; gap:8px; }
+.kanban-main { width:min(1500px,100%); margin:auto; padding:28px; }
+.kanban-title { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:22px; }
+.kanban-title h1 { margin:0 0 7px; font:700 27px Orbitron,sans-serif; }
+.kanban-title p,.kanban-project header p { margin:0; color:var(--kb-muted); }
+.kanban-title input { width:min(340px,100%); padding:10px; border:1px solid var(--kb-border); border-radius:8px; background:var(--kb-card); color:var(--kb-text); }
+.kanban-project { margin-bottom:22px; padding:17px; border:1px solid var(--kb-border); border-radius:12px; background:color-mix(in srgb,var(--kb-card) 90%,transparent); }
+.kanban-project>header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:15px; }
+.kanban-project h2 { margin:0 0 5px; font-size:17px; }
+.kanban-priority { display:inline-block; margin-top:8px; color:#c084fc; font-size:11px; }
+.project-actions { display:flex; align-items:center; gap:8px; }
+.project-actions button,.task-edit { padding:7px 10px; border:1px solid var(--kb-border); border-radius:7px; background:var(--kb-card); color:var(--kb-text); cursor:pointer; }
+.project-actions .add-task { border-color:#8b45c1; }
+.project-actions .delete-project { font-size:18px; }
+.kanban-columns { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.kanban-column { min-height:155px; padding:12px; border:1px solid var(--kb-border); border-radius:9px; background:var(--kb-bg); }
+.kanban-column h3 { display:flex; justify-content:space-between; margin:0 0 10px; font-size:12px; }
+.kanban-column h3 span { color:var(--kb-muted); }
+.kanban-card { position:relative; margin:8px 0; padding:12px; border:1px solid var(--kb-border); border-radius:8px; background:var(--kb-card); cursor:grab; }
+.kanban-card h4 { margin:0 28px 8px 0; font-size:13px; }
+.kanban-card p,.kanban-card small { color:var(--kb-muted); font-size:11px; line-height:1.5; }
+.kanban-card p { margin:0 0 9px; }
+.kanban-card small { color:#c084fc; }
+.task-edit { position:absolute; top:8px; right:8px; padding:5px; border:0; }
+@media(max-width:750px) { .kanban-main{padding:18px}.kanban-columns{grid-template-columns:1fr}.kanban-title,.kanban-project>header{align-items:stretch;flex-direction:column}.kanban-header{padding:12px}.kanban-brand{display:none} }
+
 /* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande, sin hueco vertical extra. */
 @media (min-width: 701px) {
   #main-dashboard-view .main.orbital-main.has-open.layout-large-small {
