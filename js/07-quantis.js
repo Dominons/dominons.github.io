@@ -980,12 +980,10 @@
         nameSpan.style.cursor = "pointer";
         nameSpan.style.flex = "1";
         nameSpan.onclick = function () {
-          var n = prompt("Renombrar proyecto:", proj.name);
-          if (n && n.trim()) {
-            proj.name = n.trim();
-            qRenderProjects();
-            qSaveWorkspace();
-          }
+          window.dominonDialog({ title:"Renombrar proyecto", fields:[{name:"name",label:"Nombre",value:proj.name,required:true}] }).then(function(result) {
+            if (!result || !result.name.trim()) return;
+            proj.name = result.name.trim(); qRenderProjects(); qSaveWorkspace();
+          });
         };
         lbl.appendChild(nameSpan);
 
@@ -1087,12 +1085,12 @@
         window.showPlanPopup("Limite de proyectos alcanzado para tu plan.");
         return;
       }
-      var n = prompt("Nombre del nuevo proyecto:");
-      if (n && n.trim()) {
+      window.dominonDialog({ title:"Nuevo proyecto de Quantis", fields:[{name:"name",label:"Nombre",required:true}] }).then(function(result) {
+      if (result && result.name.trim()) {
         var newIdx = QS.projects.length;
         QS.projects.push({
           id: "qp-" + Date.now(),
-          name: n.trim(),
+          name: result.name.trim(),
           pages: ["Página 1"],
         });
         QS.canvasData[newIdx + "-0"] = [];
@@ -1100,6 +1098,7 @@
         qRenderProjects();
         qSaveWorkspace();
       }
+      });
     };
 
     // FIX: qDeleteProject — elimina proyecto y reindexea claves de proyectos posteriores
@@ -1168,14 +1167,15 @@
         );
         return;
       }
-      var n = prompt("Nombre de la nueva página:");
-      if (n && n.trim()) {
-        QS.projects[projIdx].pages.push(n.trim());
+      window.dominonDialog({ title:"Nueva página", fields:[{name:"name",label:"Nombre",required:true}] }).then(function(result) {
+      if (result && result.name.trim()) {
+        QS.projects[projIdx].pages.push(result.name.trim());
         var newIdx = QS.projects[projIdx].pages.length - 1;
         QS.canvasData[projIdx + "-" + newIdx] = [];
         QS.drawings[projIdx + "-" + newIdx] = [];
         qLoadPage(projIdx, newIdx);
       }
+      });
     }
 
     window.qApplyPlanLimits = function () {

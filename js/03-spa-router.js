@@ -4,7 +4,7 @@
     // =========================================================
     // New 3-view router — add/remove .hidden-view cleanly across all views with fade transitions
     window.switchAppView = function(targetViewId) {
-      var ALL_VIEWS = ['main-dashboard-view', 'quantis-view'];
+      var ALL_VIEWS = ['main-dashboard-view', 'kanban-view', 'quantis-view'];
       var currentActiveView = null;
 
       // 1. Identificar la vista que está visible actualmente

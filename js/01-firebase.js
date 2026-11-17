@@ -668,12 +668,12 @@
           dots.className = 'gemini-rename-btn';
           dots.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
           dots.title = 'Renombrar';
-          dots.onclick = function(e){
+          dots.onclick = async function(e){
             e.stopPropagation();
             var cur = geminiGetName(n);
-            var nuevo = prompt('Renombrar conversacion:', cur);
-            if (nuevo === null) return;
-            nuevo = nuevo.trim();
+            var result = await window.dominonDialog({ title:'Renombrar conversación', fields:[{name:'name',label:'Nombre',value:cur,required:true}] });
+            if (!result) return;
+            var nuevo = result.name.trim();
             if (!nuevo) return;
             if (nuevo.length > 30) nuevo = nuevo.slice(0,30);
             geminiSetName(n, nuevo);
