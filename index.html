@@ -39,6 +39,7 @@
     <div class="container hidden" id="mainApp">
       <div class="top-bar">
         <div class="top-left">
+          <button class="glow-button" onclick="window.switchAppView('kanban-view')"><i class="fa-solid fa-table-columns"></i> KANBAN</button>
           <button id="toggle-view-to-quantis" class="glow-button" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas">
             <i class="fa-solid fa-infinity"></i> QUANTIS
           </button>
@@ -191,6 +192,18 @@
         </div>
       </main>
     </div>
+  </div>
+
+  <div id="kanban-view" class="app-view-transition hidden-view">
+    <header class="kanban-header">
+      <div class="kanban-brand">KANBAN</div>
+      <nav><button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button><button class="glow-button" onclick="window.switchAppView('quantis-view')">QUANTIS</button></nav>
+      <button class="glow-button" id="kanban-new-project"><i class="fa-solid fa-plus"></i> NUEVO PROYECTO</button>
+    </header>
+    <main class="kanban-main">
+      <div class="kanban-title"><div><h1>Proyectos</h1><p>Organiza tus ideas, prioridades y próximos pasos.</p></div><input id="kanban-search" type="search" placeholder="Buscar proyectos o tareas..."></div>
+      <div id="kanban-projects"></div>
+    </main>
   </div>
 
   <!-- VISTA SPA 3: QUANTIS CANVAS -->
@@ -431,6 +444,13 @@
     </div>
   </div>
 
+  <div id="dominon-dialog" class="dominon-dialog-backdrop" aria-hidden="true">
+    <form class="dominon-dialog" id="dominon-dialog-form">
+      <h2 id="dominon-dialog-title"></h2><div id="dominon-dialog-fields"></div>
+      <div class="dominon-dialog-actions"><button type="button" class="dialog-cancel">Cancelar</button><button type="submit" class="dialog-save">Guardar</button></div>
+    </form>
+  </div>
+
   <!-- SCRIPTS DE INICIALIZACIÓN DE FIREBASE (V10 MODULAR) -->
   <script type="module" src="js/01-firebase.js"></script>
 
@@ -439,6 +459,7 @@
 
   <!-- CONTROL DE LA INTERFAZ SPA -->
   <script src="js/03-spa-router.js"></script>
+  <script src="js/12-dialog.js"></script>
 
   <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
   <script src="js/04-config-router.js"></script>
@@ -448,6 +469,7 @@
 
   <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
 <script src="js/07-quantis.js"></script>
+<script src="js/13-kanban.js"></script>
 
   <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / QUANTIS) -->
   <script src="js/08-nav-particles.js"></script>
