@@ -1,5 +1,5 @@
 # Dominon
-Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis crypto (Notepad, Quantis Canvas, Deep‑Flow terminal y asistente AI).
+Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis crypto (Notepad, Quantis Canvas y asistente AI).
 
 [![Web](https://img.shields.io/badge/Web-GitHub%20Pages-blue)](https://dominons.github.io)
 [![JS](https://img.shields.io/badge/Vanilla%20JS-ESModules-yellow?logo=javascript&logoColor=black)]
@@ -11,7 +11,7 @@ Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis c
 ---
 
 ## Descripción general
-Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos: combina un dashboard con widgets (TradingView), un terminal "Deep‑Flow" con métricas on‑chain, un canvas infinito llamado "Quantis" para diagramas y proyectos visuales, un bloc de notas con persistencia local y en la nube (planes) y un asistente conversacional integrado con Google AI (Gemini). Ideal para demos, prototipos y como base para un producto SaaS ligero.
+Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos: combina un dashboard con widgets (TradingView), un canvas infinito llamado "Quantis" para diagramas y proyectos visuales, un bloc de notas con persistencia local y en la nube (planes) y un asistente conversacional integrado con Google AI (Gemini). Ideal para demos, prototipos y como base para un producto SaaS ligero.
 
 Principales casos de uso:
 - Monitorización y demo de métricas crypto (simuladas + fuentes públicas).
@@ -26,7 +26,6 @@ Principales casos de uso:
 - Autenticación Google (Firebase Auth).
 - Guardado local y en la nube (Firestore / RealtimeDB) según plan de membresía.
 - Quantis: canvas infinito con herramientas de dibujo, export/import.
-- Deep‑Flow: terminal/ledger con filtros y métricas de mercado.
 - Bloc de notas con pestañas, import/export.
 - Asistente Gemini (Google Generative Language) con encriptación local de la API key.
 - Reproductor de audio local (arrastrar MP3s).
@@ -43,7 +42,6 @@ Principales casos de uso:
   - 03-spa-router.js — enrutado de vistas
   - 04-config-router.js — configuración y estados
   - 05-dominon.js — lógica general
-  - 06-deepflow.js — lógica del terminal crypto
   - 07-quantis.js — motor del canvas
   - 08-11 ... utilidades y animaciones
 - Favicon.png
@@ -120,7 +118,6 @@ https://dominons.github.io
 1. Abrir la app y click en "Iniciar sesión con Google".
 2. Probar bloc de notas: crear pestañas, escribir; en planes Premium las notas se guardan en Firestore.
 3. Abrir Quantis: crear proyecto/páginas, dibujar y exportar/importar JSON.
-4. Deep‑Flow: revisar ledger simulado y filtros (trading iframe usa TradingView).
 5. Asistente Gemini: abrir sidebar, guardar API Key y enviar prompts; respuestas aparecen en la conversación.
 6. Reproductor: arrastra MP3s al área de reproducción.
 

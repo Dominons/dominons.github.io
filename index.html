@@ -39,9 +39,6 @@
     <div class="container hidden" id="mainApp">
       <div class="top-bar">
         <div class="top-left">
-          <button id="toggle-view-to-flow" class="glow-button" onclick="window.switchAppView('deep-flow-view')" title="Abrir Terminal DEEP FLOW">
-            <i class="fa-solid fa-chart-line"></i> DEEP FLOW
-          </button>
           <button id="toggle-view-to-quantis" class="glow-button" onclick="window.switchAppView('quantis-view')" title="Abrir Quantis Canvas">
             <i class="fa-solid fa-infinity"></i> QUANTIS
           </button>
@@ -196,57 +193,6 @@
     </div>
   </div>
 
-  <!-- VISTA SPA 2: DEEP FLOW TERMINAL -->
-  <div id="deep-flow-view" class="app-view-transition hidden-view">
-    <header id="hdr">
-            <span id="status-dot"></span><span id="hdr-brand">DEEP FLOW</span><span id="demo-badge" title="Datos de transacciones simulados con fines demostrativos. Precios reales vía CoinGecko.">DEMO</span>
-      <button class="ctrl-btn" id="font-dec">A-</button><button class="ctrl-btn" id="font-inc">A+</button>
-      <button class="ctrl-btn" id="sound-toggle">SND ON</button>
-      <button class="ctrl-btn" id="stream-toggle">ON-CHAIN</button>
-      <button class="ctrl-btn" id="lang-toggle">EN / ES</button>
-      <button class="glow-button" id="view-toggle" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
-      <button class="glow-button" id="view-toggle-quantis" onclick="window.switchAppView('quantis-view')">QUANTIS</button>
-      <button class="ctrl-btn" id="toggleMusicPanelFlow" style="border-color:#A855F7; color:#A855F7;"><i class="fa-solid fa-music"></i> REPROD</button>
-      <span id="hdr-spacer"></span><span id="hdr-conn-status">[ CONNECTION HOLD / ERROR ]</span>
-      <span id="hdr-date"></span><span id="hdr-clock"></span>
-      <div class="ticker-chip"><span class="ticker-label">BTC</span><span class="ticker-price" id="btc-price">---</span><span class="ticker-change" id="btc-change"></span></div>
-      <div class="ticker-chip eth-chip"><span class="ticker-label">ETH</span><span class="ticker-price" id="eth-price">---</span><span class="ticker-change" id="eth-change"></span></div>
-      <div class="ticker-chip gas-chip"><span class="ticker-label">GAS</span><span class="ticker-price" id="gas-value">--</span><span class="gas-unit">Gwei</span></div>
-    </header>
-    <main id="dashboard">
-      <aside id="sidebar">
-        <div id="sidebar-onchain" class="sidebar-layer active">
-          <div class="corner-block"><div class="block-label" data-i18n="btcDom">BTC DOMINANCE</div><div class="block-value loading" id="btc-dom-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="btc-dom-bar" style="width:0%;background:#F7931A;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="totalMcap">TOTAL MARKET CAP</div><div class="block-value loading" id="mcap-value">---</div><div class="block-sub" id="mcap-change"></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="volIndex">VOLATILITY INDEX</div><div class="block-value" id="vol-value">0</div><div class="block-bar"><div class="block-bar-fill" id="vol-bar" style="width:0%;background:#39FF14;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="ssr">STABLE SUPPLY RATIO</div><div class="block-value" id="ssr-value">--%</div><div class="block-bar"><div class="block-bar-fill" id="ssr-bar" style="width:0%;background:#26A17B;"></div></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="whaleRatio">WHALE BUY/SELL</div><div class="ratio-bar"><div class="ratio-buy" id="ratio-buy" style="width:50%;"></div><div class="ratio-sell" id="ratio-sell" style="width:50%;"></div></div><div class="ratio-labels"><span class="ratio-buy-label" id="ratio-buy-label">BUY 50%</span><span class="ratio-sell-label" id="ratio-sell-label">SELL 50%</span></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="hotContracts">TOP HOT CONTRACTS</div><div class="hot-list" id="hot-list"></div></div>
-        </div>
-        <div id="sidebar-binance" class="sidebar-layer">
-          <div class="corner-block"><div class="block-label" data-i18n="binanceVolume">BINANCE 24H SPOT VOL</div><div class="block-value" id="bn-volume-value" style="color:#F0B90B;">---</div><div class="block-sub" id="bn-volume-change"></div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="proofOfReserves">PROOF OF RESERVES</div><div class="block-value" id="bn-por-value" style="color:#F0B90B;">540,000 BTC</div><div class="block-bar" style="margin-top:4px;"><div class="block-bar-fill" id="bn-por-bar" style="width:100%;background:#F0B90B;"></div></div><div class="block-sub" id="bn-por-label" style="color:#39FF14;">100% BACKED</div></div>
-          <div class="corner-block"><div class="block-label" data-i18n="topPairs">TOP TRADING PAIRS</div><div class="hot-list" id="bn-pairs-list"></div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">FUTURES OPEN INT.</div><div class="block-value" id="bn-oi-value">$18.4B</div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">TOP FUTURES PAIR</div><div class="block-value">BTC/USDT</div></div>
-          <div class="corner-block bn-vivid-block"><div class="block-label">BTC DOMINANCE</div><div class="block-value" id="btc-dom-value-2">52.4%</div></div>
-        </div>
-      </aside>
-      <section id="ledger-section">
-        <div id="ledger-header">
-          <span class="col-value sort-header" id="sort-value" data-sort="value"><span data-i18n="value">VALUE (USD)</span><span class="sort-arrow" id="arrow-value">&#9660;</span></span>
-          <span class="col-asset" data-i18n="asset">ASSET</span><span class="col-action" data-i18n="action">ACTION</span><span class="col-flow" data-i18n="fromTo">FROM / TO</span>
-          <span class="col-time sort-header" id="sort-time" data-sort="timestamp"><span data-i18n="time">TIME</span><span class="sort-arrow" id="arrow-time"></span></span>
-        </div>
-        <div id="macro-filters">
-          <button class="mf-btn active" data-mf="all" data-i18n="showAll">SHOW ALL</button><button class="mf-btn" data-mf="massive" data-i18n="massiveOnly">MASSIVE +500M</button><button class="mf-btn" data-mf="swaps" data-i18n="swapsOnly">SWAPS ONLY</button><button class="mf-btn" data-mf="yield" data-i18n="yieldOnly">YIELD ONLY</button>
-        </div>
-        <input type="text" id="filter-bar" spellcheck="false" autocomplete="off">
-        <div id="ledger-body"><div class="scroll-sentinel" id="scroll-sentinel"></div></div>
-      </section>
-    </main>
-  </div>
-
   <!-- VISTA SPA 3: QUANTIS CANVAS -->
   <div id="quantis-view" class="app-view-transition hidden-view">
 
@@ -255,7 +201,6 @@
       <div id="quantis-nav-left">
         <span id="quantis-brand">QUANTIS</span>
         <button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button>
-        <button class="glow-button" onclick="window.switchAppView('deep-flow-view')">DEEP FLOW</button>
       </div>
       <div id="quantis-nav-right">
         <span id="quantis-clock">00:00:00</span>
@@ -492,7 +437,7 @@
   <!-- REPRODUCTOR DE AUDIO LOCAL (archivos desde la PC, sin YouTube) -->
   <script src="js/02-music-player.js"></script>
 
-  <!-- CONTROL DE LA INTERFAZ SPA (ENRUTADOR DE 3 VISTAS) -->
+  <!-- CONTROL DE LA INTERFAZ SPA -->
   <script src="js/03-spa-router.js"></script>
 
   <!-- CONFIGURATION & VIEW ROUTER SUPPORT -->
@@ -501,12 +446,10 @@
   <!-- LÓGICA DE NEGOCIO Y OPERACIÓN GENERAL DE DOMINON -->
   <script src="js/05-dominon.js"></script>
 
-  <!-- LÓGICA DE OPERACIÓN DE TERMINAL CRYPTO: DEEP FLOW -->
-  <script src="js/06-deepflow.js"></script>
   <!-- QUANTIS CANVAS ENGINE — Scoped to #quantis-view elements only -->
 <script src="js/07-quantis.js"></script>
 
-  <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / DEEP FLOW / QUANTIS) -->
+  <!-- PARTÍCULAS AL CAMBIAR DE VISTA (DOMINON / QUANTIS) -->
   <script src="js/08-nav-particles.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="js/11-orbital.js"></script>
