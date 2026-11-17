@@ -291,7 +291,8 @@
       ctx.clearRect(0, 0, w, h);
       ensureStars();
       var t = tms / 1000, k, p2;
-      ctx.fillStyle = '#ffffff';
+      var starColor = $('main-dashboard-view').classList.contains('light-theme') ? '#111111' : '#ffffff';
+      ctx.fillStyle = starColor;
       for (k = 0; k < stars.length; k++) {
         p2 = stars[k];
         ctx.globalAlpha = 0.4 + 0.6 * Math.abs(Math.sin(t * p2.sp + p2.ph));
