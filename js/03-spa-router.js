@@ -1,10 +1,10 @@
-/* 03-spa-router.js - router SPA 3 vistas (extraido verbatim de originalindex.html) */
+/* 03-spa-router.js - router SPA de vistas (extraido verbatim de originalindex.html) */
     // =========================================================
     // --- SPA ROUTER (3-VIEW SWITCHER) ---
     // =========================================================
     // New 3-view router — add/remove .hidden-view cleanly across all views with fade transitions
     window.switchAppView = function(targetViewId) {
-      var ALL_VIEWS = ['main-dashboard-view', 'deep-flow-view', 'quantis-view'];
+      var ALL_VIEWS = ['main-dashboard-view', 'quantis-view'];
       var currentActiveView = null;
 
       // 1. Identificar la vista que está visible actualmente

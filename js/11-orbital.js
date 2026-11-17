@@ -209,8 +209,8 @@
   }
   function ensureStars() {
     if (stars.length) return;
-    for (var i = 0; i < 60; i++) {
-      stars.push({ x: Math.random(), y: Math.random(), r: 0.4 + Math.random() * 1.1, ph: Math.random() * 6.28, sp: 0.5 + Math.random() * 1.5 });
+    for (var i = 0; i < 150; i++) {
+      stars.push({ x: Math.random(), y: Math.random(), r: 0.6 + Math.random() * 1.5, ph: Math.random() * 6.28, sp: 0.5 + Math.random() * 1.5 });
     }
   }
 
@@ -294,7 +294,7 @@
       ctx.fillStyle = '#ffffff';
       for (k = 0; k < stars.length; k++) {
         p2 = stars[k];
-        ctx.globalAlpha = 0.15 + 0.55 * Math.abs(Math.sin(t * p2.sp + p2.ph));
+        ctx.globalAlpha = 0.4 + 0.6 * Math.abs(Math.sin(t * p2.sp + p2.ph));
         ctx.beginPath();
         ctx.arc(p2.x * w, p2.y * h, p2.r, 0, 6.29);
         ctx.fill();
