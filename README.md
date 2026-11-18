@@ -1,5 +1,5 @@
 # Dominon
-Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis crypto (Notepad, Quantis Canvas y asistente AI).
+Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis crypto (Kanban, Notepad, Quantis Canvas y asistente AI).
 
 [![Web](https://img.shields.io/badge/Web-GitHub%20Pages-blue)](https://dominons.github.io)
 [![JS](https://img.shields.io/badge/Vanilla%20JS-ESModules-yellow?logo=javascript&logoColor=black)]
@@ -11,12 +11,13 @@ Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis c
 ---
 
 ## Descripción general
-Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos: combina un dashboard con widgets (TradingView), un canvas infinito llamado "Quantis" para diagramas y proyectos visuales, un bloc de notas con persistencia local y en la nube (planes) y un asistente conversacional integrado con Google AI (Gemini). Ideal para demos, prototipos y como base para un producto SaaS ligero.
+Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos. Reúne Kanban para organizar proyectos y tareas, un dashboard con TradingView, Quantis para diagramas y proyectos visuales, un bloc de notas y Gemini como asistente conversacional. Los datos se guardan localmente y, para Premium, algunas herramientas se sincronizan con Firebase.
 
 Principales casos de uso:
 - Monitorización y demo de métricas crypto (simuladas + fuentes públicas).
 - Notas rápidas y sincronización por usuario (local / Firebase para planes Premium).
 - Espacio para bocetos / planificación (Quantis canvas).
+- Organización de proyectos y tareas en Kanban con columnas de estado, prioridades, fechas límite y búsqueda.
 - Chat asistido por Gemini para ayuda contextual dentro de la app.
 - Reproductor MP3 local para ambientación.
 
@@ -26,8 +27,9 @@ Principales casos de uso:
 - Autenticación Google (Firebase Auth).
 - Guardado local y en la nube (Firestore / RealtimeDB) según plan de membresía.
 - Quantis: canvas infinito con herramientas de dibujo, export/import.
+- Kanban: proyectos con descripción y prioridad; tareas editables con prioridad y fecha límite, movibles entre Por hacer, En progreso y Completado. Incluye búsqueda, temas, control de animaciones y guardado local por usuario; Premium sincroniza los proyectos en Firestore.
 - Bloc de notas con pestañas, import/export.
-- Asistente Gemini (Google Generative Language) con encriptación local de la API key.
+- Asistente Gemini (Google Generative Language) con encriptación local de la API key y límite de conversaciones por plan: 3 Normal, 6 Extended y 10 Premium.
 - Reproductor de audio local (arrastrar MP3s).
 - Animaciones con GSAP; sistema de temas (claro/oscuro/paletas).
 
@@ -43,6 +45,8 @@ Principales casos de uso:
   - 04-config-router.js — configuración y estados
   - 05-dominon.js — lógica general
   - 07-quantis.js — motor del canvas
+  - 12-dialog.js — diálogos reutilizables de la interfaz
+  - 13-kanban.js — proyectos y tareas Kanban
   - 08-11 ... utilidades y animaciones
 - Favicon.png
 
@@ -118,6 +122,7 @@ https://dominons.github.io
 1. Abrir la app y click en "Iniciar sesión con Google".
 2. Probar bloc de notas: crear pestañas, escribir; en planes Premium las notas se guardan en Firestore.
 3. Abrir Quantis: crear proyecto/páginas, dibujar y exportar/importar JSON.
+4. Abrir Kanban: crear proyectos, añadir tareas y moverlas por las columnas según su progreso.
 5. Asistente Gemini: abrir sidebar, guardar API Key y enviar prompts; respuestas aparecen en la conversación.
 6. Reproductor: arrastra MP3s al área de reproducción.
 
