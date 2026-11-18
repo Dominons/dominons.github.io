@@ -198,7 +198,7 @@
     <header class="kanban-header">
       <div class="kanban-brand">KANBAN</div>
       <nav><button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button><button class="glow-button" onclick="window.switchAppView('quantis-view')">QUANTIS</button></nav>
-      <div class="kanban-header-actions"><button class="glow-button" id="kanban-settings" title="Configuración"><i class="fa-solid fa-gear"></i></button><button class="glow-button" id="kanban-new-project"><i class="fa-solid fa-plus"></i> NUEVO PROYECTO</button></div>
+      <div class="kanban-header-actions"><button class="kanban-theme-swatch light" id="kanban-theme-light" title="Tema claro"></button><button class="kanban-theme-swatch dark" id="kanban-theme-dark" title="Tema oscuro"></button><button class="glow-button" id="kanban-new-project"><i class="fa-solid fa-plus"></i> NUEVO PROYECTO</button></div>
     </header>
     <main class="kanban-main">
       <div class="kanban-title"><div><h1>Proyectos</h1><p>Organiza tus ideas, prioridades y próximos pasos.</p></div><input id="kanban-search" type="search" placeholder="Buscar proyectos o tareas..."></div>
@@ -335,7 +335,7 @@
           <div class="plan-price">$0</div>
           <ul>
             <li>Notepad: 3 páginas, guardado local</li>
-            <li>Kanban: proyectos y tareas con guardado local</li>
+            <li>Kanban: hasta 2 proyectos, guardado local</li>
             <li>Quantis: 2 proyectos, 3 páginas/proyecto, canvas 2000×2000 px</li>
             <li>Gemini: hasta 3 conversaciones, historial local</li>
           </ul>
@@ -345,7 +345,7 @@
           <div class="plan-price">$5/mo</div>
           <ul>
             <li>Notepad: 5 páginas, guardado local y exportación</li>
-            <li>Kanban: proyectos y tareas con guardado local</li>
+            <li>Kanban: hasta 4 proyectos, guardado local</li>
             <li>Quantis: 4 proyectos, 7 páginas/proyecto, canvas 4000×4000 px</li>
             <li>Gemini: hasta 6 conversaciones, historial local</li>
           </ul>
@@ -355,7 +355,7 @@
           <div class="plan-price">$10/mo</div>
           <ul>
             <li>Notepad: 10 páginas sincronizadas en la nube</li>
-            <li>Kanban: proyectos sincronizados en Firestore</li>
+            <li>Kanban: hasta 10 proyectos sincronizados en Firestore</li>
             <li>Quantis: 10 proyectos, 20 páginas/proyecto, canvas 8000×8000 px</li>
             <li>Gemini: hasta 10 conversaciones, historial sincronizado</li>
             <li>Herramientas de dibujo y soporte prioritario</li>
