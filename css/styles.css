@@ -2358,6 +2358,19 @@
         --quantis-shadow: rgba(15,23,42,0.12);
         --quantis-boundary: rgba(0, 0, 0, 0.3);
       }
+      #quantis-view.light-theme #quantis-header,
+      #quantis-view.light-theme #quantis-header button,
+      #quantis-view.light-theme #quantis-header span,
+      #quantis-view.light-theme #quantis-header i { color:#18181b; }
+      #quantis-view.light-theme #quantis-header button { border-color:#c4b5fd; background:#fff; }
+      #quantis-view.light-theme #quantis-brand { color:#7e22ce; text-shadow:none; }
+      #quantis-view.light-theme #quantis-tools .q-tool-btn,
+      #quantis-view.light-theme #quantisConfigBtn,
+      #quantis-view.light-theme #toggleMusicPanelQuantis { color:#18181b; background:#fff; }
+      #quantis-view.light-theme #q-context-menu { background:#fff; color:#18181b; border-color:#d4d4d8; }
+      #quantis-view.light-theme #q-context-menu button,
+      #quantis-view.light-theme #q-context-menu button i { color:#27272a; }
+      #quantis-view.light-theme #quantis-config-dropdown { background:#fff; color:#18181b; }
       #quantis-view.hidden-view { display: none !important; }
 
       #quantis-header {
@@ -3311,9 +3324,14 @@
 .dominon-dialog-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
 .dominon-dialog-actions button { padding:9px 14px; border:1px solid var(--color-border,#333); border-radius:8px; background:transparent; color:inherit; }
 .dominon-dialog-actions .dialog-save { border-color:var(--color-highlight,#a855f7); background:var(--color-highlight,#a855f7); color:#fff; }
-#kanban-view { --kb-bg:#090a0d; --kb-card:#111318; --kb-border:#272a33; --kb-text:#e5e7eb; --kb-muted:#959aa5; display:flex; flex-direction:column; width:100%; height:100vh; overflow:auto; background:var(--kb-bg); color:var(--kb-text); font-family:'JetBrains Mono',monospace; }
-#kanban-view.light-theme { --kb-bg:#f3f4f6; --kb-card:#fff; --kb-border:#d8dbe2; --kb-text:#20232a; --kb-muted:#69707d; }
+#kanban-view { --kb-bg:#090a0d; --kb-card:#111318; --kb-border:#272a33; --kb-text:#e5e7eb; --kb-muted:#959aa5; --color-main-bg:var(--kb-card);--color-text:var(--kb-text);--color-border:var(--kb-border);--color-highlight:#a855f7;--color-input-bg:var(--kb-bg);display:flex; flex-direction:column; width:100%; height:100vh; overflow:auto; background:var(--kb-bg); color:var(--kb-text); font-family:'JetBrains Mono',monospace; }
+#kanban-view.light-theme { --kb-bg:#f3f4f6; --kb-card:#fff; --kb-border:#d8dbe2; --kb-text:#20232a; --kb-muted:#69707d;--color-highlight:#27272a; }
+#kanban-view.purple-theme { --kb-bg:#100b18; --kb-card:#191222; --kb-border:#49305f; --kb-text:#f1eafa; --kb-muted:#b8a9c8; }
+#kanban-view.green-theme { --kb-bg:#07130d; --kb-card:#0e1c14; --kb-border:#28523a; --kb-text:#e6f5eb; --kb-muted:#9db7a6; }
+#kanban-view.red-theme { --kb-bg:#170a0b; --kb-card:#211113; --kb-border:#5b2a30; --kb-text:#f8e9ea; --kb-muted:#c4a0a3; }
+#kanban-view.blue-theme { --kb-bg:#08111b; --kb-card:#101b28; --kb-border:#294765; --kb-text:#e7f1fb; --kb-muted:#9db2c8; }
 .kanban-header { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:12px 24px; border-bottom:1px solid var(--kb-border); background:var(--kb-card); }
+.kanban-header-actions { display:flex; gap:8px; }
 .kanban-brand { color:#c084fc; font:700 18px Orbitron,sans-serif; letter-spacing:2px; }
 .kanban-header nav { display:flex; gap:8px; }
 .kanban-main { box-sizing:border-box; width:100%; max-width:1500px; min-width:0; margin:0 auto; padding:20px 24px; }
@@ -3359,6 +3377,15 @@
   #kanban-view .kanban-title h1 { font-size:clamp(18px,2.4vw,27px); }
   #kanban-view .kanban-column { min-height:110px; }
 }
+.kanban-anim-off *, .kanban-anim-off *::before, .kanban-anim-off *::after { animation:none!important; transition:none!important; }
+html.anim-on #kanban-view:not(.kanban-anim-off) .kanban-project { animation:kanban-in .24s ease both; }
+html.anim-on #kanban-view:not(.kanban-anim-off) .kanban-card { transition:transform .16s ease, border-color .16s ease; }
+html.anim-on #kanban-view:not(.kanban-anim-off) .kanban-card:hover { transform:translateY(-2px); }
+.kanban-exit { animation:kanban-out .18s ease forwards; }
+.kanban-particle { position:fixed; z-index:10001; top:24%; left:50%; color:#c084fc; pointer-events:none; animation:kanban-particle .65s ease-out forwards; }
+@keyframes kanban-in { from {opacity:0;transform:translateY(7px)} to {opacity:1;transform:none} }
+@keyframes kanban-out { to {opacity:0;transform:translateX(12px)} }
+@keyframes kanban-particle { to {opacity:0;transform:translate(22px,-24px) scale(.3)} }
 
 /* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande, sin hueco vertical extra. */
 @media (min-width: 701px) {
