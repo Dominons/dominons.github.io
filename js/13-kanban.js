@@ -5,20 +5,15 @@
   var root = document.getElementById("kanban-projects");
   var search = document.getElementById("kanban-search");
   var kanbanView = document.getElementById("kanban-view");
-  var themes = ["black","light","purple","green","red","blue"];
-  function setKanbanTheme(theme) {
-    themes.forEach(function (name) { kanbanView.classList.remove(name + "-theme"); });
-    kanbanView.classList.add((themes.indexOf(theme) >= 0 ? theme : "black") + "-theme");
-    localStorage.setItem("dominon_kanban_theme", theme);
+  var savedTheme = localStorage.getItem("dominon_kanban_theme") || "black";
+  kanbanView.classList.add(savedTheme === "light" ? "light-theme" : "black-theme");
+  function setTheme(theme) {
+    kanbanView.classList.toggle("light-theme", theme === "light");
+    kanbanView.classList.toggle("black-theme", theme !== "light");
+    localStorage.setItem("dominon_kanban_theme", theme === "light" ? "light" : "black");
   }
-  setKanbanTheme(localStorage.getItem("dominon_kanban_theme") || "black");
-  if (localStorage.getItem("dominon_kanban_anim") === "off") kanbanView.classList.add("kanban-anim-off");
-  document.getElementById("kanban-settings").onclick = function () {
-    window.dominonDialog({ title:"Configuración de Kanban", fields:[
-      {name:"theme",label:"Tema",type:"select",value:localStorage.getItem("dominon_kanban_theme")||"black",options:themes.map(function(t){return {value:t,label:t.charAt(0).toUpperCase()+t.slice(1)};})},
-      {name:"animations",label:"Animaciones",type:"select",value:localStorage.getItem("dominon_kanban_anim")||"on",options:[{value:"on",label:"Activadas"},{value:"off",label:"Desactivadas"}]}
-    ]}).then(function (result) { if (!result) return; setKanbanTheme(result.theme); localStorage.setItem("dominon_kanban_anim",result.animations); kanbanView.classList.toggle("kanban-anim-off",result.animations==="off"); });
-  };
+  document.getElementById("kanban-theme-light").onclick = function(){setTheme("light");};
+  document.getElementById("kanban-theme-dark").onclick = function(){setTheme("black");};
   var stages = [["todo","Por hacer"],["doing","En progreso"],["done","Completado"]];
   function save() {
     localStorage.setItem(key, JSON.stringify(projects));
@@ -33,7 +28,7 @@
     key = window.storageKeyForUser ? window.storageKeyForUser("dominon_kanban_projects_") : "dominon_kanban_projects_guest";
     try {
       var stored = localStorage.getItem(key);
-      if (!stored && localStorage.getItem("dominon_kanban_projects")) {
+      if (!stored && (!window.auth || !window.auth.currentUser) && localStorage.getItem("dominon_kanban_projects")) {
         stored = localStorage.getItem("dominon_kanban_projects");
         localStorage.setItem(key, stored);
       }
@@ -43,6 +38,11 @@
     if (window.isPremiumPlan && window.isPremiumPlan() && window.loadKanbanCloud) await window.loadKanbanCloud();
   };
   function editProject(project) {
+    if (!project) {
+      if (!window.isMembershipPlanReady) return window.showPlanPopup("Cargando tu plan. Inténtalo de nuevo.");
+      var maxProjects = window.getPlanLimits ? window.getPlanLimits().maxKanbanProjects : 2;
+      if (projects.length >= maxProjects) return window.showPlanPopup("Límite de " + maxProjects + " proyectos Kanban para tu plan.");
+    }
     window.dominonDialog({ title: project ? "Editar proyecto" : "Nuevo proyecto", fields: [
       { name:"name", label:"Nombre", value:project ? project.name : "", required:true },
       { name:"description", label:"Descripción", type:"textarea", value:project ? project.description : "" },
@@ -50,7 +50,7 @@
     ]}).then(function (result) {
       if (!result) return;
       if (project) Object.assign(project, result);
-      else { projects.unshift({ id:Date.now(), name:result.name, description:result.description, priority:result.priority, tasks:[] }); animate("project"); }
+      else projects.unshift({ id:Date.now(), name:result.name, description:result.description, priority:result.priority, tasks:[] });
       save(); render();
     });
   }
@@ -63,17 +63,9 @@
     ]}).then(function (result) {
       if (!result) return;
       if (task) Object.assign(task, result);
-      else { project.tasks.push({ id:Date.now(), ...result, stage:"todo" }); animate("task"); }
+      else project.tasks.push({ id:Date.now(), ...result, stage:"todo" });
       save(); render();
     });
-  }
-  function animate(type) {
-    if (kanbanView.classList.contains("kanban-anim-off")) return;
-    var node = document.createElement("span");
-    node.className = "kanban-particle " + type;
-    node.textContent = "✦";
-    document.body.appendChild(node);
-    setTimeout(function(){node.remove();},650);
   }
   function render() {
     var filter = (search.value || "").toLowerCase();
@@ -87,7 +79,7 @@
       section.querySelector(".kanban-priority").textContent = "Prioridad " + project.priority;
       section.querySelector(".edit-project").onclick = function(){editProject(project);};
       section.querySelector(".add-task").onclick = function(){editTask(project);};
-      section.querySelector(".delete-project").onclick = function(){if(!kanbanView.classList.contains("kanban-anim-off")) section.classList.add("kanban-exit");setTimeout(function(){projects=projects.filter(function(p){return p!==project;});save();render();},kanbanView.classList.contains("kanban-anim-off")?0:180);};
+      section.querySelector(".delete-project").onclick = function(){projects=projects.filter(function(p){return p!==project;});save();render();};
       var columns=section.querySelector(".kanban-columns");
       stages.forEach(function(stage){
         var col=document.createElement("div"); col.className="kanban-column"; col.dataset.stage=stage[0];
@@ -104,7 +96,7 @@
           col.querySelector(".kanban-cards").appendChild(card);
         });
         col.ondragover=function(e){e.preventDefault();};
-        col.ondrop=function(e){e.preventDefault();var id=Number(e.dataTransfer.getData("text/plain"));var task=project.tasks.find(function(t){return t.id===id;});if(task){task.stage=stage[0];save();render();animate("task");}};
+        col.ondrop=function(e){e.preventDefault();var id=Number(e.dataTransfer.getData("text/plain"));var task=project.tasks.find(function(t){return t.id===id;});if(task){task.stage=stage[0];save();render();}};
         columns.appendChild(col);
       });
       root.appendChild(section);

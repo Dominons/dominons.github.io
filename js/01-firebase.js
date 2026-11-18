@@ -126,9 +126,9 @@
     // --- GLOBAL MEMBERSHIP PLANS & DATA PERSISTENCE ---
     // =========================================================
     const PLAN_LIMITS = {
-      normal: { maxNotepadPages: 3, maxGeminiChats: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
-      Extended: { maxNotepadPages: 5, maxGeminiChats: 6, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
-      Premium: { maxNotepadPages: 10, maxGeminiChats: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
+      normal: { maxNotepadPages: 3, maxKanbanProjects: 2, maxGeminiChats: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
+      Extended: { maxNotepadPages: 5, maxKanbanProjects: 4, maxGeminiChats: 6, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
+      Premium: { maxNotepadPages: 10, maxKanbanProjects: 10, maxGeminiChats: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
     };
     window.PLAN_LIMITS = PLAN_LIMITS;
     window.userPlan = 'normal';
