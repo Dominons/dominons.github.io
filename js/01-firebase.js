@@ -107,14 +107,28 @@
         console.warn("Error cargando Quantis desde Firebase:", error);
       }
     };
+    window.saveKanbanCloud = async function(projects) {
+      if (!window.isPremiumPlan() || !auth.currentUser) return;
+      try {
+        await setDoc(doc(db, "users", auth.currentUser.uid, "kanban", "board"),
+          { projects: projects, savedAt: Date.now() }, { merge: true });
+      } catch (error) { console.warn("Error guardando Kanban en Firebase:", error); }
+    };
+    window.loadKanbanCloud = async function() {
+      if (!window.isPremiumPlan() || !auth.currentUser || !window.setKanbanProjects) return;
+      try {
+        var snap = await getDoc(doc(db, "users", auth.currentUser.uid, "kanban", "board"));
+        if (snap.exists() && Array.isArray(snap.data().projects)) window.setKanbanProjects(snap.data().projects, false);
+      } catch (error) { console.warn("Error cargando Kanban desde Firebase:", error); }
+    };
 
     // =========================================================
     // --- GLOBAL MEMBERSHIP PLANS & DATA PERSISTENCE ---
     // =========================================================
     const PLAN_LIMITS = {
-      normal: { maxNotepadPages: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
-      Extended: { maxNotepadPages: 5, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
-      Premium: { maxNotepadPages: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
+      normal: { maxNotepadPages: 3, maxGeminiChats: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
+      Extended: { maxNotepadPages: 5, maxGeminiChats: 6, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
+      Premium: { maxNotepadPages: 10, maxGeminiChats: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
     };
     window.PLAN_LIMITS = PLAN_LIMITS;
     window.userPlan = 'normal';
@@ -205,6 +219,7 @@
       if (typeof window.renderTabs === 'function') window.renderTabs();
       if (typeof window.qApplyPlanLimits === 'function') window.qApplyPlanLimits();
       if (typeof window.qUpdateDrawingControls === 'function') window.qUpdateDrawingControls();
+      if (typeof window.initKanbanForUser === 'function') window.initKanbanForUser();
     };
 
     // =========================================================
@@ -602,7 +617,7 @@
     // --- GEMINI TAB SYSTEM ---
     // =========================================================
     var geminiActiveTab = 1;
-    var geminiMaxTabs = 5;
+    var geminiMaxTabs = 3;
     var geminiChatCount = 3;
 
     function geminiChatStorageKey() {
@@ -611,6 +626,9 @@
     }
     function geminiChatNamesKey() {
       return 'gemini_chat_names_' + getGeminiUserScope();
+    }
+    function geminiChatCountKey() {
+      return 'gemini_chat_count_' + getGeminiUserScope();
     }
     function geminiLoadNames() {
       try { return JSON.parse(localStorage.getItem(geminiChatNamesKey()) || '{}'); } catch(e){ return {}; }
@@ -719,6 +737,8 @@
     }
 
     window.initGeminiAssistant = function() {
+      geminiMaxTabs = (window.getPlanLimits && window.getPlanLimits().maxGeminiChats) || 3;
+      geminiChatCount = Math.max(3, Math.min(parseInt(localStorage.getItem(geminiChatCountKey()), 10) || 3, geminiMaxTabs));
       var keyInput = document.getElementById('geminiApiKeyInput');
       if (keyInput) getGeminiKeyForUser().then(function(k) { keyInput.value = k; });
       geminiRenderTabs();
@@ -729,8 +749,9 @@
       document.getElementById('geminiSidebar')?.classList.toggle('open');
     });
     document.getElementById('geminiNewChatBtn')?.addEventListener('click', function() {
-      if (geminiChatCount >= geminiMaxTabs) return window.showPlanPopup('Maximo 5 conversaciones.');
+      if (geminiChatCount >= geminiMaxTabs) return window.showPlanPopup('Límite de ' + geminiMaxTabs + ' conversaciones para tu plan.');
       geminiChatCount++;
+      localStorage.setItem(geminiChatCountKey(), geminiChatCount);
       geminiActiveTab = geminiChatCount;
       geminiSetChat(geminiActiveTab, []);
       geminiSetName(geminiActiveTab, 'Chat ' + geminiActiveTab);

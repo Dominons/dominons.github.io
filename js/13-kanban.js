@@ -1,13 +1,47 @@
 (function () {
-  var key = "dominon_kanban_projects";
+  var key = window.storageKeyForUser ? window.storageKeyForUser("dominon_kanban_projects_") : "dominon_kanban_projects_guest";
   var projects = [];
   try { projects = JSON.parse(localStorage.getItem(key) || "[]"); } catch (e) {}
   var root = document.getElementById("kanban-projects");
   var search = document.getElementById("kanban-search");
-  var savedTheme = localStorage.getItem("danifu_dominon_theme") || "black";
-  document.getElementById("kanban-view").classList.add(savedTheme + "-theme");
+  var kanbanView = document.getElementById("kanban-view");
+  var themes = ["black","light","purple","green","red","blue"];
+  function setKanbanTheme(theme) {
+    themes.forEach(function (name) { kanbanView.classList.remove(name + "-theme"); });
+    kanbanView.classList.add((themes.indexOf(theme) >= 0 ? theme : "black") + "-theme");
+    localStorage.setItem("dominon_kanban_theme", theme);
+  }
+  setKanbanTheme(localStorage.getItem("dominon_kanban_theme") || "black");
+  if (localStorage.getItem("dominon_kanban_anim") === "off") kanbanView.classList.add("kanban-anim-off");
+  document.getElementById("kanban-settings").onclick = function () {
+    window.dominonDialog({ title:"Configuración de Kanban", fields:[
+      {name:"theme",label:"Tema",type:"select",value:localStorage.getItem("dominon_kanban_theme")||"black",options:themes.map(function(t){return {value:t,label:t.charAt(0).toUpperCase()+t.slice(1)};})},
+      {name:"animations",label:"Animaciones",type:"select",value:localStorage.getItem("dominon_kanban_anim")||"on",options:[{value:"on",label:"Activadas"},{value:"off",label:"Desactivadas"}]}
+    ]}).then(function (result) { if (!result) return; setKanbanTheme(result.theme); localStorage.setItem("dominon_kanban_anim",result.animations); kanbanView.classList.toggle("kanban-anim-off",result.animations==="off"); });
+  };
   var stages = [["todo","Por hacer"],["doing","En progreso"],["done","Completado"]];
-  function save() { localStorage.setItem(key, JSON.stringify(projects)); }
+  function save() {
+    localStorage.setItem(key, JSON.stringify(projects));
+    if (window.isPremiumPlan && window.isPremiumPlan() && window.saveKanbanCloud) window.saveKanbanCloud(projects);
+  }
+  window.setKanbanProjects = function (next, persist) {
+    projects = Array.isArray(next) ? next : [];
+    if (persist !== false) save();
+    render();
+  };
+  window.initKanbanForUser = async function () {
+    key = window.storageKeyForUser ? window.storageKeyForUser("dominon_kanban_projects_") : "dominon_kanban_projects_guest";
+    try {
+      var stored = localStorage.getItem(key);
+      if (!stored && localStorage.getItem("dominon_kanban_projects")) {
+        stored = localStorage.getItem("dominon_kanban_projects");
+        localStorage.setItem(key, stored);
+      }
+      projects = JSON.parse(stored || "[]");
+    } catch (e) { projects = []; }
+    render();
+    if (window.isPremiumPlan && window.isPremiumPlan() && window.loadKanbanCloud) await window.loadKanbanCloud();
+  };
   function editProject(project) {
     window.dominonDialog({ title: project ? "Editar proyecto" : "Nuevo proyecto", fields: [
       { name:"name", label:"Nombre", value:project ? project.name : "", required:true },
@@ -16,7 +50,7 @@
     ]}).then(function (result) {
       if (!result) return;
       if (project) Object.assign(project, result);
-      else projects.unshift({ id:Date.now(), name:result.name, description:result.description, priority:result.priority, tasks:[] });
+      else { projects.unshift({ id:Date.now(), name:result.name, description:result.description, priority:result.priority, tasks:[] }); animate("project"); }
       save(); render();
     });
   }
@@ -29,9 +63,17 @@
     ]}).then(function (result) {
       if (!result) return;
       if (task) Object.assign(task, result);
-      else project.tasks.push({ id:Date.now(), ...result, stage:"todo" });
+      else { project.tasks.push({ id:Date.now(), ...result, stage:"todo" }); animate("task"); }
       save(); render();
     });
+  }
+  function animate(type) {
+    if (kanbanView.classList.contains("kanban-anim-off")) return;
+    var node = document.createElement("span");
+    node.className = "kanban-particle " + type;
+    node.textContent = "✦";
+    document.body.appendChild(node);
+    setTimeout(function(){node.remove();},650);
   }
   function render() {
     var filter = (search.value || "").toLowerCase();
@@ -45,7 +87,7 @@
       section.querySelector(".kanban-priority").textContent = "Prioridad " + project.priority;
       section.querySelector(".edit-project").onclick = function(){editProject(project);};
       section.querySelector(".add-task").onclick = function(){editTask(project);};
-      section.querySelector(".delete-project").onclick = function(){projects=projects.filter(function(p){return p!==project;});save();render();};
+      section.querySelector(".delete-project").onclick = function(){if(!kanbanView.classList.contains("kanban-anim-off")) section.classList.add("kanban-exit");setTimeout(function(){projects=projects.filter(function(p){return p!==project;});save();render();},kanbanView.classList.contains("kanban-anim-off")?0:180);};
       var columns=section.querySelector(".kanban-columns");
       stages.forEach(function(stage){
         var col=document.createElement("div"); col.className="kanban-column"; col.dataset.stage=stage[0];
@@ -62,7 +104,7 @@
           col.querySelector(".kanban-cards").appendChild(card);
         });
         col.ondragover=function(e){e.preventDefault();};
-        col.ondrop=function(e){e.preventDefault();var id=Number(e.dataTransfer.getData("text/plain"));var task=project.tasks.find(function(t){return t.id===id;});if(task){task.stage=stage[0];save();render();}};
+        col.ondrop=function(e){e.preventDefault();var id=Number(e.dataTransfer.getData("text/plain"));var task=project.tasks.find(function(t){return t.id===id;});if(task){task.stage=stage[0];save();render();animate("task");}};
         columns.appendChild(col);
       });
       root.appendChild(section);
