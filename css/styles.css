@@ -1110,6 +1110,12 @@
       height: 480px;
       flex-shrink: 0;
     }
+    #main-dashboard-view .gemini-panel,
+    #main-dashboard-view .gemini-layout,
+    #main-dashboard-view .gemini-main { min-height: 0; }
+    #main-dashboard-view .gemini-main { height: 100%; }
+    #main-dashboard-view .gemini-history { min-height: 0; flex: 1 1 auto; }
+    #main-dashboard-view .gemini-input-row { flex: 0 0 auto; }
     .gemini-sidebar {
       width: 0;
       min-width: 0;
@@ -2888,6 +2894,7 @@
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .chart-iframe { height: calc(100% - 35px) !important; min-height: 0; flex: 1; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-panel { height: 100%; display: flex; flex-direction: column; margin-top: 0; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-chat-history { flex-grow: 1; height: auto; min-height: 0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .gemini-layout { height:100%; min-height:0; flex:1; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .calculator-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo .pomodoro-panel { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
 
@@ -2898,6 +2905,8 @@
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .calculator-panel { height: auto; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .pomodoro-panel { height: auto; }
     #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open:not(.solo) .gemini-panel { height: 380px; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open .gemini-panel { min-height:0; }
+    #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open .gemini-layout { height:100%; min-height:0; flex:1; }
     .orbital-main.has-open .orbital-clock {
       width: auto;
       aspect-ratio: auto;
@@ -3334,6 +3343,22 @@
 .kanban-card small { color:#c084fc; }
 .task-edit { position:absolute; top:8px; right:8px; padding:5px; border:0; }
 @media(max-width:750px) { .kanban-main{padding:16px}.kanban-columns{grid-template-columns:1fr}.kanban-title,.kanban-project>header{align-items:stretch;flex-direction:column}.kanban-header{padding:12px}.kanban-brand{display:none} }
+
+/* Scrollbars discretas y consistentes con el bloc de notas. */
+* { scrollbar-width:thin; scrollbar-color:rgba(168,85,247,.55) rgba(20,20,24,.8); }
+*::-webkit-scrollbar { width:9px; height:9px; }
+*::-webkit-scrollbar-track { background:rgba(20,20,24,.8); }
+*::-webkit-scrollbar-thumb { border:2px solid transparent; border-radius:8px; background:rgba(168,85,247,.55); background-clip:padding-box; }
+*::-webkit-scrollbar-thumb:hover { background:rgba(168,85,247,.82); background-clip:padding-box; }
+#kanban-view .kanban-main { padding:clamp(12px,2vw,24px); }
+#kanban-view .kanban-project { margin-bottom:14px; padding:clamp(10px,1.4vw,16px); }
+#kanban-view .kanban-column { min-height:clamp(110px,22vh,220px); }
+@media(max-height:700px) {
+  #kanban-view .kanban-main { padding-top:12px; padding-bottom:12px; }
+  #kanban-view .kanban-title { margin-bottom:12px; }
+  #kanban-view .kanban-title h1 { font-size:clamp(18px,2.4vw,27px); }
+  #kanban-view .kanban-column { min-height:110px; }
+}
 
 /* Corrección final: Pomodoro siempre ocupa su propia fila junto a una herramienta grande, sin hueco vertical extra. */
 @media (min-width: 701px) {
