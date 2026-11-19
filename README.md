@@ -26,11 +26,21 @@ Principales casos de uso:
 ## Características principales
 - Autenticación Google (Firebase Auth).
 - Guardado local y en la nube (Firestore / RealtimeDB) según plan de membresía.
-- Quantis: canvas infinito con herramientas de dibujo, export/import.
-- Kanban: proyectos con descripción y prioridad; tareas editables con prioridad y fecha límite, movibles entre Por hacer, En progreso y Completado. Incluye búsqueda, temas, control de animaciones y guardado local por usuario; Premium sincroniza los proyectos en Firestore.
-- Bloc de notas con pestañas, import/export.
-- Asistente Gemini (Google Generative Language) con encriptación local de la API key y límite de conversaciones por plan: 3 Normal, 6 Extended y 10 Premium.
+- Quantis: canvas con herramientas de dibujo y guardado local de trazos para todos los planes; Premium lo sincroniza en Firebase.
+- Kanban: proyectos con descripción y prioridad; tareas editables con prioridad y fecha límite, movibles entre Por hacer, En progreso y Completado. Incluye búsqueda, temas y guardado local; Premium sincroniza los proyectos en Firestore.
+- Bloc de notas con pestañas y guardado local; Premium sincroniza las notas en Firestore.
+- Asistente Gemini (Google Generative Language) con encriptación local de la API key e historial local; Premium sincroniza los chats.
 - Reproductor de audio local (arrastrar MP3s).
+
+### Planes y límites
+
+| Plan | Bloc de Notas | Kanban | Quantis | Gemini | Persistencia |
+| --- | --- | --- | --- | --- | --- |
+| Normal | 4 páginas | 4 proyectos | 2 proyectos, 3 páginas por proyecto | 4 chats | Local |
+| Extended | 7 páginas | 7 proyectos | 3 proyectos, 5 páginas por proyecto | 7 chats | Local, con exportación/importación |
+| Premium | 10 páginas | 10 proyectos | 5 proyectos, 10 páginas por proyecto | 10 chats | Local y sincronización con Firebase |
+
+Las herramientas de dibujo de Quantis están disponibles en todos los planes. Extended y Premium pueden exportar/importar datos de Bloc de Notas, Kanban, Quantis y Gemini para moverlos entre equipos.
 - Animaciones con GSAP; sistema de temas (claro/oscuro/paletas).
 
 ---
@@ -120,11 +130,12 @@ https://dominons.github.io
 
 ## Uso rápido (flujo típico)
 1. Abrir la app y click en "Iniciar sesión con Google".
-2. Probar bloc de notas: crear pestañas, escribir; en planes Premium las notas se guardan en Firestore.
-3. Abrir Quantis: crear proyecto/páginas, dibujar y exportar/importar JSON.
+2. Probar bloc de notas: crear pestañas y escribir; en Premium las notas se guardan en Firestore.
+3. Abrir Quantis: crear proyecto/páginas y dibujar; todos los trazos se guardan localmente y Premium los sincroniza.
 4. Abrir Kanban: crear proyectos, añadir tareas y moverlas por las columnas según su progreso.
-5. Asistente Gemini: abrir sidebar, guardar API Key y enviar prompts; respuestas aparecen en la conversación.
-6. Reproductor: arrastra MP3s al área de reproducción.
+5. Asistente Gemini: abrir sidebar, guardar API Key y enviar prompts; las respuestas quedan en el historial local y Premium lo sincroniza.
+6. En Extended o Premium, usar los controles de exportar/importar para mover los datos entre equipos.
+7. Reproductor: arrastra MP3s al área de reproducción.
 
 ---
 

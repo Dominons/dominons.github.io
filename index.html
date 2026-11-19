@@ -96,7 +96,7 @@
               <div class="notepad-actions" id="notepadActions">
                 <button class="notepad-file-btn" id="exportNoteBtn" type="button"><i class="fa-solid fa-file-export"></i> Export</button>
                 <button class="notepad-file-btn" id="importNoteBtn" type="button"><i class="fa-solid fa-file-import"></i> Import</button>
-                <input type="file" id="importNoteInput" accept=".txt,text/plain" style="display:none;">
+                <input type="file" id="importNoteInput" accept=".json,application/json" style="display:none;">
               </div>
             </div>
             <div class="notepad-tabs" id="notepad-tabs">
@@ -162,6 +162,9 @@
               <div class="gemini-sidebar-list" id="geminiTabBar"></div>
               <div class="gemini-sidebar-footer">
                 <button id="geminiKeyIcon" title="API Key"><i class="fa-solid fa-key"></i> Key</button>
+                <button id="geminiExportBtn" title="Exportar historial"><i class="fa-solid fa-file-export"></i></button>
+                <button id="geminiImportBtn" title="Importar historial"><i class="fa-solid fa-file-import"></i></button>
+                <input type="file" id="geminiImportInput" accept=".json,application/json" hidden>
                 <button id="geminiClearBtn" title="Borrar chat actual"><i class="fa-solid fa-trash-can"></i> Borrar</button>
               </div>
             </aside>
@@ -198,7 +201,7 @@
     <header class="kanban-header">
       <div class="kanban-brand">KANBAN</div>
       <nav><button class="glow-button" onclick="window.switchAppView('main-dashboard-view')">DOMINON</button><button class="glow-button" onclick="window.switchAppView('quantis-view')">QUANTIS</button></nav>
-      <div class="kanban-header-actions"><button class="kanban-theme-swatch light" id="kanban-theme-light" title="Tema claro"></button><button class="kanban-theme-swatch dark" id="kanban-theme-dark" title="Tema oscuro"></button><button class="glow-button" id="kanban-new-project"><i class="fa-solid fa-plus"></i> NUEVO PROYECTO</button></div>
+      <div class="kanban-header-actions"><button class="kanban-theme-swatch light" id="kanban-theme-light" title="Tema claro"></button><button class="kanban-theme-swatch dark" id="kanban-theme-dark" title="Tema oscuro"></button><button class="kanban-backup-btn" id="kanban-export-btn" title="Exportar Kanban"><i class="fa-solid fa-file-export"></i></button><button class="kanban-backup-btn" id="kanban-import-btn" title="Importar Kanban"><i class="fa-solid fa-file-import"></i></button><input type="file" id="kanban-import-input" accept=".json,application/json" hidden><button class="glow-button" id="kanban-new-project"><i class="fa-solid fa-plus"></i> NUEVO PROYECTO</button></div>
     </header>
     <main class="kanban-main">
       <div class="kanban-title"><div><h1>Proyectos</h1><p>Organiza tus ideas, prioridades y próximos pasos.</p></div><input id="kanban-search" type="search" placeholder="Buscar proyectos o tareas..."></div>
@@ -334,31 +337,33 @@
           <h3>Normal</h3>
           <div class="plan-price">$0</div>
           <ul>
-            <li>Notepad: 3 páginas, guardado local</li>
-            <li>Kanban: hasta 2 proyectos, guardado local</li>
-            <li>Quantis: 2 proyectos, 3 páginas/proyecto, canvas 2000×2000 px</li>
-            <li>Gemini: hasta 3 conversaciones, historial local</li>
+            <li>Bloc de Notas: hasta 4 páginas, guardado local</li>
+            <li>Kanban: hasta 4 proyectos, guardado local</li>
+            <li>Quantis: 2 proyectos y 3 páginas por proyecto</li>
+            <li>Gemini: hasta 4 conversaciones, historial local</li>
+            <li>Herramientas de dibujo incluidas</li>
           </ul>
         </button>
         <button class="plan-option" type="button" data-plan-choice="Extended">
           <h3>Extended</h3>
           <div class="plan-price">$5/mo</div>
           <ul>
-            <li>Notepad: 5 páginas, guardado local y exportación</li>
-            <li>Kanban: hasta 4 proyectos, guardado local</li>
-            <li>Quantis: 4 proyectos, 7 páginas/proyecto, canvas 4000×4000 px</li>
-            <li>Gemini: hasta 6 conversaciones, historial local</li>
+            <li>Bloc de Notas: hasta 7 páginas, guardado local y respaldo</li>
+            <li>Kanban: hasta 7 proyectos, guardado local y respaldo</li>
+            <li>Quantis: 3 proyectos y 5 páginas por proyecto</li>
+            <li>Gemini: hasta 7 conversaciones, historial local y respaldo</li>
+            <li>Importación y exportación de datos</li>
           </ul>
         </button>
         <button class="plan-option" type="button" data-plan-choice="Premium">
           <h3>Premium</h3>
           <div class="plan-price">$10/mo</div>
           <ul>
-            <li>Notepad: 10 páginas sincronizadas en la nube</li>
+            <li>Bloc de Notas: 10 páginas sincronizadas en la nube</li>
             <li>Kanban: hasta 10 proyectos sincronizados en Firestore</li>
-            <li>Quantis: 10 proyectos, 20 páginas/proyecto, canvas 8000×8000 px</li>
+            <li>Quantis: 5 proyectos y 10 páginas por proyecto, sincronizados</li>
             <li>Gemini: hasta 10 conversaciones, historial sincronizado</li>
-            <li>Herramientas de dibujo y soporte prioritario</li>
+            <li>Importación y exportación de datos</li>
           </ul>
         </button>
       </div>
@@ -366,7 +371,6 @@
         <strong>Contacto para activar plan</strong>
         <p>Discord: @DANIFU777</p>
         <p>Email: danielprooooogamer41@gmail.com</p>
-        <p>GitHub: @daniFU777</p>
       </div>
     </div>
   </div>
