@@ -1269,6 +1269,20 @@
               var data = JSON.parse(ev.target.result);
               if (!Array.isArray(data.projects) || !data.canvasData)
                 throw new Error("Formato inválido");
+              var limits = window.getPlanLimits
+                ? window.getPlanLimits()
+                : { maxQuantisProjects: 2, maxQuantisPagesPerProj: 3 };
+              if (
+                data.projects.length > limits.maxQuantisProjects ||
+                data.projects.some(function(project) {
+                  return !project || !Array.isArray(project.pages) ||
+                    !project.pages.length ||
+                    project.pages.length > limits.maxQuantisPagesPerProj;
+                })
+              ) {
+                window.showPlanPopup("El archivo supera los límites de tu plan.");
+                return;
+              }
               QS.projects = data.projects;
               QS.canvasData = data.canvasData || {};
               QS.drawings = data.drawings || {};

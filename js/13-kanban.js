@@ -19,6 +19,45 @@
     localStorage.setItem(key, JSON.stringify(projects));
     if (window.isPremiumPlan && window.isPremiumPlan() && window.saveKanbanCloud) window.saveKanbanCloud(projects);
   }
+  function backupAllowed() {
+    return !!(window.canUseLocalBackup && window.canUseLocalBackup());
+  }
+  window.exportKanbanBackup = function () {
+    if (!backupAllowed()) return window.showPlanPopup("El respaldo de Kanban requiere Extended o Premium.");
+    save();
+    var blob = new Blob([JSON.stringify({
+      type: "dominon-kanban-backup",
+      version: 1,
+      projects: projects
+    }, null, 2)], { type: "application/json;charset=utf-8" });
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "dominon-kanban-backup.json";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+  window.importKanbanBackup = function (file) {
+    if (!backupAllowed()) return window.showPlanPopup("El respaldo de Kanban requiere Extended o Premium.");
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      try {
+        var data = JSON.parse(event.target.result);
+        var maxProjects = window.getPlanLimits ? window.getPlanLimits().maxKanbanProjects : 4;
+        if (!data || data.type !== "dominon-kanban-backup" || !Array.isArray(data.projects) || data.projects.length > maxProjects ||
+          data.projects.some(function(project) {
+            return !project || typeof project.name !== "string" || !Array.isArray(project.tasks);
+          })) {
+          throw new Error("Formato inválido");
+        }
+        window.setKanbanProjects(data.projects);
+        window.showPlanPopup("Kanban importado.");
+      } catch (error) {
+        window.showPlanPopup("Archivo de Kanban inválido o fuera del límite de tu plan.");
+      }
+    };
+    reader.readAsText(file);
+  };
   window.setKanbanProjects = function (next, persist) {
     projects = Array.isArray(next) ? next : [];
     if (persist !== false) save();
@@ -103,6 +142,15 @@
     });
   }
   document.getElementById("kanban-new-project").onclick=function(){editProject(null);};
+  document.getElementById("kanban-export-btn").onclick=function(){window.exportKanbanBackup();};
+  document.getElementById("kanban-import-btn").onclick=function(){
+    if (!backupAllowed()) return window.showPlanPopup("El respaldo de Kanban requiere Extended o Premium.");
+    document.getElementById("kanban-import-input").click();
+  };
+  document.getElementById("kanban-import-input").addEventListener("change",function(e){
+    window.importKanbanBackup(e.target.files[0]);
+    e.target.value="";
+  });
   search.addEventListener("input",render);
   render();
 })();

@@ -126,9 +126,9 @@
     // --- GLOBAL MEMBERSHIP PLANS & DATA PERSISTENCE ---
     // =========================================================
     const PLAN_LIMITS = {
-      normal: { maxNotepadPages: 3, maxKanbanProjects: 2, maxGeminiChats: 3, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: false, saveNotepad: 'local', quantisSize: 2000 },
-      Extended: { maxNotepadPages: 5, maxKanbanProjects: 4, maxGeminiChats: 6, maxQuantisProjects: 4, maxQuantisPagesPerProj: 7, hasBrush: false, saveNotepad: 'local', quantisSize: 4000 },
-      Premium: { maxNotepadPages: 10, maxKanbanProjects: 10, maxGeminiChats: 10, maxQuantisProjects: 10, maxQuantisPagesPerProj: 20, hasBrush: true, saveNotepad: 'cloud', quantisSize: 8000 }
+      normal: { maxNotepadPages: 4, maxKanbanProjects: 4, maxGeminiChats: 4, maxQuantisProjects: 2, maxQuantisPagesPerProj: 3, hasBrush: true, hasLocalBackup: false, saveNotepad: 'local', quantisSize: 8000 },
+      Extended: { maxNotepadPages: 7, maxKanbanProjects: 7, maxGeminiChats: 7, maxQuantisProjects: 3, maxQuantisPagesPerProj: 5, hasBrush: true, hasLocalBackup: true, saveNotepad: 'local', quantisSize: 8000 },
+      Premium: { maxNotepadPages: 10, maxKanbanProjects: 10, maxGeminiChats: 10, maxQuantisProjects: 5, maxQuantisPagesPerProj: 10, hasBrush: true, hasLocalBackup: true, saveNotepad: 'cloud', quantisSize: 8000 }
     };
     window.PLAN_LIMITS = PLAN_LIMITS;
     window.userPlan = 'normal';
@@ -143,6 +143,9 @@
     window.storageKeyForUser = storageKeyForUser;
     window.isPremiumPlan = function() {
       return window.getPlanLimits ? window.getPlanLimits().saveNotepad === 'cloud' : false;
+    };
+    window.canUseLocalBackup = function() {
+      return !!(window.getPlanLimits && window.getPlanLimits().hasLocalBackup);
     };
 
     // --- Loader de guardado en la nube (Premium) ---
@@ -214,7 +217,7 @@
         localStorage.setItem(storageKeyForUser('danifu_active_tab_'), window.activeTab);
       }
       const actions = document.getElementById('notepadActions');
-      if (actions) actions.style.display = window.userPlan === 'Extended' ? 'flex' : 'none';
+      if (actions) actions.style.display = window.canUseLocalBackup() ? 'flex' : 'none';
       if (typeof window.initGeminiAssistant === 'function') window.initGeminiAssistant();
       if (typeof window.renderTabs === 'function') window.renderTabs();
       if (typeof window.qApplyPlanLimits === 'function') window.qApplyPlanLimits();
@@ -455,44 +458,78 @@
 
     window.renderTabs();
 
-    window.exportCurrentNote = function() {
-      if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Export Note está disponible en Extended.');
+    function notepadBackupAllowed() {
+      return window.canUseLocalBackup && window.canUseLocalBackup();
+    }
+
+    window.exportNotepadBackup = function() {
+      if (!notepadBackupAllowed()) {
+        window.showPlanPopup('El respaldo del Bloc de Notas requiere Extended o Premium.');
         return;
       }
       const note = document.getElementById('notepad');
-      const blob = new Blob([note ? note.value : ''], { type: 'text/plain;charset=utf-8' });
+      if (note) saveNoteToCache(window.activeTab, note.value);
+      const pages = {};
+      for (let i = 1; i <= window.createdPagesCount; i++) {
+        pages[i] = localStorage.getItem(noteCacheKey(i)) || '';
+      }
+      const blob = new Blob([JSON.stringify({
+        type: 'dominon-notepad-backup',
+        version: 1,
+        createdPagesCount: window.createdPagesCount,
+        activeTab: window.activeTab,
+        pages: pages
+      }, null, 2)], { type: 'application/json;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'notepad_page_' + window.activeTab + '.txt';
+      a.download = 'dominon-notepad-backup.json';
       a.click();
       URL.revokeObjectURL(a.href);
     };
 
-    window.importCurrentNote = function(file) {
-      if (window.userPlan !== 'Extended') {
-        window.showPlanPopup('Import Note está disponible en Extended.');
+    window.importNotepadBackup = function(file) {
+      if (!notepadBackupAllowed()) {
+        window.showPlanPopup('El respaldo del Bloc de Notas requiere Extended o Premium.');
         return;
       }
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(event) {
-        const note = document.getElementById('notepad');
-        if (note) {
-          note.value = event.target.result || '';
-          window.saveCurrentNote();
+        try {
+          const data = JSON.parse(event.target.result);
+          if (!data || data.type !== 'dominon-notepad-backup' || !data.pages || typeof data.pages !== 'object') {
+            throw new Error('Formato inválido');
+          }
+          const requestedCount = parseInt(data.createdPagesCount, 10) || Object.keys(data.pages).length || 1;
+          const importedCount = Math.min(Math.max(1, requestedCount), window.maxPages);
+          for (let i = 1; i <= importedCount; i++) {
+            saveNoteToCache(i, typeof data.pages[i] === 'string' ? data.pages[i] : '');
+            if (window.isPremiumPlan() && window.auth && window.auth.currentUser) {
+              dirtyNoteTabs.add(String(i));
+            }
+          }
+          if (dirtyNoteTabs.size > 0) scheduleCloudNoteSync();
+          window.createdPagesCount = importedCount;
+          window.activeTab = String(Math.min(importedCount, Math.max(1, parseInt(data.activeTab, 10) || 1)));
+          localStorage.setItem(storageKeyForUser('danifu_pages_count_'), window.createdPagesCount);
+          localStorage.setItem(storageKeyForUser('danifu_active_tab_'), window.activeTab);
+          window.renderTabs();
+          window.switchTab(window.activeTab, { skipSave: true });
+          window.showPlanPopup('Bloc de Notas importado.');
+        } catch (error) {
+          window.showPlanPopup('Archivo del Bloc de Notas inválido.');
         }
       };
       reader.readAsText(file);
     };
 
-    document.getElementById('exportNoteBtn')?.addEventListener('click', window.exportCurrentNote);
+    document.getElementById('exportNoteBtn')?.addEventListener('click', window.exportNotepadBackup);
     document.getElementById('importNoteBtn')?.addEventListener('click', function() {
-      if (window.userPlan !== 'Extended') return window.showPlanPopup('Import Note está disponible en Extended.');
+      if (!notepadBackupAllowed()) return window.showPlanPopup('El respaldo del Bloc de Notas requiere Extended o Premium.');
       document.getElementById('importNoteInput')?.click();
     });
     document.getElementById('importNoteInput')?.addEventListener('change', function(e) {
-      window.importCurrentNote(e.target.files[0]);
+      window.importNotepadBackup(e.target.files[0]);
       e.target.value = '';
     });
 
@@ -745,8 +782,89 @@
       geminiLoadChat(geminiActiveTab);
     };
 
+    function geminiBackupAllowed() {
+      return window.canUseLocalBackup && window.canUseLocalBackup();
+    }
+
+    window.exportGeminiBackup = function() {
+      if (!geminiBackupAllowed()) {
+        window.showPlanPopup('El respaldo de Gemini requiere Extended o Premium.');
+        return;
+      }
+      const blob = new Blob([JSON.stringify({
+        type: 'dominon-gemini-backup',
+        version: 1,
+        chatCount: geminiChatCount,
+        activeTab: geminiActiveTab,
+        chats: geminiLoadChats(),
+        names: geminiLoadNames()
+      }, null, 2)], { type: 'application/json;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'dominon-gemini-backup.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    window.importGeminiBackup = function(file) {
+      if (!geminiBackupAllowed()) {
+        window.showPlanPopup('El respaldo de Gemini requiere Extended o Premium.');
+        return;
+      }
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const data = JSON.parse(event.target.result);
+          if (!data || data.type !== 'dominon-gemini-backup' || !data.chats || typeof data.chats !== 'object') {
+            throw new Error('Formato inválido');
+          }
+          const requestedCount = parseInt(data.chatCount, 10) || Object.keys(data.chats).length || 3;
+          geminiChatCount = Math.min(Math.max(3, requestedCount), geminiMaxTabs);
+          const chats = {};
+          const names = {};
+          for (let i = 1; i <= geminiChatCount; i++) {
+            const sourceMessages = data.chats['chat_' + i];
+            chats['chat_' + i] = Array.isArray(sourceMessages)
+              ? sourceMessages.filter(function(message) {
+                  return message && (message.role === 'user' || message.role === 'assistant') && typeof message.text === 'string';
+                }).map(function(message) {
+                  return { role: message.role, text: message.text };
+                })
+              : [];
+            const sourceName = data.names && data.names['chat_' + i];
+            names['chat_' + i] = typeof sourceName === 'string' && sourceName.trim()
+              ? sourceName.trim().slice(0, 30)
+              : 'Chat ' + i;
+          }
+          geminiSaveChats(chats);
+          geminiSaveNames(names);
+          localStorage.setItem(geminiChatCountKey(), geminiChatCount);
+          geminiActiveTab = Math.min(geminiChatCount, Math.max(1, parseInt(data.activeTab, 10) || 1));
+          geminiRenderTabs();
+          geminiLoadChat(geminiActiveTab);
+          if (window.isPremiumPlan && window.isPremiumPlan() && window.saveGeminiCloud) {
+            window.saveGeminiCloud(chats);
+          }
+          window.showPlanPopup('Historial de Gemini importado.');
+        } catch (error) {
+          window.showPlanPopup('Archivo de Gemini inválido.');
+        }
+      };
+      reader.readAsText(file);
+    };
+
     document.getElementById('geminiSidebarToggle')?.addEventListener('click', function() {
       document.getElementById('geminiSidebar')?.classList.toggle('open');
+    });
+    document.getElementById('geminiExportBtn')?.addEventListener('click', window.exportGeminiBackup);
+    document.getElementById('geminiImportBtn')?.addEventListener('click', function() {
+      if (!geminiBackupAllowed()) return window.showPlanPopup('El respaldo de Gemini requiere Extended o Premium.');
+      document.getElementById('geminiImportInput')?.click();
+    });
+    document.getElementById('geminiImportInput')?.addEventListener('change', function(e) {
+      window.importGeminiBackup(e.target.files[0]);
+      e.target.value = '';
     });
     document.getElementById('geminiNewChatBtn')?.addEventListener('click', function() {
       if (geminiChatCount >= geminiMaxTabs) return window.showPlanPopup('Límite de ' + geminiMaxTabs + ' conversaciones para tu plan.');
