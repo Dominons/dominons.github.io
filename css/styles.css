@@ -3328,6 +3328,8 @@
 #kanban-view.light-theme { --kb-bg:#f3f4f6; --kb-card:#fff; --kb-border:#d8dbe2; --kb-text:#20232a; --kb-muted:#69707d;--color-highlight:#27272a; }
 .kanban-header { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:12px 24px; border-bottom:1px solid var(--kb-border); background:var(--kb-card); }
 .kanban-header-actions { display:flex; align-items:center; gap:8px; }
+.kanban-backup-btn { width:30px; height:30px; border:1px solid var(--kb-border); border-radius:7px; background:var(--kb-card); color:var(--kb-text); cursor:pointer; }
+.kanban-backup-btn:hover { border-color:#a855f7; color:#c084fc; }
 .kanban-theme-swatch { width:23px; height:23px; border-radius:50%; cursor:pointer; border:1px solid #a855f7; box-shadow:0 0 0 1px #08090d; }
 .kanban-theme-swatch.light { background:#fff; }
 .kanban-theme-swatch.dark { background:#090a0d; }
