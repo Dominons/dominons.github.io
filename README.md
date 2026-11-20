@@ -14,7 +14,6 @@ Un Entorno de Trabajo Unificado — tablero SPA para productividad y análisis c
 Dominon es una aplicación web SPA enfocada en productividad y análisis para usuarios técnicos. Reúne Kanban para organizar proyectos y tareas, un dashboard con TradingView, Quantis para diagramas y proyectos visuales, un bloc de notas y Gemini como asistente conversacional. Los datos se guardan localmente y, para Premium, algunas herramientas se sincronizan con Firebase.
 
 Principales casos de uso:
-- Monitorización y demo de métricas crypto (simuladas + fuentes públicas).
 - Notas rápidas y sincronización por usuario (local / Firebase para planes Premium).
 - Espacio para bocetos / planificación (Quantis canvas).
 - Organización de proyectos y tareas en Kanban con columnas de estado, prioridades, fechas límite y búsqueda.
