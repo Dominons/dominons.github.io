@@ -1231,22 +1231,9 @@
           qUpdateTransform();
         });
       var mobileView = document.getElementById("quantis-view");
-      var mobileZoom = 1;
-      var zoomLabel = document.getElementById("q-mobile-zoom-value");
-      function setMobileZoom(next) {
-        mobileZoom = Math.max(0.75, Math.min(1.25, Math.round(next * 100) / 100));
-        mobileView.style.setProperty("--q-ui-scale", mobileZoom);
-        if (zoomLabel) zoomLabel.textContent = Math.round(mobileZoom * 100) + "%";
-      }
       document.getElementById("q-mobile-sidebar-btn")?.addEventListener("click", function () {
         var collapsed = mobileView.classList.toggle("q-mobile-sidebar-collapsed");
         this.setAttribute("aria-pressed", String(collapsed));
-      });
-      document.getElementById("q-mobile-zoom-out")?.addEventListener("click", function () {
-        setMobileZoom(mobileZoom - 0.05);
-      });
-      document.getElementById("q-mobile-zoom-in")?.addEventListener("click", function () {
-        setMobileZoom(mobileZoom + 0.05);
       });
       document
         .getElementById("q-export-project-btn")
@@ -1331,7 +1318,11 @@
         clickY = 0,
         isMouseDragging = false,
         touchPinchDistance = 0,
-        touchPinchZoom = 1;
+        touchPinchZoom = 1,
+        touchContextTimer = null,
+        touchContextOpened = false,
+        touchStartX = 0,
+        touchStartY = 0;
       QD.viewport.addEventListener("mousedown", function (e) {
         if (e.button === 0) {
           if (QS.drawMode) {
@@ -1371,7 +1362,10 @@
         if (e.touches.length !== 1) return;
         e.preventDefault();
         var touch = e.touches[0];
+        touchContextOpened = false;
         if (QS.drawMode) {
+          clearTimeout(touchContextTimer);
+          touchContextTimer = null;
           qBeginDraw({
             clientX: touch.clientX,
             clientY: touch.clientY,
@@ -1380,13 +1374,32 @@
             shiftKey: false
           });
         } else {
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
           QS.isPanning = true;
           QS.startX = touch.clientX - QS.panX;
           QS.startY = touch.clientY - QS.panY;
           QD.viewport.classList.add("grabbing");
+          touchContextTimer = setTimeout(function () {
+            var point = qCanvasPoint({ clientX: touchStartX, clientY: touchStartY });
+            if (!qIsWithinBounds(point.x, point.y)) return;
+            touchContextOpened = true;
+            QS.isPanning = false;
+            QD.viewport.classList.remove("grabbing");
+            QS.ctxCoords.x = point.x;
+            QS.ctxCoords.y = point.y;
+            QD.ctxMenu.style.display = "block";
+            QD.ctxMenu.style.left = touchStartX + "px";
+            QD.ctxMenu.style.top = touchStartY + "px";
+          }, 550);
         }
       }, { passive: false });
       QD.viewport.addEventListener("touchmove", function (e) {
+        if (touchContextTimer && e.touches.length === 1 &&
+            Math.hypot(e.touches[0].clientX - touchStartX, e.touches[0].clientY - touchStartY) > 10) {
+          clearTimeout(touchContextTimer);
+          touchContextTimer = null;
+        }
         if (e.touches.length === 2 && touchPinchDistance) {
           e.preventDefault();
           var distance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
@@ -1413,6 +1426,8 @@
         }
       }, { passive: false });
       QD.viewport.addEventListener("touchend", function () {
+        clearTimeout(touchContextTimer);
+        touchContextTimer = null;
         touchPinchDistance = 0;
         if (QS.isDrawing) qEndDraw();
         QS.isPanning = false;
