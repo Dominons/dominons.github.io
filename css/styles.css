@@ -2574,6 +2574,32 @@
       }
       .q-page-del:hover { color: #ef4444; }
 
+      /* Variantes de prueba móvil, seleccionables mediante una clase en html. */
+      @media (max-width: 700px) {
+        html.q-mobile-compact #quantis-header { height: 42px; padding: 0 8px; }
+        html.q-mobile-compact #quantis-brand,
+        html.q-mobile-compact #quantis-clock { display: none; }
+        html.q-mobile-compact #quantis-sidebar { width: 112px; min-width: 112px; }
+        html.q-mobile-compact #quantis-sidebar-header { padding: 7px; }
+        html.q-mobile-compact #q-projects-list { padding: 5px; }
+        html.q-mobile-topbar #quantis-header { height: auto; min-height: 40px; padding: 5px 8px; flex-wrap: wrap; gap: 4px; }
+        html.q-mobile-topbar #quantis-nav-left,
+        html.q-mobile-topbar #quantis-nav-right { width: 100%; justify-content: space-between; }
+        html.q-mobile-topbar #quantis-brand { font-size: 11px; margin-right: 0; }
+        html.q-mobile-topbar #quantis-sidebar { width: 100%; min-width: 0; height: 118px; border-right: 0; border-bottom: 1px solid rgba(168,85,247,0.18); }
+        html.q-mobile-topbar #quantis-sidebar-header { padding: 5px 9px; }
+        html.q-mobile-topbar #q-projects-list { display: flex; gap: 10px; overflow-x: auto; overflow-y: hidden; padding: 5px 8px; }
+        html.q-mobile-topbar .q-proj-item { min-width: 145px; margin: 0; }
+        html.q-mobile-overlay #quantis-header { height: 42px; padding: 0 8px; }
+        html.q-mobile-overlay #quantis-brand,
+        html.q-mobile-overlay #quantis-clock { display: none; }
+        html.q-mobile-overlay #quantis-sidebar { position: absolute; z-index: 35; top: 48px; left: 6px; bottom: 6px; width: min(72vw, 250px); min-width: 0; height: auto; border: 1px solid rgba(168,85,247,0.28); border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,.55); }
+        html.q-mobile-overlay #quantis-body { position: relative; }
+        html.q-mobile-overlay #quantis-viewport { width: 100%; }
+        html.q-mobile-overlay #quantis-sidebar-header { padding: 8px 10px; }
+        html.q-mobile-overlay #q-projects-list { padding: 6px 8px; }
+      }
+
       /* ===== QUANTIS VIEWPORT / INFINITE CANVAS ===== */
 #quantis-viewport {
          flex: 1;
