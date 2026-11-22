@@ -2585,7 +2585,6 @@
         #quantis-view #quantis-sidebar-header, #quantis-view #q-projects-list { font-size: calc(1em * var(--q-ui-scale)); }
         #quantis-view #quantis-sidebar { width: calc(112px * var(--q-ui-scale)); min-width: calc(112px * var(--q-ui-scale)); }
         #quantis-view.q-mobile-sidebar-collapsed #quantis-sidebar { display: none; }
-        #q-mobile-zoom-value { min-width: 34px; justify-content: center; align-items: center; color: var(--quantis-muted); font-size: 10px; }
         html.q-mobile-compact #quantis-header { height: 42px; padding: 0 8px; }
         html.q-mobile-compact #quantis-brand,
         html.q-mobile-compact #quantis-clock { display: none; }
