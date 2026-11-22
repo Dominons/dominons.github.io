@@ -59,4 +59,7 @@
       if (targetViewId === 'quantis-view' && typeof window.qApplyPlanLimits === 'function') {
         window.qApplyPlanLimits();
       }
+      if (targetViewId === 'quantis-view' && typeof window.qPrepareMobileCanvas === 'function') {
+        requestAnimationFrame(function() { requestAnimationFrame(window.qPrepareMobileCanvas); });
+      }
     }

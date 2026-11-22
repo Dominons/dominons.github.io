@@ -52,6 +52,13 @@
       redoStack: {},
     };
     window.QS = QS;
+    window.qPrepareMobileCanvas = function () {
+      if (!window.matchMedia("(max-width: 700px)").matches || !QD.viewport) return;
+      QS.zoom = 1;
+      QS.panX = 0;
+      QS.panY = 0;
+      qUpdateTransform();
+    };
 
     // =========================================================
     // --- QUANTIS DOM REFERENCES ---
@@ -1223,6 +1230,24 @@
           QS.zoom = 1.0;
           qUpdateTransform();
         });
+      var mobileView = document.getElementById("quantis-view");
+      var mobileZoom = 1;
+      var zoomLabel = document.getElementById("q-mobile-zoom-value");
+      function setMobileZoom(next) {
+        mobileZoom = Math.max(0.75, Math.min(1.25, Math.round(next * 100) / 100));
+        mobileView.style.setProperty("--q-ui-scale", mobileZoom);
+        if (zoomLabel) zoomLabel.textContent = Math.round(mobileZoom * 100) + "%";
+      }
+      document.getElementById("q-mobile-sidebar-btn")?.addEventListener("click", function () {
+        var collapsed = mobileView.classList.toggle("q-mobile-sidebar-collapsed");
+        this.setAttribute("aria-pressed", String(collapsed));
+      });
+      document.getElementById("q-mobile-zoom-out")?.addEventListener("click", function () {
+        setMobileZoom(mobileZoom - 0.05);
+      });
+      document.getElementById("q-mobile-zoom-in")?.addEventListener("click", function () {
+        setMobileZoom(mobileZoom + 0.05);
+      });
       document
         .getElementById("q-export-project-btn")
         ?.addEventListener("click", function () {
@@ -1304,7 +1329,9 @@
       var clickT = 0,
         clickX = 0,
         clickY = 0,
-        isMouseDragging = false;
+        isMouseDragging = false,
+        touchPinchDistance = 0,
+        touchPinchZoom = 1;
       QD.viewport.addEventListener("mousedown", function (e) {
         if (e.button === 0) {
           if (QS.drawMode) {
@@ -1332,6 +1359,64 @@
             isMouseDragging = false;
           }
         }
+      });
+      QD.viewport.addEventListener("touchstart", function (e) {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          touchPinchDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+          touchPinchZoom = QS.zoom;
+          QS.isPanning = false;
+          return;
+        }
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        var touch = e.touches[0];
+        if (QS.drawMode) {
+          qBeginDraw({
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            target: QD.canvas,
+            preventDefault: function () {},
+            shiftKey: false
+          });
+        } else {
+          QS.isPanning = true;
+          QS.startX = touch.clientX - QS.panX;
+          QS.startY = touch.clientY - QS.panY;
+          QD.viewport.classList.add("grabbing");
+        }
+      }, { passive: false });
+      QD.viewport.addEventListener("touchmove", function (e) {
+        if (e.touches.length === 2 && touchPinchDistance) {
+          e.preventDefault();
+          var distance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+          var rect = QD.viewport.getBoundingClientRect();
+          var centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+          var centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+          var oldZoom = QS.zoom;
+          QS.zoom = Math.max(0.05, Math.min(8, touchPinchZoom * distance / touchPinchDistance));
+          QS.panX = centerX - ((centerX - QS.panX) / oldZoom) * QS.zoom;
+          QS.panY = centerY - ((centerY - QS.panY) / oldZoom) * QS.zoom;
+          qUpdateTransform();
+          return;
+        }
+        if (!QS.isPanning && !QS.isDrawing) return;
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        var touch = e.touches[0];
+        if (QS.isDrawing) {
+          qMoveDraw({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: function () {} });
+        } else {
+          QS.panX = touch.clientX - QS.startX;
+          QS.panY = touch.clientY - QS.startY;
+          qUpdateTransform();
+        }
+      }, { passive: false });
+      QD.viewport.addEventListener("touchend", function () {
+        touchPinchDistance = 0;
+        if (QS.isDrawing) qEndDraw();
+        QS.isPanning = false;
+        QD.viewport.classList.remove("grabbing");
       });
       window.addEventListener("mousemove", function (e) {
         if (QS.isPanning) {
