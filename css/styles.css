@@ -2574,11 +2574,9 @@
       }
       .q-page-del:hover { color: #ef4444; }
 
-      .q-mobile-control { display: none; }
       /* Variantes de prueba móvil, seleccionables mediante una clase en html. */
       @media (max-width: 700px) {
         #quantis-view #quantis-viewport { touch-action: none; }
-        .q-mobile-control { display: flex; }
         #quantis-view { --q-ui-scale: 1; }
         #quantis-view #quantis-header, #quantis-view #quantis-sidebar, #quantis-view #quantis-viewport { font-size: calc(1em * var(--q-ui-scale)); }
         #quantis-view #quantis-header { padding-left: calc(8px * var(--q-ui-scale)); padding-right: calc(8px * var(--q-ui-scale)); }
