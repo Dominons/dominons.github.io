@@ -23,6 +23,7 @@
   var orbGeomCache = null;
   var accentTick = 0;
   var accentCur = '168,85,247';
+  var parallaxX = 0, parallaxY = 0, targetParallaxX = 0, targetParallaxY = 0;
   function orbPos(i, n, g) {
     var a = orbAngle + i * (Math.PI * 2 / n);
     return [g.cx + g.rx * Math.cos(a), g.cy + g.ry * Math.sin(a)];
@@ -257,6 +258,8 @@
       var tms = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
       var stacked = openStack.length > 0;
       if (!stacked) {
+        parallaxX += (targetParallaxX - parallaxX) * 0.035;
+        parallaxY += (targetParallaxY - parallaxY) * 0.035;
         var g = circleGeom();
         if (g) {
           if (lastT) {
@@ -269,7 +272,7 @@
             var b = buttons[keys[i]];
             if (!b || b.parentNode !== g.st) continue;
             var xy2 = orbPos(i, keys.length, g);
-            var p = clampXY(g, xy2[0], xy2[1]);
+            var p = clampXY(g, xy2[0] + parallaxX * 12, xy2[1] + parallaxY * 9);
             setXY(b, p[0], p[1]);
           }
         }
@@ -357,6 +360,15 @@
       var s = sizeCanvas();
       if (s) { stars = []; }
       layoutCircle();
+    });
+    window.addEventListener('pointermove', function(e) {
+      if (!isAnimOn() || e.pointerType === 'touch' || openStack.length) return;
+      var stage = $('orbitalStage');
+      if (!stage) return;
+      var rect = stage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      targetParallaxX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width - 0.5) * 2));
+      targetParallaxY = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height - 0.5) * 2));
     });
     window.addEventListener('load', function() { layoutCircle(); });
     lastT = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
