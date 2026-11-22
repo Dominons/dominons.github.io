@@ -1235,6 +1235,10 @@
         var collapsed = mobileView.classList.toggle("q-mobile-sidebar-collapsed");
         this.setAttribute("aria-pressed", String(collapsed));
       });
+      document.getElementById("q-free-mode-btn")?.addEventListener("click", function () {
+        window.qSetFreeMode();
+        this.setAttribute("aria-pressed", "true");
+      });
       document
         .getElementById("q-export-project-btn")
         ?.addEventListener("click", function () {
@@ -2295,6 +2299,8 @@ document.getElementById("q-draw-custom-color")?.addEventListener("input", functi
 
       window.qUpdateDrawingControls = function () {
         if (!window.isMembershipPlanReady) return;
+        var freeModeButton = document.getElementById("q-free-mode-btn");
+        if (freeModeButton) freeModeButton.setAttribute("aria-pressed", String(!QS.drawMode));
         var hasBrush = qIsPremiumBrush();
         document.querySelectorAll(".q-draw-tool").forEach(function (el) {
           el.style.opacity = hasBrush ? "1" : "0.58";
