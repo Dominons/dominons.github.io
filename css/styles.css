@@ -3070,6 +3070,30 @@
     height: 170px;
   }
 }
+
+/* Android: las herramientas compactas no deben heredar el alto de pantalla
+   reservado para paneles grandes como notas, chat o TradingView. */
+@media (max-width: 700px) {
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="calculator"],
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] {
+    flex-grow: 0;
+    height: auto;
+    min-height: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="calculator"] > .calculator-panel,
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] > .pomodoro-panel {
+    flex-grow: 0;
+    height: auto;
+    min-height: 0;
+  }
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] .pomodoro-panel {
+    gap: 16px;
+    justify-content: flex-start;
+  }
+  #main-dashboard-view .main.orbital-main.has-open .orbital-layer.open.solo[data-orbital="pomodoro"] .pomodoro-display {
+    margin: 12px 0 4px;
+  }
+}
 #main-dashboard-view.light-theme {
   --acc-chart:#7C3AED; --acc-notepad:#0891B2; --acc-calc:#B45309;
   --acc-pomo:#BE123C;  --acc-gemini:#BE185D; --acc-music:#047857;
