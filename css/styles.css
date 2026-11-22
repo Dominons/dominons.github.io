@@ -2577,12 +2577,13 @@
       .q-mobile-control { display: none; }
       /* Variantes de prueba móvil, seleccionables mediante una clase en html. */
       @media (max-width: 700px) {
+        #quantis-view #quantis-viewport { touch-action: none; }
         .q-mobile-control { display: flex; }
         #quantis-view { --q-ui-scale: 1; }
-        #quantis-header, #quantis-sidebar, #quantis-viewport { font-size: calc(1em * var(--q-ui-scale)); }
-        #quantis-header { padding-left: calc(8px * var(--q-ui-scale)); padding-right: calc(8px * var(--q-ui-scale)); }
-        #quantis-sidebar-header, #q-projects-list { font-size: calc(1em * var(--q-ui-scale)); }
-        #quantis-sidebar { width: calc(112px * var(--q-ui-scale)); min-width: calc(112px * var(--q-ui-scale)); }
+        #quantis-view #quantis-header, #quantis-view #quantis-sidebar, #quantis-view #quantis-viewport { font-size: calc(1em * var(--q-ui-scale)); }
+        #quantis-view #quantis-header { padding-left: calc(8px * var(--q-ui-scale)); padding-right: calc(8px * var(--q-ui-scale)); }
+        #quantis-view #quantis-sidebar-header, #quantis-view #q-projects-list { font-size: calc(1em * var(--q-ui-scale)); }
+        #quantis-view #quantis-sidebar { width: calc(112px * var(--q-ui-scale)); min-width: calc(112px * var(--q-ui-scale)); }
         #quantis-view.q-mobile-sidebar-collapsed #quantis-sidebar { display: none; }
         #q-mobile-zoom-value { min-width: 34px; justify-content: center; align-items: center; color: var(--quantis-muted); font-size: 10px; }
         html.q-mobile-compact #quantis-header { height: 42px; padding: 0 8px; }
