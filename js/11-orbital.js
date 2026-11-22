@@ -262,6 +262,10 @@
         parallaxY += (targetParallaxY - parallaxY) * 0.035;
         var g = circleGeom();
         if (g) {
+          var clock = $('orbitalClock');
+          if (clock && clock.parentNode === g.st) {
+            setXY(clock, g.cx + parallaxX * 12, g.cy + parallaxY * 9);
+          }
           if (lastT) {
             var dt = Math.min(100, Math.max(0, tms - lastT));
             orbAngle += (dt / ORBIT_MS) * Math.PI * 2;
